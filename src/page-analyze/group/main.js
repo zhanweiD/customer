@@ -15,13 +15,12 @@ const {Option} = Select
 
 @observer
 export default class Group extends Component {
-  constructor(props) {
-    super(props)
-    store.tagList = []
-  }
-
   componentDidMount() {
     store.getGroup()
+  }
+
+  componentWillUnmount() {
+    this.resetValue()
   }
 
   @action changeTag = v => {
