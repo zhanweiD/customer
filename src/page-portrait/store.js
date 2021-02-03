@@ -132,7 +132,6 @@ class Store {
   // 获取触点
   @action async getUnitEvent() {
     this.contactLoading = true
-
     try {
       const res = await io.getUnitEvent({
         id: this.portraitId,
@@ -142,6 +141,7 @@ class Store {
         tableName: this.tableName,
       })
       runInAction(() => {
+        console.log(res)
         this.unitEvents = res.map(item => {
           item.detailsList.unshift({monthDay: item.year})
           return item

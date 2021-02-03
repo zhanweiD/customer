@@ -8,7 +8,7 @@ import {ListContentStore} from '../../component/list-content'
 const dateFormat = 'YYYY-MM-DD'
 const date = new Date()
 const nowDate = moment(+date.getTime()).format(dateFormat)
-const pastDate = moment(+date.getTime() - 1000 * 60 * 60 * 24 * 1).format(dateFormat)
+const pastDate = moment(+date.getTime() - 1000 * 60 * 60 * 24 * 30).format(dateFormat)
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false 
   @observable loading = true 

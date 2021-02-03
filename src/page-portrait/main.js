@@ -13,7 +13,7 @@ export default () => {
     <Switch>
       {
         codeInProduct('portrait:view') && (
-          <Route exact path={`${prePath}/portrait/:ident?/:id?`} component={Portrait} />
+          <Route exact path={`${prePath}/portrait/:ident?/:id?/:isConsultant?`} component={Portrait} />
         )
       }
     </Switch>

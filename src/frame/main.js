@@ -12,6 +12,7 @@ import {
   TagsOutlined,
   DeploymentUnitOutlined,
   FileSyncOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
@@ -60,6 +61,8 @@ export default class Frame extends Component {
   @action closeModal = () => {
     store.visible = false
   }
+
+  // 修改密码
   @action submit = () => {
     this.formRef.current.validateFields().then(value => {
       store.modifyPwd(value)
@@ -236,7 +239,7 @@ export default class Frame extends Component {
                   }
                   {
                     codeInProduct('scene:view') && (
-                      <Menu.Item key="/scene/list" icon={<UserOutlined />}>
+                      <Menu.Item key="/scene/list" icon={<AppstoreOutlined />}>
                         场景管理
                       </Menu.Item>
                     )
@@ -259,11 +262,6 @@ export default class Frame extends Component {
                             <Menu.Item key="/system/system-log">系统日志</Menu.Item>
                           )
                         }
-                        {/* {
-                          codeInProduct('system:push-manage:view') && (
-                            <Menu.Item key="/system/push-manage">推送管理</Menu.Item>
-                          )
-                        } */}
                         {
                           codeInProduct('system:portrait:view') && (
                             <Menu.Item key="/system/portrait">画像配置</Menu.Item>
@@ -272,7 +270,6 @@ export default class Frame extends Component {
                       </SubMenu>
                     )
                   }
-              
                 </Menu>
               </Sider>
             </Affix>

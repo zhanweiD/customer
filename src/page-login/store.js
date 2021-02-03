@@ -90,11 +90,11 @@ class Store {
   @action.bound goRedirect() {
     if (localStorage.getItem('url') && localStorage.getItem('url') !== '#/login') {
       window.location.replace(localStorage.getItem('url'))
-      window.location.reload()
+      window.location.reload() // 强制刷新页面
     } else {
       // window.location.replace(`${window.__keeper.pathHrefPrefix}/tag/manage`)
       window.location.href = `${window.__keeper.pathHrefPrefix}/tag/manage`
-      window.location.reload()
+      window.location.reload() // 强制刷新页面
     }
     // window.location.reload()
   }

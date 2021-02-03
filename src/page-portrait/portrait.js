@@ -18,6 +18,7 @@ export default class Portrait extends Component {
     const {match} = props
     store.ident = match.params.ident
     store.portraitId = +match.params.id
+    store.isCustomer = !match.params.isConsultant
     store.isJump = store.ident
 
     store.portraits = []

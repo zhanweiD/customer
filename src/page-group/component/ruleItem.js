@@ -3,7 +3,6 @@
  */
 import {useState} from 'react'
 import {Select, Input, Form, Tooltip, DatePicker} from 'antd'
-import OnerFrame from '@dtwave/oner-frame'
 import {IconDel, IconTreeAdd} from '../../icon-comp'
 import {functionList, condition, entityFunctionList, textCondition} from './util'
 import io from '../rule-create/io'
