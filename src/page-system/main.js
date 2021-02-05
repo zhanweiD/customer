@@ -1,7 +1,7 @@
 /**
  * @description  系统配置
  */
-import {Route, Switch, Redirect} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import {codeInProduct} from '../common/util'
 
 import UserManage from './user-manage'

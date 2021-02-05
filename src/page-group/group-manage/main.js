@@ -6,8 +6,8 @@ import {Tabs} from 'antd'
 
 import {codeInProduct} from '../../common/util'
 
-import GroupList from '../group-list'
-import PushList from '../push-list'
+import GroupList from './group-list'
+import PushList from './push-list'
 import './main.styl'
 
 const {TabPane} = Tabs

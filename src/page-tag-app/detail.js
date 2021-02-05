@@ -6,7 +6,7 @@ import {observer} from 'mobx-react'
 import {
   OmitTooltip, OverviewCardWrap,
 } from '../component'
-import VisualList from './visual/visual-list'
+import VisualList from './visual-list'
 
 
 @observer

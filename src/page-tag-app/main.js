@@ -5,8 +5,8 @@ import {Route, Switch, Redirect} from 'react-router-dom'
 import {codeInProduct} from '../common/util'
 
 import TagApp from './tag-app'
-import VisualDetail from './visual/visual-detail'
-import VisuallConfig from './visual/visual-config'
+import VisualDetail from './visual-detail'
+import VisuallConfig from './visual-config'
 import './main.styl'
 
 const prePath = '/tag'

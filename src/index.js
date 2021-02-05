@@ -44,7 +44,7 @@ function Entry() {
           <Route path="/tag" component={TagApp} />
           {/* 场景管理 */}
           <Route path="/scene" component={Scene} />
-          {/* 人物画像 */}
+          {/* 客户画像 */}
           <Route path="/customer" component={Portrait} />
 
           {/* 群体管理 */}
