@@ -35,7 +35,7 @@ class Store {
   @observable cloud1Data = [] // 客户评价/客户心声
   @observable isCustomer = true // 客户对象 顾问对象 ？
   @observable currentPage = 1 // 页数
-  @observable searchKey = null // 
+  @observable searchKey = '' // 
 
   @observable unitBasic = [] // 画像个体基础信息
 
@@ -62,6 +62,7 @@ class Store {
         this.portraitId = res[0] ? res[0].id : undefined
         this.placeholder = res[0] ? res[0].placeholder : '请输入'
         this.isCustomer = true
+        this.getUnitList()
       })
     } catch (e) {
       errorTip(e.message)

@@ -32,8 +32,8 @@ export default class SearchResult extends Component {
         style={{height: '56px', paddingTop: '12px', width: '108px', textAlign: 'left'}}
         onClick={() => this.btnClick(item)}
       >
-        <OmitTooltip text={cards[0]} maxWidth={108} />
         <OmitTooltip text={cards[1]} maxWidth={108} />
+        <OmitTooltip text={cards[0]} maxWidth={108} />
       </div>
     )
   }
