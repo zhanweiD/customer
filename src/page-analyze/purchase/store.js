@@ -51,7 +51,7 @@ class Store extends ListContentStore(io.getList) {
       const res = await io.getTgiMerit()
       runInAction(() => {
         this.tgiMerit = res
-        this.merit = res [0]
+        this.merit = res[0]
         this.getList({...this.reqData, tag: res[0], currentPage: 1})
       })
     } catch (e) {
@@ -95,7 +95,7 @@ class Store extends ListContentStore(io.getList) {
         tag,
       })
       runInAction(() => {
-        if(res.length > 20) res.length = 20
+        if (res.length > 20) res.length = 20
         const chart = res.sort((a, b) => a.value - b.value)
         this.getDrawSaveTrend(res || [], tag)
       })

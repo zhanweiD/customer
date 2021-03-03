@@ -71,7 +71,7 @@ export function pieOption(data, total) {
       type: 'pie',
       radius: ['35%', '48%'],
       center: ['50%', '50%'],
-      data: data,
+      data,
       hoverAnimation: false,
       itemStyle: {
         normal: {
@@ -113,8 +113,11 @@ export function scatterOption(data) {
     tooltip: {
       position: 'top',
       formatter: params => {
+        if (data.y[params.seriesIndex] === '未知') {
+          return `${params.value[1]}人未进行${params.name}评价`
+        }
         return `${params.value[1]}人对${params.name}结果${data.y[params.seriesIndex]}`
-      }
+      },
     },
     title: [
       {
@@ -139,7 +142,7 @@ export function scatterOption(data) {
       text: day,
       textStyle: {
         fontSize: 14,
-      }
+      },
     })
     option.singleAxis.push({
       left: 96,
@@ -149,18 +152,18 @@ export function scatterOption(data) {
       top: `${(idx + 0.3) * 100 / 6}%`,
       height: `${100 / 6 - 10}%`,
       axisLabel: {
-        interval: 1,
+        interval: 0,
       },
       axisLine: {
         lineStyle: {
           width: 1,
-          color: '#333'
+          color: '#333',
         },
       },
       axisTick: {
         lineStyle: {
           width: 1,
-          color: '#333'
+          color: '#333',
         },
       },
     })
@@ -170,9 +173,9 @@ export function scatterOption(data) {
       type: 'scatter',
       data: [],
       symbolSize(dataItem) {
-        if (dataItem[1]/200 > 35) return 35
-        if (dataItem[1]/200 < 10) return 10
-        return dataItem[1]/200
+        if (dataItem[1] / 200 > 35) return 35
+        if (dataItem[1] / 200 < 10) return 10
+        return dataItem[1] / 200
       },
     })
   })

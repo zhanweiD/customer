@@ -6,7 +6,8 @@ export default function radarOption(radarChart) {
     color,
     tooltip: {},
     radar: {
-      radius: '50%',
+      radius: '70%',
+      // radius: '50%',
       nameGap: 4, // 图中工艺等字距离图的距离
       // splitNumber: 3, //指示器轴的分割段数
       name: {

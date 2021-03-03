@@ -73,6 +73,7 @@ const ListContentStore = apiFunc => class _Store {
    * @param {object} params
    */
   @action.bound async getList(params) {
+    console.log(toJS(this.initParams))
     try {
       this.tableLoading = true
       const {pageSize = 10, currentPage = 1} = this.pagination

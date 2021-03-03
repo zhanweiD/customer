@@ -55,7 +55,7 @@ export function pieOption(data, total) {
         },
       },
     }, {
-      text: '成交转化情况',
+      text: '客户状态分布',
       top: 12,
       left: 16,
       textStyle: {
@@ -121,6 +121,16 @@ export function funnelOption(data1, data2) {
     } 
   }
   return ({
+    title: {
+      text: '成交转化情况',
+      top: 12,
+      left: 16,
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 400,
+      },
+    },
     color,
     legend: {
       top: 32,

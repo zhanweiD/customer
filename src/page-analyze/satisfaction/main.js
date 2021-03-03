@@ -87,10 +87,12 @@ export default class Satisfaction extends Component {
     }
 
     // 选择条件（一级二级三级）
+    // 选择只有一级
     store.reqData.projectArea = item[0].name
     store.reqData.projectCity = null
     store.reqData.projectName = null
 
+    // 两级
     if (item.length === 2) {
       store.reqData.projectArea = item[0].name
       if (item[1].parentId) {
@@ -100,6 +102,7 @@ export default class Satisfaction extends Component {
       }
     } 
 
+    // 三级
     if (item.length === 3) {
       store.reqData.projectCity = item[1].name
       store.reqData.projectName = item[2].name
@@ -124,7 +127,7 @@ export default class Satisfaction extends Component {
     // 对象指标信息卡
     const cards = [
       {
-        title: '评价客户数',
+        title: '累计评价客户数',
         values: [evaluationPeo || 0],
       }, {
         title: '评价次数',
@@ -167,9 +170,7 @@ export default class Satisfaction extends Component {
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
     }
-    const noDataConfig = {
-      text: '暂无数据',
-    }
+    
     return (
       <div>
         <div className="content-header">

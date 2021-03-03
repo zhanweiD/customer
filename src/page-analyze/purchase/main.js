@@ -89,76 +89,77 @@ export default class Purchase extends Component {
     title: '房间总价',
     dataIndex: 'roomTotalPriceRange',
   }, 
-  {
-    key: 'customerSourceRegion',
-    title: '地区来源',
-    dataIndex: 'customerSourceRegion',
-  }, 
-  {
-    key: 'customerIndustry',
-    title: '行业',
-    dataIndex: 'customerIndustry',
-  }, 
-  {
-    key: 'customerProfessional',
-    title: '职业',
-    dataIndex: 'customerProfessional',
-  }, 
-  {
-    key: 'customerHouseFactor',
-    title: '购房关注因子',
-    dataIndex: 'customerHouseFactor',
-  }, 
-  {
-    key: 'customerLiveCity',
-    title: '居住城市',
-    dataIndex: 'customerLiveCity',
-  }, 
-  {
-    key: 'customerLiveProvinces',
-    title: '居住省份',
-    dataIndex: 'customerLiveProvinces',
-  }, 
-  {
-    key: 'customerWorkCity',
-    title: '工作城市',
-    dataIndex: 'customerWorkCity',
-  }, 
-  {
-    key: 'customerWorkProvinces',
-    title: '工作省份',
-    dataIndex: 'customerWorkProvinces',
-  }, 
-  {
-    key: 'roomPeripheralSupport',
-    title: '周边配套',
-    dataIndex: 'roomPeripheralSupport',
-  }, 
-  {
-    key: 'customerChildNums',
-    title: '子女人数',
-    dataIndex: 'customerChildNums',
-  }, 
-  {
-    key: 'customerChildAgeGroup',
-    title: '子女年龄段',
-    dataIndex: 'customerChildAgeGroup',
-  }, 
-  {
-    key: 'customerFamilyStructure',
-    title: '家庭结构',
-    dataIndex: 'customerFamilyStructure',
-  }, 
-  {
-    key: 'customerMarriageStatus',
-    title: '婚姻状态',
-    dataIndex: 'customerMarriageStatus',
-  }, 
-  {
-    key: 'customerHouseholdIncome',
-    title: '家庭年收入',
-    dataIndex: 'customerHouseholdIncome',
-  }]
+  // {
+  //   key: 'customerSourceRegion',
+  //   title: '地区来源',
+  //   dataIndex: 'customerSourceRegion',
+  // }, 
+  // {
+  //   key: 'customerIndustry',
+  //   title: '行业',
+  //   dataIndex: 'customerIndustry',
+  // }, 
+  // {
+  //   key: 'customerProfessional',
+  //   title: '职业',
+  //   dataIndex: 'customerProfessional',
+  // }, 
+  // {
+  //   key: 'customerHouseFactor',
+  //   title: '购房关注因子',
+  //   dataIndex: 'customerHouseFactor',
+  // }, 
+  // {
+  //   key: 'customerLiveCity',
+  //   title: '居住城市',
+  //   dataIndex: 'customerLiveCity',
+  // }, 
+  // {
+  //   key: 'customerLiveProvinces',
+  //   title: '居住省份',
+  //   dataIndex: 'customerLiveProvinces',
+  // }, 
+  // {
+  //   key: 'customerWorkCity',
+  //   title: '工作城市',
+  //   dataIndex: 'customerWorkCity',
+  // }, 
+  // {
+  //   key: 'customerWorkProvinces',
+  //   title: '工作省份',
+  //   dataIndex: 'customerWorkProvinces',
+  // }, 
+  // {
+  //   key: 'roomPeripheralSupport',
+  //   title: '周边配套',
+  //   dataIndex: 'roomPeripheralSupport',
+  // }, 
+  // {
+  //   key: 'customerChildNums',
+  //   title: '子女人数',
+  //   dataIndex: 'customerChildNums',
+  // }, 
+  // {
+  //   key: 'customerChildAgeGroup',
+  //   title: '子女年龄段',
+  //   dataIndex: 'customerChildAgeGroup',
+  // }, 
+  // {
+  //   key: 'customerFamilyStructure',
+  //   title: '家庭结构',
+  //   dataIndex: 'customerFamilyStructure',
+  // }, 
+  // {
+  //   key: 'customerMarriageStatus',
+  //   title: '婚姻状态',
+  //   dataIndex: 'customerMarriageStatus',
+  // }, 
+  // {
+  //   key: 'customerHouseholdIncome',
+  //   title: '家庭年收入',
+  //   dataIndex: 'customerHouseholdIncome',
+  // }
+  ]
 
   filter = (inputValue, path) => {
     return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
@@ -219,7 +220,7 @@ export default class Purchase extends Component {
   }
 
   render() {
-    const {cardData, tabLoading, loading, reqData, tgiMerit, formatList, defaultNames} = store
+    const {cardData, tabLoading, loading, merit, tgiMerit, formatList, defaultNames} = store
     // 对象指标信息卡
     const cards = [
       {
@@ -236,8 +237,8 @@ export default class Purchase extends Component {
     const listConfig = {
       key: 'id',
       rowKey: 'id',
-      scroll: {x: 2000},
-      initParams: {...store.reqData},
+      scroll: {x: 1000},
+      initParams: {...store.reqData, tag: merit},
       columns: this.columns,
       tabLoading,
       buttons: [

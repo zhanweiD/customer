@@ -43,6 +43,9 @@ export default class Portrait extends Component {
     store.placeholder = item.placeholder
     store.portraitId = v
     store.isCustomer = !item.index
+
+    // 演示环境默认展示一个
+    store.getUnitList()
   }
  
   render() {

@@ -1,8 +1,8 @@
 import {
-  observable, action, runInAction, toJS, observe,
+  observable, action, runInAction, 
 } from 'mobx'
 import {
-  successTip, errorTip, changeToOptions, trimFormValues, userLog,
+  successTip, errorTip, userLog,
 } from '../../common/util'
 import io from './io'
 import {ListContentStore} from '../../component/list-content'
@@ -102,6 +102,13 @@ class Store extends ListContentStore(io.getList) {
         ...params,
       })
       runInAction(() => {
+        if (this.roleStatus === 3) {
+          this.infoRole = {}
+          userLog('系统管理/角色管理/复制角色')
+        } else {
+          this.infoRole = res
+          userLog('系统管理/角色管理/编辑角色')
+        }
         successTip('编辑成功')
         this.getList()
         if (cb) cb()
@@ -120,13 +127,6 @@ class Store extends ListContentStore(io.getList) {
         id: params,
       })
       runInAction(() => {
-        if (this.roleStatus === 3) {
-          this.infoRole = {}
-          userLog('系统管理/角色管理/复制角色')
-        } else {
-          this.infoRole = res
-          userLog('系统管理/角色管理/编辑角色')
-        }
         this.menuCheckedKeys = res.menuIds.map(String)
         // this.dataCheckedKeys = res.dataIds.map(String)
         this.drawerVisible = true

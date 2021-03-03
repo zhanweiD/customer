@@ -243,7 +243,7 @@ class VisualList extends Component {
           </Authority>,
         ]),
       store, // 必填属性
-      initGetDataByParent: true,
+      initGetDataByParent: false,
     }
 
     return (
