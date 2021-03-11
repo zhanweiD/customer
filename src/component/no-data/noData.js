@@ -31,12 +31,12 @@ export default class NoData extends Component {
     const {code} = props
     if (code) {
       const {userProductFunctionCode = [], projectFunctionCode = []} = window.frameInfo || {}
-      const functionCodes = props.isCommon ? userProductFunctionCode : projectFunctionCode
+      // const functionCodes = props.isCommon ? userProductFunctionCode : projectFunctionCode
+      const functionCodes = window.frameInfo.perms
 
       this.auth = functionCodes.includes(code)
       // this.auth = true
     }
-    
   }
 
   onClick = () => {

@@ -37,7 +37,8 @@ export default class UpdateConfig extends Component {
           }
     
           t.store.submitVisual(params, () => {
-            window.location.href = `${window.__keeper.pathHrefPrefix}/tag/app`
+            // window.location.href = `${window.__keeper.pathHrefPrefix}/tag/app` // 无效问题
+            window.location.replace('#/tag/app')
             window.location.reload()
           })
         })

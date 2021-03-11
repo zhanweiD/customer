@@ -44,14 +44,14 @@ class Scene extends Component {
   } 
 
   render() {
-    const {loading, list = [], functionCodes} = store
+    const {loading, list = []} = store
     
     const noDataConfig = {
       btnText: '添加场景',
       text: '没有任何场景，去新建场景吧',
       onClick: () => this.handleModalVisible(),
       code: 'scene:add-scene',
-      isCommon: true,
+      isCommon: false,
       noAuthText: '暂无数据',
       // myFunctionCodes: functionCodes,
       isLoading: loading,
@@ -59,7 +59,6 @@ class Scene extends Component {
 
     return (
       <div className="scene-wrap">
-
         <div className="content-header">标签使用场景</div>
         <Spin spinning={loading}>
           <div className="scene-box">

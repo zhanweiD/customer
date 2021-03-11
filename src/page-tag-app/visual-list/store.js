@@ -32,7 +32,7 @@ class Store extends ListContentStore(io.getList) {
       })
       runInAction(() => {
         successTip('删除成功')
-        this.getList({currentPage: 1})
+        this.getList({currentPage: 1, objId: this.objId})
         userLog('标签应用/删除组合标签方案')
       })
     } catch (e) {
@@ -49,11 +49,11 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         if (res) {
           successTip('克隆成功')
-          this.getList()
+          this.getList({objId: this.objId})
         } else {
           failureTip('克隆失败')
         }
-        this.getList()
+        this.getList({objId: this.objId})
       })
     } catch (e) {
       errorTip(e.message)
@@ -69,12 +69,12 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         if (res) {
           successTip('执行成功')
-          this.getList()
+          this.getList({objId: this.objId})
           userLog('标签应用/执行组合标签方案')
         } else {
           failureTip('执行失败')
         }
-        this.getList()
+        this.getList({objId: this.objId})
       })
     } catch (e) {
       errorTip(e.message)

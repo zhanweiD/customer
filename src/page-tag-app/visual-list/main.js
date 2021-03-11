@@ -20,7 +20,8 @@ class VisualList extends Component {
   constructor(props) {
     super(props)
     store.objStore = props.objStore
-    store.objId = props.objId
+    store.objId = +props.objId
+    console.log(props.objId)
   }
 
   columns = [{
@@ -225,6 +226,7 @@ class VisualList extends Component {
     const {cardDetail} = objStore
     const listConfig = {
       columns: this.columns,
+      initParams: {objId},
       searchParams: seach(),
       buttons: cardDetail.total ? [
         <Authority

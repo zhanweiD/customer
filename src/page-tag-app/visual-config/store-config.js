@@ -180,7 +180,7 @@ class Store {
               }
             }
           }
-
+          successTip('校验成功！')
           this.tagTreeData = tagTreeData
           this.relVisualExtRspList[+this.currentTag] = data
         }

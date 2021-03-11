@@ -413,7 +413,7 @@ export default class LogicConfig extends Component {
           <Button
             type="primary"
             onClick={this.nextStep}
-            disabled={!tagTreeData.length || tagTreeData.length !== tagTreeData.filter(d => d.canSubmit).length}
+            disabled={canEditCondition || !tagTreeData.length || tagTreeData.length !== tagTreeData.filter(d => d.canSubmit).length}
           >
             下一步
           </Button>

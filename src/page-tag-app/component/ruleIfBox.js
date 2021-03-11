@@ -169,20 +169,20 @@ export default class RuleIfBox extends Component {
   renderRuleItem = () => {
     const {data} = this.state
     const {type} = this.props
-    
     const {
       // funcList, 
       tagList,
     } = this.props
-
     return data.map((d, i) => {
       if (d.type === 2) {
+        const selectTag = tagList.find(item => item.objIdTagId === d.leftTagId) || {}
         return (
           <RuleItem 
             key={`ruleItem${d.flag}`} 
             pos={[d.x, d.y]} 
             delCon={() => this.delCon(d, i)}
             info={d}
+            tagType={selectTag.tagType}
             // funcList={funcList}
             tagList={tagList}
             wrappedComponentRef={form => { this[`ruleItem${d.flag}`] = form ? form.props.form : form }} 

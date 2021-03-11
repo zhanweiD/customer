@@ -168,7 +168,6 @@ export default class ModalCreateTag extends Component {
         },
       }]
     }
-
     return comp.concat(other)
   }
 

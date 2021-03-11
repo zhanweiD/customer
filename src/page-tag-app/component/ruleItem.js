@@ -57,7 +57,7 @@ const condition = [{
   value: '<',
   name: '小于',
 }, {
-  value: '=<',
+  value: '<=',
   name: '小于等于',
 }, {
   value: '!=',
@@ -75,17 +75,33 @@ const condition = [{
 // }
 ]
 
+const textCondition = [{
+  value: '=',
+  name: '等于',
+}, {
+  value: '!=',
+  name: '不等于',
+}]
+
+// let conditions = condition
+
 @Form.create()
 export default class RuleItem extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       leftFunction: undefined,
       typeList: [1, 2, 3, 4, 5, 6],
       leftTagId: props.info && props.info.leftTagId,
     }
   }
-  
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tagType !== this.props.tagType) {
+      this.tagType = this.props.tagType
+    }
+  }
 
   onSelect = e => {
     const [fun] = functionList.filter(d => d.value === e)
@@ -106,6 +122,15 @@ export default class RuleItem extends Component {
     }
   }
 
+  // 选择标签
+  onSelectTag = tag => {
+    console.log(tag.tagType)
+    this.tagType = tag.tagType
+    this.props.info.comparision = undefined
+
+    this.props.form.resetFields(['comparision'])
+  }
+
   render() {
     const {
       pos = [], 
@@ -123,6 +148,9 @@ export default class RuleItem extends Component {
       left: pos[0],
       top: pos[1],
     }
+
+    // 操作符设置
+    const conditions = this.tagType === 4 ? textCondition : condition
 
     const {level} = info
 
@@ -171,13 +199,14 @@ export default class RuleItem extends Component {
             <Select 
               showSearch
               className="mr8" 
+              onSelect={(tagId, tag) => this.onSelectTag(tag)}
               style={{width: 180}}
               optionFilterProp="children"
               placeholder="选择标签"
             >
               {
                 tags.map(d => (
-                  <Option value={d.objIdTagId}>
+                  <Option tagType={d.tagType} value={d.objIdTagId}>
                     <div title={d.objNameTagName} className="omit">{d.objNameTagName}</div>
                   </Option>
                 ))}
@@ -200,9 +229,8 @@ export default class RuleItem extends Component {
               optionFilterProp="children"
             >
               {
-                condition.map(d => <Option value={d.value}>{d.name}</Option>)
+                conditions.map(d => <Option value={d.value}>{d.name}</Option>)
               }
-         
             </Select>
           )}
         </FormItem>
