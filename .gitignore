@@ -11,6 +11,5 @@ dist
 dist-private/
 resource/
 static-cache/
-package-lock.json
 tgz
 .vscode
