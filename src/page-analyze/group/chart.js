@@ -23,8 +23,8 @@ export default class ChartPie extends Component {
 
   componentDidMount() {
     this.myChartPie = echarts.init(this.refs.chartsPie)
-    this.myChartPie.setOption(mapOption)
-    // this.drawSaveTrend(this.dataList, this.title)
+    // this.myChartPie.setOption(mapOption)
+    this.drawSaveTrend(this.dataList, this.title)
     // this.store.getGroup((data, type) => {
     //   this.drawSaveTrend(this.data, this.title)
     // })
@@ -34,7 +34,7 @@ export default class ChartPie extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
       this.data = this.props.data
-      // this.drawSaveTrend(this.props.data, this.title)
+      this.drawSaveTrend(this.props.data, this.title)
     }
   }
 
