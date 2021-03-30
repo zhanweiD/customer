@@ -7,6 +7,7 @@ import {observer} from 'mobx-react'
 
 import {pieOption, barOption, mapOption} from './chart-option'
 import chinaJson from './china.json'
+// import hangZhou from '../../../public/province/330000.json'
 
 @observer
 export default class ChartPie extends Component {

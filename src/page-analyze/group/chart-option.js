@@ -218,8 +218,7 @@ export function barOption(dataList, type, text) {
 
 export const mapOption = {
   title: {
-    text: 'iphone销量',
-    subtext: '纯属虚构',
+    text: '客户分布',
     x: 'left',
   },
   tooltip: {
@@ -230,7 +229,7 @@ export const mapOption = {
     max: 2500,
     x: 'left',
     y: 'bottom',
-    text: ['高', '低'], // 文本，默认为数值文本
+    // text: ['高', '低'], // 文本，默认为数值文本
     calculable: false,
   },
   series: [
