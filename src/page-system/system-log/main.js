@@ -88,7 +88,7 @@ export default class PushList extends Component {
       ],
     }
     return (
-      <div className="system-log" style={{height: 'calc(100vh - 203px)'}}>
+      <div className="system-log" style={{minHeight: 'calc(100vh - 203px)'}}>
         <div className="content-header">系统日志</div> 
         <div className="user-manage">
           <ListContent {...listConfig} />

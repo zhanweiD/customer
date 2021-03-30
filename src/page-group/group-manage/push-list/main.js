@@ -144,7 +144,7 @@ export default class PushList extends Component {
       ],
     }
     return (
-      <div className="group-push-list" style={{height: 'calc(100vh - 203px)'}}>
+      <div className="group-push-list" style={{minHeight: 'calc(100vh - 203px)'}}>
         <div className="list-content">
           <ListContent {...listConfig} />
         </div>

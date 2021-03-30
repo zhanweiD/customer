@@ -198,7 +198,7 @@ export default class Frame extends Component {
                 }
                 {
                   showAnalyze && (
-                    <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
+                    <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
                       {
                         codeInProduct('analyze:chinch:view') && (
                           <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>

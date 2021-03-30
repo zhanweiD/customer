@@ -88,7 +88,7 @@ export default class PushList extends Component {
       initParams: {},
     }
     return (
-      <div className="group-customer-list" style={{height: 'calc(100vh - 203px)'}}>
+      <div className="group-customer-list" style={{minHeight: 'calc(100vh - 203px)'}}>
         <div className="action" style={{display: 'flex', justifyContent: 'flex-end', padding: '0 24px 8px 24px', marginTop: '-8px'}}>
           <a href style={{margin: '0 16px', fontSize: '12px'}} onClick={() => this.openDrawer(1)}>配置</a>
           <a href style={{margin: '0 16px', fontSize: '12px'}} onClick={() => this.openDrawer(2)}>分析</a>
