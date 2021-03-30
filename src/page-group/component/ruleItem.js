@@ -378,14 +378,15 @@ const RuleItem = ({
                 <Select 
                   showSearch
                   style={{width: 170}}
-                  optionFilterProp="children"
+                  // optionFilterProp="children"
                   placeholder="选择标签"
                   disabled={rest.page === 'detail'}
                   onSelect={onSelectTag}
+                  filterOption={(input, option) => option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                   {
                     entityTagList.map(d => (
-                      <Option tagType={d.tagType} value={d.objIdTagId}>
+                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName}>
                         <div title={d.objNameTagName} className="omit">{d.objNameTagName}</div>
                       </Option>
                     ))}
@@ -405,10 +406,11 @@ const RuleItem = ({
                   placeholder="选择标签"
                   disabled={rest.page === 'detail'}
                   onSelect={onSelectTag}
+                  filterOption={(input, option) => option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                   {
                     entityTagList.map(d => (
-                      <Option tagType={d.tagType} value={d.objIdTagId}>
+                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName}>
                         <div title={d.objNameTagName} className="omit">{d.objNameTagName}</div>
                       </Option>
                     ))}
