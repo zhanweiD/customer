@@ -1,7 +1,6 @@
 import {
   action, runInAction, observable, toJS,
 } from 'mobx'
-import {observer} from 'mobx-react'
 import {errorTip, successTip} from '../common/util'
 import io from './io'
 

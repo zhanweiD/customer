@@ -48,11 +48,6 @@ export default class RelationSheet extends Component {
     //   render: text => <OmitTooltip maxWidth={250} text={text} />,
     // }, 
     {
-      title: '描述',
-      key: 'desrc',
-      dataIndex: 'desrc',
-      render: text => <OmitTooltip maxWidth={250} text={text} />,
-    }, {
       title: '已绑/字段总数',
       key: 'bindFields',
       dataIndex: 'bindFields',
@@ -63,6 +58,11 @@ export default class RelationSheet extends Component {
       key: 'updateTime',
       dataIndex: 'updateTime',
       render: t => moment(+t).format('YYYY-MM-DD'),
+    }, {
+      title: '描述',
+      key: 'desrc',
+      dataIndex: 'desrc',
+      render: text => <OmitTooltip maxWidth={250} text={text} />,
     }, {
       key: 'action',
       title: '操作',

@@ -15,13 +15,12 @@ const {Option} = Select
 
 @observer
 export default class Group extends Component {
-  constructor(props) {
-    super(props)
-    store.tagList = []
-  }
-
   componentDidMount() {
     store.getGroup()
+  }
+
+  componentWillUnmount() {
+    this.resetValue()
   }
 
   @action changeTag = v => {
@@ -42,8 +41,13 @@ export default class Group extends Component {
     return (
       <div className="analyze-group">
         <div className="content-header">
-          <span className="mr24">客群分析</span>
-          <Select value={groupId ? `${groupId}` : null} style={{width: '128px'}} onChange={this.changeGroup}>
+          <span className="mr24">群体画像</span>
+          <Select 
+            placeholder="请选择群体"
+            value={groupId ? `${groupId}` : null} 
+            style={{width: '128px'}} 
+            onChange={this.changeGroup}
+          >
             {
               groupList.map(item => <Option key={item.groupId}>{item.groupName}</Option>)
             }

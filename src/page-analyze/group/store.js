@@ -53,6 +53,7 @@ class Store {
   // 枚举标签列表
   @action async getTagList() {
     this.tagLoading = true
+    if (!this.groupId) return
     try {
       const res = await io.getTagList({
         groupId: this.groupId,

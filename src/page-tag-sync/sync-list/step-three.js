@@ -79,7 +79,7 @@ export default class StepThree extends Component {
             }]}
             className="mb24"
           />
-          <div className="info-title ">配置目的源</div>
+          {/* <div className="info-title ">配置目的源</div>
           <NemoBaseInfo 
             dataSource={[{
               title: '数据源类型',
@@ -92,7 +92,7 @@ export default class StepThree extends Component {
               value: `tbjh_${tableName}`,
             }]}
             className="mb24"
-          />
+          /> */}
           <div className="info-title ">主标签配置</div>
           <NemoBaseInfo 
             dataSource={tableData.filter(d => d.isMajor).map(d => ({

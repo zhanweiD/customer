@@ -114,6 +114,14 @@ export function radarOption(radarChart) {
         fontWeight: 400,
       },
     }],
+    legend: {
+      top: 24,
+      right: 24,
+      orient: 'vertical',
+      textStyle: {color: fontColor, fontSize: 12}, 
+      data: radarChart.data && radarChart.data.map(item => item.name),
+      icon: 'roundRect',
+    },
     radar: {
       nameGap: 4, // 图中工艺等字距离图的距离
       // splitNumber: 3, //指示器轴的分割段数
@@ -155,7 +163,6 @@ export function radarOption(radarChart) {
       containLabel: true,
     },
     series: [{
-      name: ' ',
       type: 'radar',
       data: radarChart.data && radarChart.data.map((item, index) => {
         item.areaStyle = {

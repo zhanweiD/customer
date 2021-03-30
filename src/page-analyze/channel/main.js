@@ -132,13 +132,13 @@ export default class Channel extends Component {
     // 对象指标信息卡
     const cards = [
       {
-        title: '报备客户数',
+        title: '累计报备客户',
         values: [channelData.card ? channelData.card.report : 0],
       }, {
-        title: '到访客户数',
+        title: '累计到访客户',
         values: [channelData.card ? channelData.card.visit : 0],
       }, {
-        title: '成交客户数',
+        title: '累计成交客户',
         values: [channelData.card ? channelData.card.signing : 0],
       }, 
     ]

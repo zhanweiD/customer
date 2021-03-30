@@ -3,10 +3,9 @@ import {Timeline, DatePicker, Select, Menu, Spin} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
-import {OmitTooltip, NoData} from '../component'
+import {NoData} from '../component'
 
 const {Option} = Select
-const {RangePicker} = DatePicker
 const {SubMenu} = Menu
 
 const optionTime = [
@@ -23,7 +22,7 @@ export default class Contact extends Component {
     super(props)
     this.store = props.store
 
-    this.store.pastDate(9999) // 永久历史时间
+    this.store.pastDate(365) // 永久历史时间
   }
 
   componentDidMount() {
@@ -33,7 +32,7 @@ export default class Contact extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.ident !== this.props.ident) {
-      this.store.pastDate(9999)
+      this.store.pastDate(365)
       this.store.tableName = null
     }
   }
@@ -42,7 +41,7 @@ export default class Contact extends Component {
     if (v) {
       this.store.pastDate(v)
     } else {
-      this.store.pastDate(9999)
+      this.store.pastDate(365)
     }
     this.store.getUnitEvent()
   }
@@ -83,7 +82,7 @@ export default class Contact extends Component {
             {/* <RangePicker 
             style={{width: '60%'}} 
           /> */}
-            <Select allowClear style={{width: '40%'}} placeholder="请选择时间" onChange={this.selectTime}>
+            <Select defaultValue={365} allowClear style={{width: '40%'}} placeholder="请选择时间" onChange={this.selectTime}>
               {
                 optionTime.map(item => <Option value={item.value}>{item.name}</Option>)
               }

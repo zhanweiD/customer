@@ -6,7 +6,6 @@ import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {Spin} from 'antd'
 
-import {NoData} from '../../component'
 import pieOption from './chart-option'
 
 @observer
@@ -20,7 +19,6 @@ export default class ChartPie extends Component {
 
   componentDidMount() {
     this.myChartPie = echarts.init(this.refs.chartsPie)
-
     this.store.getDrawSaveTrend = this.drawSaveTrend
     this.props.getDraw(this.drawSaveTrend)
     window.addEventListener('resize', () => this.resize())

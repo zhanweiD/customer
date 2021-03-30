@@ -24,7 +24,7 @@ export default class Consultant extends Component {
     dataIndex: 'userName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}/1`}>{text}</Link>
       }
       return text
     },

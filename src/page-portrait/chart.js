@@ -37,7 +37,7 @@ export default class ChartPie extends Component {
   render() {
     const {chartData, isCustomer} = this.store
     return (
-      <div className="chart bgf ml16 p16 box-border">
+      <div className="chart bgf ml16 mr16 p16 box-border">
         <span className="tag-herder">{isCustomer ? '综合满意度' : '提升象限'}</span>
         <div ref="chartsSanKey" style={{height: '300px', width: '100%', display: 'inline-block'}} />
         {

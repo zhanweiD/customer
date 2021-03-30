@@ -20,6 +20,7 @@ export default class SearchResult extends Component {
     this.store = props.store
   }
 
+  // 卡片信息处理
   setCard = item => {
     const cards = []
     for (const key in item) {
@@ -32,8 +33,8 @@ export default class SearchResult extends Component {
         style={{height: '56px', paddingTop: '12px', width: '108px', textAlign: 'left'}}
         onClick={() => this.btnClick(item)}
       >
-        <OmitTooltip text={cards[0]} maxWidth={108} />
         <OmitTooltip text={cards[1]} maxWidth={108} />
+        <OmitTooltip text={cards[0]} maxWidth={108} />
       </div>
     )
   }
@@ -62,6 +63,7 @@ export default class SearchResult extends Component {
     this.store.getUnitList()
   }
 
+  // 上下页切换处理
   setOperationsSlot = () => {
     const {isFirst, isLast} = this.store
     if (isLast && isFirst) {
@@ -105,7 +107,7 @@ export default class SearchResult extends Component {
                   <Cloud store={this.store} loading={loading} index={1} />
                   <div className="d-flex">
                     <Chart store={this.store} />
-                    <Cloud1 store={this.store} loading={loading} index={1} />
+                    {/* <Cloud1 store={this.store} loading={loading} index={1} /> */}
                   </div>
                 </div>
                 <div className="business-contact bgf box-border">
@@ -141,7 +143,7 @@ export default class SearchResult extends Component {
                             <Cloud store={this.store} loading={loading} index={i} />
                             <div className="d-flex">
                               <Chart store={this.store} />
-                              <Cloud1 store={this.store} loading={loading} index={i} />
+                              {/* <Cloud1 store={this.store} loading={loading} index={i} /> */}
                             </div>
                           </div>
                           <div className="business-contact bgf box-border">

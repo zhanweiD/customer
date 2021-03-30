@@ -40,46 +40,46 @@ export default class SupplyDemand extends Component {
     title: '意向业态',
     dataIndex: 'intentProjectFormats',
   }, 
-  {
-    key: 'intentRoomPeripheral',
-    title: '意向周边配套',
-    dataIndex: 'intentRoomPeripheral',
-  }, 
-  {
-    key: 'intentRoomNum',
-    title: '意向房间数',
-    dataIndex: 'intentRoomNum',
-  }, 
-  {
-    key: 'intentRoomMaxArea',
-    title: '意向房间面积最大值',
-    dataIndex: 'intentRoomMaxArea',
-  }, 
-  {
-    key: 'intentRoomMinArea',
-    title: '意向房间面积最小值',
-    dataIndex: 'intentRoomMinArea',
-  }, 
-  {
-    key: 'intentRoomMaxPrice',
-    title: '意向房间单价最大值',
-    dataIndex: 'intentRoomMaxPrice',
-  }, 
-  {
-    key: 'intentRoomMinPrice',
-    title: '意向房间单价最小值',
-    dataIndex: 'intentRoomMinPrice',
-  }, 
-  {
-    key: 'intentRoomMaxTotal',
-    title: '意向房间总价最高',
-    dataIndex: 'intentRoomMaxTotal',
-  }, 
-  {
-    key: 'intentRoomMinTotal',
-    title: '意向房间总价最低',
-    dataIndex: 'intentRoomMinTotal',
-  }, 
+  // {
+  //   key: 'intentRoomPeripheral',
+  //   title: '意向周边配套',
+  //   dataIndex: 'intentRoomPeripheral',
+  // }, 
+  // {
+  //   key: 'intentRoomNum',
+  //   title: '意向房间数',
+  //   dataIndex: 'intentRoomNum',
+  // }, 
+  // {
+  //   key: 'intentRoomMaxArea',
+  //   title: '意向房间面积最大值',
+  //   dataIndex: 'intentRoomMaxArea',
+  // }, 
+  // {
+  //   key: 'intentRoomMinArea',
+  //   title: '意向房间面积最小值',
+  //   dataIndex: 'intentRoomMinArea',
+  // }, 
+  // {
+  //   key: 'intentRoomMaxPrice',
+  //   title: '意向房间单价最大值',
+  //   dataIndex: 'intentRoomMaxPrice',
+  // }, 
+  // {
+  //   key: 'intentRoomMinPrice',
+  //   title: '意向房间单价最小值',
+  //   dataIndex: 'intentRoomMinPrice',
+  // }, 
+  // {
+  //   key: 'intentRoomMaxTotal',
+  //   title: '意向房间总价最高',
+  //   dataIndex: 'intentRoomMaxTotal',
+  // }, 
+  // {
+  //   key: 'intentRoomMinTotal',
+  //   title: '意向房间总价最低',
+  //   dataIndex: 'intentRoomMinTotal',
+  // }, 
   // {
   //   key: 'channelType',
   //   title: '购房关注因素',
@@ -145,11 +145,11 @@ export default class SupplyDemand extends Component {
   }
 
   render() {
-    const {channelData, tableLoading, loading, unFitList, reqData} = store
+    const {indicators, tableLoading, loading, unFitList, reqData} = store
     const listConfig = {
       key: 'id',
       rowKey: 'id',
-      initParams: store.reqData,
+      initParams: {...store.reqData, index: indicators},
       columns: this.columns,
       tableLoading,
       scroll: {x: 1400},

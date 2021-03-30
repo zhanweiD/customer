@@ -6,7 +6,7 @@ import {observer} from 'mobx-react'
 import {
   OmitTooltip, OverviewCardWrap,
 } from '../component'
-import VisualList from './visual/visual-list'
+import VisualList from './visual-list'
 
 
 @observer
@@ -76,8 +76,8 @@ export default class CateDetail extends Component {
     ]
 
     return (
-      <div className="object-detail" style={{paddingTop: '0px', height: 'auto'}}>
-        <OverviewCardWrap cards={cards} />
+      <div className="object-detail" style={{paddingTop: '16px', height: 'auto'}}>
+        {/* <OverviewCardWrap cards={cards} /> */}
         <VisualList objId={this.store.objId} />
       </div>
     )

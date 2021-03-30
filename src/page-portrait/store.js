@@ -3,7 +3,7 @@ import {
 } from 'mobx'
 import {message} from 'antd'
 
-import {successTip, errorTip} from '../common/util'
+import {errorTip} from '../common/util'
 import io from './io'
 
 const dateFormat = 'YYYY-MM-DD'
@@ -12,7 +12,7 @@ const nowDate = moment(+date.getTime()).format(dateFormat)
 
 class Store {
   projectId // 项目ID
-  @observable isJump = false
+  @observable isJump = false // 是否是跳转进来的
   @observable loading = false
   // 暂无数据状态
   @observable noData = true
@@ -35,7 +35,7 @@ class Store {
   @observable cloud1Data = [] // 客户评价/客户心声
   @observable isCustomer = true // 客户对象 顾问对象 ？
   @observable currentPage = 1 // 页数
-  @observable searchKey = null // 
+  @observable searchKey = '' // 
 
   @observable unitBasic = [] // 画像个体基础信息
 
@@ -62,6 +62,9 @@ class Store {
         this.portraitId = res[0] ? res[0].id : undefined
         this.placeholder = res[0] ? res[0].placeholder : '请输入'
         this.isCustomer = true
+
+        // 演示环境默认展示
+        this.getUnitList()
       })
     } catch (e) {
       errorTip(e.message)
@@ -132,7 +135,6 @@ class Store {
   // 获取触点
   @action async getUnitEvent() {
     this.contactLoading = true
-
     try {
       const res = await io.getUnitEvent({
         id: this.portraitId,
@@ -142,6 +144,7 @@ class Store {
         tableName: this.tableName,
       })
       runInAction(() => {
+        console.log(res)
         this.unitEvents = res.map(item => {
           item.detailsList.unshift({monthDay: item.year})
           return item

@@ -37,8 +37,8 @@ export default class DataSheet extends Component {
       render: text => <OmitTooltip maxWidth={250} text={text} />,
     }, {
       title: '主标签字段名',
-      key: 'storageTypeName',
-      dataIndex: 'storageTypeName',
+      key: 'mappingKey',
+      dataIndex: 'mappingKey',
     }, {
       title: '已配置/字段数',
       key: 'configuredField',

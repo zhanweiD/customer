@@ -5,7 +5,6 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
-import {NoData} from '../../component'
 import {pieOption, sanKeyOption} from './chart-option'
 
 @observer

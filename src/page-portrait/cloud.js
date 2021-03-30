@@ -88,7 +88,7 @@ export default class Cloud extends Component {
           {/* <span>{`${unitName}的个人画像`}</span> */}
           <span>个人画像</span>
         </div>
-        <span className="ml16 tag-herder">彰泰标签</span>
+        {/* <span className="ml16 tag-herder">个人标签</span> */}
         <Spin spinning={loading}>
           <div className="object-cloud-content">
 

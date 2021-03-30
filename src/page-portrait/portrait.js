@@ -18,6 +18,7 @@ export default class Portrait extends Component {
     const {match} = props
     store.ident = match.params.ident
     store.portraitId = +match.params.id
+    store.isCustomer = !match.params.isConsultant
     store.isJump = store.ident
 
     store.portraits = []
@@ -42,6 +43,9 @@ export default class Portrait extends Component {
     store.placeholder = item.placeholder
     store.portraitId = v
     store.isCustomer = !item.index
+
+    // 演示环境默认展示一个
+    store.getUnitList()
   }
  
   render() {
