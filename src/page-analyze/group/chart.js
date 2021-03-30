@@ -5,7 +5,8 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
-import {pieOption, barOption} from './chart-option'
+import {pieOption, barOption, mapOption} from './chart-option'
+import chinaJson from './china.json'
 
 @observer
 export default class ChartPie extends Component {
@@ -16,12 +17,14 @@ export default class ChartPie extends Component {
     this.store = props.store
     this.title = props.title
     this.dataList = props.data
+
+    echarts.registerMap('china', chinaJson)
   }
 
   componentDidMount() {
     this.myChartPie = echarts.init(this.refs.chartsPie)
-
-    this.drawSaveTrend(this.dataList, this.title)
+    this.myChartPie.setOption(mapOption)
+    // this.drawSaveTrend(this.dataList, this.title)
     // this.store.getGroup((data, type) => {
     //   this.drawSaveTrend(this.data, this.title)
     // })
@@ -31,7 +34,7 @@ export default class ChartPie extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
       this.data = this.props.data
-      this.drawSaveTrend(this.props.data, this.title)
+      // this.drawSaveTrend(this.props.data, this.title)
     }
   }
 
