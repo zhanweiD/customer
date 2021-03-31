@@ -44,8 +44,7 @@ export default class Portrait extends Component {
     store.portraitId = v
     store.isCustomer = !item.index
 
-    // 演示环境默认展示一个
-    store.getUnitList()
+    // store.getUnitList()
   }
  
   render() {
@@ -63,10 +62,10 @@ export default class Portrait extends Component {
       <div className="portrait-wrap">
         <div className="content-header">客户画像</div>
         <div className="search m16">
-          {
-            defaultPortrait ? (
-              <div className="search_content">
-                <Select 
+          {/* {
+            defaultPortrait ? ( */}
+          <div className="search_content">
+            {/* <Select 
                   onChange={(v, item) => this.onChange(v, item)} 
                   style={{width: '8%', height: '24px'}}
                   defaultValue={defaultPortrait}
@@ -76,25 +75,26 @@ export default class Portrait extends Component {
                       return <Option index={i} key={item.id} value={item.id} name={item.name} placeholder={item.placeholder}>{item.name}</Option>
                     })
                   }
-                </Select>
-                <Search 
-                  placeholder={placeholder} 
-                  onSearch={this.onSearch} 
-                  style={{width: '15%', height: '24px', borderLeft: 'none'}} 
-                />
-              </div>
-            ) : (
+                </Select> */}
+            <Search 
+              size="large"
+              placeholder={placeholder} 
+              onSearch={this.onSearch} 
+              style={{width: '25%', borderLeft: 'none'}} 
+            />
+          </div>
+          {/* ) : (
               !isJump && <Spin spinning={porLoading} />
             )
-          }
+          } */}
 
           <SearchResult store={store} />
         </div>
-        {
+        {/* {
           isJump ? null : (
             !unitList.length && <div className="mt16 box-border noData-box"><NoData style={{height: 'calc(100% - 32px)'}} {...NoDataConfig} /></div>
           )
-        }
+        } */}
       </div>
     )
   }

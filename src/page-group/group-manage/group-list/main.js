@@ -63,11 +63,11 @@ export default class GroupList extends Component {
       key: 'name',
       title: '群体名称',
       dataIndex: 'name',
-      // render: (text, record) => (
-      //   <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
-      //     <OmitTooltip maxWidth={100} text={text} />
-      //   </Link>
-      // ),
+      render: (text, record) => (
+        <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
+          {text}
+        </Link>
+      ),
     }, {
       key: 'objName',
       title: '实体',
@@ -114,7 +114,6 @@ export default class GroupList extends Component {
               <a className="mr16" onClick={() => this.goPerform(record)} href>执行</a>
               {/* <a className="mr16" disabled={record.status === 3 || record.mode === 2} onClick={() => this.goPerform(record)} href>执行</a> */}
             </Authority>
-            {/* <span className="table-action-line" /> */}
           </Fragment>
           <Fragment>
             <Authority
@@ -123,7 +122,6 @@ export default class GroupList extends Component {
               <a className="mr16" href onClick={() => this.goGroupEdit(record)}>编辑</a>
               {/* <a className="mr16" disabled={record.status === 3} href onClick={() => this.goGroupEdit(record)}>编辑</a> */}
             </Authority>
-            {/* <span className="table-action-line" /> */}
           </Fragment>
                
           <Fragment>
@@ -139,7 +137,6 @@ export default class GroupList extends Component {
                 {/* <a href>删除</a> */}
                 <a href className="mr16">删除</a>
                 {/* <a disabled={record.status === 3} href className="mr16">删除</a> */}
-                {/* <span className="table-action-line" /> */}
               </Popconfirm>
             </Authority>
 
@@ -153,7 +150,6 @@ export default class GroupList extends Component {
                 </Link>
 
               </Authority>
-              {/* <span className="table-action-line" /> */}
             </Fragment>
            
           </Fragment>

@@ -64,7 +64,7 @@ class Store {
         this.isCustomer = true
 
         // 演示环境默认展示
-        this.getUnitList()
+        // this.getUnitList()
       })
     } catch (e) {
       errorTip(e.message)
