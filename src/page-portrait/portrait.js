@@ -7,9 +7,14 @@ import {NoData} from '../component'
 
 import store from './store'
 import SearchResult from './search-result'
+import SearchList from './search-list'
 
-const {Option} = Select
 const {Search} = Input
+const data = [
+  {name: '张三', type: '业主', time: '30分钟前', phone: '12345678911'},
+  {name: '李四', type: '业主', time: '60分钟前', phone: '12345678911'},
+  {name: '王二', type: '租户', time: '一小时前', phone: '12345678911'},
+]
 @observer
 export default class Portrait extends Component {
   constructor(props) {
@@ -43,39 +48,19 @@ export default class Portrait extends Component {
     store.placeholder = item.placeholder
     store.portraitId = v
     store.isCustomer = !item.index
-
-    // store.getUnitList()
   }
  
   render() {
     const {
-      porLoading,
-      portraits, 
       placeholder, 
-      defaultPortrait,
       unitList,
-      isJump,
     } = store
 
-    const NoDataConfig = {text: '暂无数据,请进行搜索'}
     return (
       <div className="portrait-wrap">
         <div className="content-header">客户画像</div>
-        <div className="search m16">
-          {/* {
-            defaultPortrait ? ( */}
-          <div className="search_content">
-            {/* <Select 
-                  onChange={(v, item) => this.onChange(v, item)} 
-                  style={{width: '8%', height: '24px'}}
-                  defaultValue={defaultPortrait}
-                >
-                  {
-                    portraits.map((item, i) => {
-                      return <Option index={i} key={item.id} value={item.id} name={item.name} placeholder={item.placeholder}>{item.name}</Option>
-                    })
-                  }
-                </Select> */}
+        <div className="search m16 mr0">
+          <div className="search_content mr16">
             <Search 
               size="large"
               placeholder={placeholder} 
@@ -83,18 +68,19 @@ export default class Portrait extends Component {
               style={{width: '25%', borderLeft: 'none'}} 
             />
           </div>
-          {/* ) : (
-              !isJump && <Spin spinning={porLoading} />
-            )
-          } */}
-
+          {
+            !unitList.length ? (
+              <div className="d-flex">
+                <SearchList data={data} title="相关客户推荐" color="#339999" />
+                <SearchList data={data} title="已关注客户" color="#00cccc" />
+                <SearchList data={data} title="最近浏览客户" color="#6699cc" />
+                <SearchList data={data} title="待跟进客户" color="#cc6699" />
+              </div>
+            ) : null
+          }
+          
           <SearchResult store={store} />
         </div>
-        {/* {
-          isJump ? null : (
-            !unitList.length && <div className="mt16 box-border noData-box"><NoData style={{height: 'calc(100% - 32px)'}} {...NoDataConfig} /></div>
-          )
-        } */}
       </div>
     )
   }

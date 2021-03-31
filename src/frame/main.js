@@ -168,7 +168,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   codeInProduct('tag-model:view') && (
                     <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
                       标签同步
@@ -179,6 +179,13 @@ export default class Frame extends Component {
                   codeInProduct('tag-app:view') && (
                     <Menu.Item key="/tag/app" icon={<DeploymentUnitOutlined />}>
                       标签应用
+                    </Menu.Item>
+                  )
+                } */}
+                {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                      客户中心
                     </Menu.Item>
                   )
                 }
@@ -192,11 +199,11 @@ export default class Frame extends Component {
                 {
                   codeInProduct('group-manage:view') && (
                     <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
-                      群体管理
+                      客群管理
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   showAnalyze && (
                     <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
                       {
@@ -236,15 +243,15 @@ export default class Frame extends Component {
                       }
                     </SubMenu>
                   )
-                }
-                {
+                } */}
+                {/* {
                   codeInProduct('scene:view') && (
                     <Menu.Item key="/scene/list" icon={<AppstoreOutlined />}>
                       场景管理
                     </Menu.Item>
                   )
-                }
-                {
+                } */}
+                {/* {
                   showSystem && (
                     <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
                       {
@@ -269,7 +276,7 @@ export default class Frame extends Component {
                       }
                     </SubMenu>
                   )
-                }
+                } */}
               </Menu>
             </Sider>
             {/* </Affix> */}
