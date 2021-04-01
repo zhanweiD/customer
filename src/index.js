@@ -19,6 +19,8 @@ import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
 
+import TagMarket from './page-tag-market'
+
 const njkData = {
   dict,
 }
@@ -49,6 +51,9 @@ function Entry() {
 
           {/* 群体管理 */}
           <Route path="/group" component={Group} />
+
+          <Route path="/tag/market" component={TagMarket} />
+
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

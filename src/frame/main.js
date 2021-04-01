@@ -203,6 +203,13 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
+                {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/tag/market" icon={<TeamOutlined />}>
+                      标签集市
+                    </Menu.Item>
+                  )
+                }
                 {/* {
                   showAnalyze && (
                     <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
