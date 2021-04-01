@@ -32,10 +32,11 @@ class Store {
   @observable ident = null // 画像个体id
   @observable chartData = [] // 雷达图
   @observable cloudData = [] // 彰泰标签
-  @observable cloud1Data = [] // 客户评价/客户心声
   @observable isCustomer = true // 客户对象 顾问对象 ？
   @observable currentPage = 1 // 页数
   @observable searchKey = '' // 
+
+  @observable toAllTag = true // 切换标签描摹模式 默认全量
 
   @observable unitBasic = [] // 画像个体基础信息
 
@@ -189,33 +190,6 @@ class Store {
           }
         })
         cb(this.cloudData, 2)
-      })
-    } catch (e) {
-      errorTip(e.message)
-    } finally {
-      runInAction(() => {
-        this.loading = false
-      })
-    }
-  }
-
-  // 获取客户心声评价
-  @action async getObjCloud1(cb) {
-    this.loading = true
-    try {
-      const res = await io.getCusVoice({
-        id: this.portraitId,
-        ident: this.ident,
-      })
-
-      runInAction(() => {
-        this.cloud1Data = []
-        res.forEach(item => {
-          if (item.list) {
-            this.cloud1Data = [...this.cloud1Data, ...item.list]
-          }
-        })
-        cb(this.cloud1Data, 2)
       })
     } catch (e) {
       errorTip(e.message)

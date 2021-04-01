@@ -5,8 +5,9 @@ import * as d3 from 'd3'
 import cloud from 'd3-cloud'
 import {Component} from 'react'
 import {observer} from 'mobx-react'
-import {Spin} from 'antd'
 import {action} from 'mobx'
+import {Spin} from 'antd'
+
 import {NoData} from '../component'
 
 @observer
@@ -16,8 +17,17 @@ export default class Cloud extends Component {
     this.store = props.store
   }
 
-  componentDidMount() {  
+  componentDidMount() {
+    const {toAllTag} = this.store
     this.store.getObjCloud((res, max) => {
+      if (toAllTag) return
+      this.couldLayout(res, max)
+    })
+  }
+  componentUpdate() {
+    const {toAllTag} = this.store
+    this.store.getObjCloud((res, max) => {
+      if (toAllTag) return
       this.couldLayout(res, max)
     })
   }
@@ -37,11 +47,11 @@ export default class Cloud extends Component {
     this.box.style('transform', 'scale(0.3, 0.3)').style('transition', 'all .3s linear')
     this.box.selectAll('*').remove()
 
-    const scaleSize = data.length > 20 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
+    const scaleSize = data.length > 50 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
 
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
-      .size([parseFloat(this.box.style('width')), 320])
+      .size([parseFloat(this.box.style('width')), 600])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
         return {text: `${d.tag}: ${d.val ? d.val : '-'}`, size: scaleSize(scaleFont)}
@@ -78,20 +88,14 @@ export default class Cloud extends Component {
 
   render() {
     const {
-      cloudData = [], loading, unitName,
+      cloudData = [], loading, unitName, toAllTag,
     } = this.store
     const {index} = this.props
 
     return (
-      <div className="object-cloud ml16 mr16">
-        <div className="object-cloud-header mb16">
-          {/* <span>{`${unitName}的个人画像`}</span> */}
-          <span>个人画像</span>
-        </div>
-        {/* <span className="ml16 tag-herder">个人标签</span> */}
+      <div className="object-cloud">
         <Spin spinning={loading}>
-          <div className="object-cloud-content">
-
+          <div>
             {
               !cloudData.length
                 ? (

@@ -6,8 +6,8 @@ import {LeftOutlined, RightOutlined} from '@ant-design/icons'
 
 import {Loading, OmitTooltip, NoData} from '../component'
 import Cloud from './cloud'
-import Chart from './chart'
-import Cloud1 from './cloud1'
+import TagDepict from './tagDepict'
+import ChartPie from './chart'
 import Contact from './contact'
 import User from './user-information'
 
@@ -40,6 +40,7 @@ export default class SearchResult extends Component {
   }
   @action selectPor = v => {
     this.store.ident = v
+    this.store.toAllTag = true // 标签模式切换为列表
   }
   @action btnClick = v => {
     this.store.unitName = v.姓名
@@ -103,19 +104,21 @@ export default class SearchResult extends Component {
                   <div className="herder mb16">用户信息</div>
                   <User store={this.store} />
                 </div>
+                
                 <div className="user-portrait">
-                  <Cloud store={this.store} loading={loading} index={1} />
-                  <div className="d-flex">
-                    <Chart store={this.store} />
-                    {/* <Cloud1 store={this.store} loading={loading} index={1} /> */}
-                  </div>
-                </div>
-                <div className="business-contact bgf box-border">
-                  <div className="herder">业务触点</div>
-                  <Contact store={this.store} ident={ident} />
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="标签描摹" key="1">
+                      <Cloud store={this.store} loading={loading} index={1} />
+                    </TabPane>
+                    <TabPane tab="业务触点" key="2">
+                      <div>
+                        <ChartPie store={this.store} />
+                        <Contact store={this.store} ident={ident} />
+                      </div>
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
-              // </Spin>
             ) : null
           }
           {
@@ -139,17 +142,30 @@ export default class SearchResult extends Component {
                             <div className="herder mb16">用户信息</div>
                             <User store={this.store} />
                           </div>
-                          <div className="user-portrait">
+                          <div className="user-portrait ml16 bgf">
+                            <Tabs defaultActiveKey="1">
+                              <TabPane tab="标签描摹" key="1">
+                                <TagDepict store={this.store} index={i} />
+                              </TabPane>
+                              <TabPane tab="业务触点" key="2">
+                                <div style={{height: 'calc(100vh - 189px)'}} className="d-flex bgf">
+                                  <ChartPie store={this.store} />
+                                  <Contact store={this.store} ident={ident} />
+                                </div>
+                              </TabPane>
+                            </Tabs>
+                          </div>
+                          {/* <div className="user-portrait">
                             <Cloud store={this.store} loading={loading} index={i} />
                             <div className="d-flex">
                               <Chart store={this.store} />
-                              {/* <Cloud1 store={this.store} loading={loading} index={i} /> */}
+                              <Cloud1 store={this.store} loading={loading} index={i} />
                             </div>
-                          </div>
-                          <div className="business-contact bgf box-border">
+                          </div> */}
+                          {/* <div className="business-contact bgf box-border">
                             <div className="herder">业务触点</div>
                             <Contact store={this.store} ident={ident} />
-                          </div>
+                          </div> */}
                         </div>
                         // </Spin>
                       )

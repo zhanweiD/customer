@@ -37,12 +37,12 @@ export default class ChartPie extends Component {
   render() {
     const {chartData, isCustomer} = this.store
     return (
-      <div className="chart bgf ml16 mr16 p16 box-border">
+      <div className="chart bgf m16 p16 box-border">
         <span className="tag-herder">{isCustomer ? '综合满意度' : '提升象限'}</span>
-        <div ref="chartsSanKey" style={{height: '300px', width: '100%', display: 'inline-block'}} />
+        <div ref="chartsSanKey" style={{height: '600px', width: '100%', display: 'inline-block'}} />
         {
           chartData.indicator ? null : (
-            <div className="no-Data" style={{height: '200px'}}>
+            <div className="no-Data" style={{height: '400px'}}>
               <NoData text="暂无数据" size="small" />
             </div>
           )
