@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
 
 import GroupManage from './group-manage'
-import GroupDetail from './group-detail'
+import GroupDetail from './group-detail-2'
 import UnitList from './unit-list'
 import RuleCreate from './rule-create'
 import RuleDetail from './rule-detail'
