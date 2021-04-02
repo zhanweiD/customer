@@ -184,7 +184,7 @@ export default class Frame extends Component {
                 } */}
                 {
                   codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                    <Menu.Item key="/overview/customer" icon={<TeamOutlined />}>
                       客户中心
                     </Menu.Item>
                   )

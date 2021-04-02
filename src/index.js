@@ -18,6 +18,7 @@ import Analyze from './page-analyze'
 import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
+import Overview from './page-overview'
 
 const njkData = {
   dict,
@@ -37,15 +38,17 @@ function Entry() {
           {/* 标签管理 */}
           <Route path="/tag" component={Manage} />
           {/* 标签同步 */}
-          <Route path="/tag" component={Sync} />
+          {/* <Route path="/tag" component={Sync} /> */}
           {/* 群体分析 */}
           <Route path="/analyze" component={Analyze} />
           {/* 标签应用 */}
-          <Route path="/tag" component={TagApp} />
+          {/* <Route path="/tag" component={TagApp} /> */}
           {/* 场景管理 */}
           <Route path="/scene" component={Scene} />
           {/* 客户画像 */}
           <Route path="/customer" component={Portrait} />
+          {/* 客户画像 */}
+          <Route path="/overview" component={Overview} />
 
           {/* 群体管理 */}
           <Route path="/group" component={Group} />
