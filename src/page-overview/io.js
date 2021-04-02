@@ -1,10 +1,11 @@
 import ioContext from '../common/io-context'
-import {baseUser, get, post} from '../common/util'
+import {get, post, baseApi} from '../common/util'
 
 const api = {
-  goLogin: post(`${baseUser}/login`), // 登录
+  getClinch: post(`${baseApi}/deal/deal`), // 成交分析数据
+  getObjCloud: post(`${baseApi}/portrait/portrait`), // 画像个体画像
 } 
 
-ioContext.create('login', api) 
+ioContext.create('overview', api) 
 
-export default ioContext.api.login
+export default ioContext.api.overview

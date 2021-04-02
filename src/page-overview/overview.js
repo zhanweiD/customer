@@ -6,6 +6,7 @@ import ConversionChart from './conversion-chart'
 import DistributionChart from './distribution-chart'
 import CustomerChart from './customer-chart'
 
+
 const {Option} = Select
 // 对象指标信息卡
 const cards = [
@@ -54,7 +55,7 @@ const Overview = () => {
           <ConversionChart />
           <DistributionChart />
         </div>
-        <div className="bgf" style={{width: '30%'}}>
+        <div style={{width: '30%'}}>
           <CustomerChart />
         </div>
       </div>

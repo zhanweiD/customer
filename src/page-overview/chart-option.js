@@ -234,9 +234,9 @@ export const mapOption = {
       type: 'map',
       mapType: 'china',
       top: 128,
-      left: 96,
+      left: 56,
       roam: false,
-      zoom: 1.4,
+      zoom: 1.2,
       itemStyle: {
         normal: {label: {show: true}},
         emphasis: {label: {show: true}},
@@ -292,8 +292,7 @@ export const dbarOption = {
     data: ['2011年'],
   },
   grid: {
-    left: '1%',
-    containLabel: true,
+    left: 56,
   },
   xAxis: {
     type: 'value',
@@ -324,6 +323,7 @@ export const dbarOption = {
       // name: '2011年',
       type: 'bar',
       barWidth: '40%',
+      left: 96,
       color: color[1],
       label: {
         show: true,
@@ -376,4 +376,90 @@ export const sunOption = {
       rotate: 'radial',
     },
   },
+}
+
+export function funnelOption(data1, data2) {
+  if (!data1) {
+    return {
+      title: [{
+        text: '暂无数据',
+        top: '50%',
+        left: '30%',
+        textStyle: {
+          fontSize: 32,
+          color: titleColor,
+          fontWeight: 400,
+        },
+      }],
+    } 
+  }
+  return ({
+    title: {
+      text: '客户转化率',
+      top: 12,
+      left: 16,
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 400,
+      },
+    },
+    color,
+    legend: {
+      top: 48,
+      left: '5%',
+      data: data1 && data1.map(item => item.name),
+    },
+    series: [{
+      top: 96,
+      type: 'funnel',
+      sort: (a, b) => data1[b],
+      height: '300',
+      minSize: 150,
+      left: '5%',
+      width: '60%',
+      label: {
+        show: true,
+        position: 'inside',
+        fontSize: '14',
+        formatter(d) {
+          const ins = `${d.name}{aa|}\n${d.data.num}`
+          return ins
+        },
+        rich: {
+          aa: {
+            padding: [8, 0, 6, 0],
+          },
+        },
+      },
+      data: data1,
+    },
+    {
+      top: 96,
+      type: 'funnel',
+      sort: (a, b) => data1[b],
+      height: '300',
+      minSize: 50,
+      left: '15%',
+      width: '60%',
+      label: {
+        normal: {
+          color: '#333',
+          position: 'right',
+          rich: {
+            aa: {
+              align: 'left',
+              color: fontColor,
+              fontSize: '12',
+            },
+          },
+        },
+      },
+      labelLine: {
+        show: false,
+      },
+      data: data2,
+    },
+    ],
+  })
 }
