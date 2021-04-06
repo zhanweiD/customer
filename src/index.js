@@ -13,7 +13,7 @@ import Group from './page-group'
 import Scene from './page-scene'
 import System from './page-system'
 import Login from './page-login'
-import Manage from './page-tag-manage'
+import Manage from './page-tag-manage-2'
 import Analyze from './page-analyze'
 import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
@@ -39,7 +39,7 @@ function Entry() {
           {/* 系统管理 */}
           <Route path="/system" component={System} />
           {/* 标签管理 */}
-          <Route path="/tag" component={Manage} />
+          {/* <Route path="/tag" component={Manage} /> */}
           {/* 标签同步 */}
           {/* <Route path="/tag" component={Sync} /> */}
           {/* 群体分析 */}
@@ -59,6 +59,8 @@ function Entry() {
           <Route path="/tag/market" component={TagMarket} />
 
           <Route path="/tag/object" component={TagObject} />
+
+          <Route path="/tag/manage" component={Manage} />
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

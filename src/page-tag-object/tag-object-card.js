@@ -14,8 +14,12 @@ export default ({data, ondelete}) => {
     </Menu>
   )
 
+  const gotoManage = () => {
+    window.open(`#/tag/manage/${data.id}`, '_blank')
+  }
+
   return (
-    <div className="object-card-box">
+    <div className="object-card-box" onClick={gotoManage}>
       <div className="object-card FBV">
         <div className="object-up">
           <div className="FBH FBJB">
