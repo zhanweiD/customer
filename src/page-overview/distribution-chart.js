@@ -20,8 +20,8 @@ const DistributionChart = ({barData, mapData}) => {
       myChartMap && myChartMap.resize()
       myChartBar && myChartBar.resize()
     }
-    myChartMap.setOption(mapOption)
-    myChartBar.setOption(dbarOption)
+    myChartMap.setOption(mapOption())
+    myChartBar.setOption(dbarOption())
     window.addEventListener('resize', resize)
   }
  

@@ -91,7 +91,7 @@ const CustomerChart = ({sunData}) => {
       myChartFunnel && myChartFunnel.resize()
     }
  
-    myChartSun.setOption(sunOption)
+    myChartSun.setOption(sunOption())
     myChartFunnel.setOption(funnelOption(funnelData.data1, funnelData.data2))
     window.addEventListener('resize', resize)
   }

@@ -18,8 +18,8 @@ const ConversionChart = ({barData, lineData}) => {
       myChartLine && myChartLine.resize()
     }
     
-    myChartBar.setOption(cbarOption)
-    myChartLine.setOption(lineOption)
+    myChartBar.setOption(cbarOption())
+    myChartLine.setOption(lineOption())
     window.addEventListener('resize', resize)
   }
 

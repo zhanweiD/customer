@@ -33,6 +33,18 @@ const Cloud = () => {
     }
   }
 
+  // 对接高德开放者平台API https://lbs.amap.com/api/webservice/guide/api/district
+  // async function getMapData() {
+  //   fetch('https://restapi.amap.com/v3/config/district?keywords=北京&subdistrict=2&key=f82f4c74c4e7a533551b6af39cb8c030')
+  //     .then(function (response) {
+  //       console.log(response)
+  //       return response.json()
+  //     })
+  //     .then(function (myJson) {
+  //       console.log(myJson)
+  //     })
+  // }
+
   function draw(data) {
     d3.select('#box') 
       .append('svg')
