@@ -20,6 +20,7 @@ import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
 
 import TagMarket from './page-tag-market'
+import TagObject from './page-tag-object'
 
 const njkData = {
   dict,
@@ -54,6 +55,7 @@ function Entry() {
 
           <Route path="/tag/market" component={TagMarket} />
 
+          <Route path="/tag/object" component={TagObject} />
 
           {/* <Redirect to="/tag" /> */}
         </Frame>
