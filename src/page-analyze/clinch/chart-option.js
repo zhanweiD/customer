@@ -9,7 +9,7 @@ export function pieOption(data, total) {
   if (!data.length) {
     return {
       title: [{
-        text: '成交转化情况',
+        text: '客户状态分布',
         top: 16,
         left: 16,
         textStyle: {
