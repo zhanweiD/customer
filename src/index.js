@@ -22,6 +22,7 @@ import Overview from './page-overview'
 
 import TagMarket from './page-tag-market'
 import TagObject from './page-tag-object'
+import TagDetail from './page-tag-market-detail'
 
 const njkData = {
   dict,
@@ -57,6 +58,8 @@ function Entry() {
           <Route path="/group" component={Group} />
 
           <Route path="/tag/market" component={TagMarket} />
+          
+          <Route path="/tag/detail" component={TagDetail} />
 
           <Route path="/tag/object" component={TagObject} />
 
