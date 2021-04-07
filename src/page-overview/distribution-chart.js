@@ -3,15 +3,17 @@
  */
 import {useState, useEffect, useRef} from 'react'
  
-import chinaJson from '../../public/map/china.json'
 import {dbarOption, mapOption} from './chart-option'
+import china from '../../public/map'
   
-const DistributionChart = ({barData, mapData}) => {
+const DistributionChart = ({mapType}) => {
   const chartBar = useRef(null)
   const chartMap = useRef(null)
+  const [barData, setBarData] = useState([])
+  const [mapData, setMapData] = useState([])
    
   const drawSaveTrend = () => {
-    echarts.registerMap('china', chinaJson)
+    echarts.registerMap(mapType, china[mapType])
 
     const myChartMap = echarts.init(chartMap.current)
     const myChartBar = echarts.init(chartBar.current)
@@ -20,7 +22,7 @@ const DistributionChart = ({barData, mapData}) => {
       myChartMap && myChartMap.resize()
       myChartBar && myChartBar.resize()
     }
-    myChartMap.setOption(mapOption())
+    myChartMap.setOption(mapOption(mapType))
     myChartBar.setOption(dbarOption())
     window.addEventListener('resize', resize)
   }
@@ -28,6 +30,11 @@ const DistributionChart = ({barData, mapData}) => {
   useEffect(() => {
     drawSaveTrend()
   }, [mapData, barData])
+
+  useEffect(() => {
+    // 发请求
+    drawSaveTrend()
+  }, [mapType])
  
   return (
     <div className="p16 bgf">

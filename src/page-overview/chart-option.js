@@ -2,10 +2,10 @@ const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
 const fontColor = 'rgba(0,0,0,0.65)'
 const titleColor = 'rgba(0,0,0,0.85)'
 // 转化对比
-export function cbarOption() {
+export function cbarOption(area) {
   return {
     title: {
-      text: '转化对比',
+      text: area === 'china' ? '转化对比' : '客户变化趋势',
       textStyle: {
         fontSize: 14,
         color: titleColor,
@@ -14,6 +14,9 @@ export function cbarOption() {
     },
     tooltip: {
       trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',
+      },
     },
     grid: {
       top: 96,
@@ -21,7 +24,7 @@ export function cbarOption() {
     },
     legend: {
       top: 32,
-      data: ['蒸发量', '降水量', '湿度', '平均温度'],
+      data: area === 'chaina' ? ['报备', '来访', '成交'] : ['报备', '来访', '成交', '成交转化率'],
     },
     xAxis: [
       {
@@ -50,10 +53,10 @@ export function cbarOption() {
         },
       },
     ],
-    yAxis: [
+    yAxis: area === 'chaina' ? [
       {
         type: 'value',
-        name: '水量',
+        name: '人数',
         nameTextStyle: {
           fontSize: 12,
           color: fontColor,
@@ -70,64 +73,107 @@ export function cbarOption() {
           },
         },
       },
-    // {
-    //   type: 'value',
-    //   name: '温度',
-    //   nameTextStyle: {
-    //     fontSize: 12,
-    //     color: fontColor,
-    //   },
-    //   axisLabel: {
-    //     textStyle: {
-    //       fontSize: 12,
-    //       color: fontColor,
-    //     },
-    //   },
-    //   axisLine: {
-    //     lineStyle: {
-    //       color: '#ccc',
-    //     },
-    //   },
-    // },
-    ],
-    series: [
+    ] : [
       {
-        name: '蒸发量',
+        type: 'value',
+        name: '人数',
+        nameTextStyle: {
+          fontSize: 12,
+          color: fontColor,
+        },
+        axisLabel: {
+          textStyle: {
+            fontSize: 12,
+            color: fontColor,
+          },
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
+      },
+      {
+        type: 'value',
+        name: '成交率',
+        nameTextStyle: {
+          fontSize: 12,
+          color: fontColor,
+        },
+        axisLabel: {
+          textStyle: {
+            fontSize: 12,
+            color: fontColor,
+          },
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
+      },
+    ],
+    
+    series: area === 'china' ? [
+      {
+        name: '报备',
         type: 'bar',
         stack: 'total',
         color: color[0],
         data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
       },
       {
-        name: '降水量',
+        name: '来访',
         stack: 'total',
         type: 'bar',
         color: color[1],
         data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
       },
       {
-        name: '湿度',
+        name: '成交',
         stack: 'total',
         type: 'bar',
         color: color[2],
         data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
       },
-    // {
-    //   name: '平均温度',
-    //   type: 'line',
-    //   yAxisIndex: 1,
-    //   color: color[3],
-    //   data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
-    // },
+    ] : [
+      {
+        name: '报备',
+        type: 'bar',
+        stack: 'total',
+        color: color[0],
+        data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+      },
+      {
+        name: '来访',
+        stack: 'total',
+        type: 'bar',
+        color: color[1],
+        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+      },
+      {
+        name: '成交',
+        stack: 'total',
+        type: 'bar',
+        color: color[2],
+        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+      },
+      {
+        name: '成交转化率',
+        type: 'line',
+        yAxisIndex: 1,
+        color: color[3],
+        data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+      },
     ],
   }
 }
 
 // 转化趋势
-export function lineOption() {
+export function lineOption(area) {
   return {
     title: {
-      text: '转化趋势',
+      text: area === 'china' ? '转化趋势' : '供需情况',
       textStyle: {
         fontSize: 14,
         color: titleColor,
@@ -140,10 +186,13 @@ export function lineOption() {
     },
     legend: {
       top: 32,
-      data: ['来访', '成交'],
+      data: area === 'china' ? ['来访', '成交'] : ['高层', '别墅'],
     },
     tooltip: {
       trigger: 'axis',
+      axisPointer: {
+        type: 'shadow',
+      },
     },
 
     xAxis: {
@@ -170,10 +219,30 @@ export function lineOption() {
         },
       },
     },
-    yAxis: [
+    yAxis: area === 'china' ? [
       {
         type: 'value',
-        name: '来访',
+        name: '趋势',
+        nameTextStyle: {
+          fontSize: 12,
+          color: fontColor,
+        },
+        axisLabel: {
+          textStyle: {
+            fontSize: 12,
+            color: fontColor,
+          },
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
+      },
+    ] : [
+      {
+        type: 'value',
+        name: '销售量',
         nameTextStyle: {
           fontSize: 12,
           color: fontColor,
@@ -191,7 +260,7 @@ export function lineOption() {
         },
       },
     ],
-    series: [
+    series: area === 'china' ? [
       {
         name: '来访',
         type: 'line',
@@ -211,12 +280,32 @@ export function lineOption() {
         emphasis: {focus: 'series'},
         data: [51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
       },
+    ] : [
+      {
+        name: '高层',
+        type: 'line',
+        color: color[0],
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: {focus: 'series'},
+        data: [56.5, 82.1, 88.7, 70.1, 53.4, 85.1],
+          
+      },
+      {
+        name: '别墅',
+        type: 'line',
+        color: color[1],
+        smooth: true,
+        seriesLayoutBy: 'row',
+        emphasis: {focus: 'series'},
+        data: [51.1, 51.4, 55.1, 53.3, 73.8, 68.7],
+      },
     ],
   }
 }
 
 // 客户分布
-export function mapOption() {
+export function mapOption(mapType) {
   return {
     title: {
       text: '客户分布',
@@ -228,7 +317,7 @@ export function mapOption() {
     dataRange: {
     // min: 0,
     // max: 2500,
-      show: false,
+      show: true,
       x: 'left',
       y: 'bottom',
     // text: ['高', '低'], // 文本，默认为数值文本
@@ -238,7 +327,7 @@ export function mapOption() {
       {
         name: '客户人数',
         type: 'map',
-        mapType: 'china',
+        mapType,
         top: 128,
         left: 56,
         roam: false,
@@ -282,6 +371,7 @@ export function mapOption() {
           {name: '台湾', value: Math.round(Math.random() * 1000)},
           {name: '香港', value: Math.round(Math.random() * 1000)},
           {name: '澳门', value: Math.round(Math.random() * 1000)},
+          {name: '杭州市', value: Math.round(Math.random() * 1000)},
         ],
       }, 
     ],
@@ -325,7 +415,7 @@ export function dbarOption() {
           color: fontColor,
         },
       },
-      data: ['巴西', '印尼', '美国', '印度', '中国', '杭州'],
+      data: ['浙江', '河南', '山东', '上海', '北京', '深圳'],
     },
     series: [
       {

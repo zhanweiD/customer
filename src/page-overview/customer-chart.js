@@ -35,10 +35,11 @@ const data = [
   },
 ]
   
-const CustomerChart = ({sunData}) => {
+const CustomerChart = ({area}) => {
   const chartSun = useRef(null)
   const chartFunnel = useRef(null)
   const [funnelData, setFunnelData] = useState({})
+  const [sunData, setSunData] = useState([])
 
   // 获取配置信息
   async function getFunnel() {
@@ -125,7 +126,11 @@ const CustomerChart = ({sunData}) => {
       </div>
       <div className="bgf mb16" ref={chartFunnel} style={{height: '420px', width: '100%'}} />
       <div className="bgf" style={{height: '400px', width: '100%'}}>
-        <div className="pt16 pl16 fs14 c85">客户心声</div>
+        <div className="pt16 pl16 fs14 c85">
+          {
+            area === 'china' ? '客户心声' : '显著特征'
+          }
+        </div>
         <Cloud />
       </div>
       {/* </Spin> */}

@@ -1,13 +1,15 @@
 /**
  * @description 转化对比、趋势
  */
-import {useEffect, useRef} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 import {cbarOption, lineOption} from './chart-option'
  
-const ConversionChart = ({barData, lineData}) => {
+const ConversionChart = ({area}) => {
   const chartBar = useRef(null)
   const chartLine = useRef(null)
+  const [barData, setBarData] = useState([])
+  const [lineData, setLineData] = useState([])
 
   const drawSaveTrend = () => {
     const myChartBar = echarts.init(chartBar.current)
@@ -17,15 +19,20 @@ const ConversionChart = ({barData, lineData}) => {
       myChartBar && myChartBar.resize()
       myChartLine && myChartLine.resize()
     }
-    
-    myChartBar.setOption(cbarOption())
-    myChartLine.setOption(lineOption())
+    myChartBar.clear()
+    myChartLine.clear()
+    myChartBar.setOption(cbarOption(area))
+    myChartLine.setOption(lineOption(area))
     window.addEventListener('resize', resize)
   }
 
   useEffect(() => {
     drawSaveTrend()
   }, [barData, lineData])
+
+  useEffect(() => {
+    drawSaveTrend()
+  }, [area])
 
   return (
     <div className="p16 bgf mb16">
