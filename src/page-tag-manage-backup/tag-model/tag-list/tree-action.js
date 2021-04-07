@@ -67,16 +67,7 @@ export default class Action extends Component {
           authCode="tag-manage:add-cate"
         >
           <Menu.Item>
-            <div 
-              onClick={this.addTree} 
-              onKeyDown={() => {}} 
-              style={{
-                fontSize: '12px', 
-                margin: '-5px -12px', 
-                padding: '4px 20px',
-                cursor: 'pointer',
-              }}
-            >
+            <div onClick={this.addTree} onKeyDown={() => {}} style={{fontSize: '12px', margin: '-5px -12px', padding: '5px 12px'}}>
               新建一级类目
             </div>
           </Menu.Item>

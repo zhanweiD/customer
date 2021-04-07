@@ -74,11 +74,11 @@ export default class ObjectDetail extends Component {
                   this.store.tabId === '2' ? <DateSheet objId={objId} bigStore={this.store} /> : null
                 }
               </TabPane>
-              <TabPane className="h-428" tab="关系表管理" key="3">
+              {/* <TabPane className="h-428" tab="关系表管理" key="3">
                 {
                   this.store.tabId === '3' ? <RelationSheet objId={objId} bigStore={this.store} /> : null
                 }
-              </TabPane>
+              </TabPane> */}
             </Tabs>
           </Provider>
         </div>

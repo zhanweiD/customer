@@ -1,8 +1,10 @@
 .page-object-modal
-  display flex
-  background-color #f3f4f9
-  height 100%
-    
+  
+  .object-modal-content
+    display flex
+    min-height calc(100vh - 113px)
+    background-color #f3f4f9
+
   .object-detail
     flex 1
     padding 16px 16px 12px
@@ -65,10 +67,7 @@
     .edgePath path
       stroke rgba(11,67,156,0.10)
       stroke-width 1px
-
-  .h-428
-    min-height calc(100vh - 368px)
-
+    
 .object-tree
   background #ffffff
 
@@ -92,11 +91,6 @@
     text-align right
 .comp-list-search
   padding 24px 24px 8px
+.h-428
+  min-height calc(100vh - 428px)
 
-
-.dt-tree-node-detail
-  height 24px
-  padding-top 4px
-
-.dt-tree .dt-li-tree
-  line-height 24px

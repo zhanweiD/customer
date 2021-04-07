@@ -17,6 +17,8 @@ class Store {
 
   @observable loading = false
   @observable releaseLoading = false
+
+  @observable isSpinning = true
   
   @action.bound async getTreeData(cb) {
     this.loading = true
@@ -41,6 +43,7 @@ class Store {
 
   @action async getObjDetail() {
     this.objDetail = this.objTreeData.find(item => item.id === this.selectedKey)
+    this.isSpinning = false
   }
 
   /**
