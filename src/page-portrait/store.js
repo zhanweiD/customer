@@ -27,6 +27,9 @@ class Store {
   @observable changeLoading = false // 画像列表加载
   @observable contactLoading = false // 画像列表加载
 
+  @observable cateList = [] // 触点展开列表
+  @observable openKeys = [] // 触点展开列表
+
   @observable unitList = [] // 画像个体列表
   @observable tabLoading = false // 切换loading
   @observable ident = null // 画像个体id
@@ -94,19 +97,6 @@ class Store {
         this.unitList = res.data
         this.ident = this.unitList[0].ident
         this.getUnitBasic()
-        // if (res.data[0] && res.data[0].ident) {
-        //   this.unitList = res.data
-        //   this.ident = this.unitList[0].ident
-        //   // this.unitName = this.unitList[0].姓名
-        //   this.getUnitBasic()
-        // } 
-        // else if (this.currentPage > 1) {
-        //   this.isLast = true
-        //   message.warning('已经到底了！')
-        // } else {
-        //   this.unitList = res.data
-        //   this.ident = null
-        // }
       })
     } catch (e) {
       errorTip(e.message)
@@ -145,7 +135,6 @@ class Store {
         tableName: this.tableName,
       })
       runInAction(() => {
-        console.log(res)
         this.unitEvents = res.map(item => {
           item.detailsList.unshift({monthDay: item.year})
           return item
@@ -200,18 +189,15 @@ class Store {
     }
   }
 
-  // 获取个体象限
+  // 获取业务类型
   @action async getChart(cb) {
     try {
-      const res = this.isCustomer ? await io.getChart1({
-        id: this.portraitId,
-        ident: this.ident,
-      }) : await io.getChart({
-        id: this.portraitId,
-        ident: this.ident,
+      const res = await io.getChart({
+        reportTimeEnd: '2021-04-09',
+        reportTimeStart: '2020-04-09',
       })
       runInAction(() => {
-        this.chartData = res
+        this.chartData = res.pieChart
         cb(this.chartData)
       })
     } catch (e) {

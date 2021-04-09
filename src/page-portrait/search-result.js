@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {toJS, action} from 'mobx'
 import {observer} from 'mobx-react'
-import {Tabs, Button, Spin, message} from 'antd'
+import {Tabs, Select, Spin, message} from 'antd'
 import {LeftOutlined, RightOutlined} from '@ant-design/icons'
 
 import {Loading, OmitTooltip, NoData} from '../component'
@@ -10,6 +10,7 @@ import TagDepict from './tagDepict'
 import ChartPie from './chart'
 import Contact from './contact'
 import User from './user-information'
+import BusinessContact from './business-contact'
 
 const {TabPane} = Tabs
 
@@ -111,10 +112,7 @@ export default class SearchResult extends Component {
                       <Cloud store={this.store} loading={loading} index={1} />
                     </TabPane>
                     <TabPane tab="业务触点" key="2">
-                      <div>
-                        <ChartPie store={this.store} />
-                        <Contact store={this.store} ident={ident} />
-                      </div>
+                      <BusinessContact store={this.store} ident={ident} />
                     </TabPane>
                   </Tabs>
                 </div>
@@ -148,24 +146,10 @@ export default class SearchResult extends Component {
                                 <TagDepict store={this.store} index={i} />
                               </TabPane>
                               <TabPane tab="业务触点" key="2">
-                                <div style={{height: 'calc(100vh - 189px)'}} className="d-flex bgf">
-                                  <ChartPie store={this.store} />
-                                  <Contact store={this.store} ident={ident} />
-                                </div>
+                                <BusinessContact store={this.store} />
                               </TabPane>
                             </Tabs>
                           </div>
-                          {/* <div className="user-portrait">
-                            <Cloud store={this.store} loading={loading} index={i} />
-                            <div className="d-flex">
-                              <Chart store={this.store} />
-                              <Cloud1 store={this.store} loading={loading} index={i} />
-                            </div>
-                          </div> */}
-                          {/* <div className="business-contact bgf box-border">
-                            <div className="herder">业务触点</div>
-                            <Contact store={this.store} ident={ident} />
-                          </div> */}
                         </div>
                         // </Spin>
                       )

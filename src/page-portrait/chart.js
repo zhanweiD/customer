@@ -5,13 +5,23 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
-import {NoData} from '../component'
+import {NoData, LegendItem} from '../component'
 
-import radarOption from './option'
+import {pieOption, barOption} from './option'
+
+const datal = [
+  {
+    title: '外渠',
+    percent: '20%',
+    counts: 20,
+    color: '#1cd389',
+  },
+]
 
 @observer
 export default class ChartPie extends Component {
-  myChartFun = null
+  myChartPie = null
+  myChartBar = null
 
   constructor(props) {
     super(props)
@@ -19,34 +29,46 @@ export default class ChartPie extends Component {
   }
 
   componentDidMount() {
-    this.myChartSanKey = echarts.init(this.refs.chartsSanKey)
+    this.myChartPie = echarts.init(this.refs.chartPie)
+    this.myChartBar = echarts.init(this.refs.chartBar)
+
     this.store.getChart(data => {
       this.drawSaveTrend(data)
     })
-    window.addEventListener('resize', () => this.resize())
-  }
-
-  @action resize() {
-    this.myChartSanKey && this.myChartSanKey.resize()
   }
 
   @action.bound drawSaveTrend(data) {
-    data.indicator ? this.myChartSanKey.setOption(radarOption(data)) : null
+    const resize = () => {
+      if (this.myChartPie) {
+        this.myChartPie.resize()
+        this.myChartBar.resize()
+      }
+    }
+    window.addEventListener('resize', resize)
+
+    this.myChartPie.setOption(pieOption(data, 10))
+    this.myChartBar.setOption(barOption(data))
   }
 
   render() {
-    const {chartData, isCustomer} = this.store
     return (
-      <div className="chart bgf m16 p16 box-border">
-        <span className="tag-herder">{isCustomer ? '综合满意度' : '提升象限'}</span>
-        <div ref="chartsSanKey" style={{height: '600px', width: '100%', display: 'inline-block'}} />
-        {
-          chartData.indicator ? null : (
-            <div className="no-Data" style={{height: '400px'}}>
-              <NoData text="暂无数据" size="small" />
-            </div>
-          )
-        }
+      <div className="chart m16 mt8 p16 box-border">
+        <div className="d-flex">
+          <div ref="chartPie" style={{height: '300px', width: '60%'}} />
+          <div className="w40 fs12 FBV FBJC FBAC categroy-legend-box">
+            {
+              datal.map(item => (
+                <LegendItem 
+                  title={item.title} 
+                  percent={item.percent}
+                  counts={item.counts}
+                  color={item.color}
+                />
+              ))
+            }
+          </div>
+        </div>
+        <div ref="chartBar" style={{height: '180px', width: '100%'}} />
       </div> 
     )
   }

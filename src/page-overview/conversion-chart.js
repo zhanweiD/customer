@@ -16,8 +16,10 @@ const ConversionChart = ({area}) => {
     const myChartLine = echarts.init(chartLine.current)
 
     const resize = () => {
-      myChartBar && myChartBar.resize()
-      myChartLine && myChartLine.resize()
+      if (myChartBar && myChartLine) {
+        myChartBar.resize()
+        myChartLine.resize()
+      }
     }
     myChartBar.clear()
     myChartLine.clear()

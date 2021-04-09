@@ -14,7 +14,7 @@ const {Option} = Select
 export default class TagDepict extends Component {
   constructor(props) {
     super(props)
-    this.store = this.props.store
+    this.store = props.store
   }
   @action changeModel = () => {
     this.store.toAllTag = !this.store.toAllTag
