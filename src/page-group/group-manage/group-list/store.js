@@ -30,9 +30,10 @@ class Store extends ListContentStore(io.getGroupList) {
   @observable drawerVisible = false // id新建群体
   @observable modalVisible = false // 文件解析结果
   @observable isAdd = true // 判断编辑还是新建
-  // @observable isPerform = false // id集合执行
   @observable confirmLoading = false // 确认按钮loading
   @observable pushDrawerVis = false // 推送抽屉
+
+  @observable selectedRows = [] // 选中表格
 
   @action handleCancel = () => {
     this.drawerVisible = false
@@ -77,68 +78,29 @@ class Store extends ListContentStore(io.getGroupList) {
     }
   }
 
-  // 添加id群体
-  @action async addIdGroup(obj) {
-    try {
-      const res = {}
-      // const res = await io.addIdGroup({
-      //   ...obj,
-      // })
-      runInAction(() => {
-        if (res) {
-          successTip('添加成功')
-          this.handleCancel()
-          this.getList()
-        }
-      })
-    } catch (e) {
-      this.confirmLoading = false
-      errorTip(e.message)
-    }
-  }
-  
-  // 编辑id群体
-  @action async editIdGroup(obj) {
-    try {
-      const res = {}
-      // const res = await io.editIdGroup({
-      //   id: this.recordObj.id, // 群体ID
-      //   ...obj,
-      // })
-      runInAction(() => {
-        if (res) {
-          successTip('编辑成功')
-          this.handleCancel()
-          this.getList()
-        }
-      })
-    } catch (e) {
-      this.confirmLoading = false
-      errorTip(e.message)
-    }
-  }
-
-  // 获取ID编辑群体信息
-  @action async getEditIdGroup(cb) {
-    try {
-      const res = {}
-      // const res = await io.getEditIdGroup({
-      //   id: this.recordObj.id, // 群体ID
-      // })
-      runInAction(() => {
-        res.outputTags = res.outputTags.map(String)
-        cb(res.outputTags)
-      })
-    } catch (e) {
-      errorTip(e.message)
-    }
-  }
-
   // 删除群体
   @action async removeGroup(id) {
     try {
       const res = await io.removeGroup({
         id, // 群体ID
+      })
+      runInAction(() => {
+        if (res) {
+          successTip('删除成功')
+          this.getList()
+          userLog('群体管理/删除群体')
+        }
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 批量删除群体
+  @action async removeGroupList(ids) {
+    try {
+      const res = await io.removeGroupList({
+        ids, // 群体ID
       })
       runInAction(() => {
         if (res) {

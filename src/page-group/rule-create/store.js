@@ -237,8 +237,8 @@ class Store {
     }
   }
 
-    // 获取输出标签
-    @action async getOutputTags() {
+  // 获取输出标签
+  @action async getOutputTags() {
     try {
       const res = await io.getOutputTags({
         objId: this.objId, // 实体ID
@@ -254,24 +254,24 @@ class Store {
 
   // 初始化数据
   @action.bound destroy() {
-      if (this.groupId) {
-        this.detail = {}
-      }
-
-      this.current = 0
-      this.oneForm = {}
-      this.threeForm = {}
-      this.submitLoading = false
-
-      this.entityList.clear()
-      this.configTagList.clear()
-      this.otherEntity.clear()
-
-      this.logicExper = {}
-      this.posList = {}
-      this.whereMap = {}
-      this.wherePosMap = {}
+    if (this.groupId) {
+      this.detail = {}
     }
+
+    this.current = 0
+    this.oneForm = {}
+    this.threeForm = {}
+    this.submitLoading = false
+
+    this.entityList.clear()
+    this.configTagList.clear()
+    this.otherEntity.clear()
+
+    this.logicExper = {}
+    this.posList = {}
+    this.whereMap = {}
+    this.wherePosMap = {}
+  }
 }
 
 export default new Store()

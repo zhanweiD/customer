@@ -8,6 +8,7 @@ const api = {
   checkName: post(`${groupApi}/checkName`), // 群体名称查重
   performGroup: post(`${groupApi}/manual_run`), // 规则实时执行
   removeGroup: post(`${groupApi}/delete_group`), // 删除群体
+  removeGroupList: post(`${groupApi}/batch_del_group`), // 批量删除群体
 
   addGroup: post(`${groupApi}/add_id_group`), // 新建群体
   addIdGroup: post(`${groupApi}/add_id_group`), // 新建id群体

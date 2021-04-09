@@ -23,7 +23,7 @@ export default () => {
       {/* <Route exact path={`${prePath}/manage`} component={GroupManage} /> */}
 
       {/* 实时/离线 群体创建/编辑 */}
-      <Route exact path={`${prePath}/manage/create/:groupId?`} component={RuleCreate} />
+      <Route exact path={`${prePath}/manage/create/:groupId?/:isCopy?`} component={RuleCreate} />
 
       {/* 群体详情 */}
       <Route exact path={`${prePath}/manage/:id/:objId`} component={GroupDetail} /> 

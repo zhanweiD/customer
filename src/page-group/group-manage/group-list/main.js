@@ -3,9 +3,10 @@
  */
 import React, {Component, Fragment} from 'react'
 import {Link} from 'react-router-dom'
-import {action} from 'mobx'
+import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
-import {Popconfirm, Badge, Menu, Button} from 'antd'
+import {Popconfirm, Badge, Menu, Button, Dropdown} from 'antd'
+import {DownOutlined} from '@ant-design/icons'
 
 import {Time} from '../../../common/util'
 import {
@@ -13,7 +14,7 @@ import {
 } from '../../../component'
 
 import search from './search'
-import ModalGroup from './modal'
+// import ModalGroup from './modal'
 // import IdCreate from './id-create'
 import store from './store'
 
@@ -31,29 +32,31 @@ export default class GroupList extends Component {
 
   menu = record => {
     const {status, mode, type} = record
-    let isClick = false
-    if (status === 1) {
-      isClick = false
-    } else if (status === 2) {
-      if (mode === 2 || type === 2) {
-        isClick = false
-      } else {
-        isClick = true
-      }
-    } else {
-      isClick = true
-    }
+    // let isClick = false
+    // if (status === 1) {
+    //   isClick = false
+    // } else if (status === 2) {
+    //   if (mode === 2 || type === 2) {
+    //     isClick = false
+    //   } else {
+    //     isClick = true
+    //   }
+    // } else {
+    //   isClick = true
+    // }
     return (
       <Menu>
-        <Menu.Item disabled={isClick}>
-          <Link disabled={isClick} target="_blank" to={`/group/analyze/${record.id}/${record.objId}/${store.projectId}`}>
-            <a href disabled={isClick}>群体分析</a>
-          </Link>
+        <Menu.Item>
+          <a className="fs12" href>复制</a>
         </Menu.Item>
-        <Menu.Item disabled={isClick}>
-          <Link disabled={isClick} target="_blank" to={`/group/unit/${record.id}/${record.objId}/${record.lastTime}/${store.projectId}`}>
-            <a href disabled={isClick}>个体列表</a>
-          </Link>
+        <Menu.Item>
+          <Authority
+            authCode="group-manage:export-group"
+          >
+            <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
+              <a className="fs12 c85" href>个体列表</a>
+            </Link>
+          </Authority>
         </Menu.Item>
       </Menu>
     )
@@ -69,14 +72,11 @@ export default class GroupList extends Component {
         </Link>
       ),
     }, {
-      key: 'objName',
-      title: '实体',
-      dataIndex: 'objName',
-    }, {
       key: 'lastCount',
-      title: '群体数量',
+      title: '覆盖人数',
       dataIndex: 'lastCount',
-    }, {
+    }, 
+    {
       key: 'status',
       title: '群体状态',
       dataIndex: 'status',
@@ -88,81 +88,77 @@ export default class GroupList extends Component {
         }
         return (<Badge color="blue" text="计算中" />)
       },
-    }, {
+    }, 
+    {
       key: 'lastTime',
       title: '创建时间',
       dataIndex: 'lastTime',
       width: 170,
       render: text => <Time timestamp={text} />,
-    }, {
+    }, 
+    {
+      key: 'cUserName',
+      title: '创建人',
+      dataIndex: 'cUserName',
+    },
+    {
       key: 'updateTime',
       title: '更新时间',
       dataIndex: 'updateTime',
       width: 170,
       render: text => <Time timestamp={text} />,
-    }, {
+    }, 
+    {
       key: 'action',
       title: '操作',
       width: 250,
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">
-          <Fragment>
-            <Authority
-              authCode="group-manage:add-group"
-            >
-              <a className="mr16" onClick={() => this.goPerform(record)} href>执行</a>
-              {/* <a className="mr16" disabled={record.status === 3 || record.mode === 2} onClick={() => this.goPerform(record)} href>执行</a> */}
-            </Authority>
-          </Fragment>
-          <Fragment>
-            <Authority
-              authCode="group-manage:add-group"
-            >
-              <a className="mr16" href onClick={() => this.goGroupEdit(record)}>编辑</a>
-              {/* <a className="mr16" disabled={record.status === 3} href onClick={() => this.goGroupEdit(record)}>编辑</a> */}
-            </Authority>
-          </Fragment>
-               
-          <Fragment>
-            <Authority
-              authCode="group-manage:add-group"
-            >
-              <Popconfirm
-                placement="topRight"
-                title="你确定要删除该群体吗？"
-                // disabled={record.status === 3}
-                onConfirm={() => this.delItem(record.id)}
-              >
-                {/* <a href>删除</a> */}
-                <a href className="mr16">删除</a>
-                {/* <a disabled={record.status === 3} href className="mr16">删除</a> */}
-              </Popconfirm>
-            </Authority>
-
-            <Fragment>
-              <Authority
-                authCode="group-manage:export-group"
-              >
-                <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
-                  <a href>个体列表</a>
-                  {/* <a disabled={record.status === 3} href>个体列表</a> */}
-                </Link>
-
-              </Authority>
-            </Fragment>
-           
-          </Fragment>
-          {/* <Authority
-            authCode="tag_app:analyze_group[x]"
+          <Authority
+            authCode="group-manage:add-group"
           >
-            <Dropdown overlay={() => this.menu(record)}>
-              <a href>
-                更多
-                <DownOutlined />
-              </a>
-            </Dropdown>
-          </Authority> */}
+            <a className="mr16" disabled={record.status === 2} onClick={() => this.goPerform(record)} href>运行</a>
+          </Authority>
+          <Authority
+            authCode="group-manage:add-group"
+          >
+            <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, false)}>编辑</a>
+          </Authority>
+
+          <Authority
+            authCode="group-manage:add-group"
+          >
+            <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, true)}>复制</a>
+          </Authority>
+               
+          <Authority
+            authCode="group-manage:add-group"
+          >
+            <Popconfirm
+              placement="topRight"
+              title="你确定要删除该群体吗？"
+              disabled={record.status === 2}
+              onConfirm={() => store.removeGroup(record.id)}
+            >
+              <a disabled={record.status === 2} href className="mr16">删除</a>
+            </Popconfirm>
+          </Authority>
+
+          <Authority
+            authCode="group-manage:export-group"
+          >
+            <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
+              <a href>个体列表</a>
+            </Link>
+          </Authority>
+          
+          {/* <Dropdown overlay={() => this.menu(record)}>
+            <a href>
+              更多
+              <DownOutlined />
+            </a>
+          </Dropdown> */}
         </div>
       ),
     },
@@ -178,11 +174,6 @@ export default class GroupList extends Component {
     store.pushDrawerVis = true
   }
 
-  // 删除群体
-  delItem = id => {
-    store.removeGroup(id)
-  }
-
   // 群体执行
   goPerform = record => {
     const {mode, type, id} = record
@@ -192,23 +183,11 @@ export default class GroupList extends Component {
   }
 
   // 跳转到群体编辑
-  goGroupEdit = record => {
+  goGroupEdit = (record, isCopy) => {
     store.isAdd = false
-    const {mode, id, type, objId} = record
+    const {id} = record
 
-    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/${id}`
-    // if (mode === 2) {
-    //   record.objId = objId.toString()
-    //   store.objId = record.objId
-    //   store.recordObj = record
-    //   store.uploadData = true
-
-    //   store.getTagList()
-    //   store.getEditIdGroup(this.childForm.setOutputTags)
-    //   store.drawerVisible = true
-    // } else {
-    //   window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/${id}`
-    // }
+    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/${id}/${isCopy}`
   }
 
   // 列表请求前搜索参数处理
@@ -222,13 +201,19 @@ export default class GroupList extends Component {
     return values
   }
 
-  render() {
-    const {
-      projectId,
-    } = store
+  @action.bound onTableCheck(selectedRowKeys, selectedRows) {
+    // 表格 - 已选项
+    // store.rowKeys = selectedRows
+    store.selectedRows = selectedRowKeys
+  }
 
+  render() {
+    const {selectedRows, removeGroupList} = store
+    const rowSelection = {
+      selectedRowKeys: selectedRows.slice(),
+      onChange: this.onTableCheck,
+    }
     const listConfig = {
-      initParams: {projectId},
       columns: this.columns,
       searchParams: search(store),
       beforeSearch: this.beforeSearch,
@@ -236,20 +221,30 @@ export default class GroupList extends Component {
         <Authority
           authCode="group-manage:add-group"
         >
-          <Button type="primary" onClick={() => this.openModal()}>新建群体</Button>
+          <Button className="mr8" type="primary" onClick={() => this.openModal()}>新建群体</Button>
+        </Authority>,
+        <Authority
+          authCode="group-manage:add-group"
+        >
+          <Popconfirm
+            placement="topRight"
+            title="你确定要删除群体吗？"
+            disabled={selectedRows.length === 0}
+            onConfirm={removeGroupList}
+          >
+            <Button disabled={selectedRows.length === 0}>批量删除</Button>
+          </Popconfirm>
         </Authority>,
       ],
+      rowKey: 'id',
+      rowSelection,
       // initGetDataByParent: true, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
     }
 
     return (
       <div style={{minHeight: 'calc(100vh - 203px)'}}>
-        {/* <div className="list-content"> */}
         <ListContent {...listConfig} />
-        {/* </div> */}
-        {/* <ModalGroup store={store} /> */}
-        {/* <IdCreate onRef={ref => this.childForm = ref} store={store} /> */}
       </div>
     )
   }

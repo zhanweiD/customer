@@ -30,6 +30,19 @@ const serach = store => [
     component: 'select',
   },
   {
+    label: '创建人',
+    key: 'cUserId',
+    initialValue: '',
+    control: {
+      placeholder: '请选择创建人',
+    },
+    options: [
+      {name: '全部', value: ''},
+      // ...toJS(store.entityList),
+    ],
+    component: 'select',
+  },
+  {
     label: '群体名称',
     key: 'keyword',
     control: {
