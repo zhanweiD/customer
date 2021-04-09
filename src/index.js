@@ -21,6 +21,8 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 
 import TagMarket from './page-tag-market'
+import TagObject from './page-tag-object'
+import TagDetail from './page-tag-market-detail'
 
 const njkData = {
   dict,
@@ -38,7 +40,7 @@ function Entry() {
           {/* 系统管理 */}
           <Route path="/system" component={System} />
           {/* 标签管理 */}
-          <Route path="/tag" component={Manage} />
+          {/* <Route path="/tag" component={Manage} /> */}
           {/* 标签同步 */}
           {/* <Route path="/tag" component={Sync} /> */}
           {/* 群体分析 */}
@@ -56,7 +58,12 @@ function Entry() {
           <Route path="/group" component={Group} />
 
           <Route path="/tag/market" component={TagMarket} />
+          
+          <Route path="/tag/detail" component={TagDetail} />
 
+          <Route path="/tag/object" component={TagObject} />
+
+          <Route path="/tag/manage" component={Manage} />
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

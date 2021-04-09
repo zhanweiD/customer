@@ -62,7 +62,7 @@ export default class ModalForm extends Component {
                 valuePropName,
                 rules: mergeRules(rules, label),
                 validateFirst: true,
-              })(<ControlComponent mode={mode} type={type} label={label} {...control} {...rest} />)}
+              })(<ControlComponent mode={mode} type={type} label={label} {...control} {...rest} autoComplete="off" />)}
             </FormItem>
           )
         }

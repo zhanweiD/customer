@@ -14,7 +14,7 @@ export default () => {
       {
         codeInProduct('tag-manage:view') && (
           <div>
-            <Route exact path={`${prePath}/manage`} component={ObjectModel} />
+            <Route exact path="/tag/manage/:id" component={ObjectModel} />
             {/* <Redirect strict to={`${prePath}/manage`} /> */}
           </div>
         )
