@@ -13,14 +13,17 @@ export default class BusinessContact extends Component {
   constructor(props) {
     super(props)
     this.store = props.store
+
+    // this.store.getBizType()
   }
   render() {
     return (
       <div style={{height: 'calc(100vh - 392px)'}}>
         <div className="dfjf mt16 mr16">
           <RangePicker />
-          <Select style={{margin: '0px 8px'}} placeholder="触点类型">
-            <Option value="1">11</Option>
+          <Select onChange={v => console.log(v)} style={{margin: '0px 8px'}} placeholder="触点类型">
+            <Option value={0}>线上触点</Option>
+            <Option value={1}>线下触点</Option>
           </Select>
           <Select placeholder="业务类型">
             <Option value="2">11</Option>

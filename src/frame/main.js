@@ -258,7 +258,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 } */}
-                {/* {
+                {
                   showSystem && (
                     <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
                       {
@@ -283,7 +283,7 @@ export default class Frame extends Component {
                       }
                     </SubMenu>
                   )
-                } */}
+                }
               </Menu>
             </Sider>
             {/* </Affix> */}

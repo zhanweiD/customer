@@ -25,17 +25,21 @@ export default class User extends Component {
             return (
               <div className="basis-info-content-list">
                 <div className="info-title">
-                  <span className="title">{item.cat}</span>
-                  <div className="line" />
+                  {item.cat}
+                  {/* <span className="title">{item.cat}</span> */}
+                  {/* <div className="line" /> */}
                 </div>
-                {item.list && item.list.map(content => {
-                  return (
-                    <p className="info-content">
-                      <div className="p-tag">{`${content.tag}:`}</div>
-                      <div className="p-val"><OmitTooltip text={content.val} maxWidth={160} /></div>
-                    </p>
-                  )
-                })}
+                <div>
+                  {item.list && item.list.map(content => {
+                    return (
+                    // <p className="info-content">
+                    //   <div className="p-tag">{`${content.tag}:`}</div>
+                    //   <div className="p-val"><OmitTooltip text={content.val} maxWidth={160} /></div>
+                    // </p>
+                      <span className="mr8 mb8 fs12 c65 info-tag">{content.val}</span>
+                    )
+                  })}
+                </div>
               </div>
             )
           })

@@ -25,7 +25,7 @@ class Store {
   @observable placeholder = '请输入' // 输入提示
   @observable porLoading = false // 画像列表加载
   @observable changeLoading = false // 画像列表加载
-  @observable contactLoading = false // 画像列表加载
+  @observable contactLoading = false // 触点加载
 
   @observable cateList = [] // 触点展开列表
   @observable openKeys = [] // 触点展开列表
@@ -34,7 +34,7 @@ class Store {
   @observable tabLoading = false // 切换loading
   @observable ident = null // 画像个体id
   @observable chartData = [] // 雷达图
-  @observable cloudData = [] // 彰泰标签
+  @observable cloudData = [] // 标签
   @observable isCustomer = true // 客户对象 顾问对象 ？
   @observable currentPage = 1 // 页数
   @observable searchKey = '' // 
@@ -46,14 +46,39 @@ class Store {
   @observable unitTableList = [] // 画像个体触点
   @observable unitTables = [] // 画像个体触点场景下拉
   @observable unitEvents = [] // 画像个体触点信息
-  @observable queryStartTime = null
-  @observable queryEndTime = nowDate // 筛选时间
+  @observable businessList = [] // 业务类型
+
+
   @observable tableName = null // 筛选业务场景
   @observable isLast = false // 是否是最后一页
   @observable isFirst = true // 是否是第一页
 
-  @action pastDate(v) {
-    this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
+  @observable followList = [] // 关注客户列表
+
+  @observable businessParams = {
+    startTime: null,
+    endTime: null,
+    eventType: null,
+    bizCode: null,
+  } // 业务触点搜索参数
+
+  // @action pastDate(v) {
+  //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
+  // }
+
+  // 获取关注客户列表
+  @action async getFollow(currentPage = 1) {
+    this.followLoading = true
+    try {
+      const res = await io.getFollow({currentPage})
+      runInAction(() => {
+        this.followList = res.data
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.followLoading = false
+    }
   }
   // 获取画像个体(对象)
   @action async getPortrait() {
@@ -124,14 +149,12 @@ class Store {
   }
 
   // 获取触点
-  @action async getUnitEvent() {
+  @action.bound async getUnitEvent() {
     this.contactLoading = true
     try {
       const res = await io.getUnitEvent({
         id: this.portraitId,
         ident: this.ident,
-        queryStartTime: this.queryStartTime,
-        queryEndTime: this.queryEndTime,
         tableName: this.tableName,
       })
       runInAction(() => {
@@ -156,6 +179,21 @@ class Store {
       })
       runInAction(() => {
         this.unitTables = res
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获取业务类型
+  @action async getBizType() {
+    try {
+      const res = await io.getBizType({
+        // id: this.portraitId,
+        // ident: this.ident,
+      })
+      runInAction(() => {
+        this.businessList = res
       })
     } catch (e) {
       errorTip(e.message)
