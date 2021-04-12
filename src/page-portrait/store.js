@@ -62,6 +62,10 @@ class Store {
     bizCode: null,
   } // 业务触点搜索参数
 
+  // 标签云图
+  @observable cateTitle = [] // 搜索同类目标签标题
+  color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
+
   // @action pastDate(v) {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
   // }
@@ -203,6 +207,7 @@ class Store {
   // 获取标签云图
   @action async getObjCloud(cb) {
     this.loading = true
+    this.cateTitle = []
     try {
       const res = await io.getObjCloud({
         id: this.portraitId,
@@ -211,9 +216,15 @@ class Store {
       runInAction(() => {
         this.cloudData = []
         const list = res || []
-        list.forEach(item => {
+        list.forEach((item, i) => {
+          this.cateTitle.push({text: item.cat, color: this.color[i]})
           if (item.list) {
-            this.cloudData = [...this.cloudData, ...item.list]
+            // 同类标签颜色生成
+            const newList = item.list.map(text => {
+              text.color = this.color[i]
+              return text
+            })
+            this.cloudData = [...this.cloudData, ...newList]
           }
         })
         cb(this.cloudData, 2)

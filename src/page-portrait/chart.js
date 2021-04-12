@@ -32,6 +32,10 @@ export default class ChartPie extends Component {
     this.myChartPie = echarts.init(this.refs.chartPie)
     this.myChartBar = echarts.init(this.refs.chartBar)
 
+    // 将drawSaveTrend传递给父组件
+    const {props} = this
+    props.getDraw(this.drawSaveTrend)
+
     this.store.getChart(data => {
       this.drawSaveTrend(data)
     })

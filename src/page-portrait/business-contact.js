@@ -10,6 +10,7 @@ const {Option} = Select
 
 @observer
 export default class BusinessContact extends Component {
+  drawSaveTrend = null
   constructor(props) {
     super(props)
     this.store = props.store
@@ -30,7 +31,7 @@ export default class BusinessContact extends Component {
           </Select>
         </div>
         <div className="d-flex mb16">
-          <Chart store={this.store} />
+          <Chart store={this.store} getDraw={drawSaveTrend => this.drawSaveTrend = drawSaveTrend} />
           <Contact store={this.store} />
         </div>
       </div>
