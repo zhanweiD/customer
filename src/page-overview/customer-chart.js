@@ -4,27 +4,11 @@
 import {useEffect, useRef, useState} from 'react'
 
 import {errorTip} from '../common/util'
+import {LegendItem} from '../component'
 
 import {sunOption, funnelOption} from './chart-option'
 import Cloud from './cloud'
 import io from './io'
-
-const LegendItem = ({title, percent, counts, color}) => {
-  return (
-    <div className="categroy-legend-item FBH FBAC">
-      <div className="legend-name">
-        <span style={{background: color}} className="legend-name-icon mr8" />
-        <span>{title}</span>
-      </div>
-      <div className="legend-bar">
-        <div className="legend-bar-inner" style={{width: percent}} />
-      </div>
-      <span className="c45 ml8 mr8">{percent}</span>
-      <span className="c45">|</span>
-      <span className="ml8 c45">{counts}</span>
-    </div>
-  )
-}
 
 const data = [
   {
@@ -35,10 +19,11 @@ const data = [
   },
 ]
   
-const CustomerChart = ({sunData}) => {
+const CustomerChart = ({area}) => {
   const chartSun = useRef(null)
   const chartFunnel = useRef(null)
   const [funnelData, setFunnelData] = useState({})
+  const [sunData, setSunData] = useState([])
 
   // 获取配置信息
   async function getFunnel() {
@@ -91,7 +76,7 @@ const CustomerChart = ({sunData}) => {
       myChartFunnel && myChartFunnel.resize()
     }
  
-    myChartSun.setOption(sunOption)
+    myChartSun.setOption(sunOption())
     myChartFunnel.setOption(funnelOption(funnelData.data1, funnelData.data2))
     window.addEventListener('resize', resize)
   }
@@ -125,7 +110,11 @@ const CustomerChart = ({sunData}) => {
       </div>
       <div className="bgf mb16" ref={chartFunnel} style={{height: '420px', width: '100%'}} />
       <div className="bgf" style={{height: '400px', width: '100%'}}>
-        <div className="pt16 pl16 fs14 c85">客户心声</div>
+        <div className="pt16 pl16 fs14 c85">
+          {
+            area === 'china' ? '客户心声' : '显著特征'
+          }
+        </div>
         <Cloud />
       </div>
       {/* </Spin> */}

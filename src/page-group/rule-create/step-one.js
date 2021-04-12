@@ -22,7 +22,7 @@ export default class StepOne extends Component {
   
   selectContent= () => {
     const {
-      entityList = [], objId, groupId, detail,
+      entityList = [], objId, groupId, detail, isCopy,
     } = this.store
 
     return [{
@@ -41,7 +41,7 @@ export default class StepOne extends Component {
     }, {
       label: '群体名称',
       key: 'name',
-      initialValue: detail.name,
+      initialValue: isCopy ? undefined : detail.name,
       rules: [
         '@namePattern',
         '@nameUnderline',
@@ -51,7 +51,7 @@ export default class StepOne extends Component {
         '@max32',
         {validator: this.checkName},
       ],
-      disabled: !objId || groupId,
+      disabled: !objId || (groupId && !isCopy),
       component: 'input',
     }, {
       label: '描述',

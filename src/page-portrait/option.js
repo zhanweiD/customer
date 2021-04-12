@@ -1,58 +1,188 @@
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
 const fontColor = 'rgba(0,0,0,0.65)'
+const titleColor = 'rgba(0,0,0,0.85)'
+const bgColor = '#fff'
+const title = '触点总数'
 
-export default function radarOption(radarChart) {
+export function pieOption(data, total) {
+  if (!data.length) {
+    return {
+      title: [{
+        text: '业务类型分布',
+        top: 16,
+        left: 16,
+        textStyle: {
+          fontSize: 14,
+          color: titleColor,
+          fontWeight: 400,
+        },
+      }, {
+        text: '暂无数据',
+        top: '50%',
+        left: '50%',
+        textStyle: {
+          fontSize: 32,
+          color: titleColor,
+          fontWeight: 400,
+        },
+      }],
+    } 
+  }
   return ({
     color,
-    tooltip: {},
-    radar: {
-      radius: '70%',
-      // radius: '50%',
-      nameGap: 4, // 图中工艺等字距离图的距离
-      // splitNumber: 3, //指示器轴的分割段数
-      name: {
-        textStyle: {
-          color: fontColor,
-          fontSize: 12,
-        },
-      },
-      indicator: radarChart.indicator && radarChart.indicator.map(item => {
-        return {
-          name: item,
-          max: 100,
-        }
-      }),
-      axisLine: { // 指向外圈文本的分隔线样式
-        lineStyle: {
-          // color: '#1c368f',
-        },
-      },
-      splitLine: {
-        lineStyle: {
-        },
-      },
-      splitArea: {
-        areaStyle: {
-          // color: '#141845',
-        },
-      },
+    tooltip: {
+      trigger: 'item',
     },
+    title: [{
+      text: `{name|${title}}\n{val|${total}}`,
+      top: 'center',
+      left: 'center',
+      textStyle: {
+        rich: {
+          name: {
+            fontSize: 14,
+            fontWeight: 'normal',
+            color: fontColor,
+            padding: [10, 0],
+          },
+          val: {
+            fontSize: 32,
+            fontWeight: 'bold',
+            color: titleColor,
+          },
+        },
+      },
+    }, {
+      text: '业务类型分布',
+      top: 0,
+      left: 0,
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 400,
+      },
+    }],
     grid: {
-      top: '8%',
-      left: '4%',
-      right: '4%',
-      bottom: '4%',
-      containLabel: true,
+      left: -48,
+      right: 0,
     },
     series: [{
-      name: ' ',
-      type: 'radar',
-      data: radarChart.data && radarChart.data.map((item, index) => {
-        item.areaStyle = {
-          color: color[index],
-        }
-        return item
-      }),
+      type: 'pie',
+      left: -48,
+      right: 8,
+      radius: ['55%', '75%'],
+      center: ['50%', '50%'],
+      data,
+      // hoverAnimation: false,
+      itemStyle: {
+        normal: {
+          borderColor: bgColor,
+          borderWidth: 2,
+        },
+      },
+      labelLine: {
+        show: false,
+      },
+      label: {
+        show: false,
+        // normal: {
+        //   // formatter: params => {
+        //   //   return (
+        //   //     `{name|${params.name}}{value|${params.value}}\n{percent|${params.percent.toFixed(2)}%}`
+        //   //   )
+        //   // },
+        //   rich: {
+        //     name: {
+        //       fontSize: 12,
+        //       padding: [0, 4, 0, 4],
+        //       color: fontColor,
+        //     },
+        //     percent: {
+        //       fontSize: 12,
+        //       padding: [0, 4, 0, 4],
+        //       color: fontColor,
+        //     },
+        //     value: {
+        //       fontSize: 12,
+        //       color: fontColor,
+        //     },
+        //   },
+        // },
+      },
     }],
   })
+}
+
+export function barOption(data) {
+  return ({
+    title: {
+      text: '触点类型分布',
+      top: 0,
+      left: 0,
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 400,
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'none',
+      },
+    },
+    legend: {
+      data: ['线下触点', '线上触点'],
+      top: 48,
+      right: 0,
+    },
+    grid: {
+      top: 96,
+      left: 8,
+      right: 0,
+    },
+    xAxis: {
+      type: 'value',
+      show: false,
+    },
+    yAxis: {
+      type: 'category',
+      data: ['触点类型'],
+      show: false,
+    },
+    series: [
+      {
+        name: '线上触点',
+        type: 'bar',
+        stack: 'total',
+        label: {
+          show: true,
+        },
+        barWidth: '100%',
+        data: [320],
+        color: color[0],
+
+      },
+      {
+        name: '线下触点',
+        type: 'bar',
+        stack: 'total',
+        color: color[1],
+        label: {
+          show: true,
+          // normal: {
+          //   formatter: params => {
+          //     console.log(params)
+          //     // return (
+          //     //   `{name|${params.name}}{value|${params.value}}\n{percent|${params.percent.toFixed(2)}%}`
+          //     // )
+          //   },
+          // },
+        },
+        barWidth: '100%',
+        data: [220],
+      },
+    ],
+  }
+  )
 }

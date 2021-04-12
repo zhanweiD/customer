@@ -17,6 +17,7 @@ import ModalStotageDetail from './modal-stroage-detail'
 import Card from './dt-card'
 import DtGrid from './dt-grid'
 import {AuthBox, Authority} from './auth-box'
+import LegendItem from './legendItem'
 
 export {
   DetailHeader,
@@ -40,4 +41,5 @@ export {
   ModalStotageDetail,
   Card,
   DtGrid,
+  LegendItem,
 }

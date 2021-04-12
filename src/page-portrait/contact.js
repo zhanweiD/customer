@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {Timeline, DatePicker, Select, Menu, Spin} from 'antd'
+import {Timeline, Button, Select, Menu, Spin} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
+import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/icons'
 
 import {NoData} from '../component'
 
@@ -54,68 +55,69 @@ export default class Contact extends Component {
   @action setContact = v => {
     return (
       v.detailContent.map(item => (
-        // <Menu onClick={this.handleClick} mode="inline">
-        //   <SubMenu key="sub1" title={item.tableZhName}>
-        //     <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '12px'}}>
-        //       <OmitTooltip text={item} maxWidth={200} />
-        //     </div>
-        //   </SubMenu>
-        // </Menu>
         <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '12px', marginRight: '8px'}}>
-          {/* <OmitTooltip text={item} maxWidth={200} /> */}
           {item}
         </div>
       ))
     )
   }
 
-  handleClick = e => {
-    console.log('click ', e)
+  // 全部展开menu
+  @action openMenu = () => {
+    this.store.openKeys = this.store.cateList
+  }
+  // 关闭menu
+  @action closeMenu = () => {
+    this.store.openKeys = []
+  }
+  @action clickMenu = v => {
+    this.store.openKeys = v
   }
 
   render() {
-    const {unitEvents, unitTables, contactLoading, unitTableList} = this.store
+    const {unitEvents, contactLoading, openKeys} = this.store
     return (
-      <div className="m16 time-list">
-        <div>业务触点</div>
-        <Spin spinning={contactLoading}>
-          <div className="dfjs mb16">
-            {/* <RangePicker 
-            style={{width: '60%'}} 
-          /> */}
-            <Select defaultValue={365} allowClear style={{width: '40%'}} placeholder="请选择时间" onChange={this.selectTime}>
-              {
-                optionTime.map(item => <Option value={item.value}>{item.name}</Option>)
-              }
-            </Select>
-            <Select allowClear style={{width: '40%'}} placeholder="业务场景" onChange={this.selectTable}>
-              {
-                unitTables.map(item => <Option value={item.tableName}>{item.tableZhName}</Option>)
-              }
-            </Select>
+      <div className="m16 mt8 time-list">
+        <div className="dfjc">
+          <div className="mb16">业务触点</div>
+          <div className="far mr16">
+            <RetweetOutlined onClick={() => console.log(111)} />
+            <ArrowsAltOutlined style={{margin: '0px 8px'}} onClick={this.openMenu} />
+            <ShrinkOutlined onClick={this.closeMenu} />
           </div>
+        </div>
+        
+        <Spin spinning={contactLoading}>
           <Timeline mode="left" style={{marginLeft: '-58%'}}>
             {
-              unitEvents.map(item => {
-                return item.detailsList.map(items => {
-                  if (items.detailContent) {
+              unitEvents.map(items => {
+                return items.detailsList.map(item => {
+                  // 存放menu key
+                  if (item.date) this.store.cateList.push(item.date)
+                  // 生成时间轴节点内容
+                  if (item.detailContent) {
                     return (
-                      <Timeline.Item label={items.monthDay} position="left">
-                        <Menu onClick={this.handleClick} mode="inline">
-                          <SubMenu key="sub1" title={items.tableZhName}>
-                            {this.setContact(items)}
+                      <Timeline.Item label={item.monthDay} position="left">
+                        <Menu 
+                          openKeys={openKeys} 
+                          onOpenChange={v => this.clickMenu(v)}
+                          mode="inline"
+                        >
+                          <SubMenu key={item.date} title={item.tableZhName}>
+                            {this.setContact(item)}
                           </SubMenu>
                         </Menu>
                       </Timeline.Item>
                     )
                   }
                   return (
-                    <Timeline.Item color="green" style={{height: '24px', fontSize: '14px'}} label={items.monthDay} position="left" />
+                    <Timeline.Item color="green" style={{height: '24px', fontSize: '14px'}} label={item.monthDay} position="left" />
                   )
                 })
               })
             }
           </Timeline>
+    
           {
             unitEvents.length ? null : (<NoData style={{marginTop: '60%'}} text="暂无数据" size="small" />)
           }

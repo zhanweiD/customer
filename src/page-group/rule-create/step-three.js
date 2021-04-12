@@ -22,7 +22,6 @@ const StepThree = ({current, configTagList, prev, save, loading, detail, type}) 
     if (type === 1) {
       params.scheduleType = scheduleType
       params.scheduleExpression = scheduleExpression
-      // params.isStart = isStart ? +isStart : undefined
       params.startTime = rangePicker && +moment(rangePicker[0]).format('x')
       params.endTime = rangePicker && +moment(rangePicker[1]).format('x')
     }

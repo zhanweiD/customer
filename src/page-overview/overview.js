@@ -34,13 +34,21 @@ const cards = [
 ]
 
 const Overview = () => {
+  const [area, setArea] = useState('china')
+  const changeArea = v => {
+    setArea(v)
+  }
   return (
     <div className="overview">
       <div className="content-header">
         <span>客户中心</span>
-        <Select style={{width: 128, marginLeft: '8px', marginRight: '8px'}} defaultValue="1">
-          <Option value="1">全集团</Option>
-          <Option value="2">浙江</Option>
+        <Select 
+          style={{width: 128, marginLeft: '8px', marginRight: '8px'}} 
+          defaultValue={area}
+          onChange={changeArea}
+        >
+          <Option value="china">全集团</Option>
+          <Option value="zheJiang">浙江</Option>
         </Select>
         <Select style={{width: 128}} defaultValue="1">
           <Option value="1">最近一周</Option>
@@ -52,11 +60,11 @@ const Overview = () => {
       </div>
       <div className="d-flex m16">
         <div className="mr16" style={{width: '70%'}}>
-          <ConversionChart />
-          <DistributionChart />
+          <ConversionChart area={area} />
+          <DistributionChart mapType={area} />
         </div>
         <div style={{width: '30%'}}>
-          <CustomerChart />
+          <CustomerChart area={area} />
         </div>
       </div>
     </div>

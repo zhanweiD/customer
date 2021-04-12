@@ -1,7 +1,6 @@
 import {Component, useEffect, Fragment} from 'react'
 import {observer, Provider} from 'mobx-react'
 import {action, toJS} from 'mobx'
-import OnerFrame from '@dtwave/oner-frame'
 import {Steps, message, Modal} from 'antd'
 
 import store from './store'
@@ -22,7 +21,11 @@ export default class RuleCreate extends Component {
     store.type = 1
     
     store.groupId = params.groupId
+    store.isCopy = params.isCopy
 
+    if (params.isCopy) {
+      return headerTitle = '复制群体'
+    }
     if (params.groupId) {
       headerTitle = '编辑群体'
     } else {
@@ -48,15 +51,13 @@ export default class RuleCreate extends Component {
   }
 
   @action save = values => {
-    const {oneForm, submitLoading, groupId} = store
+    const {groupId, isCopy} = store
 
-    if (groupId) {
-      // message.loading({content: `群体 ${oneForm.name} 编辑中...`, duration: 1})
+    if (groupId && !isCopy) {
       store.editGroup(values, res => {
         this.showResult(res)
       })
     } else {
-      // message.loading({content: `群体 ${oneForm.name} 创建中...`, duration: 1})
       store.addGroup(values, res => {
         this.showResult(res)
       })
@@ -64,10 +65,10 @@ export default class RuleCreate extends Component {
   }
 
   @action showResult = result => {
-    const {oneForm, groupId} = store
+    const {oneForm, groupId, isCopy} = store
 
     if (result) {
-      message.success(`群体 ${oneForm.name} ${groupId ? '编辑' : '创建'}成功`)
+      message.success(`群体 ${oneForm.name} ${groupId && !isCopy ? '编辑' : '创建'}成功`)
       window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`
     } else {
       Modal.error({
