@@ -1,14 +1,30 @@
 import React from 'react'
+import {Button} from 'antd'
 import {EditOutlined, CopyOutlined, ReloadOutlined} from '@ant-design/icons'
+import {inject} from 'mobx-react'
+import {useObserver} from 'mobx-react-lite'
 
 
-export default () => {
-  return (
+export default inject('store')(({store}) => {
+  const {groupDetail: {name, descr, logicExper, nums, coveringRate}} = store
+
+  const genRate = num => {
+    if (num === 0) {
+      return '0%'
+    }
+
+    return `${(num * 100).toFixed(2)}%`
+  }
+
+  return useObserver(() => (
     <div className="manage-detail-header">
       <div className="FBH FBJB FBAC">
         <div className="FBV">
           <div>
-            <span className="detail-head">客群名称</span>
+            <span className="detail-head">
+              客群名称：
+              {name}
+            </span>
             <EditOutlined className="header-icon ml16" />
             <CopyOutlined className="header-icon ml16" />
             <ReloadOutlined className="header-icon ml16" />
@@ -18,7 +34,7 @@ export default () => {
               客群描述：
             </span>
             <span className="black65">
-              卡卡卡卡卡
+              {descr}
             </span>
           </div>
           <div>
@@ -26,7 +42,7 @@ export default () => {
               圈选规则：
             </span>
             <span className="black65">
-              卡卡卡卡卡
+              {logicExper}
             </span>
           </div>
         </div>
@@ -36,7 +52,7 @@ export default () => {
               覆盖客户数
             </div>
             <div className="black65">
-              1234
+              {nums}
             </div>
           </div>
           <div className="FBV ml24">
@@ -44,11 +60,11 @@ export default () => {
               客户覆盖率
             </div>
             <div className="black65">
-              57%
+              {genRate(coveringRate)}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  ))
+})
