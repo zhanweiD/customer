@@ -10,17 +10,6 @@ import {NoData, LegendItem} from '../component'
 
 import {pieOption, barOption} from './option'
 
-const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
-
-
-// const datal = [
-//   {
-//     title: '外渠',
-//     percent: '20%',
-//     counts: 20,
-//     color: '#1cd389',
-//   },
-// ]
 
 @observer
 export default class ChartPie extends Component {
@@ -45,7 +34,7 @@ export default class ChartPie extends Component {
     })
   }
 
-  @action.bound drawSaveTrend(data, total, barData) {
+  @action.bound drawSaveTrend(pieData, total, barData) {
     const resize = () => {
       if (this.myChartPie) {
         this.myChartPie.resize()
@@ -54,12 +43,12 @@ export default class ChartPie extends Component {
     }
     window.addEventListener('resize', resize)
 
-    this.myChartPie.setOption(pieOption(data, total))
+    this.myChartPie.setOption(pieOption(pieData, total))
     this.myChartBar.setOption(barOption(barData))
   }
 
   render() {
-    const {pieData, pieTotal, chartLoading} = this.store
+    const {pieData, pieTotal, chartLoading, color} = this.store
     return (
       <div className="chart m16 mt8 p16 box-border">
         <Spin spinning={chartLoading}>

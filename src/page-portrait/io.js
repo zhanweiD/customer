@@ -4,10 +4,13 @@ import {baseApi, get, post} from '../common/util'
 const api = { 
   getPortrait: get(`${baseApi}/portrait`), // 画像列表
   getUnitList: post(`${baseApi}/portrait/individual`), // 画像个体列表
-  getUnitBasic: post(`${baseApi}/portrait/basic`), // 画像个体基础信息
   getObjCloud: post(`${baseApi}/portrait/portrait`), // 画像个体画像
   getUnitTable: post(`${baseApi}/portrait/eventTables`), // 画像个体触点场景下拉
   getCusVoice: post(`${baseApi}/portrait/cusVoice`), // 客户心声
+
+  // 客户档案
+  getUnitBasic: post(`${baseApi}/portrait/basic`), // 画像个体基础信息
+  actionFocus: post(`${baseApi}/portrait/attention`), // 关注取关
 
   // getFollow: get(`${baseApi}/portrait/follow`), // 关注客户列表
   getFollow: get('http://192.168.90.129:3000/mock/208/hub_api/portrait/follow/'), // 关注客户列表

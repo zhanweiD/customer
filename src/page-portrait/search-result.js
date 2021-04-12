@@ -22,6 +22,7 @@ export default class SearchResult extends Component {
   // 卡片信息处理
   setCard = item => {
     const cards = []
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in item) {
       if (key !== 'ident') {
         cards.push(`${key}: ${item[key]}`)
@@ -37,6 +38,7 @@ export default class SearchResult extends Component {
       </div>
     )
   }
+  // 切换个体
   @action selectPor = v => {
     this.store.ident = v
     this.store.toAllTag = true // 标签模式切换为列表
@@ -45,6 +47,7 @@ export default class SearchResult extends Component {
     this.store.unitName = v.姓名
   }
 
+  // 上一页
   @action prevPage = () => {
     this.store.isLast = false
     if (this.store.currentPage === 2) {
@@ -100,15 +103,6 @@ export default class SearchResult extends Component {
               // <Spin spinning={changeLoading}>
               <div className="d-flex user-info mb16">
                 <div className="basis-info bgf box-border">
-                  <div className="herder">客户档案</div>
-                  <div className="fs12 c65 pl16 pr16 pb8 bbc">
-                    <div className="dfjc lh24">
-                      <div>姓名</div>
-                      <Button>关注</Button>
-                    </div>
-                    <div className="lh24">业务身份</div>
-                    <div className="lh24">联系电话</div>
-                  </div>
                   <User store={this.store} />
                 </div>
                 
@@ -143,15 +137,6 @@ export default class SearchResult extends Component {
                         // <Spin spinning={changeLoading}>
                         <div className="d-flex user-info mb16">
                           <div className="basis-info bgf box-border">
-                            <div className="herder">客户档案</div>
-                            <div className="fs12 c65 pl16 pr16 pb8 bbc">
-                              <div className="dfjc lh24">
-                                <div>姓名</div>
-                                <Button>关注</Button>
-                              </div>
-                              <div className="lh24">业务身份</div>
-                              <div className="lh24">联系电话</div>
-                            </div>
                             <User store={this.store} />
                           </div>
                           <div className="user-portrait ml16 bgf">

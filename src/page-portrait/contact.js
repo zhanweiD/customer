@@ -6,7 +6,6 @@ import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/ic
 
 import {NoData} from '../component'
 
-const {Option} = Select
 const {SubMenu} = Menu
 
 const optionTime = [
@@ -22,30 +21,17 @@ export default class Contact extends Component {
   constructor(props) {
     super(props)
     this.store = props.store
-
-    // this.store.pastDate(365) // 永久历史时间
   }
 
   componentDidMount() {
-    // this.store.getUnitTable()
     this.store.getUnitEvent()
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.ident !== this.props.ident) {
-      // this.store.pastDate(365)
       this.store.tableName = null
     }
   }
-
-  // @action selectTime = v => {
-  //   if (v) {
-  //     this.store.pastDate(v)
-  //   } else {
-  //     this.store.pastDate(365)
-  //   }
-  //   this.store.getUnitEvent()
-  // }
 
   @action selectTable = v => {
     this.store.tableName = v
@@ -89,7 +75,7 @@ export default class Contact extends Component {
         </div>
         
         <Spin spinning={contactLoading}>
-          <Timeline mode="left" style={{marginLeft: '-58%'}}>
+          <Timeline mode="left" style={{marginLeft: '-44%'}}>
             {
               unitEvents.map(items => {
                 return items.detailsList.map(item => {
