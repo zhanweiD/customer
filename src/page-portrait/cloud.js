@@ -74,8 +74,6 @@ export default class Cloud extends Component {
       .attr('width', this.layout.size()[0])
       .attr('height', this.layout.size()[1])
       .append('g')
-      .attr('width', this.layout.size()[0])
-      .attr('height', this.layout.size()[1])
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
       .selectAll('text')
       .data(data)
@@ -87,6 +85,10 @@ export default class Cloud extends Component {
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
+      // .insert('rect', 'text')
+      // .attr('width', d => d.width)
+      // .attr('height', d => d.height)
+      // .style('fill', (d, i) => d.color)
   }
 
   render() {

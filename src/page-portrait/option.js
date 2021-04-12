@@ -28,6 +28,7 @@ export function pieOption(data, total) {
       }],
     } 
   }
+ 
   return ({
     color,
     tooltip: {
@@ -70,7 +71,7 @@ export function pieOption(data, total) {
       type: 'pie',
       left: -48,
       right: 8,
-      radius: ['55%', '75%'],
+      radius: ['58%', '78%'],
       center: ['50%', '50%'],
       data,
       // hoverAnimation: false,
@@ -85,35 +86,13 @@ export function pieOption(data, total) {
       },
       label: {
         show: false,
-        // normal: {
-        //   // formatter: params => {
-        //   //   return (
-        //   //     `{name|${params.name}}{value|${params.value}}\n{percent|${params.percent.toFixed(2)}%}`
-        //   //   )
-        //   // },
-        //   rich: {
-        //     name: {
-        //       fontSize: 12,
-        //       padding: [0, 4, 0, 4],
-        //       color: fontColor,
-        //     },
-        //     percent: {
-        //       fontSize: 12,
-        //       padding: [0, 4, 0, 4],
-        //       color: fontColor,
-        //     },
-        //     value: {
-        //       fontSize: 12,
-        //       color: fontColor,
-        //     },
-        //   },
-        // },
       },
     }],
   })
 }
 
 export function barOption(data) {
+  console.log(data)
   return ({
     title: {
       text: '触点类型分布',
@@ -152,35 +131,27 @@ export function barOption(data) {
     },
     series: [
       {
-        name: '线上触点',
+        name: '线下触点',
         type: 'bar',
         stack: 'total',
         label: {
           show: true,
         },
         barWidth: '100%',
-        data: [320],
+        data: [data[0].value],
         color: color[0],
 
       },
       {
-        name: '线下触点',
+        name: '线上触点',
         type: 'bar',
         stack: 'total',
         color: color[1],
         label: {
           show: true,
-          // normal: {
-          //   formatter: params => {
-          //     console.log(params)
-          //     // return (
-          //     //   `{name|${params.name}}{value|${params.value}}\n{percent|${params.percent.toFixed(2)}%}`
-          //     // )
-          //   },
-          // },
         },
         barWidth: '100%',
-        data: [220],
+        data: [data[1].value],
       },
     ],
   }

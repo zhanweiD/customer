@@ -27,7 +27,7 @@ export default class Contact extends Component {
   }
 
   componentDidMount() {
-    this.store.getUnitTable()
+    // this.store.getUnitTable()
     this.store.getUnitEvent()
   }
 
@@ -94,7 +94,7 @@ export default class Contact extends Component {
               unitEvents.map(items => {
                 return items.detailsList.map(item => {
                   // 存放menu key
-                  if (item.date) this.store.cateList.push(item.date)
+                  if (item.monthDay) this.store.cateList.push(item.monthDay)
                   // 生成时间轴节点内容
                   if (item.detailContent) {
                     return (
@@ -104,7 +104,7 @@ export default class Contact extends Component {
                           onOpenChange={v => this.clickMenu(v)}
                           mode="inline"
                         >
-                          <SubMenu key={item.date} title={item.tableZhName}>
+                          <SubMenu key={item.monthDay} title={item.tableZhName}>
                             {this.setContact(item)}
                           </SubMenu>
                         </Menu>

@@ -8,9 +8,9 @@ const LegendItem = ({title, percent, counts, color}) => {
       <div className="legend-bar">
         <div className="legend-bar-inner" style={{width: percent}} />
       </div>
-      <span className="c45 ml8 mr8">{percent}</span>
+      <span className="c45 ml4 mr4">{percent}</span>
       <span className="c45">|</span>
-      <span className="ml8 c45">{counts}</span>
+      <span className="ml4 c45">{counts}</span>
     </div>
   )
 }
