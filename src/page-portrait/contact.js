@@ -23,7 +23,7 @@ export default class Contact extends Component {
     super(props)
     this.store = props.store
 
-    this.store.pastDate(365) // 永久历史时间
+    // this.store.pastDate(365) // 永久历史时间
   }
 
   componentDidMount() {
@@ -33,19 +33,19 @@ export default class Contact extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.ident !== this.props.ident) {
-      this.store.pastDate(365)
+      // this.store.pastDate(365)
       this.store.tableName = null
     }
   }
 
-  @action selectTime = v => {
-    if (v) {
-      this.store.pastDate(v)
-    } else {
-      this.store.pastDate(365)
-    }
-    this.store.getUnitEvent()
-  }
+  // @action selectTime = v => {
+  //   if (v) {
+  //     this.store.pastDate(v)
+  //   } else {
+  //     this.store.pastDate(365)
+  //   }
+  //   this.store.getUnitEvent()
+  // }
 
   @action selectTable = v => {
     this.store.tableName = v
@@ -70,18 +70,19 @@ export default class Contact extends Component {
   @action closeMenu = () => {
     this.store.openKeys = []
   }
+  // 点击展开
   @action clickMenu = v => {
     this.store.openKeys = v
   }
 
   render() {
-    const {unitEvents, contactLoading, openKeys} = this.store
+    const {unitEvents, contactLoading, openKeys, getUnitEvent} = this.store
     return (
       <div className="m16 mt8 time-list">
         <div className="dfjc">
           <div className="mb16">业务触点</div>
           <div className="far mr16">
-            <RetweetOutlined onClick={() => console.log(111)} />
+            <RetweetOutlined onClick={getUnitEvent} />
             <ArrowsAltOutlined style={{margin: '0px 8px'}} onClick={this.openMenu} />
             <ShrinkOutlined onClick={this.closeMenu} />
           </div>

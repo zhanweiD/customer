@@ -2,7 +2,7 @@ const LegendItem = ({title, percent, counts, color}) => {
   return (
     <div className="categroy-legend-item FBH FBAC">
       <div className="legend-name">
-        <span style={{background: color}} className="legend-name-icon mr8" />
+        <span style={{background: color}} className="legend-name-icon mr4" />
         <span>{title}</span>
       </div>
       <div className="legend-bar">

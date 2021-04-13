@@ -1,14 +1,12 @@
 import React, {Component} from 'react'
 import {toJS, action} from 'mobx'
 import {observer} from 'mobx-react'
-import {Tabs, Select, Spin, message} from 'antd'
+import {Tabs, Button, Spin, message} from 'antd'
 import {LeftOutlined, RightOutlined} from '@ant-design/icons'
 
 import {Loading, OmitTooltip, NoData} from '../component'
 import Cloud from './cloud'
 import TagDepict from './tagDepict'
-import ChartPie from './chart'
-import Contact from './contact'
 import User from './user-information'
 import BusinessContact from './business-contact'
 
@@ -102,7 +100,15 @@ export default class SearchResult extends Component {
               // <Spin spinning={changeLoading}>
               <div className="d-flex user-info mb16">
                 <div className="basis-info bgf box-border">
-                  <div className="herder mb16">用户信息</div>
+                  <div className="herder">客户档案</div>
+                  <div className="fs12 c65 pl16 pr16 pb8 bbc">
+                    <div className="dfjc lh24">
+                      <div>姓名</div>
+                      <Button>关注</Button>
+                    </div>
+                    <div className="lh24">业务身份</div>
+                    <div className="lh24">联系电话</div>
+                  </div>
                   <User store={this.store} />
                 </div>
                 
@@ -137,7 +143,15 @@ export default class SearchResult extends Component {
                         // <Spin spinning={changeLoading}>
                         <div className="d-flex user-info mb16">
                           <div className="basis-info bgf box-border">
-                            <div className="herder mb16">用户信息</div>
+                            <div className="herder">客户档案</div>
+                            <div className="fs12 c65 pl16 pr16 pb8 bbc">
+                              <div className="dfjc lh24">
+                                <div>姓名</div>
+                                <Button>关注</Button>
+                              </div>
+                              <div className="lh24">业务身份</div>
+                              <div className="lh24">联系电话</div>
+                            </div>
                             <User store={this.store} />
                           </div>
                           <div className="user-portrait ml16 bgf">

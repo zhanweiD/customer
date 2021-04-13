@@ -210,7 +210,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
-                {/* {
+                {
                   showAnalyze && (
                     <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
                       {
@@ -250,7 +250,7 @@ export default class Frame extends Component {
                       }
                     </SubMenu>
                   )
-                } */}
+                }
                 {/* {
                   codeInProduct('scene:view') && (
                     <Menu.Item key="/scene/list" icon={<AppstoreOutlined />}>
@@ -258,7 +258,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 } */}
-                {/* {
+                {
                   showSystem && (
                     <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
                       {
@@ -283,7 +283,7 @@ export default class Frame extends Component {
                       }
                     </SubMenu>
                   )
-                } */}
+                }
               </Menu>
             </Sider>
             {/* </Affix> */}

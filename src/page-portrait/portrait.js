@@ -32,6 +32,8 @@ export default class Portrait extends Component {
 
   componentDidMount() {
     if (store.isJump) return
+    // store.getFollow()
+
     store.getPortrait()
   }
 
@@ -54,6 +56,7 @@ export default class Portrait extends Component {
     const {
       placeholder, 
       unitList,
+      followList,
     } = store
 
     return (
@@ -71,10 +74,10 @@ export default class Portrait extends Component {
           {
             !unitList.length ? (
               <div className="d-flex">
-                <SearchList data={data} title="相关客户推荐" color="#339999" />
-                <SearchList data={data} title="已关注客户" color="#00cccc" />
+                {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
+                <SearchList data={followList} title="已关注客户" color="#00cccc" />
                 <SearchList data={data} title="最近浏览客户" color="#6699cc" />
-                <SearchList data={data} title="待跟进客户" color="#cc6699" />
+                {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
               </div>
             ) : null
           }

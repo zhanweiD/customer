@@ -47,16 +47,17 @@ export default class Cloud extends Component {
     this.box.style('transform', 'scale(0.3, 0.3)').style('transition', 'all .3s linear')
     this.box.selectAll('*').remove()
 
-    const scaleSize = data.length > 50 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
+    const scaleSize = d3.scaleLinear().domain([0, max]).range([14, 28])
+    // const scaleSize = data.length > 50 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
 
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
-      .size([parseFloat(this.box.style('width')), 600])
+      .size([parseFloat(this.box.style('width')), 480])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
-        return {text: `${d.tag}: ${d.val ? d.val : '-'}`, size: scaleSize(scaleFont)}
+        return {text: `${d.tag}: ${d.val ? d.val : '-'}`, color: d.color, size: scaleSize(scaleFont)}
       }))
-      .padding(2)
+      .padding(0)
       .spiral('archimedean')
       .rotate(0)
       .font('Impact')
@@ -73,6 +74,8 @@ export default class Cloud extends Component {
       .attr('width', this.layout.size()[0])
       .attr('height', this.layout.size()[1])
       .append('g')
+      .attr('width', this.layout.size()[0])
+      .attr('height', this.layout.size()[1])
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
       .selectAll('text')
       .data(data)
@@ -80,7 +83,7 @@ export default class Cloud extends Component {
       .append('text')
       .style('font-size', d => `${d.size}px`)
       .style('font-family', 'Impact')
-      .style('fill', (d, i) => this.fill(i))
+      .style('fill', (d, i) => d.color)
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
@@ -88,7 +91,7 @@ export default class Cloud extends Component {
 
   render() {
     const {
-      cloudData = [], loading, unitName, toAllTag,
+      cloudData = [], loading, unitName, toAllTag, cateTitle,
     } = this.store
     const {index} = this.props
 
@@ -106,6 +109,16 @@ export default class Cloud extends Component {
                 : null
             }
             <div id={`box${index}`} />
+            <div className="d-flex FBJC">
+              {
+                cateTitle.map(item => (
+                  <div className="mr8" style={{color: item.color}}>
+                    <span style={{backgroundColor: item.color}} className="legend-name-icon mr4" />
+                    <span>{item.text}</span>
+                  </div>
+                ))
+              }
+            </div>
           </div>
         </Spin>
       </div>

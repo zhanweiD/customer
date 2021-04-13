@@ -11,6 +11,11 @@ const api = {
   getUnitTable: post(`${baseApi}/portrait/eventTables`), // 画像个体触点场景下拉
   getUnitEvent: post(`${baseApi}/portrait/event`), // 画像个体触点表信息
   getCusVoice: post(`${baseApi}/portrait/cusVoice`), // 客户心声
+
+  // getFollow: get(`${baseApi}/portrait/follow`), // 关注客户列表
+  getFollow: get('http://192.168.90.129:3000/mock/208/hub_api/portrait/follow/'), // 关注客户列表
+  // getBizType: get(`${baseApi}/portrait/bizTypeDropdown`), // 业务类型下拉
+  getBizType: get('http://192.168.90.129:3000/mock/208/hub_api/portrait/bizTypeDropdown'), // 业务类型下拉
 }
 
 ioContext.create('portrait', api)
