@@ -1,16 +1,23 @@
 /**
- * @description 转化对比、趋势
+ * @description 地图
  */
 import {useState, useEffect, useRef} from 'react'
+import {Spin} from 'antd'
  
 import {dbarOption, mapOption} from './chart-option'
 import china from '../../public/map'
-  
-const DistributionChart = ({mapType}) => {
+import io from './io'
+import {errorTip} from '../common/util'
+
+const DistributionChart = ({
+  orgCodes, projectCode, timeStart, timeEnd,
+}) => {
   const chartBar = useRef(null)
   const chartMap = useRef(null)
   const [barData, setBarData] = useState([])
   const [mapData, setMapData] = useState([])
+  const [mapType, setMapType] = useState('china')
+  const [loading, setLoading] = useState(false)
    
   const drawSaveTrend = () => {
     echarts.registerMap(mapType, china[mapType])
@@ -22,9 +29,42 @@ const DistributionChart = ({mapType}) => {
       myChartMap && myChartMap.resize()
       myChartBar && myChartBar.resize()
     }
-    myChartMap.setOption(mapOption(mapType))
-    myChartBar.setOption(dbarOption())
+
+    myChartMap.clear()
+    myChartBar.clear()
+    myChartMap.setOption(mapOption(mapType, mapData))
+    myChartBar.setOption(dbarOption(barData))
     window.addEventListener('resize', resize)
+  }
+
+  async function getMap() {
+    setLoading(true)
+    try {
+      const res = await io.getMap({
+        timeStart,
+        timeEnd,
+        orgCodes,
+        projectCode,
+      })
+      const {provinces = [], cities = [], values = []} = res
+
+      // 大于一个省显示全国，否则显示单个省
+      if (provinces.length > 1) {
+        setMapType('china')
+        setMapData(provinces)
+      } else {
+        setMapType((provinces[0] ? provinces[0].name : 'china'))
+        setMapData(cities)
+      }
+
+      const newValues = values.sort((a, b) => a.count - b.count)
+
+      setBarData(newValues)
+    } catch (err) {
+      errorTip(err)
+    } finally {
+      setLoading(false)
+    }
   }
  
   useEffect(() => {
@@ -32,16 +72,15 @@ const DistributionChart = ({mapType}) => {
   }, [mapData, barData])
 
   useEffect(() => {
-    // 发请求
-    drawSaveTrend()
-  }, [mapType])
+    getMap()
+  }, [orgCodes, timeStart, projectCode])
  
   return (
     <div className="p16 bgf">
-      {/* <Spin spinning={chartLoading}> */}
-      <div ref={chartMap} style={{height: '614px', width: '62%', display: 'inline-block'}} />
-      <div ref={chartBar} style={{height: '480px', width: '38%', display: 'inline-block'}} />
-      {/* </Spin> */}
+      <Spin spinning={loading}>
+        <div ref={chartMap} style={{height: '614px', width: '62%', display: 'inline-block'}} />
+        <div ref={chartBar} style={{height: '480px', width: '38%', display: 'inline-block'}} />
+      </Spin>
     </div> 
   )
 }

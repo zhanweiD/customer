@@ -6,46 +6,25 @@ import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/ic
 
 import {NoData} from '../component'
 
-const {Option} = Select
 const {SubMenu} = Menu
 
-const optionTime = [
-  {name: '近一周', value: 7},
-  {name: '近一月', value: 30},
-  {name: '近三月', value: 90},
-  {name: '近半年', value: 182},
-  {name: '近一年', value: 365},
-]
 
 @observer
 export default class Contact extends Component {
   constructor(props) {
     super(props)
     this.store = props.store
-
-    // this.store.pastDate(365) // 永久历史时间
   }
 
   componentDidMount() {
-    this.store.getUnitTable()
     this.store.getUnitEvent()
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.ident !== this.props.ident) {
-      // this.store.pastDate(365)
       this.store.tableName = null
     }
   }
-
-  // @action selectTime = v => {
-  //   if (v) {
-  //     this.store.pastDate(v)
-  //   } else {
-  //     this.store.pastDate(365)
-  //   }
-  //   this.store.getUnitEvent()
-  // }
 
   @action selectTable = v => {
     this.store.tableName = v
@@ -89,12 +68,12 @@ export default class Contact extends Component {
         </div>
         
         <Spin spinning={contactLoading}>
-          <Timeline mode="left" style={{marginLeft: '-58%'}}>
+          <Timeline mode="left" style={{marginLeft: '-44%'}}>
             {
               unitEvents.map(items => {
                 return items.detailsList.map(item => {
                   // 存放menu key
-                  if (item.date) this.store.cateList.push(item.date)
+                  if (item.monthDay) this.store.cateList.push(item.monthDay)
                   // 生成时间轴节点内容
                   if (item.detailContent) {
                     return (
@@ -104,7 +83,7 @@ export default class Contact extends Component {
                           onOpenChange={v => this.clickMenu(v)}
                           mode="inline"
                         >
-                          <SubMenu key={item.date} title={item.tableZhName}>
+                          <SubMenu key={item.monthDay} title={item.tableZhName}>
                             {this.setContact(item)}
                           </SubMenu>
                         </Menu>

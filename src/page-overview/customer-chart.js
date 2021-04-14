@@ -1,72 +1,61 @@
 /**
- * @description 转化对比、趋势
+ * @description 渠道分布，转化率，云图
  */
 import {useEffect, useRef, useState} from 'react'
+import {Spin} from 'antd'
 
 import {errorTip} from '../common/util'
-import {LegendItem} from '../component'
+import {LegendItem, NoData} from '../component'
 
 import {sunOption, funnelOption} from './chart-option'
 import Cloud from './cloud'
 import io from './io'
 
-const data = [
-  {
-    title: '外渠',
-    percent: '20%',
-    counts: 20,
-    color: '#1cd389',
-  },
-]
-  
-const CustomerChart = ({area}) => {
+const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
+
+const CustomerChart = ({
+  orgCodes, projectCode, timeStart, timeEnd,
+}) => {
   const chartSun = useRef(null)
   const chartFunnel = useRef(null)
   const [funnelData, setFunnelData] = useState({})
-  const [sunData, setSunData] = useState([])
+  const [sunData, setSunData] = useState([]) // 渠道分布
+  const [count, setCount] = useState(0) // 渠道总数
+  const [loading, setLoading] = useState(false)
 
-  // 获取配置信息
-  async function getFunnel() {
-    const dateFormat = 'YYYY-MM-DD'
-    const date = new Date()
-    const nowDate = moment(+date.getTime()).format(dateFormat)
-    const pastDate = moment(+date.getTime() - 1000 * 60 * 60 * 24 * 365).format(dateFormat)
-    const reqData = { // 初始时间
-      reportTimeStart: pastDate,
-      reportTimeEnd: nowDate,
-    } 
+  // 渠道分布
+  async function getSunburst() {
+    setLoading(true)
     try {
-      const res = await io.getClinch(reqData)
-      const {funnelChart = []} = res
-      const data1 = []
-      const data2 = []
-      for (let i = 0; i < funnelChart.length; i++) {
-        const obj1 = {
-          value: funnelChart[i].count,
-          num: funnelChart[i].count,
-          name: funnelChart[i].name,
-        }
-  
-        const obj2 = {
-          value: funnelChart[i].count,
-          goal: funnelChart[i].goal,
-          name: funnelChart[i].rate,
-          itemStyle: {
-            opacity: 0,
-          },
-        }
-        data1.push(obj1)
-        data2.push(obj2)
-      }
-      setFunnelData({
-        data1,
-        data2,
+      const res = await io.getSunburst({
+        timeStart,
+        timeEnd,
+        orgCodes,
+        projectCode,
       })
+      setSunData(res)
+      setCount(res.reduce((total, item) => total + item.value, 0))
     } catch (error) {
-      errorTip(error.message)
+      errorTip(error)
+    } finally {
+      setLoading(false)
     }
   }
-   
+
+  async function getFunnel() {
+    try {
+      const res = await io.getFunnel({
+        timeStart,
+        timeEnd,
+        orgCodes,
+        projectCode,
+      })
+      setFunnelData(res)
+    } catch (error) {
+      errorTip(error)
+    }
+  }
+
   const drawSaveTrend = () => {
     const myChartSun = echarts.init(chartSun.current)
     const myChartFunnel = echarts.init(chartFunnel.current)
@@ -75,15 +64,17 @@ const CustomerChart = ({area}) => {
       myChartSun && myChartSun.resize()
       myChartFunnel && myChartFunnel.resize()
     }
- 
-    myChartSun.setOption(sunOption())
-    myChartFunnel.setOption(funnelOption(funnelData.data1, funnelData.data2))
+    myChartSun.clear()
+    myChartFunnel.clear()
+    myChartSun.setOption(sunOption(sunData))
+    myChartFunnel.setOption(funnelOption(funnelData))
     window.addEventListener('resize', resize)
   }
 
   useEffect(() => {
     getFunnel()
-  }, [])
+    getSunburst()
+  }, [timeStart, orgCodes, projectCode])
 
   useEffect(() => {
     drawSaveTrend()
@@ -91,33 +82,52 @@ const CustomerChart = ({area}) => {
  
   return (
     <div>
-      {/* <Spin spinning={chartLoading}> */}
-      <div className="d-flex bgf p16 mb16">
-        <div ref={chartSun} style={{height: '300px', width: '50%'}} />
-        <div className="w50 FBV FBJC FBAC categroy-legend-box">
-          {
-            data.map(item => (
-              <LegendItem 
-                title={item.title} 
-                percent={item.percent}
-                counts={item.counts}
-                color={item.color}
-              />
-            ))
-          }
+      <Spin spinning={loading}>
+        <div className="bgf p16 mb16">
+          <div className="fs14 c85">
+            客户渠道分布
+          </div>
+          <div style={{height: '300px'}}>
+            {
+              !sunData.length
+                ? (
+                  <div className="no-Data d-flex" style={{height: '300px', width: '100%'}}>
+                    <NoData text="暂无数据" size="small" />
+                  </div>
+                )
+                : null
+            }
+            <div className="d-flex">
+              <div ref={chartSun} style={{height: '300px', width: '50%'}} />
+              <div className="w50 FBV FBJC FBAC categroy-legend-box">
+                {
+                  sunData.map((item, i) => (
+                    <LegendItem 
+                      title={item.name} 
+                      percent={`${((item.value / count) * 100).toFixed(2)}%`}
+                      counts={item.value}
+                      color={color[i]}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+          </div>
         </div>
-      
-      </div>
-      <div className="bgf mb16" ref={chartFunnel} style={{height: '420px', width: '100%'}} />
-      <div className="bgf" style={{height: '400px', width: '100%'}}>
-        <div className="pt16 pl16 fs14 c85">
-          {
-            area === 'china' ? '客户心声' : '显著特征'
-          }
+
+        <div className="bgf mb16" ref={chartFunnel} style={{height: '420px', width: '100%'}} />
+        <div className="bgf" style={{height: '400px', width: '100%'}}>
+          <div className="pt16 pl16 fs14 c85">
+            客户心声
+          </div>
+          <Cloud
+            orgCodes={orgCodes} 
+            timeStart={timeStart}
+            timeEnd={timeEnd}
+            projectCode={projectCode}
+          />
         </div>
-        <Cloud />
-      </div>
-      {/* </Spin> */}
+      </Spin>
     </div> 
   )
 }

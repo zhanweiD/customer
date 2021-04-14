@@ -3,12 +3,23 @@ import {
 } from 'mobx'
 import {message} from 'antd'
 
-import {errorTip} from '../common/util'
+import {errorTip, successTip} from '../common/util'
 import io from './io'
 
 const dateFormat = 'YYYY-MM-DD'
 const date = new Date()
 const nowDate = moment(+date.getTime()).format(dateFormat)
+
+function listToTree(data) {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentCode === item.bizCode)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentCode === '-1')
+}
 
 class Store {
   projectId // 项目ID
@@ -25,36 +36,36 @@ class Store {
   @observable placeholder = '请输入' // 输入提示
   @observable porLoading = false // 画像列表加载
   @observable changeLoading = false // 画像列表加载
-  @observable contactLoading = false // 触点加载
-
-  @observable cateList = [] // 触点展开列表
-  @observable openKeys = [] // 触点展开列表
-
+ 
   @observable unitList = [] // 画像个体列表
   @observable tabLoading = false // 切换loading
   @observable ident = null // 画像个体id
-  @observable chartData = [] // 雷达图
-  @observable cloudData = [] // 标签
   @observable isCustomer = true // 客户对象 顾问对象 ？
   @observable currentPage = 1 // 页数
   @observable searchKey = '' // 
-
-  @observable toAllTag = true // 切换标签描摹模式 默认全量
-
-  @observable unitBasic = [] // 画像个体基础信息
-
-  @observable unitTableList = [] // 画像个体触点
-  @observable unitTables = [] // 画像个体触点场景下拉
-  @observable unitEvents = [] // 画像个体触点信息
-  @observable businessList = [] // 业务类型
-
-
-  @observable tableName = null // 筛选业务场景
   @observable isLast = false // 是否是最后一页
   @observable isFirst = true // 是否是第一页
 
   @observable followList = [] // 关注客户列表
 
+  // 客户档案
+  @observable unitBasic = [] // 画像个体基础信息
+  @observable basicLoading = false // 画像个体基础信息loading
+  @observable attention = 0 // 关注取关
+
+  // 标签描摹
+  @observable cloudData = [] // 标签
+  @observable toAllTag = true // 切换标签描摹模式 默认全量
+
+  // 业务触点
+  @observable contactLoading = false // 触点加载
+  @observable chartLoading = false // 类型分布加载
+  @observable cateList = [] // 全部触点key
+  @observable openKeys = [] // 触点展开列表
+  @observable unitTableList = [] // 画像个体触点
+  @observable unitEvents = [] // 画像个体触点信息
+  @observable businessList = [] // 业务类型
+  @observable pieData = [] // 业务类型分布图
   @observable businessParams = {
     startTime: null,
     endTime: null,
@@ -84,6 +95,7 @@ class Store {
       this.followLoading = false
     }
   }
+
   // 获取画像个体(对象)
   @action async getPortrait() {
     this.porLoading = true
@@ -134,76 +146,6 @@ class Store {
     }
   }
 
-  // 获取基础信息
-  @action async getUnitBasic() {
-    this.changeLoading = true
-    try {
-      const res = await io.getUnitBasic({
-        id: this.portraitId,
-        ident: this.ident,
-      })
-      runInAction(() => {
-        this.unitBasic = res || []
-      })
-    } catch (e) {
-      errorTip(e.message)
-    } finally {
-      this.changeLoading = false
-    }
-  }
-
-  // 获取触点
-  @action.bound async getUnitEvent() {
-    this.contactLoading = true
-    try {
-      const res = await io.getUnitEvent({
-        id: this.portraitId,
-        ident: this.ident,
-        tableName: this.tableName,
-      })
-      runInAction(() => {
-        this.unitEvents = res.map(item => {
-          item.detailsList.unshift({monthDay: item.year})
-          return item
-        })
-      })
-    } catch (e) {
-      errorTip(e.message)
-    } finally {
-      this.contactLoading = false
-    }
-  }
-
-  // 获取触点业务场景
-  @action async getUnitTable() {
-    try {
-      const res = await io.getUnitTable({
-        id: this.portraitId,
-        // ident: this.ident,
-      })
-      runInAction(() => {
-        this.unitTables = res
-      })
-    } catch (e) {
-      errorTip(e.message)
-    }
-  }
-
-  // 获取业务类型
-  @action async getBizType() {
-    try {
-      const res = await io.getBizType({
-        // id: this.portraitId,
-        // ident: this.ident,
-      })
-      runInAction(() => {
-        this.businessList = res
-      })
-    } catch (e) {
-      errorTip(e.message)
-    }
-  }
-
   // 获取标签云图
   @action async getObjCloud(cb) {
     this.loading = true
@@ -238,19 +180,127 @@ class Store {
     }
   }
 
-  // 获取业务类型
-  @action async getChart(cb) {
+  // 客户档案
+  // 获取基础信息
+  @action async getUnitBasic() {
+    this.basicLoading = true
     try {
-      const res = await io.getChart({
-        reportTimeEnd: '2021-04-09',
-        reportTimeStart: '2020-04-09',
+      const res = await io.getUnitBasic({
+        id: this.portraitId,
+        ident: this.ident,
       })
       runInAction(() => {
-        this.chartData = res.pieChart
-        cb(this.chartData)
+        this.unitBasic = res || []
       })
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.basicLoading = false
+    }
+  }
+  // 获取基础信息
+  @action async actionFocus(type = 0) {
+    try {
+      await io.actionFocus({
+        id: this.portraitId,
+        ident: this.ident,
+        type,
+      })
+      runInAction(() => {
+        successTip(type ? '关注成功' : '取关成功')
+        this.getUnitBasic()
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 业务触点
+  // 获取业务类型分布
+  @action async getPieChart(cb) {
+    this.pieTotal = 0
+    this.chartLoading = true
+    try {
+      const res = await io.getPieChart({
+        // ident: this.ident,
+        // ...this.businessParams,
+        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
+        startTime: '2021-01-01',
+        endTime: '2021-05-01',
+        eventType: 1,
+        bizCode: 'DC',
+      })
+      runInAction(() => {
+        this.getBarChart(cb)
+        this.pieData = res || []
+        this.pieData.forEach(item => this.pieTotal += item.value)
+        // cb(this.pieData, this.pieTotal)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获取触点类型分布
+  @action async getBarChart(cb) {
+    try {
+      const res = await io.getBarChart({
+        // ident: this.ident,
+        // ...this.businessParams,
+        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
+        startTime: '2021-01-01',
+        endTime: '2021-05-01',
+        eventType: 1,
+        bizCode: 'DC',
+      })
+      runInAction(() => {
+        cb(this.pieData, this.pieTotal, res)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.chartLoading = false
+    }
+  }
+
+  // 获取业务类型下拉
+  @action async getBizType() {
+    try {
+      const res = await io.getBizType({
+        // id: this.portraitId,
+        // ident: this.ident,
+      })
+      runInAction(() => {
+        this.businessList = listToTree(res)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获取触点
+  @action.bound async getUnitEvent() {
+    this.contactLoading = true
+    try {
+      const res = await io.getUnitEvent({
+        // id: this.portraitId,
+        // ident: this.ident,
+        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
+        startTime: '2021-01-01',
+        endTime: '2021-05-01',
+        eventType: 1,
+        bizCode: 'DC',
+      })
+      runInAction(() => {
+        this.unitEvents = res.map(item => {
+          item.detailsList.unshift({monthDay: item.year})
+          return item
+        })
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.contactLoading = false
     }
   }
 }

@@ -32,6 +32,17 @@ export const basePerm = `${pathPrefix}hub_user_api/perm` // 权限
 export const groupApi = `${pathPrefix}hub_api/group` // 群体管理
 export const derivativeApi = `${pathPrefix}hub_api/derivation` // 可视化加工
 
+// export const baseApi = `${pathPrefix}hub_api_dev` // 标签中心
+// export const sceneApi = `${pathPrefix}hub_api_dev/occasion` // 场景
+// export const baseSyncApi = `${pathPrefix}hub_api_dev/objTransmission` // 标签中心
+// export const baseUserApi = `${pathPrefix}hub_api_dev` // 用户中心
+// export const baseUser = `${pathPrefix}hub_user_api_dev/user` // 用户
+// export const baseZtOrg = `${pathPrefix}hub_user_api_dev/ztOrg` // 部门
+// export const baseRole = `${pathPrefix}hub_user_api_dev/role` // 角色
+// export const basePerm = `${pathPrefix}hub_user_api_dev/perm` // 权限
+// export const groupApi = `${pathPrefix}hub_api_dev/group` // 群体管理
+// export const derivativeApi = `${pathPrefix}hub_api_dev/derivation` // 可视化加工
+
 
 // 接口前缀
 
