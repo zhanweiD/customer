@@ -20,6 +20,8 @@ export default class Store {
 
   @observable formInitValue = {}
 
+  @observable confirmLoading = false
+
   @observable formatList = []
 
   /**
@@ -58,7 +60,8 @@ export default class Store {
    * @param {Object} params {bizName: , parentCode: , bizCode: , descr: }
    * @returns {any} void
    */
-  async addDomain(params) {
+  @action async addDomain(params) {
+    this.confirmLoading = true
     try {
       const res = await io.addDomain(params)
 
@@ -67,6 +70,8 @@ export default class Store {
       successTip('添加成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
@@ -76,7 +81,8 @@ export default class Store {
    * @param {Object} params {id: , bizName: , parentCode: ,bizCode: , descr: }
    * @returns {any} void
    */
-  async editDomain(params) {
+  @action async editDomain(params) {
+    this.confirmLoading = true
     try {
       const res = await io.editDomain({
         ...params,
@@ -88,6 +94,8 @@ export default class Store {
       successTip('编辑成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
