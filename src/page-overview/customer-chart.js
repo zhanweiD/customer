@@ -87,18 +87,18 @@ const CustomerChart = ({
           <div className="fs14 c85">
             客户渠道分布
           </div>
-          <div style={{height: '300px'}}>
+          <div style={{height: '326px'}}>
             {
               !sunData.length
                 ? (
-                  <div className="no-Data d-flex" style={{height: '300px', width: '100%'}}>
+                  <div className="no-Data d-flex" style={{height: '326px', width: '100%'}}>
                     <NoData text="暂无数据" size="small" />
                   </div>
                 )
                 : null
             }
             <div className="d-flex">
-              <div ref={chartSun} style={{height: '300px', width: '50%'}} />
+              <div ref={chartSun} style={{height: '326px', width: '50%'}} />
               <div className="w50 FBV FBJC FBAC categroy-legend-box">
                 {
                   sunData.map((item, i) => (

@@ -85,6 +85,7 @@ export function cbarOption(barData) {
       data: data.map(sitem => {
         return sitem[item]
       }),
+      barWidth: '40%',
       type: 'bar',
       stack: 'total',
       // yAxisIndex: 1,
@@ -215,6 +216,9 @@ export function mapOption(mapType, data) {
           normal: {label: {show: true}},
           emphasis: {label: {show: true}},
         },
+        label: {
+          fontSize: 10,
+        },
         data: data.map(item => ({name: item.name, value: item.count})),
       },
     ],
@@ -223,20 +227,6 @@ export function mapOption(mapType, data) {
 
 // 客户分布
 export function dbarOption(data) {
-  // if (!data.length) {
-  //   return {
-  //     title: [{
-  //       text: '暂无数据',
-  //       top: '50%',
-  //       left: '30%',
-  //       textStyle: {
-  //         fontSize: 32,
-  //         color: titleColor,
-  //         fontWeight: 400,
-  //       },
-  //     }],
-  //   } 
-  // }
   return {
     tooltip: {
       trigger: 'axis',
@@ -346,13 +336,13 @@ export function funnelOption(funnelData) {
     color,
     legend: {
       top: 48,
-      left: '5%',
+      left: 'center',
       data: type,
     },
     series: [{
       top: 96,
       type: 'funnel',
-      sort: 'descending',
+      sort: 'none',
       height: '300',
       gap: 0,
       minSize: 150,

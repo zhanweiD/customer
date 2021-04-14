@@ -93,11 +93,11 @@ const Cloud = ({
   return (
     <div className="object-cloud">
       {/* <Spin spinning={loading}> */}
-      <div style={{height: '400px'}}>
+      <div>
         {
           !cloudData.length
             ? (
-              <div className="no-Data" style={{height: '400px'}}>
+              <div className="no-Data" style={{height: '378px'}}>
                 <NoData text="暂无数据" size="small" />
               </div>
             )
