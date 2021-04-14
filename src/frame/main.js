@@ -33,7 +33,7 @@ export default class Frame extends Component {
   componentDidMount() {
     store.getUserInfo()
     store.getParams()
-    store.getProject()
+    // store.getProject()
 
     // 设置页面的ico图标
     // const tenantImageVO = res.tenantImageVO || {}

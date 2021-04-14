@@ -8,13 +8,6 @@ import {NoData} from '../component'
 
 const {SubMenu} = Menu
 
-const optionTime = [
-  {name: '近一周', value: 7},
-  {name: '近一月', value: 30},
-  {name: '近三月', value: 90},
-  {name: '近半年', value: 182},
-  {name: '近一年', value: 365},
-]
 
 @observer
 export default class Contact extends Component {

@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 /**
  * @description 对象云图
  */
@@ -10,49 +11,40 @@ import {NoData} from '../component'
 import {errorTip} from '../common/util'
 import io from './io'
 
-const Cloud = () => {
+const Cloud = ({
+  orgCodes, projectCode, timeStart, timeEnd,
+}) => {
   let layout = null
   let fill = null
   const [cloudData, setCloudData] = useState([])
 
-  async function getObjCloud() {
-    // this.loading = true
+  async function getCloud() {
     try {
-      const res = await io.getObjCloud({
-        id: 34323626329648,
-        ident: 'vTuyFx6Ddf6ut8K2JDtDJj7X8dmRyJoYXTK9pKJdLaVKvX6gaitvKuBPnsuA',
+      const res = await io.getCloud({
+        timeStart,
+        timeEnd,
+        orgCodes,
+        projectCode,
       })
-      const list = res || []
-      list.forEach(item => {
-        if (item.list) {
-          setCloudData([...cloudData, ...item.list])
-        }
-      })
+      const newList = []
+      // eslint-disable-next-line no-restricted-syntax
+      for (const item in res) {
+        newList.push(`${item}: ${res[item]}`)
+      }
+      setCloudData(newList)
     } catch (e) {
       errorTip(e.message)
-    }
+    } 
   }
-
-  // 对接高德开放者平台API https://lbs.amap.com/api/webservice/guide/api/district
-  // async function getMapData() {
-  //   fetch('https://restapi.amap.com/v3/config/district?keywords=北京&subdistrict=2&key=f82f4c74c4e7a533551b6af39cb8c030')
-  //     .then(function (response) {
-  //       console.log(response)
-  //       return response.json()
-  //     })
-  //     .then(function (myJson) {
-  //       console.log(myJson)
-  //     })
-  // }
 
   function draw(data) {
     d3.select('#box') 
       .append('svg')
-      .attr('width', layout.size()[0])
-      .attr('height', layout.size()[1])
+      .attr('width', layout.size()[0] || 0)
+      .attr('height', layout.size()[1] || 0)
       
       .append('g')
-      .attr('transform', `translate(${layout.size()[0] / 2},${layout.size()[1] / 2})`)
+      .attr('transform', `translate(${layout.size()[0] / 2 || 0},${layout.size()[1] / 2 || 0})`)
       .selectAll('text')
       .data(data)
       .enter()
@@ -78,7 +70,7 @@ const Cloud = () => {
       .size([parseFloat(box.style('width')), 360])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
-        return {text: `${d.tag}: ${d.val ? d.val : '-'}`, size: scaleSize(scaleFont)}
+        return {text: d, size: scaleSize(scaleFont)}
       }))
       .padding(2)
       .spiral('archimedean')
@@ -92,8 +84,8 @@ const Cloud = () => {
   }
 
   useEffect(() => {
-    getObjCloud()
-  }, [])
+    getCloud()
+  }, [timeStart, orgCodes, projectCode])
   useEffect(() => {
     couldLayout(cloudData, 2)
   }, [cloudData])
@@ -101,17 +93,17 @@ const Cloud = () => {
   return (
     <div className="object-cloud">
       {/* <Spin spinning={loading}> */}
-      <div>
-        {/* {
-            !cloudData.length
-              ? (
-                <div className="no-Data" style={{height: '442px'}}>
-                  <NoData text="暂无数据" size="small" />
-                </div>
-              )
-              : null
-          } */}
-        <div id="box" />
+      <div style={{height: '400px'}}>
+        {
+          !cloudData.length
+            ? (
+              <div className="no-Data" style={{height: '400px'}}>
+                <NoData text="暂无数据" size="small" />
+              </div>
+            )
+            : null
+        }
+        <div id="box" style={{display: cloudData.length ? 'block' : 'none'}} />
       </div>
       {/* </Spin> */}
     </div>
