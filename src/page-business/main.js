@@ -15,10 +15,24 @@ const formatStore = new FormatStore()
 const {TabPane} = Tabs
 
 export default () => {
+  const tabsChange = key => {
+    if (key === '1') {
+      sceneStore.getDomainFormatList()
+    }
+
+    if (key === '2') {
+      domainStore.getFormatList()
+    }
+  }
+
   return (
     <div className="business-config">
       <div className="content-header">业务配置</div>
-      <Tabs defaultActiveKey="1" style={{backgroundColor: '#fff', margin: '16px'}}>
+      <Tabs 
+        defaultActiveKey="1" 
+        style={{backgroundColor: '#fff', margin: '16px'}}
+        onChange={key => tabsChange(key)}
+      >
         <TabPane tab="场景管理" key="1">
           <Provider store={sceneStore}>
             <Scene />

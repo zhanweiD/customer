@@ -1,16 +1,26 @@
 import {action, observable} from 'mobx'
-import {errorTip, changeToOptions, userLog} from '../common/util'
+import _ from 'lodash'
+import {errorTip, successTip, changeToOptions, userLog} from '../common/util'
 import io from './io'
 
 export default class Store {
   @observable drawerVis = false
+  @observable isEdit = false
 
-  @observable pageConfigFormat = {
+  @observable tableData = []
+  @observable tableLoading = false
+
+  @observable selectedRows = []
+
+  @observable pagination = {
     currentPage: 1,
     pageSize: 10,
+    totalCount: 0,
   }
 
   @observable formInitValue = {}
+
+  @observable formatList = []
 
   /**
    * 查询业务域
@@ -19,13 +29,26 @@ export default class Store {
    * currentPage
    * pageSize
    */
-  async getList() {
+  @action async getList() {
+    this.tableLoading = true
     try {
       const res = await io.listDomain({
-        ...this.pageConfigFormat,
+        currentPage: this.pagination.currentPage,
+        pageSize: this.pagination.pageSize,
+      })
+
+      this.pagination.currentPage = res.currentPage
+      this.pagination.pageSize = res.pageSize
+      this.pagination.totalCount = res.totalCount
+
+      this.tableData = res.data
+      this.tableData.forEach(item => {
+        item.key = item.id
       })
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.tableLoading = false
     }
   }
 
@@ -38,6 +61,10 @@ export default class Store {
   async addDomain(params) {
     try {
       const res = await io.addDomain(params)
+
+      this.drawerVis = false
+      this.getList()
+      successTip('添加成功')
     } catch (e) {
       errorTip(e.message)
     }
@@ -51,7 +78,14 @@ export default class Store {
    */
   async editDomain(params) {
     try {
-      const res = await io.editDomain(params)
+      const res = await io.editDomain({
+        ...params,
+        id: this.formInitValue.id,
+      })
+
+      this.drawerVis = false
+      this.getList()
+      successTip('编辑成功')
     } catch (e) {
       errorTip(e.message)
     }
@@ -65,9 +99,13 @@ export default class Store {
    */
   async deleteDomain(params) {
     try {
-      const res = await io.deteleDomain({
+      const res = await io.deleteDomain({
         bizCodes: params,
       })
+
+      this.getList()
+      this.selectedRows = []
+      successTip('删除成功')
     } catch (e) {
       errorTip(e.message)
     }
@@ -82,6 +120,19 @@ export default class Store {
   async getFormatList() {
     try {
       const res = await io.getFormatList()
+
+      this.formatList = []
+      if (Object.keys(res).length > 0) {
+        // 有数据
+        _.each(res, (v, k) => {
+          this.formatList.push({
+            code: k,
+            name: v,
+          })
+        })
+      } else {
+        this.formatList = []
+      }
     } catch (e) {
       errorTip(e.message)
     }

@@ -63,6 +63,7 @@ export default class ConfigField extends Component {
         onClose={this.onClose}
         maskClosable={false}
         destroyOnClose
+        className="drawer-tag"
       >
         {/* 步骤条 */}
         <Steps size="small" current={this.currentStep} style={{padding: '0 100px', marginBottom: '32px'}}>

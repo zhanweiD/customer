@@ -355,7 +355,7 @@ class TagList extends Component {
       scroll: {x: 960},
       tableLoading: treeStore.tableLoading,
       buttons: [
-        <div className="dfjs">
+        <div className="FBH FBJB">
           <div>
             <Authority
               authCode="tag-manage:add-tag"

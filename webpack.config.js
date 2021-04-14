@@ -33,7 +33,7 @@ module.exports = {
     proxy: [
       {
         context: ['/hub_api', '/hub_user_api'],
-        target: 'http://192.168.90.54',
+        target: 'http://192.168.90.54:8173',
         // target: 'http://172.18.100.219',
         changeOrigin: true,
       },

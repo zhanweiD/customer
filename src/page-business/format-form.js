@@ -1,6 +1,7 @@
 import {Form, Select, Input, Button} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import {debounce, getNamePattern} from '../common/util'
 
 const formItemLayout = {
   labelCol: {span: 6},
@@ -11,27 +12,79 @@ const formItemLayout = {
 export default inject('store')(({store}) => {
   const [form] = Form.useForm()
 
+  const checkName = (rule, value, callback) => {
+    if (value) {
+      // 防抖设计
+      debounce(() => {
+        if (store.isEdit) {
+          store.checkFormatName(
+            {
+              bizName: value,
+              id: store.formInitValue.id,
+            }, 
+            callback
+          )
+        } else {
+          store.checkFormatName({bizName: value}, callback)
+        }
+      }, 500)
+    } else {
+      callback()
+    }
+  }
+
+  const checkCode = (rule, value, callback) => {
+    if (value) {
+      debounce(() => {
+        if (store.isEdit) {
+          store.checkFormatCode(
+            {
+              bizCode: value,
+              id: store.formInitValue.id,
+            }, 
+            callback
+          )
+        } else {
+          store.checkFormatCode({bizCode: value}, callback)
+        }
+      })
+    } else {
+      callback()
+    }
+  }
+
   return useObserver(() => (
     <div>
       <Form
         form={form}
-        name="scene"
+        name="format"
         {...formItemLayout}
         initialValues={store.formInitValue}
       >
         <Form.Item
           label="业态名称"
           name="bizName"
-          rules={[{required: true, message: '请输入业态名称'}]}
+          rules={[
+            ...getNamePattern(),
+            // {required: true, message: '请输入业态名称'},
+            {
+              validator: (rule, value, callback) => checkName(rule, value, callback),
+            },
+          ]}
         >
-          <Input placeHolder="请输入业态名称" />
+          <Input placeHolder="请输入业态名称" autoComplete="off" />
         </Form.Item>
         <Form.Item
           label="业态Code"
           name="bizCode"
-          rules={[{required: true, message: '请输入业态Code'}]}
+          rules={[
+            {required: true, message: '请输入业态Code'},
+            {
+              validator: (rule, value, callback) => checkCode(rule, value, callback),
+            },
+          ]}
         >
-          <Input placeHolder="请输入业态Code" />
+          <Input placeHolder="请输入业态Code" autoComplete="off" />
         </Form.Item>
         <Form.Item
           label="业态描述"
@@ -52,7 +105,11 @@ export default inject('store')(({store}) => {
         <Button
           type="primary"
           onClick={() => {
-            console.log(form.getFieldsValue())
+            if (store.isEdit) {
+              store.editFormat(form.getFieldsValue())
+            } else {
+              store.addFormat(form.getFieldsValue())
+            }
           }}
         >
           确定
