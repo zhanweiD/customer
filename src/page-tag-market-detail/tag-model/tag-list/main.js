@@ -208,7 +208,7 @@ class TagList extends Component {
       initParams: {objId, cateId: treeStore.currentSelectKeys},
       tableLoading: treeStore.tableLoading,
       buttons: [
-        <div className="dfjs">
+        <div className="FBH FBJB">
           <div>
             <Select style={{width: 150}} placeholder="业务类型" />
           </div>

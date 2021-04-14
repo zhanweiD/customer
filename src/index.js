@@ -23,6 +23,7 @@ import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagObject from './page-tag-object'
 import TagDetail from './page-tag-market-detail'
+import Business from './page-business'
 
 const njkData = {
   dict,
@@ -64,6 +65,9 @@ function Entry() {
           <Route path="/tag/object" component={TagObject} />
 
           <Route path="/tag/manage" component={Manage} />
+
+          {/* 业务配置 */}
+          <Route path="/business/config" component={Business} />
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

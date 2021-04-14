@@ -5,10 +5,20 @@ import {MoreOutlined} from '@ant-design/icons'
 export default ({data, ondelete}) => {
   const menu = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item
+        onClick={(e) => {
+          e.domEvent.stopPropagation()
+        }}
+      >
         编辑
       </Menu.Item>
-      <Menu.Item disabled={data.tag !== 0} onClick={() => ondelete(data)}>
+      <Menu.Item 
+        disabled={data.tag !== 0} 
+        onClick={(e) => {
+          ondelete(data)
+          e.domEvent.stopPropagation()
+        }}
+      >
         删除
       </Menu.Item>
     </Menu>
@@ -19,7 +29,10 @@ export default ({data, ondelete}) => {
   }
 
   return (
-    <div className="object-card-box" onClick={gotoManage}>
+    <div 
+      className="object-card-box" 
+      onClick={gotoManage}
+    >
       <div className="object-card FBV">
         <div className="object-up">
           <div className="FBH FBJB">
