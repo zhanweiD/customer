@@ -77,21 +77,25 @@ const Overview = () => {
       tooltipText: '累计签约金额',
       values: [card.signAmount || 0, `同比${card.signTotalAmountRise || 0}`],
       valueTexts: [`累计认购金额： ${card.subscriptionAmount || 0}`],
+      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
     }, {
       title: '累计签约套数',
       tooltipText: '累计签约套数',
       values: [card.signHouseCount || 0],
       valueTexts: [`去化率 ${card.removalRate || 0}`],
+      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
     }, {
       title: '客户总数',
       tooltipText: '客户总数',
       values: [card.allCustCount || 0],
       valueTexts: [`新增客户数 ${card.newCustCount || 0}`],
+      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
     }, {
       title: '来访客户人数',
       tooltipText: '来访客户人数',
       values: [card.visitCustCount || 0],
       valueTexts: [`来访率 ${card.visitCustRate || 0}`],
+      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
     },
   ]
 
@@ -160,12 +164,16 @@ const Overview = () => {
         </div>
         <div className="bgf m16 overview-count">
           <div className="content-header">总览</div>
-          <div className="p16"><OverviewCardWrap cards={cards} /></div>
+          <div className="p16">
+            <OverviewCardWrap cards={cards} />
+          </div>
         </div>
         {
           org ? (
             <div className="d-flex m16">
+              {/* <div className="m16"> */}
               <div className="mr16" style={{width: '70%'}}>
+                {/* <div className="mr16 mb16" style={{width: '100%'}}> */}
                 <ConversionChart 
                   orgCodes={org} 
                   timeStart={timeStart}
@@ -180,6 +188,7 @@ const Overview = () => {
                 />
               </div>
               <div style={{width: '30%'}}>
+                {/* <div style={{width: '100%'}}> */}
                 <CustomerChart 
                   orgCodes={org} 
                   timeStart={timeStart}
