@@ -70,6 +70,7 @@ class AddDrawer extends Component {
   componentDidMount() {
     // 获取对象，标签，类目列表
     this.store.getObjList()
+    // this.store.getTagTree()
   }
   formRef = React.createRef()
 

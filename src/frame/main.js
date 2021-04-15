@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Layout, Menu, Modal, Dropdown, Input, Form, ConfigProvider, Affix} from 'antd'
-import {action} from 'mobx'
+import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import zhCN from 'antd/lib/locale/zh_CN'
 import {
@@ -161,21 +161,21 @@ export default class Frame extends Component {
                 mode="inline"
                 onClick={this.changeMenu}
               >
-                {
+                {/* {
                   codeInProduct('tag-manage:view') && (
                     <Menu.Item key="/tag/manage" icon={<TagsOutlined />}>
                       标签管理
                     </Menu.Item>
                   )
-                }
-                {/* {
+                } */}
+                {
                   codeInProduct('tag-model:view') && (
                     <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
                       标签同步
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   codeInProduct('tag-app:view') && (
                     <Menu.Item key="/tag/app" icon={<DeploymentUnitOutlined />}>
                       标签应用
@@ -279,6 +279,11 @@ export default class Frame extends Component {
                       {
                         codeInProduct('system:portrait:view') && (
                           <Menu.Item key="/system/portrait">画像配置</Menu.Item>
+                        )
+                      }
+                      {
+                        codeInProduct('system:portrait:view') && (
+                          <Menu.Item key="/system/business">业务配置</Menu.Item>
                         )
                       }
                     </SubMenu>
