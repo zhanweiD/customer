@@ -78,7 +78,7 @@ const DistributionChart = ({
   return (
     <div className="p16 bgf">
       <Spin spinning={loading}>
-        <div ref={chartMap} style={{height: '642px', width: '62%', display: 'inline-block'}} />
+        <div ref={chartMap} style={{height: '678px', width: '62%', display: 'inline-block'}} />
         <div ref={chartBar} style={{height: '480px', width: '38%', display: 'inline-block'}} />
       </Spin>
     </div> 

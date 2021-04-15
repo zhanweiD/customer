@@ -15,6 +15,7 @@ export default class OverviewCard extends React.Component {
         // color: '#0078FF',
         color: '#fff',
         size: 30, // 仅仅用于高亮的数值
+        viceSize: 16,
       },
     },
     className: '',
@@ -39,7 +40,6 @@ export default class OverviewCard extends React.Component {
     const {
       title, tooltipText, values, valueTexts, fontStyle: {color, active},
     } = this.props
-
     return (
       <div className={cls({'overview-card': true})} style={{color: color || 'inherit'}}>
         <div className="df-js">
@@ -64,7 +64,7 @@ export default class OverviewCard extends React.Component {
             values.map((value = '--', index) => (
               index === 0
                 ? (<span style={{color: active.color || '#0078FF', fontSize: active.size || 30}}>{value}</span>)
-                : (<span style={{fontSize: 16}}>{`/${value}`}</span>)
+                : (<span style={{fontSize: active.viceSize || 16}}>{`/${value}`}</span>)
             ))
           }
         </div>

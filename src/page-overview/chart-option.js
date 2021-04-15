@@ -85,7 +85,7 @@ export function cbarOption(barData) {
       data: data.map(sitem => {
         return sitem[item]
       }),
-      barWidth: '40%',
+      barWidth: '30%',
       type: 'bar',
       stack: 'total',
       // yAxisIndex: 1,
@@ -193,6 +193,10 @@ export function mapOption(mapType, data) {
     },
     tooltip: {
       trigger: 'item',
+      formatter(item) {
+        const ins = `${item.name}<br /> 客户人数：${item.value || '-'}`
+        return ins
+      },
     },
     dataRange: {
       min: 0,
@@ -205,7 +209,7 @@ export function mapOption(mapType, data) {
     },
     series: [
       {
-        name: '客户人数',
+        // name: '客户人数',
         type: 'map',
         mapType,
         top: 128,
@@ -213,11 +217,8 @@ export function mapOption(mapType, data) {
         roam: false,
         zoom: 1.2,
         itemStyle: {
-          normal: {label: {show: true}},
+          normal: {label: {show: false}},
           emphasis: {label: {show: true}},
-        },
-        label: {
-          fontSize: 10,
         },
         data: data.map(item => ({name: item.name, value: item.count})),
       },
@@ -287,8 +288,9 @@ export function sunOption(data) {
     series: {
       type: 'sunburst',
       data,
-      center: ['60%', '60%'],
-      radius: ['0%', '180%'],
+      // sort: 'null',
+      center: ['50%', '50%'],
+      radius: ['0%', '100%'],
       label: {
         rotate: 'radial',
         minAngle: 30,
@@ -335,15 +337,15 @@ export function funnelOption(funnelData) {
     },
     color,
     legend: {
-      top: 48,
+      top: 42,
       left: 'center',
       data: type,
     },
     series: [{
-      top: 96,
+      top: 84,
       type: 'funnel',
       sort: 'none',
-      height: '300',
+      height: '250',
       gap: 0,
       minSize: 150,
       // left: '5%',
