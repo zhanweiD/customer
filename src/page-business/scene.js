@@ -6,46 +6,13 @@ import _ from 'lodash'
 import MyForm from './scene-form'
 
 const {Search} = Input
-const options = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-]
 
 export default inject('store')(({store}) => {
   const showEdit = record => {
-    // store.editId = record.id
     store.isEdit = true
+    store.domainOption = _.filter(store.domainList, e => e.parentCode === record.pp_bizCode)
     store.formInitValue = record
+
     store.drawerVis = true
   }
 
@@ -54,11 +21,14 @@ export default inject('store')(({store}) => {
       title: '场景名称',
       dataIndex: 'bizName',
     }, {
+      title: '场景Code',
+      dataIndex: 'bizCode',
+    }, {
       title: '所属业态',
-      dataIndex: 'p_bizName',
+      dataIndex: 'pp_bizName',
     }, {
       title: '所属业务域',
-      dataIndex: 'w', // 要自己查找处理
+      dataIndex: 'p_bizName', // 要自己查找处理
     }, {
       title: '场景描述',
       dataIndex: 'descr',
@@ -101,6 +71,17 @@ export default inject('store')(({store}) => {
     store.getList()
   }
 
+  const cascaderChange = e => {
+    if (e.length > 0) {
+      [, store.tableParentCode] = e
+    } else {
+      store.tableParentCode = undefined
+    }
+
+    store.pagination.currentPage = 1
+    store.getList()
+  }
+
   useEffect(() => {
     store.getList()
     store.getDomainFormatList()
@@ -133,7 +114,11 @@ export default inject('store')(({store}) => {
           </Popconfirm>
         </div>
         <div className="FBH">
-          <Cascader options={store.domainFormatOption} placeholder="请选择" />
+          <Cascader 
+            options={store.domainFormatOption} 
+            placeholder="请选择" 
+            onChange={e => cascaderChange(e)}
+          />
           <Search placeholder="请输入场景名称" className="ml8" />
         </div>
       </div>

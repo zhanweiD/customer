@@ -1,6 +1,7 @@
 import {Form, Select, Input, Button} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import _ from 'lodash'
 import {debounce, getNamePattern} from '../common/util'
 
 const formItemLayout = {
@@ -9,25 +10,25 @@ const formItemLayout = {
   colon: false,
 }
 
+
 export default inject('store')(({store}) => {
   const [form] = Form.useForm()
 
   const checkName = (rule, value, callback) => {
     if (value) {
-      // 防抖设计
-      debounce(() => {
-        if (store.isEdit) {
-          store.checkFormatName(
-            {
-              bizName: value,
-              id: store.formInitValue.id,
-            }, 
-            callback
-          )
-        } else {
-          store.checkFormatName({bizName: value}, callback)
-        }
-      }, 500)
+      // debounce(() => {
+      if (store.isEdit) {
+        store.checkFormatName(
+          {
+            bizName: value,
+            id: store.formInitValue.id,
+          },
+          callback
+        )
+      } else {
+        store.checkFormatName({bizName: value}, callback)
+      }
+      // }, 500)
     } else {
       callback()
     }
@@ -35,19 +36,19 @@ export default inject('store')(({store}) => {
 
   const checkCode = (rule, value, callback) => {
     if (value) {
-      debounce(() => {
-        if (store.isEdit) {
-          store.checkFormatCode(
-            {
-              bizCode: value,
-              id: store.formInitValue.id,
-            }, 
-            callback
-          )
-        } else {
-          store.checkFormatCode({bizCode: value}, callback)
-        }
-      })
+      // debounce(() => {
+      if (store.isEdit) {
+        store.checkFormatCode(
+          {
+            bizCode: value,
+            id: store.formInitValue.id,
+          }, 
+          callback
+        )
+      } else {
+        store.checkFormatCode({bizCode: value}, callback)
+      }
+      // }, 500)
     } else {
       callback()
     }
@@ -104,12 +105,17 @@ export default inject('store')(({store}) => {
         </Button>
         <Button
           type="primary"
+          loading={store.confirmLoading}
           onClick={() => {
-            if (store.isEdit) {
-              store.editFormat(form.getFieldsValue())
-            } else {
-              store.addFormat(form.getFieldsValue())
-            }
+            form.validateFields().then(value => {
+              if (store.isEdit) {
+                store.editFormat(form.getFieldsValue())
+              } else {
+                store.addFormat(form.getFieldsValue())
+              }
+            }).catch(err => {
+              console.log(err)
+            })
           }}
         >
           确定

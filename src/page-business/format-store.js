@@ -19,6 +19,7 @@ export default class Store {
 
   @observable formInitValue = {}
   
+  @observable confirmLoading = false
   
   /**
    * 查询业态列表
@@ -56,7 +57,8 @@ export default class Store {
    * @param {Object} params {bizName: , bizCode: , descr: }
    * @returns {any} void
    */
-  async addFormat(params) {
+  @action async addFormat(params) {
+    this.confirmLoading = true
     try {
       const res = await io.addFormat(params)
 
@@ -65,6 +67,8 @@ export default class Store {
       successTip('添加成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
@@ -74,7 +78,8 @@ export default class Store {
    * @param {Object} params {id: , bizName: , bizCode: , descr: }
    * @returns {any} void
    */
-  async editFormat(params) {
+  @action async editFormat(params) {
+    this.confirmLoading = true
     try {
       const res = await io.editFormat({
         ...params,
@@ -86,6 +91,8 @@ export default class Store {
       successTip('编辑成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
@@ -147,6 +154,9 @@ export default class Store {
       } else {
         cb()
       }
+
+      console.log(res)
+      console.log(999999)
     } catch (e) {
       errorTip(e.message)
     }

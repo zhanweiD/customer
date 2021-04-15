@@ -10,6 +10,7 @@ export default class Store {
 
   @observable tableData = []
   @observable tableLoading = false
+  @observable tableParentCode
 
   @observable selectedRows = []
 
@@ -20,6 +21,8 @@ export default class Store {
   }
 
   @observable formInitValue = {}
+
+  @observable confirmLoading = false
 
   @observable formatList = [] // 业态列表
   @observable domainList = [] // 业务域列表
@@ -39,6 +42,7 @@ export default class Store {
       const res = await io.listScene({
         currentPage: this.pagination.currentPage,
         pageSize: this.pagination.pageSize,
+        parentCode: this.tableParentCode,
       })
 
       this.pagination.currentPage = res.currentPage
@@ -62,7 +66,8 @@ export default class Store {
    * @param {Object} params {bizName: , parentCode: , bizCode: , descr: }
    * @returns {any} void
    */
-  async addScene(params) {
+  @action async addScene(params) {
+    this.confirmLoading = true
     const {grandpaCode, ...p} = params
 
     try {
@@ -73,6 +78,8 @@ export default class Store {
       successTip('添加成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
@@ -82,7 +89,8 @@ export default class Store {
    * @param {Object} params {id: , bizName: , parentCode: ,bizCode: , descr: }
    * @returns {any} void
    */
-  async editScene(params) {
+  @action async editScene(params) {
+    this.confirmLoading = true
     try {
       const res = await io.editScene({
         ...params,
@@ -94,6 +102,8 @@ export default class Store {
       successTip('编辑成功')
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.confirmLoading = false
     }
   }
 
@@ -105,7 +115,7 @@ export default class Store {
    */
   async deleteScene(params) {
     try {
-      const res = await io.deteleScene({
+      const res = await io.deleteScene({
         bizCodes: params,
       })
 

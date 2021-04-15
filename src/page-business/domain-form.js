@@ -68,9 +68,9 @@ export default inject('store')(({store}) => {
           rules={[
             ...getNamePattern(),
             // {required: true, message: '请输入业态名称'},
-            {
-              validator: (rule, value, callback) => checkName(rule, value, callback),
-            },
+            // {
+            //   validator: (rule, value, callback) => checkName(rule, value, callback),
+            // },
           ]}
         >
           <Input placeHolder="请输入业务域名称" autoComplete="off" />
@@ -80,9 +80,9 @@ export default inject('store')(({store}) => {
           name="bizCode"
           rules={[
             {required: true, message: '请输入业态Code'},
-            {
-              validator: (rule, value, callback) => checkCode(rule, value, callback),
-            },
+            // {
+            //   validator: (rule, value, callback) => checkCode(rule, value, callback),
+            // },
           ]}
         >
           <Input placeHolder="请输入业务域Code" autoComplete="off" />
@@ -118,12 +118,17 @@ export default inject('store')(({store}) => {
         </Button>
         <Button
           type="primary"
+          loading={store.confirmLoading}
           onClick={() => {
-            if (store.isEdit) {
-              store.editDomain(form.getFieldsValue())
-            } else {
-              store.addDomain(form.getFieldsValue())
-            }
+            form.validateFields().then(value => {
+              if (store.isEdit) {
+                store.editDomain(form.getFieldsValue())
+              } else {
+                store.addDomain(form.getFieldsValue())
+              }
+            }).catch(err => {
+              console.log(err)
+            })
           }}
         >
           确定
