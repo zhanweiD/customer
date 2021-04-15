@@ -47,7 +47,7 @@ export default ({data, ondelete}) => {
           <Divider type="vertical" style={{height: '40px'}} />
           <div className="FBV FB1 fac">
             <div>
-              还不确定字段
+              {data.tagCatalog}
             </div>
             <div className="black65">
               一级类目数

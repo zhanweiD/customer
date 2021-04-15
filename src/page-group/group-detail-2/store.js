@@ -78,6 +78,22 @@ export default class Store {
     // }
   }
 
+  /**
+   * 描述 根据对象 id，获取对应标签树
+   * @date 2021-04-14
+   * @param {number} objId objid
+   * @returns {any} void
+   */
+  async getTagTree(objId) {
+    try {
+      const res = await io.getTagTree({
+        objId,
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
   @action setData() {
     this.tableLoading = true
 

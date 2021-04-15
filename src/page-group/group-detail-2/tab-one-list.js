@@ -7,7 +7,6 @@ import {useObserver} from 'mobx-react-lite'
 const colors = ['#1a98f3', '#59b7fb', '#a9d8fa', '#f3f4f9']
 
 
-
 export default inject('store')(({store}) => {
   const columns = [
     {
@@ -39,8 +38,16 @@ export default inject('store')(({store}) => {
     <div>
       <Button onClick={() => store.setData()}>设置 mock 数据</Button>
       <Table
+        // onRow={record => {
+        //   return {
+        //     onClick: event => { 
+        //       console.log('点击修改特征分布')
+        //       console.log(record)
+        //     }, // 点击行
+        //   }
+        // }}
         columns={columns}
-        dataSource={store.topList.slice()}
+        dataSource={store.topList}
         loading={store.tableLoading}
         pagination={false}
       />

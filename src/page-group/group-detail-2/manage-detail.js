@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Button} from 'antd'
 import {EditOutlined, CopyOutlined, ReloadOutlined} from '@ant-design/icons'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 
 
-export default inject('store')(({store}) => {
+export default inject('store')(({store, id}) => {
   const {groupDetail: {name, descr, logicExper, nums, coveringRate}} = store
 
   const genRate = num => {
@@ -15,6 +15,11 @@ export default inject('store')(({store}) => {
 
     return `${(num * 100).toFixed(2)}%`
   }
+
+  useEffect(() => {
+    console.log(store)
+    store.getGroupDetail(id)
+  }, [])
 
   return useObserver(() => (
     <div className="manage-detail-header">
