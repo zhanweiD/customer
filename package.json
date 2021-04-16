@@ -23,6 +23,7 @@
     "@dtwave/oner-mapping": "2.1.0-alpha12",
     "@dtwave/uikit": "3.0.0-alpha4",
     "antd": "4.9.3",
+    "antd-multi-cascader": "^1.0.2",
     "autoprefixer": "9.4.7",
     "babel-core": "6.26.3",
     "babel-eslint": "10.0.1",

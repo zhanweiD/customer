@@ -5,7 +5,6 @@ import {Component, Fragment} from 'react'
 import {action, toJS} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Modal} from 'antd'
-
 import {
   ListContent, OmitTooltip, Authority,
 } from '../../../component'

@@ -6,18 +6,16 @@ import {useObserver} from 'mobx-react-lite'
 
 
 export default inject('store')(({store, id}) => {
-  const {groupDetail: {name, descr, logicExper, nums, coveringRate}} = store
-
   const genRate = num => {
     if (num === 0) {
       return '0%'
     }
 
-    return `${(num * 100).toFixed(2)}%`
+    return `${(num).toFixed(2)}%`
   }
 
   useEffect(() => {
-    console.log(store)
+    store.id = id
     store.getGroupDetail(id)
   }, [])
 
@@ -28,7 +26,7 @@ export default inject('store')(({store, id}) => {
           <div>
             <span className="detail-head">
               客群名称：
-              {name}
+              {store.groupDetail.name}
             </span>
             <EditOutlined className="header-icon ml16" />
             <CopyOutlined className="header-icon ml16" />
@@ -39,7 +37,7 @@ export default inject('store')(({store, id}) => {
               客群描述：
             </span>
             <span className="black65">
-              {descr}
+              {store.groupDetail.descr}
             </span>
           </div>
           <div>
@@ -47,7 +45,7 @@ export default inject('store')(({store, id}) => {
               圈选规则：
             </span>
             <span className="black65">
-              {logicExper}
+              {store.groupDetail.logicExper2}
             </span>
           </div>
         </div>
@@ -57,7 +55,7 @@ export default inject('store')(({store, id}) => {
               覆盖客户数
             </div>
             <div className="black65">
-              {nums}
+              {store.groupDetail.nums}
             </div>
           </div>
           <div className="FBV ml24">
@@ -65,7 +63,7 @@ export default inject('store')(({store, id}) => {
               客户覆盖率
             </div>
             <div className="black65">
-              {genRate(coveringRate)}
+              {genRate(store.groupDetail.coveringRate)}
             </div>
           </div>
         </div>
