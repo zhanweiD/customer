@@ -92,6 +92,18 @@ class Store extends ListContentStore(io.getList) {
     } 
   }
 
+  // 类目标签树
+  @action async getTagTree() {
+    try {
+      const res = await io.getTagTree()
+      runInAction(() => {
+        console.log(res)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } 
+  }
+
   // 获取标签列表
   @action async getTagList(params) {
     try {

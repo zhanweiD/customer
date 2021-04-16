@@ -82,10 +82,7 @@ const Cloud = ({
       .style('font-size', d => `${d.size}px`)
       .style('font-family', 'Impact')
       // .style('fill', (d, i) => fill(i))
-      .style('fill', d => {
-        console.log(d)
-        return d.color
-      })
+      .style('fill', d => d.color)
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)

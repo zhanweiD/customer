@@ -150,8 +150,8 @@ const CustomerChart = ({
                 : null
             }
             {/* <div className="d-flex"> */}
-            <div ref={chartSun} style={{height: '350px', width: '100%'}} />
-            <div style={{height: '150px', marginLeft: '20%'}} className="FBV FBJC FBAC categroy-legend-box">
+            <div ref={chartSun} style={{height: '340px', width: '100%'}} />
+            <div style={{height: '150px', marginLeft: '20%'}} className="FBV FBJC categroy-legend-box">
               {
                 sunData.map((item, i) => (
                   <LegendItem 

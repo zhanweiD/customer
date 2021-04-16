@@ -43,7 +43,7 @@ function Entry() {
           {/* 标签管理 */}
           {/* <Route path="/tag" component={Manage} /> */}
           {/* 标签同步 */}
-          {/* <Route path="/tag" component={Sync} /> */}
+          <Route path="/tag" component={Sync} />
           {/* 群体分析 */}
           <Route path="/analyze" component={Analyze} />
           {/* 标签应用 */}
@@ -67,7 +67,7 @@ function Entry() {
           <Route path="/tag/manage" component={Manage} />
 
           {/* 业务配置 */}
-          <Route path="/business/config" component={Business} />
+          {/* <Route path="/business/config" component={Business} /> */}
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

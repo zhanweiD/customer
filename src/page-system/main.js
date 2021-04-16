@@ -8,6 +8,7 @@ import UserManage from './user-manage'
 import RoleManage from './role-manage'
 import Portrait from './user-portrait'
 import SystemLog from './system-log'
+import Business from '../page-business'
 
 const prePath = '/system'
 
@@ -32,6 +33,12 @@ export default () => {
       {
         codeInProduct('system:system-log:view') && (
           <Route exact path={`${prePath}/system-log`} component={SystemLog} />
+        )
+      }
+      {
+        codeInProduct('system:system-log:view') && (
+          <Route exact path={`${prePath}/business`} component={Business} />
+          // <Route path="/business/config" component={Business} />
         )
       }
       {/* <Redirect strict to={`${prePath}/role-manage`} /> */}

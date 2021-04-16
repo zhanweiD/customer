@@ -23,8 +23,9 @@ export function cbarOption(barData) {
     },
     grid: {
       top: 96,
-      bottom: 24,
-      left: 72,
+      bottom: 64,
+      left: 32,
+      // right: 0,
     },
     legend: {
       top: 32,
@@ -32,10 +33,11 @@ export function cbarOption(barData) {
     },
     xAxis: [
       {
-        min: 0,
-        max: 100,
-        type: 'value',
-        name: '转化率',
+        type: 'category',
+        // min: 0,
+        // max: 100,
+        // type: 'value',
+        data: y,
         color: fontColor,
         axisTick: {
           show: false,
@@ -58,10 +60,27 @@ export function cbarOption(barData) {
         },
       },
     ],
+    dataZoom: [
+      {
+        show: true,
+        realtime: true,
+        start: 0,
+        end: 50,
+      },
+      {
+        type: 'inside',
+        realtime: true,
+        start: 0,
+        end: 50,
+      },
+    ],
     yAxis: [
       {
-        type: 'category',
-        data: y,
+        name: '转化率',
+        type: 'value',
+        min: 0,
+        max: 100,
+        // data: y,
         nameTextStyle: {
           fontSize: 12,
           color: fontColor,
@@ -71,7 +90,7 @@ export function cbarOption(barData) {
             fontSize: 12,
             color: fontColor,
           },
-          rotate: 40,
+          // rotate: 40,
         },
         axisLine: {
           lineStyle: {
@@ -100,7 +119,7 @@ export function lineOption(lineData) {
   const xData = []
   // eslint-disable-next-line no-restricted-syntax
   for (const item in data) {
-    xData.push(item)
+    xData.push({name: item, value: data[item]})
   }
   return {
     title: {
@@ -114,12 +133,12 @@ export function lineOption(lineData) {
     },
     grid: {
       top: 96,
-      bottom: 24,
+      bottom: 64,
     },
     legend: {
       top: 32,
       // data: area === 'china' ? ['来访', '成交'] : ['高层', '别墅'],
-      data: xData,
+      data: type,
     },
     tooltip: {
       trigger: 'axis',
@@ -127,10 +146,23 @@ export function lineOption(lineData) {
         type: 'shadow',
       },
     },
-
+    dataZoom: [
+      {
+        show: true,
+        realtime: true,
+        start: 0,
+        end: 50,
+      },
+      {
+        type: 'inside',
+        realtime: true,
+        start: 0,
+        end: 50,
+      },
+    ],
     xAxis: {
       type: 'category',
-      data: type,
+      data: xData.map(item => item.name),
       axisTick: {
         show: false,
         color: fontColor,
@@ -171,15 +203,24 @@ export function lineOption(lineData) {
         },
       },
     ],
-    series: xData.map((item, index) => ({
+    series: type.map((item, index) => ({
       name: item,
       type: 'line',
       color: color[index],
       smooth: true,
       seriesLayoutBy: 'row',
       emphasis: {focus: 'series'},
-      data: type.map(sItem => data[item][sItem]),
+      data: xData.map(sItem => (sItem.value)[item]),
     })),
+    // series: xData.map((item, index) => ({
+    //   name: item,
+    //   type: 'line',
+    //   color: color[index],
+    //   smooth: true,
+    //   seriesLayoutBy: 'row',
+    //   emphasis: {focus: 'series'},
+    //   data: type.map(sItem => data[item][sItem]),
+    // })),
   }
 }
 
@@ -236,7 +277,7 @@ export function dbarOption(data) {
       },
     },
     grid: {
-      left: 56,
+      left: 96,
     },
     xAxis: {
       type: 'value',
