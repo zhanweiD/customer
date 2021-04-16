@@ -10,57 +10,8 @@ import {errorTip} from '../../common/util'
 import {Loading} from '../../component'
 
 const {Option} = Select
-const onSelect = (selectedKeys, info) => {
-  console.log('selected', selectedKeys, info)
-}
+const {TreeNode} = Tree
 
-const onCheck = (checkedKeys, info) => {
-  console.log('onCheck', checkedKeys, info)
-}
-const treeData = [
-  {
-    title: '0-0',
-    key: '0-0',
-    isCate: true,
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        isCate: true,
-        children: [
-          {
-            title: '0-0-0-0',
-            key: '0-0-0-0',
-            isCate: false,
-          },
-          {
-            title: '0-0-0-1',
-            key: '0-0-0-1',
-            isCate: false,
-          },
-        ],
-      },
-      
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    isCate: true,
-    children: [
-      {
-        title: '0-1-0-0',
-        key: '0-1-0-0',
-        isCate: false,
-      },
-      {
-        title: '0-1-0-1',
-        key: '0-1-0-1',
-        isCate: false,
-      },
-    ],
-  },
-]
 @observer
 class AddDrawer extends Component {
   constructor(props) {
@@ -70,7 +21,6 @@ class AddDrawer extends Component {
   componentDidMount() {
     // 获取对象，标签，类目列表
     this.store.getObjList()
-    // this.store.getTagTree()
   }
   formRef = React.createRef()
 
@@ -81,16 +31,53 @@ class AddDrawer extends Component {
     this.store.resetValue()
   }
 
+  findParent = (parentId, parentIds = []) => {
+    if (parentId === 0) {
+      return parentIds
+    }
+
+    const {cates} = this.store
+    const parentObj = cates.filter(item => item.id === parentId)[0]
+    parentIds.push(parentObj.id)
+ 
+    return this.findParent(parentObj.parentId, parentIds)
+  }
+
+  @action basisCheck = (keys, item) => {
+    const {cates, basic} = this.store
+    this.store.basic = []
+    const tags = item.checkedNodes.filter(sitem => !sitem.children)
+    cates.forEach(sitem => {
+      const childs = tags.filter(citem => sitem.id === citem.parentId)
+      this.store.basic.push({catIdList: [sitem.id], tagIdList: childs.map(citem => citem.aid)})
+    })
+    console.log(basic)
+  }
+
+  @action portraitCheck = (keys, item) => {
+    const {cates, portrait} = this.store
+    this.store.portrait = []
+    console.log(111)
+    const tags = item.checkedNodes.filter(sitem => !sitem.children)
+    cates.forEach(sitem => {
+      const childs = tags.filter(citem => sitem.id === citem.parentId)
+      this.store.portrait.push({catIdList: [sitem.id], tagIdList: childs.map(citem => citem.aid)})
+    })
+    console.log(portrait)
+  }
+
   // 提交
   submit = () => {
+    const {basic, portrait, addstatus, getAdd, getUpdate, detailObj} = this.store
     this.formRef.current.validateFields().then(values => {
-      console.log(values)
-      if (this.store.addstatus) {
+      values.basic = toJS(basic)
+      values.portrait = toJS(portrait)
+      if (addstatus) {
         // values.objId = this.store.objId
-        this.store.getAdd(values)
+        getAdd(values)
       } else {
-        values.id = this.store.detailObj.id
-        this.store.getUpdate(values)
+        values.id = detailObj.id
+        getUpdate(values)
       }
     }).catch(e => {
       errorTip(e)
@@ -102,19 +89,26 @@ class AddDrawer extends Component {
     if (option.name === 'objId') {
       this.store.objId = option.id
       this.store.resetValue()
+
       
       this.formRef.current.resetFields(['search', 'name', 'identification', 'basic', 'portrait', 'eventTableInfo'])
       this.store.getTagList({id: option.id})
-      this.store.getCatList({id: option.id})
-      // 添加触点
-      this.store.getRelTables({objId: option.id})
+      this.store.getTagTree({objId: option.id})
+
+      // this.store.getCatList({id: option.id})
     }
   }
 
-  // 触点列表改变
-  @action onCatChange = option => {
-    this.store.getRelTableFields({objId: this.store.objId, tableName: option})
-  }
+  renderTreeNodes = data => data.map(item => {
+    if (item.children) {
+      return (
+        <TreeNode className="parents" title={item.name} key={item.aid} {...item}>
+          {this.renderTreeNodes(item.children)}
+        </TreeNode>
+      )
+    }
+    return <TreeNode disabled={item.isCate} className="childrens" title={item.name} key={item.aid} {...item} />
+  })
 
   render() {
     const {
@@ -123,6 +117,7 @@ class AddDrawer extends Component {
       addstatus,
       drawerVisible,
       detailObj,
+      catList,
     } = this.store
 
     const {
@@ -252,16 +247,13 @@ class AddDrawer extends Component {
               >
                 <Tree
                   checkable
-                  defaultCheckedKeys={['0-0-0-0']}
-                  // onExpand={onExpand}
-                  // expandedKeys={expandedKeys}
-                  // autoExpandParent={autoExpandParent}
-                  onCheck={onCheck}
-                  // checkedKeys={on}
-                  onSelect={onSelect}
-                  // selectedKeys={selectedKeys}
-                  treeData={treeData}
-                />
+                  // defaultCheckedKeys={['0-0-0-0']}
+                  onCheck={this.basisCheck}
+                  selectable={false}
+                  // treeData={catList}
+                >
+                  {this.renderTreeNodes(catList)}
+                </Tree>
 
               </Form.Item>
               <Form.Item
@@ -271,15 +263,11 @@ class AddDrawer extends Component {
               >
                 <Tree
                   checkable
-                  // onExpand={onExpand}
-                  // expandedKeys={expandedKeys}
-                  // autoExpandParent={autoExpandParent}
-                  onCheck={onCheck}
-                  // checkedKeys={on}
-                  onSelect={onSelect}
-                  // selectedKeys={selectedKeys}
-                  treeData={treeData}
-                />
+                  onCheck={this.portraitCheck}
+                  selectable={false}
+                >
+                  {this.renderTreeNodes(catList)}
+                </Tree>
 
               </Form.Item>
             </Form>

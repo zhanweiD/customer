@@ -5,6 +5,19 @@ import {successTip, errorTip, userLog} from '../../common/util'
 import io from './io'
 import {ListContentStore} from '../../component/list-content'
 
+function listToTree(data) {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    item.title = item.name
+    item.key = item.aid
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === 0)
+}
+
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false
   @observable drawerVisible = false
@@ -21,12 +34,17 @@ class Store extends ListContentStore(io.getList) {
   @observable detailObj = {} // 配置详情数据
   @observable objList = [] // 对象列表
   @observable tagList = [] // 标签列表
-  @observable catList = [] // 类目列表
+  @observable catList = [] // 类目标签
+  @observable cates = [] // 类目标签(打平)
+
   @observable addList = [] // 新增列表
   @observable relTablesList = [] // 触点表下拉
   @observable existTablesList = [] // 已经添加的触点表下拉项
   @observable relTableFieldsList = [] // 触点时间下拉
   @observable relTableFieldsContent = {}
+
+  @observable basic = [] // 客户档案接口数据
+  @observable portrait = [] // 标签描摹接口数据
 
   // 重置表单数据
   @action resetValue = () => {
@@ -51,7 +69,7 @@ class Store extends ListContentStore(io.getList) {
         this.eventTableInfo = res.eventTableInfo || []
 
         this.getTagList({id: this.objId})
-        this.getCatList({id: this.objId})
+        // this.getCatList({id: this.objId})
         this.getRelTables({objId: this.objId})
         this.eventTableInfo.map(item => (
           this.getRelTableFields({objId: this.objId, tableName: item.table})
@@ -93,11 +111,13 @@ class Store extends ListContentStore(io.getList) {
   }
 
   // 类目标签树
-  @action async getTagTree() {
+  @action async getTagTree(params) {
     try {
-      const res = await io.getTagTree()
+      const res = await io.getTagTree(params)
       runInAction(() => {
-        console.log(res)
+        this.cates = res.filter(item => item.isCate)
+        // this.cates = this.cates.map(item => item.id)
+        this.catList = listToTree(res)
       })
     } catch (e) {
       errorTip(e.message)
@@ -151,7 +171,7 @@ class Store extends ListContentStore(io.getList) {
     } 
   }
   // 配置新增
-  @action async getAdd(params) {
+  @action.bound async getAdd(params) {
     this.confirmLoading = true
     try {
       const res = await io.getAdd(params)
@@ -168,7 +188,7 @@ class Store extends ListContentStore(io.getList) {
     }
   }
   // 配置编辑
-  @action async getUpdate(params) {
+  @action.bound async getUpdate(params) {
     this.confirmLoading = true
     try {
       const res = await io.getUpdate(params)
