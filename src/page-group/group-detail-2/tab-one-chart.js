@@ -1,42 +1,42 @@
 /* eslint-disable no-unused-expressions */
 import React, {useRef, useEffect} from 'react'
+import {inject} from 'mobx-react'
+import {useObserver} from 'mobx-react-lite'
+import {Spin} from 'antd'
+import NoData from '../../component/no-data'
 
 
-const option = {
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  },
-  yAxis: {
-    type: 'value',
-  },
-  series: [{
-    data: [120, 200, 150, 80, 70, 110, 130],
-    type: 'bar',
-  }],
-}
-
-export default () => {
+export default inject('store')(({store}) => {
   const chartRef = useRef(null)
-  let chartInstance = null
+  // let chartInstance = null
 
   const renderChart = () => {
     const renderedInstance = echarts.getInstanceByDom(chartRef.current)
     if (renderedInstance) {
-      chartInstance = renderedInstance
+      store.chartInstance = renderedInstance
     } else {
-      chartInstance = echarts.init(chartRef.current)
+      store.chartInstance = echarts.init(chartRef.current)
     }
-    
-    chartInstance.setOption(option)
+
+    store.chartInstance.setOption(store.option)
+  }
+
+  const prepareChart = () => {
+    const renderedInstance = echarts.getInstanceByDom(chartRef.current)
+    if (renderedInstance) {
+      store.chartInstance = renderedInstance
+    } else {
+      store.chartInstance = echarts.init(chartRef.current)
+    }
   }
 
   const resize = () => {
-    chartInstance && chartInstance.resize()
+    store.chartInstance && store.chartInstance.resize()
   }
 
   useEffect(() => {
-    renderChart()
+    prepareChart()
+    store.getTopList(store.id)
 
     window.addEventListener('resize', resize)
 
@@ -45,7 +45,27 @@ export default () => {
     }
   }, [])
 
-  return (
-    <div ref={chartRef} style={{height: '500px'}} />
-  )
-}
+  return useObserver(() => (
+    <div>
+      <Spin spinning={store.chartSpinning}>
+        <div className="FBH FBAC FBJC" style={{height: '500px'}}>
+          <NoData 
+            size="small" 
+            style={{
+              visibility: store.chartVis ? 'hidden' : 'visible',
+              position: 'absolute',
+            }} 
+          />
+          <div 
+            ref={chartRef} 
+            style={{
+              width: '100%', 
+              height: '500px', 
+              visibility: store.chartVis ? 'visible' : 'hidden',
+            }} 
+          />
+        </div>
+      </Spin>
+    </div>
+  ))
+})

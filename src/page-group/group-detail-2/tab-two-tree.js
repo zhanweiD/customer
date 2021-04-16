@@ -1,5 +1,7 @@
 import React from 'react'
 import {Tree} from 'antd'
+import {inject} from 'mobx-react'
+import {useObserver} from 'mobx-react-lite'
 
 const treeData = [
   {
@@ -44,24 +46,23 @@ const treeData = [
   },
 ]
 
-export default () => {
-  const onSelect = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info)
-  }
+export default inject('store')(
+  ({store}) => {
+    const onSelect = (selectedKeys, info) => {
+      console.log('selected', selectedKeys, info)
+    }
 
-  const onCheck = (checkedKeys, info) => {
-    console.log('onCheck', checkedKeys, info)
+    const onCheck = (checkedKeys, info) => {
+      console.log('onCheck', checkedKeys, info)
+    }
+
+    return useObserver(() => (
+      <Tree
+        checkable
+        onSelect={onSelect}
+        onCheck={onCheck}
+        treeData={store.treeData}
+      />
+    ))
   }
-  
-  return (
-    <Tree
-      checkable
-      defaultExpandedKeys={['0-0-0', '0-0-1']}
-      defaultSelectedKeys={['0-0-0', '0-0-1']}
-      defaultCheckedKeys={['0-0-0', '0-0-1']}
-      onSelect={onSelect}
-      onCheck={onCheck}
-      treeData={treeData}
-    />
-  )
-}
+)

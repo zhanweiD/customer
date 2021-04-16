@@ -20,6 +20,9 @@ const tabConfig = {
 
 
 const Main = ({match}) => {
+  groupStore.id = match.params.id
+  groupStore.objId = match.params.objId
+
   return (
     <Provider store={groupStore}>
       <div className="group-detail-2">
@@ -30,7 +33,7 @@ const Main = ({match}) => {
               <TabOne />
             </TabPane>
             <TabPane tab="特征分布" key="2">
-              <TabTwo />
+              <TabTwo id={match.params.id} objId={match.params.objId} />
             </TabPane>
             <TabPane tab="客户列表" key="3">
               <TabThree />

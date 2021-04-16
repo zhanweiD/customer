@@ -2,7 +2,7 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {Modal, Button, Spin} from 'antd'
-import {ModalForm} from '../../../component'
+import ModalForm from '../modal-form'
 import {changeToOptions, enNameReg, isJsonFormat, debounce} from '../../../common/util'
 import {tagConfigMethodMap, nameTypeMap, modalDefaultConfig} from '../util'
 

@@ -20,7 +20,15 @@ export default inject('store')(({store}) => {
       title: '标签',
       dataIndex: 'tagName',
       render: (text, record) => {
-        return <a onClick={() => store.getDistributionByTag([record.tagId])}>{text}</a>
+        return (
+          <a onClick={() => {
+            store.tabOneTitle = `-${record.tagName}`
+            store.getDistributionByTag([+record.tagId])
+          }}
+          >
+            {text}
+          </a>
+        )
       },
     },
     // {
@@ -36,7 +44,6 @@ export default inject('store')(({store}) => {
 
   return useObserver(() => (
     <div>
-      <Button onClick={() => store.setData()}>设置 mock 数据</Button>
       <Table
         // onRow={record => {
         //   return {
