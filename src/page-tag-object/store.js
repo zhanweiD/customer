@@ -118,6 +118,18 @@ class Store {
       errorTip(e.message)
     }
   }
+
+  @action async getObjectDetail(id, cb=()=>{}) {
+    try {
+      const res = await io.getObjectDetail({
+        id,
+      })
+
+      cb(res)
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }
 
 export default Store

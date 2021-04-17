@@ -13,6 +13,7 @@ import {
 } from '../util'
 
 import ModalTagMove from './modal-tag-move'
+import ModalUpdateBiz from './modal-update-biz'
 import DrawerCreate from './drawer-create'
 import DrawerTagConfig from '../tag-config'
 import TagCateTree from './tree'
@@ -30,6 +31,7 @@ class TagList extends Component {
     store.objId = +props.bigStore.objId
 
     // store.getTagCateSelectList()
+    store.getBizList()
   }
 
   columns = [{
@@ -38,6 +40,9 @@ class TagList extends Component {
     dataIndex: 'name',
     fixed: 'left',
     render: (text, record) => <a href onClick={() => this.showDetail(record)}>{text}</a>,
+  }, {
+    title: '业务类型',
+    dataIndex: 'bizText',
   }, {
     key: 'valueTypeName',
     title: '数据类型',
@@ -230,7 +235,7 @@ class TagList extends Component {
   @action.bound showDetail(data) {
     store.detailVisible = true
     store.getTagCateSelectList()
-    store.getTagDetail({id: data.id})
+    store.getTagDetail({id: data.id}, data)
   }
 
   @action.bound cancelTagConfig(data) {
@@ -301,6 +306,17 @@ class TagList extends Component {
   menu = keys => (
     <Menu style={{textAlign: 'center'}}>
       <Menu.Item disabled={!keys.length}>
+        <a
+          className="fs12"
+          disabled={!keys.length}
+          onClick={() => {
+            store.updateBizVisible = true
+          }}
+        >
+          设置业务类型
+        </a>
+      </Menu.Item>
+      <Menu.Item disabled={!keys.length}>
         <Authority
           authCode="tag-manage:release-tag"
         >
@@ -341,7 +357,7 @@ class TagList extends Component {
       selectedRowKeys: publishRowKeys.slice(),
       onChange: this.onTableCheck,
       getCheckboxProps: record => ({
-        // disabled: record.status !== 1, // 权限审批中的，不可进行申请、批量申请，且显示审批中
+        disabled: record.status === 2, // 权限审批中的，不可进行申请、批量申请，且显示审批中
       }),
     }
 
@@ -444,6 +460,7 @@ class TagList extends Component {
           </div>
           <TagDetailModal store={store} />
           <ModalTagMove store={store} treeStore={treeStore} />
+          <ModalUpdateBiz store={store} treeStore={treeStore} />
           <DrawerCreate store={store} treeStore={treeStore} />
           <DrawerTagConfig
             objId={store.objId}

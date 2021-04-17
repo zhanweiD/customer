@@ -55,7 +55,11 @@ export default class TagObject extends Component {
                     <div
                       className="object-card FBH FBAC FBJC"
                       style={{cursor: 'pointer'}}
-                      onClick={() => this.store.visible = true}
+                      onClick={() => {
+                        this.store.objDetail = {}
+                        this.store.isAdd = true
+                        this.store.visible = true
+                      }}
                     >
                       <div className="black65" style={{fontSize: '20px'}}>+ 新增对象</div>
                     </div>

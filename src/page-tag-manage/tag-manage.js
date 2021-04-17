@@ -20,7 +20,7 @@ export default class ObjectModel extends Component {
     const {match: {params: {id}}} = props
 
     store.selectedKey = +id
-    
+    store.getObjDetailNew(id)
     store.getTreeData()
   }
   // @action changeTab = code => {

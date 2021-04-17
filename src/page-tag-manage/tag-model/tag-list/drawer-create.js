@@ -2,6 +2,7 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {Modal, Button, Spin} from 'antd'
+import _ from 'lodash'
 import ModalForm from '../modal-form'
 import {changeToOptions, enNameReg, isJsonFormat, debounce} from '../../../common/util'
 import {tagConfigMethodMap, nameTypeMap, modalDefaultConfig} from '../util'
@@ -136,8 +137,30 @@ export default class DrawerCreate extends Component {
     
     this.form.validateFields((err, values) => {
       if (!err) {
+        // 处理业务类型的数据
+        const {biz, ...rest} = values
+        const {bizOriginList} = store
+        const bizValue = []
+
+        biz.forEach(item => {
+          const target = _.find(bizOriginList, e => e.bizCode === item)
+          const parentNode = _.find(bizOriginList, e => e.bizCode === target.parentCode)
+
+          if (!parentNode) {
+            // 没找到，说明是第一级
+            bizValue.push([target.bizCode])
+          } else if (target.parentCode === parentNode.bizCode && parentNode.parentCode === '-1') {
+            // 第二级
+            bizValue.push([target.parentCode, target.bizCode])
+          } else {
+            bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
+          }
+        })
+
+
         const params = {
-          ...values,
+          ...rest,
+          biz: bizValue,
           cateId: values.cateId[values.cateId.length - 1],
           isEnum: values.isEnum ? 1 : 0,
           configType: 0,

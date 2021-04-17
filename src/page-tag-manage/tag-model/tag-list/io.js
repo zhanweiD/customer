@@ -29,6 +29,8 @@ const api = {
 
   // 权限code
   getAuthCode: get(`${baseApi}/project/getFunctionCodes`),
+  getBizList: get(`${baseApi}/portrait/bizTypeDropdown`), // 获取业务类型下拉
+  batchUpdateBiz: post(`${baseApi}/tag/batch_update_tag_biz`), // 批量修改标签业务域
 } 
 
 ioContext.create('overview', api) 

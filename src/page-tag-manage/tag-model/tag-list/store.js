@@ -1,16 +1,27 @@
 import {
   observable, action, runInAction, toJS,
 } from 'mobx'
+import _ from 'lodash'
 import {
   successTip, failureTip, errorTip, changeToOptions, listToTree, userLog,
 } from '../../../common/util'
 import {ListContentStore} from '../../../component/list-content'
 import io from './io'
 
+const listToCascader = (data) => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentCode === item.bizCode)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentCode === '-1')
+}
 class Store {
   // 创建标签
   @observable drawerTagVisible = false
-  @observable detailVisible = false
+  @observable detailVisible = true
   @observable drawerTagType = 'add' // 创建标签弹窗类型 添加 & 编辑
   @observable drawerTagInfo = {} // 编辑标签时 标签详情
   @observable objectSelectList = [] // 所属对象下拉数据
@@ -65,7 +76,20 @@ class Store {
   @action.bound openDrawer(type, data) {
     this.drawerTagType = type
     this.getTagCateSelectList()
-    this.drawerTagInfo = data || {}
+    
+    // 要处理业务类型的数据
+    if (data) {
+      const {biz, ...rest} = data
+      const bizValue = []
+      biz.forEach(item => {
+        bizValue.push(item.pop())
+      })
+
+      this.drawerTagInfo = {biz: bizValue, ...rest}
+    } else {
+      this.drawerTagInfo = {}
+    }
+    
     // if (type === 'edit') {
     //   // 获取对象详情
     //   this.getTagDetail({
@@ -242,7 +266,7 @@ class Store {
   /**
    * @description 标签详情
    */
-  @action async getTagDetail(params, cb) {
+  @action async getTagDetail(params, data, cb) {
     this.detailLoading = true
 
     try {
@@ -250,7 +274,7 @@ class Store {
         ...params,
       })
       runInAction(() => {
-        this.drawerTagInfo = res
+        this.drawerTagInfo = {...res, bizText: data.bizText}
         this.applyInfo = res
         this.isEnum = res.isEnum
         this.ownObject = res.objId
@@ -398,6 +422,43 @@ class Store {
   }
 
   @observable functionCodes = []
+
+  @observable bizList = []
+  @observable bizOriginList = []
+
+  @observable updateBizVisible = false
+  
+  /**
+ * 描述 获取业务类型下拉列表数据
+ * @date 2021-04-17
+ * @returns {any} void
+ */
+  @action async getBizList() {
+    try {
+      const res = await io.getBizList()
+
+      res.forEach(item => {
+        item.title = item.bizName
+        item.value = item.bizCode
+      })
+
+      this.bizOriginList = res
+      this.bizList = listToCascader(res)
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  @action async batchUpdateBiz(params, cb = () => {}) {
+    try {
+      const res = await io.batchUpdateBiz(params)
+
+      successTip('操作成功')
+      cb()
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }
 
 export default new Store()

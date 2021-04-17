@@ -137,6 +137,30 @@ class Store {
       errorTip(e.message)
     }
   }
+
+  @observable objDetailNew = {
+    tag: 0,
+    bindDbFieldCnt: 0,
+    dbFieldCnt: 0,
+  }
+  /**
+   * 描述 获取对象卡片详情
+   * @date 2021-04-17
+   * @param {any} objId id
+   * @returns {any} void
+   */
+  @action async getObjDetailNew(objId) {
+    try {
+      const res = await io.getObjDetail({
+        objId,
+      })
+
+      this.objDetailNew = res
+
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }
 
 export default new Store()

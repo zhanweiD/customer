@@ -21,6 +21,7 @@ export default class TagDetailModal extends Component {
     const {
       detailVisible, drawerTagInfo, tagCateList,
     } = this.store
+    console.log(detailVisible)
     const ownCate = tagCateList.find(item => item.id === drawerTagInfo.parentId)
     if (!ownCate) return null
     const content = [{
@@ -32,6 +33,9 @@ export default class TagDetailModal extends Component {
     }, {
       name: '所属类目',
       value: ownCate.name,
+    }, {
+      name: '业务类型',
+      value: drawerTagInfo.bizText,
     }, {
       name: '描述',
       value: drawerTagInfo.descr,
@@ -58,7 +62,7 @@ export default class TagDetailModal extends Component {
 
     const modalConfig = {
       title: '标签详情',
-      visible: detailVisible,
+      visible: this.store.detailVisible,
       onCancel: this.handleCancel,
       maskClosable: false,
       width: 525,

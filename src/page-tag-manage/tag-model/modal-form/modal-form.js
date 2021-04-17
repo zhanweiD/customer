@@ -5,6 +5,8 @@ import {Component, Fragment} from 'react'
 import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import PropTypes from 'prop-types'
+import {inject} from 'mobx-react'
+import {toJS} from 'mobx'
 import {Input} from 'antd'
 import MultiCascader from 'antd-multi-cascader'
 import QuestionTooltip from '../../../component/question-tooltip'
@@ -13,49 +15,7 @@ import ControlComponent, {mergeRules} from '../form-component-config'
 const FormItem = Form.Item
 
 
-
-const MyMultiCascader = ({value = {}, onChange}) => {
-
-  return (
-    <MultiCascader
-      value={value}
-      onChange={onChange}
-      size="small"
-      data={[
-        {
-          title: '地产',
-          value: 'DC',
-          children: [
-            {
-              title: '营销',
-              value: 'YX',
-            }, {
-              title: '出售',
-              value: 'CS',
-            }, {
-              title: 'aa',
-              value: 'aa',
-            }, {
-              title: 'bb',
-              value: 'bb',
-            },
-          ],
-        }, {
-          title: '旅游',
-          value: 'LY',
-          children: [
-            {
-              title: '到访',
-              value: 'DF',
-            },
-          ],
-        },
-      ]}
-      placeholder="请选择"
-    />
-  )
-}
-
+@inject('bigStore')
 @Form.create()
 export default class ModalForm extends Component {
   static propTypes = {
@@ -206,7 +166,7 @@ export default class ModalForm extends Component {
 
 
   render() {
-    const {formItemLayout, form, ...rest} = this.props
+    const {formItemLayout, form, bigStore, ...rest} = this.props
     const {getFieldDecorator} = form
 
     return (
@@ -216,44 +176,18 @@ export default class ModalForm extends Component {
         }
         <FormItem
           label="业务类型"
-          name="business"
-          key="business"
+          name="biz"
+          key="biz"
           {...formItemLayout}
         >
-          {getFieldDecorator('business', {
-            initialValue: ['YX', 'LY'],
+          {getFieldDecorator('biz', {
+            initialValue: bigStore.drawerTagInfo.biz,
+            rules: [
+              {required: true, message: '请选择'},
+            ],
           })(
             <MultiCascader
-              data={[
-                {
-                  title: '地产',
-                  value: 'DC',
-                  children: [
-                    {
-                      title: '营销',
-                      value: 'YX',
-                    }, {
-                      title: '出售',
-                      value: 'CS',
-                    }, {
-                      title: 'aa',
-                      value: 'aa',
-                    }, {
-                      title: 'bb',
-                      value: 'bb',
-                    },
-                  ],
-                }, {
-                  title: '旅游',
-                  value: 'LY',
-                  children: [
-                    {
-                      title: '到访',
-                      value: 'DF',
-                    },
-                  ],
-                },
-              ]}
+              data={toJS(bigStore.bizList)}
               placeholder="请选择"
             />
           )}

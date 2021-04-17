@@ -27,7 +27,7 @@ export default class ObjectDetail extends Component {
 
   render() {
     const {
-      objId, objDetail, loading,
+      objId, objDetail, loading, objDetailNew,
     } = this.store
 
     // 对象指标信息卡
@@ -35,15 +35,15 @@ export default class ObjectDetail extends Component {
       {
         title: '标签总数',
         tooltipText: '该对象下的标签总数',
-        values: [objDetail.tag],
+        values: [objDetailNew.tag],
       }, {
-        title: '数据表总数',
-        tooltipText: '该对象绑定的数据表总数',
-        values: [objDetail.tagTable],
+        title: '已绑定字段数',
+        tooltipText: '该对象绑定的字段总数',
+        values: [objDetailNew.bindDbFieldCnt],
       }, {
-        title: '关系表总数',
-        tooltipText: '该对象绑定的关系表总数',
-        values: [objDetail.relTable],
+        title: '字段总数',
+        tooltipText: '该对象下的字段总数',
+        values: [objDetailNew.dbFieldCnt],
       },
     ]
 
