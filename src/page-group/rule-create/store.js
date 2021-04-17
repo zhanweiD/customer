@@ -1,7 +1,7 @@
 import {
   action, runInAction, observable, toJS,
 } from 'mobx'
-import {errorTip, changeToOptions, userLog} from '../../common/util'
+import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
 import io from './io'
 
 class Store {
@@ -16,6 +16,8 @@ class Store {
   @observable oneForm = {} // 第一步表单
   @observable threeForm = {} // 第三步表单
   @observable submitLoading = false
+  @observable aysVisible = false // 数据分析
+  @observable editLoading = false // 编辑加载
 
   // 第一步 设置基础信息
   @observable entityList = []
@@ -30,9 +32,16 @@ class Store {
   @observable posList // 
   @observable wherePosMap = {}
   @observable whereMap = {} // 设置筛选条件
+  
+  @observable treeData = [] // 数据分析类目树
+  @observable useTagList = [] // 可用标签
+  @observable applyId = null // 数据分析使用
+  @observable chartLoading = false // 数据分析使用
 
   // 第三步
   @observable outputTags = []
+
+  @observable saveInfo = {}
 
   // 编辑
   @observable detail = {}
@@ -53,7 +62,7 @@ class Store {
   }
 
   // 添加群体
-  @action async addGroup(params, cb) {
+  @action async addGroup(params) {
     this.submitLoading = true
     
     try {
@@ -67,12 +76,14 @@ class Store {
         type: +this.type,
         logicExper: JSON.stringify(logicExper),
         ...toJS(this.oneForm),
-        ...params,
+        // ...params,
       })
 
       runInAction(() => {
         userLog('群体管理/新建群体')
-        cb(res)
+        // cb(res)
+        this.saveInfo = res
+        this.current += 1
       })
     } catch (e) {
       errorTip(e.message)
@@ -85,6 +96,7 @@ class Store {
 
   // 编辑群体详情信息
   @action async getDetail(id) {
+    this.editLoading = true
     try {
       const res = await io.getDetail({
         id, 
@@ -93,6 +105,7 @@ class Store {
       runInAction(() => {
         this.objId = res.objId
         this.detail = res
+        this.getOutputTags(this.objId)
 
         if (res.logicExper) {
           this.logicExper = JSON.parse(res.logicExper)
@@ -107,11 +120,13 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.editLoading = false
     }
   }
 
   // 编辑群体
-  @action async editGroup(params, cb) {
+  @action async editGroup(params) {
     this.submitLoading = true
     try {
       const logicExper = {
@@ -125,12 +140,14 @@ class Store {
         type: +this.type,
         logicExper: JSON.stringify(logicExper),
         ...toJS(this.oneForm),
-        ...params,
+        // ...params,
       })
 
       runInAction(() => {
         userLog('群体管理/编辑群体')
-        cb(res)
+        // cb(res)
+        this.saveInfo = res
+        this.current += 1
       })
     } catch (e) {
       errorTip(e.message)
@@ -174,11 +191,10 @@ class Store {
   }
 
   // 获取对象对应已同步的标签列表
-  @action async getConfigTagList(params) {
+  @action.bound async getConfigTagList() {
     try {
       const res = await io.getConfigTagList({
         objId: this.objId, // 实体ID
-        ...params,
       })
 
       runInAction(() => {
@@ -238,10 +254,10 @@ class Store {
   }
 
   // 获取输出标签
-  @action async getOutputTags() {
+  @action async getOutputTags(objId) {
     try {
       const res = await io.getOutputTags({
-        objId: this.objId, // 实体ID
+        objId, // 实体ID
       })
 
       runInAction(() => {
@@ -271,6 +287,68 @@ class Store {
     this.posList = {}
     this.whereMap = {}
     this.wherePosMap = {}
+  }
+
+  @observable tagLoading = true 
+
+  @observable checkList = [] // 选中的标签
+  @observable aysTagList = [] // 标签列表
+  @observable tagChartData = [] // 标签分析数据
+
+  // 标签分析
+  @action.bound async getTagData() {
+    this.tagChartData = []
+    this.chartLoading = true
+    try {
+      const res = await io.getTagData({
+        tagIds: this.checkList,
+        applyId: this.applyId,
+      })
+      runInAction(() => {
+        this.tagChartData = res || []
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.chartLoading = false
+    }
+  }
+
+  // 类目标签树
+  @action.bound async getTagTree() {
+    try {
+      const res = await io.getTagTree({
+        // objId: 9063199376998720,
+        objId: this.objId,
+      })
+
+      res.forEach(item => {
+        item.title = item.name
+        item.key = item.id
+      })
+
+      this.treeData = listToTree(res || [])
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 可分析标签
+  @action.bound async getUseTag() {
+    const logicExper = {
+      ...toJS(this.logicExper),
+      posList: JSON.stringify(toJS(this.posList)),
+    }
+    try {
+      const res = await io.getUseTag({
+        objId: this.objId,
+        logicExper: JSON.stringify(logicExper),
+      })
+      this.useTagList = res.tagIds || []
+      this.applyId = res.applyId
+    } catch (e) {
+      errorTip(e.message)
+    }
   }
 }
 
