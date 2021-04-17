@@ -18,10 +18,10 @@ export default class RuleCreate extends Component {
 
     const {match: {params}} = props
 
-    store.type = 1
+    store.type = 2
     
-    store.groupId = params.groupId
-    store.isCopy = params.isCopy
+    store.groupId = +params.groupId
+    store.isCopy = +params.isCopy
 
     if (params.isCopy) {
       return headerTitle = '复制群体'
@@ -55,11 +55,11 @@ export default class RuleCreate extends Component {
 
     if (groupId && !isCopy) {
       store.editGroup(values, res => {
-        this.showResult(res)
+        // this.showResult(res)
       })
     } else {
       store.addGroup(values, res => {
-        this.showResult(res)
+        // this.showResult(res)
       })
     }
   }
@@ -78,34 +78,45 @@ export default class RuleCreate extends Component {
   }
 
   render() {
-    const {current, outputTags, submitLoading, detail, type} = store
-
+    const {
+      current, 
+      outputTags, 
+      submitLoading, 
+      detail, 
+      type,
+      entityList = [],
+      objId,
+      groupId,
+      isCopy,
+      saveInfo,
+    } = store
     return (
       <Provider store={store}>
         <div>
           <div className="content-header">{headerTitle}</div>
           <div className="rule-create">
             <Steps size="small" current={current} style={{width: '80%', margin: '0 auto'}}>
-              <Step title="设置基础信息" />
-              <Step title="设置群体圈选规则" />
-              <Step title="设置群体参数" />
+              <Step title="信息配置" />
+              <Step title="圈选规则" />
+              <Step title="完成" />
             </Steps>
-            <StepOne />
+            <StepOne
+              prev={this.prev}
+              save={this.save}
+            />
           
             {
-              store.current === 1 ? <StepTwo /> : null
+              store.current === 1 ? <StepTwo save={this.save} /> : null
             }
          
             {
               store.current === 2 ? (
                 <StepThree 
-                  configTagList={toJS(outputTags)}
                   current={current} 
-                  prev={this.prev}
-                  save={this.save}
-                  loading={submitLoading} 
-                  detail={toJS(detail)}
-                  type={+type}
+                  objId={objId}
+                  groupId={groupId}
+                  isCopy={isCopy}
+                  saveInfo={saveInfo}
                 />
               ) : null
             }

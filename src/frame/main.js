@@ -243,11 +243,11 @@ export default class Frame extends Component {
                           <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
                         )
                       }
-                      {
+                      {/* {
                         codeInProduct('analyze:group-portrait:view') && (
                           <Menu.Item key="/analyze/group">群体画像</Menu.Item>
                         )
-                      }
+                      } */}
                     </SubMenu>
                   )
                 }

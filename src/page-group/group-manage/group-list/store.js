@@ -97,10 +97,10 @@ class Store extends ListContentStore(io.getGroupList) {
   }
 
   // 批量删除群体
-  @action async removeGroupList(ids) {
+  @action.bound async removeGroupList() {
     try {
       const res = await io.removeGroupList({
-        ids, // 群体ID
+        ids: this.selectedRows, // 群体ID
       })
       runInAction(() => {
         if (res) {

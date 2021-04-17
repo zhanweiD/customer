@@ -56,7 +56,11 @@ const RuleItem = ({
 
   // tag type
   const [tagType, changeTagType] = useState(4)
+  const [isEnum, changeIsEnum] = useState(0)
   const [operatType, changeOperatType] = useState('=')
+
+  // 预提示
+  const [promptTag, changePromptTag] = useState([])
 
   const posStyle = {
     left: pos[0],
@@ -102,6 +106,19 @@ const RuleItem = ({
     changeRelRenderTag(res)
   }
 
+  // 标签值预提示
+  async function getPromptTag(objIdAndTagId) {
+    try {
+      const res = await io.getPromptTag({
+        objIdAndTagId,
+      })
+      // console.log(res)
+      changePromptTag(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const open = () => {
     openDrawer(key, relId)
   }
@@ -119,6 +136,8 @@ const RuleItem = ({
 
   // 选择标签
   const onSelectTag = (e, item) => {
+    if (item.isEnum) getPromptTag(e)
+    changeIsEnum(item.isEnum)
     changeTagType(item.tagType)
     let obj = {}
     if (+ruleIfBoxKey.slice(-1) === 1) {
@@ -161,7 +180,26 @@ const RuleItem = ({
   // 生成form item
   const setConditValue = () => {
     // 数值型 介于 输入最大最小值 其余单input
-    if (tagType === 2) {
+    if (isEnum) {
+      return ([
+        <FormItem
+          label={null}
+          name={[key, 'rightParams']}
+          initialValue={rest.rightParams}
+        >
+          <Select 
+            // mode="tags" 
+            style={{minWidth: 128}} 
+            placeholder="请输入或者选择"
+          >
+            {
+              promptTag.map(item => <Option value={item}>{item}</Option>)
+            }
+          </Select>
+        </FormItem>,
+      ])
+    }
+    if (tagType === 2 || tagType === 3) {
       if (operatType === 'in') {
         return ([
           <FormItem
@@ -195,37 +233,49 @@ const RuleItem = ({
     } 
 
     // 枚举型 等于不等于 select 其他 input
-    if (tagType === 3) {
-      if (operatType === '=' || operatType === '!=') {
-        return ([
-          <FormItem
-            label={null}
-            name={[key, 'rightParams']}
-            rules={[{required: true, message: '不能为空'}]}
-            initialValue={rest.rightParams}
-          >
-            <Select size="small" placeholder="请选择" style={{width: 120}} disabled={rest.page === 'detail'}>
-              <Option value="1">1</Option>
-              <Option value="2">2</Option>
-            </Select>
-          </FormItem>,
-        ])
-      } 
+    // 小数型
+    // if (tagType === 3) {
+    // if (operatType === '=' || operatType === '!=') {
+    //   return ([
+    //     <FormItem
+    //       label={null}
+    //       name={[key, 'rightParams']}
+    //       initialValue={rest.rightParams}
+    //     >
+    //       <Select 
+    //         mode="tags" 
+    //         style={{minWidth: 128}} 
+    //         placeholder="请输入或者选择"
+    //       >
+    //         {
+    //           promptTag.map(item => <Option value={item}>{item}</Option>)
+    //         }
+    //       </Select>
+    //     </FormItem>,
+    //   ])
+    // } 
 
-      return ([
-        <FormItem
-          label={null}
-          name={[key, 'rightParams']}
-          rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
-          initialValue={rest.rightParams}
-        >
-          <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
-        </FormItem>,
-      ])
-    }
+    // return ([
+    //   <FormItem
+    //     label={null}
+    //     name={[key, 'rightParams']}
+    //     initialValue={rest.rightParams}
+    //   >
+    //     <Select 
+    //       mode="tags" 
+    //       style={{minWidth: 128}} 
+    //       placeholder="请输入或者选择"
+    //     >
+    //       {
+    //         promptTag.map(item => <Option value={item}>{item}</Option>)
+    //       }
+    //     </Select>
+    //   </FormItem>,
+    // ])
+    // }
 
     // 文本型 input
-    if (tagType === 4) {
+    if (tagType === 4 || tagType === 5) {
       return ([
         <FormItem
           label={null}
@@ -239,35 +289,35 @@ const RuleItem = ({
     }
 
     // 日期型 介于双DatePicker 其他单DatePicker
-    if (tagType === 5) {
-      if (operatType === 'in') {
-        return ([
-          <FormItem
-            label={null}
-            name={[key, 'rightParams']}
-            rules={[{required: true, message: '不能为空'}]}
-            initialValue={rest.rightParams}
-          >
-            <RangePicker
-              style={{width: 240}}
-              format={dateFormat}
-              disabled={rest.page === 'detail'}
-              size="small"
-            />
-          </FormItem>,
-        ])
-      }
-      return ([
-        <FormItem
-          label={null}
-          name={[key, 'rightParams']}
-          rules={[{required: true, message: '不能为空'}]}
-          initialValue={rest.rightParams}
-        >
-          <DatePicker size="small" style={{width: 120}} disabled={rest.page === 'detail'} />
-        </FormItem>,
-      ])
-    }
+  //   if (tagType === 5) {
+  //     if (operatType === 'in') {
+  //       return ([
+  //         <FormItem
+  //           label={null}
+  //           name={[key, 'rightParams']}
+  //           rules={[{required: true, message: '不能为空'}]}
+  //           initialValue={rest.rightParams}
+  //         >
+  //           <RangePicker
+  //             style={{width: 240}}
+  //             format={dateFormat}
+  //             disabled={rest.page === 'detail'}
+  //             size="small"
+  //           />
+  //         </FormItem>,
+  //       ])
+  //     }
+  //     return ([
+  //       <FormItem
+  //         label={null}
+  //         name={[key, 'rightParams']}
+  //         rules={[{required: true, message: '不能为空'}]}
+  //         initialValue={rest.rightParams}
+  //       >
+  //         <DatePicker size="small" style={{width: 120}} disabled={rest.page === 'detail'} />
+  //       </FormItem>,
+  //     ])
+  //   }
   }
   
   // console.log(props)
@@ -386,7 +436,7 @@ const RuleItem = ({
                 >
                   {
                     entityTagList.map(d => (
-                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName}>
+                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName} isEnum={d.isEnum}>
                         <div title={d.objNameTagName} className="omit">{d.objNameTagName}</div>
                       </Option>
                     ))}
@@ -410,7 +460,7 @@ const RuleItem = ({
                 >
                   {
                     entityTagList.map(d => (
-                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName}>
+                      <Option tagType={d.tagType} value={d.objIdTagId} name={d.objNameTagName} isEnum={d.isEnum}>
                         <div title={d.objNameTagName} className="omit">{d.objNameTagName}</div>
                       </Option>
                     ))}
@@ -434,7 +484,6 @@ const RuleItem = ({
               {
                 comparisonMap.map(d => <Option value={d.value}>{d.name}</Option>)
               }
-         
             </Select>
           </FormItem>
           {/* <FormItem
@@ -446,9 +495,12 @@ const RuleItem = ({
               <Option value="固定值">固定值</Option>
             </Select>
           </FormItem> */}
+          
+
           {
             setConditValue()
           }
+          
           {/* <FormItem
             label={null}
             name={[key, 'rightParams']}

@@ -97,9 +97,9 @@ export default class GroupList extends Component {
       render: text => <Time timestamp={text} />,
     }, 
     {
-      key: 'cUserName',
+      key: 'cuserName',
       title: '创建人',
-      dataIndex: 'cUserName',
+      dataIndex: 'cuserName',
     },
     {
       key: 'updateTime',
@@ -123,13 +123,13 @@ export default class GroupList extends Component {
           <Authority
             authCode="group-manage:add-group"
           >
-            <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, false)}>编辑</a>
+            <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, 0)}>编辑</a>
           </Authority>
 
           <Authority
             authCode="group-manage:add-group"
           >
-            <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, true)}>复制</a>
+            <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, 1)}>复制</a>
           </Authority>
                
           <Authority

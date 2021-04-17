@@ -1,5 +1,7 @@
 /* eslint-disable guard-for-in */
-const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
+// const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff', '#8C8D8']
+const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#0099cc']
+
 const fontColor = 'rgba(0,0,0,0.65)'
 const titleColor = 'rgba(0,0,0,0.85)'
 // 转化对比
@@ -323,17 +325,20 @@ export function dbarOption(data) {
 // 渠道分布
 export function sunOption(data) {
   return {
+    color,
     tooltip: {
       trigger: 'item',
+      formatter: '{b} : {c}',
     },
     series: {
       type: 'sunburst',
+      color,
       data,
-      // sort: 'null',
+      sort: null,
       center: ['50%', '50%'],
       radius: ['0%', '100%'],
       label: {
-        rotate: 'radial',
+        // rotate: 'radial',
         minAngle: 30,
       },
     },

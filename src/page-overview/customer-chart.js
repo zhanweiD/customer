@@ -11,7 +11,8 @@ import {sunOption, funnelOption} from './chart-option'
 import Cloud from './cloud'
 import io from './io'
 
-const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
+// const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff', '#0099cc']
+const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#0099cc']
 
 const CustomerChart = ({
   orgCodes, projectCode, timeStart, timeEnd,
