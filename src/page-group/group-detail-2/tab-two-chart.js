@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /**
  * @description 渠道拓客分布
  */
@@ -31,7 +32,8 @@ export default class ChartPie extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.data !== this.props.data) {
       this.data = this.props.data
-      this.drawSaveTrend(this.props.data, this.title)
+      this.myChartPie.clear()
+      this.drawSaveTrend(this.props.data, this.props.title)
     }
   }
 
@@ -52,6 +54,8 @@ export default class ChartPie extends Component {
         this.myChartPie.clear()
         this.myChartPie.setOption(barOption(this.dataList, 'bar', title))
       } else if (params.target.__title === '切换为折线图') {
+        console.log(toJS(this.dataList))
+        console.log('===========')
         this.myChartPie.clear()
         this.myChartPie.setOption(barOption(this.dataList, 'line', title))
       }

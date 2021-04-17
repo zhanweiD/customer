@@ -5,6 +5,7 @@ import io from './io'
 
 export default class Store {
   @observable id
+  @observable objId
 
   // 客群基本信息
   @observable groupDetail = {
@@ -27,6 +28,9 @@ export default class Store {
   @observable chartVis = false
   @observable chartSpinning = false
   @observable tabOneTitle = ''
+
+  // -----------------Tab 2 特征分布-------
+  @observable usableTag = [] // 可用的标签集合
 
   // 显著特征 - 特征分布 option 数据
   // const option = {
@@ -163,6 +167,11 @@ export default class Store {
     }
   }
 
+  // ---------------------- 特征分布 ------------------
+  @observable originData = [] // 树的原始数据
+  @observable tabTwoChartDatas = []
+  @observable tabTwoChartSpining = false
+
   /**
    * 描述 根据对象 id，获取对应标签树
    * @date 2021-04-14
@@ -175,12 +184,41 @@ export default class Store {
         objId,
       })
 
+      this.originData = JSON.parse(JSON.stringify(res))
+
       res.forEach(item => {
         item.title = item.name
         item.key = item.id
+
+        if (item.isCate === 0) {
+          if (this.usableTag.indexOf(item.aid) === -1) {
+            item.disabled = true
+          }
+        }
       })
 
       this.treeData = listToTree(res || [])
+
+      this.treeData.forEach(item => {
+        if (!item.children) {
+          item.disabled = true
+        } else {
+          const {children} = item
+          let isLevelTwoNoChildren = true
+
+          children.forEach(e => {
+            if (!e.children) {
+              e.disabled = true
+            } else {
+              isLevelTwoNoChildren = false
+            }
+          })
+
+          if (isLevelTwoNoChildren) {
+            item.disabled = true
+          }
+        }
+      })
     } catch (e) {
       errorTip(e.message)
     }
@@ -198,8 +236,88 @@ export default class Store {
       const res = await io.getUsableTag({
         id,
       })
+
+      // 根据 treeData 数据中的 aid 进行对应
+      this.usableTag = res.tagIds
+      this.getTagTree(this.objId)
     } catch (e) {
       errorTip(e.message)
+    }
+  }
+
+  /**
+   * 描述 特征分布，根据选择的标签求数据
+   * @date 2021-04-16
+   * @param {any} tagIds []
+   * @returns {any} void
+   */
+  @action async getDistributionByTagTabTwo(tagIds) {
+    this.tabTwoChartSpining = true
+
+    // 处理成 tag 的 id
+    const ids = []
+    tagIds.forEach(item => {
+      const target = _.find(this.originData, e => e.id === +item)
+      // 只有叶子节点是标签
+      if (target && target.aid && target.isCate === 0) {
+        ids.push(target.aid)
+      }
+    })
+
+    try {
+      const res = await io.getDistributionByTag({
+        tagIds: ids,
+        groupId: this.id,
+      })
+
+      this.tabTwoChartDatas = res
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.tabTwoChartSpining = false
+    }
+  }
+
+  @observable clientList = []
+  @observable titleList = []
+  @observable totalCount = 0
+  @observable clientTableLoading = false
+
+  // ---------------------- 客户列表 ------------------
+  @action async getUnitList() {
+    this.clientTableLoading = true
+    try {
+      const res = await io.getUnitList({
+        id: this.id,
+        queryDate: moment(new Date()).format('YYYY-MM-DD'),
+      })
+
+      this.clientList = res.data || []
+      if (!res.data) return
+      this.titleList = []
+      const {title} = res
+      this.totalCount = res.totalSize
+
+      for (let i = 0; i < title.length; i += 1) {
+        if (title[i].toLowerCase() === res.mainTag.toLowerCase()) {
+          // this.titleList.unshift({
+          //   key: title[i],
+          //   title: title[i],
+          //   dataIndex: title[i],
+          //   // render: (text, record) => (<a onClick={() => this.goPortrayal(record[title[i]])}>{text}</a>),
+          // })
+        } else {
+          this.titleList.push({
+            key: title[i],
+            title: title[i],
+            dataIndex: title[i],
+          })
+        }
+      }
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.clientTableLoading = false
     }
   }
 }

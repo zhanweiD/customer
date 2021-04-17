@@ -7,6 +7,7 @@ const api = {
   getDistributionByTag: post(`${baseApi}/groupAnalysis/distributionByTag`), // 客群下标签值分布
   getTagTree: post(`${baseApi}/tag/tag_tree`), // 获取标签树
   getUsableTag: post(`${baseApi}/groupAnalysis/usableTag`), // 可用标签合集
+  getUnitList: post(`${groupApi}/individuals_list`), // 获取个体列表
 }
 
 ioContext.create('groupDetail', api)

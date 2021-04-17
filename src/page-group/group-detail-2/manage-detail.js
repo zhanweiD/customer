@@ -28,9 +28,9 @@ export default inject('store')(({store, id}) => {
               客群名称：
               {store.groupDetail.name}
             </span>
-            <EditOutlined className="header-icon ml16" />
+            {/* <EditOutlined className="header-icon ml16" />
             <CopyOutlined className="header-icon ml16" />
-            <ReloadOutlined className="header-icon ml16" />
+            <ReloadOutlined className="header-icon ml16" /> */}
           </div>
           <div>
             <span className="black45">
