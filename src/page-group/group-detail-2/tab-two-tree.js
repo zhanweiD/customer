@@ -49,20 +49,30 @@ const treeData = [
 export default inject('store')(
   ({store}) => {
     const onSelect = (selectedKeys, info) => {
-      console.log('selected', selectedKeys, info)
+      // console.log('selected', selectedKeys, info)
     }
 
     const onCheck = (checkedKeys, info) => {
-      console.log('onCheck', checkedKeys, info)
+      // console.log('onCheck', checkedKeys, info)
+      if (checkedKeys.length > 0) {
+        store.getDistributionByTagTabTwo(checkedKeys)
+      } else {
+        store.tabTwoChartDatas = []
+      }
     }
 
     return useObserver(() => (
-      <Tree
-        checkable
-        onSelect={onSelect}
-        onCheck={onCheck}
-        treeData={store.treeData}
-      />
+      (store.treeData && store.treeData.length > 0)
+        ? (
+          <Tree
+            checkable
+            defaultExpandAll
+            onSelect={onSelect}
+            onCheck={onCheck}
+            treeData={store.treeData}
+          />
+        )
+        : <div />
     ))
   }
 )
