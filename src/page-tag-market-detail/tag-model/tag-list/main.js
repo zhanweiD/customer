@@ -2,9 +2,9 @@
  * @description 标签模型 - 标签维护
  */
 import {Component, Fragment} from 'react'
-import {action, toJS} from 'mobx'
+import {action, toJS, observable} from 'mobx'
 import {observer, Provider} from 'mobx-react'
-import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Modal} from 'antd'
+import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Modal, Drawer, Cascader} from 'antd'
 
 import {
   ListContent, OmitTooltip, Authority,
@@ -32,6 +32,7 @@ class TagList extends Component {
     store.objId = +props.bigStore.objId
 
     // store.getTagCateSelectList()
+    store.getBizList()
   }
 
   columns = [{
@@ -40,18 +41,14 @@ class TagList extends Component {
     dataIndex: 'name',
     render: (text, record) => <a href onClick={() => this.showDetail(record)}>{text}</a>,
   }, {
-    key: 'valueTypeName',
-    title: '数据类型',
-    dataIndex: 'valueTypeName',
-  }, {
     dataIndex: 'bizText',
     title: '业务类型',
   }, {
     dataIndex: 'nonNullCnt',
-    title: '客户数',
+    title: '覆盖个体数',
   }, {
     dataIndex: 'nonNullRadio',
-    title: '客户概率',
+    title: '个体覆盖率',
   },
   // {
   //   key: 'isEnum',
@@ -64,12 +61,16 @@ class TagList extends Component {
   //   dataIndex: 'status',
   //   render: v => tagStatusBadgeMap(+v),
   // }, 
+  // {
+  //   key: 'mtime',
+  //   title: '更新日期',
+  //   dataIndex: 'mtime',
+  //   render: t => moment(+t).format('YYYY-MM-DD'),
+  // }, 
   {
-    key: 'mtime',
     title: '更新日期',
-    dataIndex: 'mtime',
-    render: t => moment(+t).format('YYYY-MM-DD'),
-  }, 
+    dataIndex: 'createDate',
+  },
   ]
 
   @action.bound remove(data) {
@@ -86,7 +87,7 @@ class TagList extends Component {
   @action.bound showDetail(data) {
     store.detailVisible = true
     store.getTagCateSelectList()
-    store.getTagDetail({id: data.id}, data)
+    store.getTagDetail({tagId: data.id}, data)
   }
 
   @action.bound cancelTagConfig(data) {
@@ -191,6 +192,7 @@ class TagList extends Component {
       updateTagConfig,
       drawerTagConfigType,
       publishRowKeys,
+      bizList,
     } = store
 
     const rowSelection = {
@@ -210,7 +212,26 @@ class TagList extends Component {
       buttons: [
         <div className="FBH FBJB">
           <div>
-            <Select style={{width: 150}} placeholder="业务类型" />
+            <Cascader 
+              options={bizList} 
+              style={{width: 150}} 
+              placeholder="业务类型" 
+              expandTrigger="hover"
+              changeOnSelect
+              onChange={e => {
+                if (e.length !== 0) {
+                  treeStore.searchParams.biz = e[e.length - 1]
+                  treeStore.biz = e[e.length - 1]
+                } else {
+                  treeStore.searchParams.biz = undefined
+                  treeStore.biz = undefined
+                }
+                treeStore.getList({
+                  currentPage: 1,
+                  biz: treeStore.biz,
+                })
+              }}
+            />
           </div>
           <div>
             {/* <Select 
@@ -231,10 +252,11 @@ class TagList extends Component {
               style={{width: 150, marginRight: '24px'}} 
               placeholder="请输入标签名称" 
               onChange={v => {
-                treeStore.keyword = v.target.value
+                treeStore.searchParams.searchKey = v.target.value
+                treeStore.searchKey = v.target.value
                 treeStore.getList({
                   currentPage: 1,
-                  keyword: v.target.value,
+                  searchKey: v.target.value,
                 })
               }}
               allowClear

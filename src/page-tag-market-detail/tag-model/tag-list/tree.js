@@ -115,7 +115,10 @@ export default class TagCateTree extends Component {
     this.store.nowCateIds = record.node.props.keyPath
 
     // 3. 获取类目详情 (基本信息&标签列表)
-    this.store.getList({objId: this.store.objId, cateId: this.store.currentSelectKeys})
+    this.store.getList({
+      objId: this.store.objId, 
+      cateId: this.store.currentSelectKeys,
+    })
   }
 
 

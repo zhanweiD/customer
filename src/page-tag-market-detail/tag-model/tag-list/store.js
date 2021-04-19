@@ -7,6 +7,17 @@ import {
 import {ListContentStore} from '../../../component/list-content'
 import io from './io'
 
+const listToCascader = (data) => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentCode === item.bizCode)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentCode === '-1')
+}
+
 class Store {
   // 创建标签
   @observable drawerTagVisible = false
@@ -398,6 +409,32 @@ class Store {
   }
 
   @observable functionCodes = []
+
+  @observable bizOriginList = []
+  @observable bizList = []
+
+  /**
+   * 描述 获取业务类型
+   * @date 2021-04-19
+   * @returns {any} void
+   */
+  async getBizList() {
+    try {
+      const res = await io.getBizList()
+
+      res.forEach(item => {
+        item.label = item.bizName
+        item.value = item.bizCode
+      })
+
+      this.bizOriginList = res
+      this.bizList = listToCascader(res)
+
+      console.log(toJS(this.bizList))
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }
 
 export default new Store()

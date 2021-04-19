@@ -12,7 +12,7 @@ const api = {
   editTagCate: post(`${baseApi}/tag/update_cate`), // 编辑标签类目
   delTagCate: post(`${baseApi}/tag/delete_cate`), // 删除标签类目
 
-  getTagDetail: get(`${baseApi}/tag/tag_detail`), // 标签详情
+  getTagDetail: get(`${baseApi}/market/tag_detail`), // 标签详情
   createTag: post(`${baseApi}/tag/create_tag`), // 创建标签
   updateTag: post(`${baseApi}/tag/update_tag`), // 编辑标签
   deleteTag: post(`${baseApi}/tag/delete_tag`), // 删除标签
@@ -29,6 +29,8 @@ const api = {
 
   // 权限code
   getAuthCode: get(`${baseApi}/project/getFunctionCodes`),
+
+  getBizList: get(`${baseApi}/portrait/bizTypeDropdown`), // 获取业务类型下拉
 } 
 
 ioContext.create('overview', api) 
