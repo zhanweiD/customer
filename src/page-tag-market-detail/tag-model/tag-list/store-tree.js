@@ -132,8 +132,10 @@ class Store extends ListContentStore(io.getList) {
         if (!this.currentSelectKeys) {
           // 默认类目
           [this.defaultCate] = list.filter(d => d.aId === -1)
-          this.currentSelectKeys = this.defaultCate.id
-          this.nowCateIds = [this.defaultCate.id]
+          if (this.defaultCate) {
+            this.currentSelectKeys = this.defaultCate.id
+            this.nowCateIds = [this.defaultCate.id]
+          }
         }
         this.categoryData = list.filter(d => d.isLeaf !== 1) // 叶子类目
         this.treeData = listToTree(data)
