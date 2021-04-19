@@ -137,6 +137,33 @@ class Store {
       errorTip(e.message)
     }
   }
+
+  @observable objDetailNew = {
+    tag: 0, // 总标签数
+    last7dayTag: 0, // 7日新增标签
+    tagCatalog: 0, // 一级标签类目数字
+    tagSecondCatalog: 0, // 二级标签类目数字
+    tagBiz: 0, // 覆盖业态
+    tagEvent: 0, // 覆盖场景
+  }
+
+  /**
+   * 描述 获取对象卡片详情
+   * @date 2021-04-17
+   * @param {any} objId id
+   * @returns {any} void
+   */
+  @action async getObjDetailNew(objId) {
+    try {
+      const res = await io.getObjDetail({
+        objId,
+      })
+
+      this.objDetailNew = res
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }
 
 export default new Store()

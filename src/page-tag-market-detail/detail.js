@@ -27,23 +27,26 @@ export default class ObjectDetail extends Component {
 
   render() {
     const {
-      objId, objDetail, loading,
+      objId, objDetail, loading, objDetailNew,
     } = this.store
 
     // 对象指标信息卡
     const cards = [
       {
-        title: '标签总数',
+        title: '总标签数',
         tooltipText: '该对象下的标签总数',
-        values: [objDetail.tag],
+        values: [objDetailNew.tag],
+        valueTexts: [`近7日新增标签${objDetailNew.last7dayTag}个`],
       }, {
-        title: '数据表总数',
-        tooltipText: '该对象绑定的数据表总数',
-        values: [objDetail.tagTable],
+        title: '一级标签类目数',
+        tooltipText: '该对象的一级标签类目数',
+        values: [objDetailNew.tagCatalog],
+        valueTexts: [`二级标签类目数${objDetailNew.tagSecondCatalog}个`],
       }, {
-        title: '关系表总数',
-        tooltipText: '该对象绑定的关系表总数',
-        values: [objDetail.relTable],
+        title: '覆盖业态数',
+        tooltipText: '该对象覆盖的业态数',
+        values: [objDetailNew.tagBiz],
+        valueTexts: [`覆盖场景数${objDetailNew.tagEvent}个`],
       },
     ]
 

@@ -119,7 +119,7 @@ export default inject('store')(({store}) => {
             placeholder="请选择" 
             onChange={e => cascaderChange(e)}
           />
-          <Search placeholder="请输入场景名称" className="ml8" />
+          {/* <Search placeholder="请输入场景名称" className="ml8" /> */}
         </div>
       </div>
       <Table

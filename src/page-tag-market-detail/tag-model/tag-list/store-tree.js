@@ -42,7 +42,8 @@ class Store extends ListContentStore(io.getList) {
   @observable currentSelectKeys = undefined // 选中
   @observable defaultCate = {}// 默认类目
   @observable categoryData = [] // 所有类目
-  @observable keyword = undefined // 标签列表搜索关键字
+  @observable searchKey = undefined // 标签列表搜索关键字
+  @observable biz // 标签业务类型搜索关键字
 
   // 选择标签弹窗 - 标签列表
   @observable tagListModal = {

@@ -1,5 +1,5 @@
 import {Component} from 'react'
-import {Modal, Button, Spin} from 'antd'
+import {Modal, Button, Spin, Drawer} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
@@ -23,6 +23,7 @@ export default class TagDetailModal extends Component {
     } = this.store
     const ownCate = tagCateList.find(item => item.id === drawerTagInfo.parentId)
     if (!ownCate) return null
+
     const content = [{
       name: '标签名称',
       value: drawerTagInfo.name,
@@ -31,13 +32,13 @@ export default class TagDetailModal extends Component {
       value: drawerTagInfo.descr,
     }, {
       name: '业务类型',
-      value: drawerTagInfo.descr,
+      value: drawerTagInfo.bizText,
     }, {
       name: '所属类目',
       value: ownCate.name,
     }, {
       name: '标签类型',
-      value: ownCate.name,
+      value: drawerTagInfo.valueTypeName,
     }, {
       name: '取值分布',
       value: '待画图',
@@ -62,24 +63,24 @@ export default class TagDetailModal extends Component {
       value: drawerTagInfo.dataSource,
     }]
 
-    const modalConfig = {
+    const drawerConfig = {
       title: '标签详情',
       visible: detailVisible,
-      onCancel: this.handleCancel,
       maskClosable: false,
       width: 525,
       destroyOnClose: true,
-      footer: [<Button type="primary" onClick={this.handleCancel}>关闭</Button>],
+      onClose: this.handleCancel,
+      // footer: [<Button type="primary" onClick={this.handleCancel}>关闭</Button>],
     }
 
     return (
-      <Modal {...modalConfig}>
+      <Drawer {...drawerConfig}>
         <div className="mb16 c85">基础信息</div>
         {/* <ModalDetail data={content} labelWidth={64} />
         <div className="mb16 c85">生产信息</div>
         <ModalDetail data={proContent} labelWidth={64} /> */}
         <ModalDetail data={content} labelWidth={64} />
-      </Modal>
+      </Drawer>
     )
   }
 }
