@@ -44,35 +44,37 @@ export default class Portrait extends Component {
       }
       return t ? <OmitTooltip maxWidth={300} text={t} /> : '-'
     },
-  }, {
-    key: 'basicStr',
-    title: '基础模块',
-    dataIndex: 'basicStr',
-    ellipsis: true,
-    width: 200,
-    render: t => {
-      if (t) {
-        t = t.map((item, index) => {
-          return index > 0 ? `、${item}` : item
-        })
-      }
-      return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
-    },
-  }, {
-    key: 'portraitStr',
-    title: '画像模块',
-    dataIndex: 'portraitStr',
-    ellipsis: true,
-    width: 200,
-    render: t => {
-      if (t) {
-        t = t.map((item, index) => {
-          return index > 0 ? `、${item}` : item
-        })
-      }
-      return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
-    },
-  }, {
+  }, 
+  // {
+  //   key: 'basicStr',
+  //   title: '基础模块',
+  //   dataIndex: 'basicStr',
+  //   ellipsis: true,
+  //   width: 200,
+  //   render: t => {
+  //     if (t) {
+  //       t = t.map((item, index) => {
+  //         return index > 0 ? `、${item}` : item
+  //       })
+  //     }
+  //     return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
+  //   },
+  // }, {
+  //   key: 'portraitStr',
+  //   title: '画像模块',
+  //   dataIndex: 'portraitStr',
+  //   ellipsis: true,
+  //   width: 200,
+  //   render: t => {
+  //     if (t) {
+  //       t = t.map((item, index) => {
+  //         return index > 0 ? `、${item}` : item
+  //       })
+  //     }
+  //     return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
+  //   },
+  // }, 
+  {
     key: 'action',
     title: '操作',
     width: 140,
@@ -135,7 +137,7 @@ export default class Portrait extends Component {
       initParams: {},
       initGetDataByParent: false,
       scroll: {x: 1000},
-      buttons: [<Button type="primary" disabled={list.length === 2} onClick={this.addButton}>添加画像</Button>],
+      buttons: [<Button type="primary" onClick={this.addButton}>添加画像</Button>],
     }
 
     return (

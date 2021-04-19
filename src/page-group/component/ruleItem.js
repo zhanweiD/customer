@@ -11,7 +11,7 @@ import {getNamePattern} from '../../common/util'
 const {Option} = Select
 const {RangePicker} = DatePicker
 const FormItem = Form.Item
-const dateFormat = 'YYYY/MM/DD'
+const dateFormat = 'YYYY-MM-DD'
 
 const RuleItem = ({
   pos = [], 
@@ -32,9 +32,6 @@ const RuleItem = ({
   editTagId,
   ...rest
 }) => {
-  // const ctx = OnerFrame.useFrame()
-  // const projectId = ctx.useProjectId()
-
   const [relTagList, changeRelTagList] = useState([])
   const [tagList, changeTagList] = useState(ruleType === 'set-rule' ? drawerConfigTagList : configTagList)
 
@@ -55,9 +52,9 @@ const RuleItem = ({
   const [functionType, changeFunctionType] = useState('count')
 
   // tag type
-  const [tagType, changeTagType] = useState(4)
+  const [tagType, changeTagType] = useState(editObj ? editObj.tagType : 4)
   const [isEnum, changeIsEnum] = useState(0)
-  const [operatType, changeOperatType] = useState('=')
+  const [operatType, changeOperatType] = useState(rest.comparision || 'in')
 
   // 预提示
   const [promptTag, changePromptTag] = useState([])
@@ -154,11 +151,11 @@ const RuleItem = ({
 
     const key = `${ruleIfBoxKey}-${flag}`
     const keyData = formRef.current.getFieldValue(key)
-
     formRef.current.setFieldsValue({
       [key]: {
         ...keyData,
-        comparision: '=',
+        rightParams: undefined,
+        comparision: 'in',
       },
     })
   }
@@ -179,8 +176,7 @@ const RuleItem = ({
 
   // 生成form item
   const setConditValue = () => {
-    // 数值型 介于 输入最大最小值 其余单input
-    if (isEnum) {
+    if (isEnum && (operatType === 'in' || operatType === 'not in')) {
       return ([
         <FormItem
           label={null}
@@ -188,7 +184,7 @@ const RuleItem = ({
           initialValue={rest.rightParams}
         >
           <Select 
-            // mode="tags" 
+            mode="tags" 
             style={{minWidth: 128}} 
             placeholder="请输入或者选择"
           >
@@ -199,128 +195,55 @@ const RuleItem = ({
         </FormItem>,
       ])
     }
-    if (tagType === 2 || tagType === 3) {
-      if (operatType === 'in') {
-        return ([
-          <FormItem
-            label={null}
-            name={[key, 'rightParams']}
-            rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
-            initialValue={rest.rightParams}
-          >
-            <Input size="small" placeholder="最小值" style={{width: 120}} disabled={rest.page === 'detail'} />
-          </FormItem>,
-          <FormItem
-            label={null}
-            name={[key, 'rightParamsMax']}
-            rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
-            initialValue={rest.rightParams}
-          >
-            <Input size="small" placeholder="最大值" style={{width: 120}} disabled={rest.page === 'detail'} />
-          </FormItem>,
-        ])
-      } 
-      return ([
+    if (tagType === 5) {
+      return (
         <FormItem
           label={null}
           name={[key, 'rightParams']}
-          rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
-          initialValue={rest.rightParams}
+          // rules={[{required: true, message: '不能为空'}]}
+          // initialValue={moment(rest.rightParams, dateFormat)}
         >
-          <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
-        </FormItem>,
-      ])
+          <DatePicker 
+            format={dateFormat} 
+            size="small" 
+            style={{width: 120}} 
+            disabled={rest.page === 'detail'} 
+            onChange={v => console.log(v)}
+          />
+        </FormItem>
+      )
     } 
-
-    // 枚举型 等于不等于 select 其他 input
-    // 小数型
-    // if (tagType === 3) {
-    // if (operatType === '=' || operatType === '!=') {
-    //   return ([
-    //     <FormItem
-    //       label={null}
-    //       name={[key, 'rightParams']}
-    //       initialValue={rest.rightParams}
-    //     >
-    //       <Select 
-    //         mode="tags" 
-    //         style={{minWidth: 128}} 
-    //         placeholder="请输入或者选择"
-    //       >
-    //         {
-    //           promptTag.map(item => <Option value={item}>{item}</Option>)
-    //         }
-    //       </Select>
-    //     </FormItem>,
-    //   ])
-    // } 
-
-    // return ([
-    //   <FormItem
-    //     label={null}
-    //     name={[key, 'rightParams']}
-    //     initialValue={rest.rightParams}
-    //   >
-    //     <Select 
-    //       mode="tags" 
-    //       style={{minWidth: 128}} 
-    //       placeholder="请输入或者选择"
-    //     >
-    //       {
-    //         promptTag.map(item => <Option value={item}>{item}</Option>)
-    //       }
-    //     </Select>
-    //   </FormItem>,
-    // ])
-    // }
-
-    // 文本型 input
-    if (tagType === 4 || tagType === 5) {
+    if (operatType === 'in' || operatType === 'not in') {
       return ([
         <FormItem
           label={null}
           name={[key, 'rightParams']}
-          rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
           initialValue={rest.rightParams}
         >
-          <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
+          <Select 
+            mode="tags" 
+            style={{minWidth: 128}} 
+            placeholder="请输入或者选择"
+          >
+            {
+              promptTag.map(item => <Option value={item}>{item}</Option>)
+            }
+          </Select>
         </FormItem>,
       ])
     }
-
-    // 日期型 介于双DatePicker 其他单DatePicker
-  //   if (tagType === 5) {
-  //     if (operatType === 'in') {
-  //       return ([
-  //         <FormItem
-  //           label={null}
-  //           name={[key, 'rightParams']}
-  //           rules={[{required: true, message: '不能为空'}]}
-  //           initialValue={rest.rightParams}
-  //         >
-  //           <RangePicker
-  //             style={{width: 240}}
-  //             format={dateFormat}
-  //             disabled={rest.page === 'detail'}
-  //             size="small"
-  //           />
-  //         </FormItem>,
-  //       ])
-  //     }
-  //     return ([
-  //       <FormItem
-  //         label={null}
-  //         name={[key, 'rightParams']}
-  //         rules={[{required: true, message: '不能为空'}]}
-  //         initialValue={rest.rightParams}
-  //       >
-  //         <DatePicker size="small" style={{width: 120}} disabled={rest.page === 'detail'} />
-  //       </FormItem>,
-  //     ])
-  //   }
+    return ([
+      <FormItem
+        label={null}
+        name={[key, 'rightParams']}
+        rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
+        initialValue={rest.rightParams}
+      >
+        <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
+      </FormItem>,
+    ])
   }
   
-  // console.log(props)
   return (  
     <div className="rule-item" style={posStyle}>
       <Form.Item>
@@ -472,7 +395,7 @@ const RuleItem = ({
           <FormItem
             label={null}
             name={[key, 'comparision']}
-            initialValue={rest.comparision || '='}
+            initialValue={rest.comparision || 'in'}
           >
             <Select 
               showSearch
@@ -559,8 +482,7 @@ const RuleItem = ({
             && ruleType === 'config' 
             && relId ? <a href onClick={open} className="ml8 fs12 mt8">查看筛选</a> : null
           }
-         
-          
+     
         </Input.Group>
        
       </Form.Item>

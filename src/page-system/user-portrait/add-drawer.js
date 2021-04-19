@@ -57,13 +57,11 @@ class AddDrawer extends Component {
   @action portraitCheck = (keys, item) => {
     const {cates, portrait} = this.store
     this.store.portrait = []
-    console.log(111)
     const tags = item.checkedNodes.filter(sitem => !sitem.children)
     cates.forEach(sitem => {
       const childs = tags.filter(citem => sitem.id === citem.parentId)
       this.store.portrait.push({catIdList: [sitem.id], tagIdList: childs.map(citem => citem.aid)})
     })
-    console.log(portrait)
   }
 
   // 提交
@@ -72,6 +70,7 @@ class AddDrawer extends Component {
     this.formRef.current.validateFields().then(values => {
       values.basic = toJS(basic)
       values.portrait = toJS(portrait)
+      values.type = 0
       if (addstatus) {
         // values.objId = this.store.objId
         getAdd(values)
@@ -118,6 +117,8 @@ class AddDrawer extends Component {
       drawerVisible,
       detailObj,
       catList,
+      defPortraitList,
+      defBasicList,
     } = this.store
 
     const {
@@ -247,7 +248,7 @@ class AddDrawer extends Component {
               >
                 <Tree
                   checkable
-                  // defaultCheckedKeys={['0-0-0-0']}
+                  defaultCheckedKeys={toJS(defBasicList)}
                   onCheck={this.basisCheck}
                   selectable={false}
                   // treeData={catList}
@@ -263,6 +264,7 @@ class AddDrawer extends Component {
               >
                 <Tree
                   checkable
+                  defaultCheckedKeys={toJS(defPortraitList)}
                   onCheck={this.portraitCheck}
                   selectable={false}
                 >
