@@ -4,7 +4,7 @@ import {
 } from '../../../common/util'
 
 const api = {
-  getList: post(`${baseApi}/tag/list_tag`), // 标签列表
+  getList: post(`${baseApi}/market/list_tag`), // 标签列表
   getTagCateTree: post(`${baseApi}/tag/cate_tree`), // 标签类目数据
   cateCheckName: post(`${baseApi}/tag/cat_name_check`), // 标签类目重命名
   tagCheckName: post(`${baseApi}/tag/name_check`), // 标签重命名

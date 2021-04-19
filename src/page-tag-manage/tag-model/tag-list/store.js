@@ -266,7 +266,7 @@ class Store {
   /**
    * @description 标签详情
    */
-  @action async getTagDetail(params, data, cb) {
+  @action async getTagDetail(params, data, cb = () => {}) {
     this.detailLoading = true
 
     try {

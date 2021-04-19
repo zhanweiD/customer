@@ -9,6 +9,7 @@ const api = {
   editObject: post(`${baseApi}/object/update_object`), // 编辑对象
   deleteObject: post(`${baseApi}/object/delete_object`), // 删除对象
   getTreeData: get(`${baseApi}/object/get_objs`), // 对象列表
+  getObjDetail: get(`${baseApi}/market/get_obj_card_detail`), // 对象详情
 } 
 
 ioContext.create('tagManage', api) 

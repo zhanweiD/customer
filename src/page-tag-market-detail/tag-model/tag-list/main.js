@@ -44,13 +44,13 @@ class TagList extends Component {
     title: '数据类型',
     dataIndex: 'valueTypeName',
   }, {
-    dataIndex: 'aa',
+    dataIndex: 'bizText',
     title: '业务类型',
   }, {
-    dataIndex: 'aa',
+    dataIndex: 'nonNullCnt',
     title: '客户数',
   }, {
-    dataIndex: 'aa',
+    dataIndex: 'nonNullRadio',
     title: '客户概率',
   },
   // {
@@ -86,7 +86,7 @@ class TagList extends Component {
   @action.bound showDetail(data) {
     store.detailVisible = true
     store.getTagCateSelectList()
-    store.getTagDetail({id: data.id})
+    store.getTagDetail({id: data.id}, data)
   }
 
   @action.bound cancelTagConfig(data) {

@@ -23,6 +23,8 @@ export default class TagDetailModal extends Component {
     } = this.store
     const ownCate = tagCateList.find(item => item.id === drawerTagInfo.parentId)
     if (!ownCate) return null
+
+    console.log(drawerTagInfo)
     const content = [{
       name: '标签名称',
       value: drawerTagInfo.name,
@@ -31,13 +33,13 @@ export default class TagDetailModal extends Component {
       value: drawerTagInfo.descr,
     }, {
       name: '业务类型',
-      value: drawerTagInfo.descr,
+      value: drawerTagInfo.bizText,
     }, {
       name: '所属类目',
       value: ownCate.name,
     }, {
       name: '标签类型',
-      value: ownCate.name,
+      value: drawerTagInfo.valueTypeName,
     }, {
       name: '取值分布',
       value: '待画图',

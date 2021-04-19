@@ -242,7 +242,7 @@ class Store {
   /**
    * @description 标签详情
    */
-  @action async getTagDetail(params, cb) {
+  @action async getTagDetail(params, data, cb = () => {}) {
     this.detailLoading = true
 
     try {
@@ -250,7 +250,7 @@ class Store {
         ...params,
       })
       runInAction(() => {
-        this.drawerTagInfo = res
+        this.drawerTagInfo = {...res, bizText: data.bizText}
         this.applyInfo = res
         this.isEnum = res.isEnum
         this.ownObject = res.objId

@@ -134,7 +134,7 @@ export default class TagCateTree extends Component {
         // showIcon
         // 对象类目只有一级
         // iconNodeSrc={e => getIconNodeSrc(e)}
-        actionList={this.setActionList(node)}
+        // actionList={this.setActionList(node)}
         nodeData={node}
         style={{fontSize: '12px'}}
       >

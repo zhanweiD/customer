@@ -156,7 +156,6 @@ class Store {
       })
 
       this.objDetailNew = res
-
     } catch (e) {
       errorTip(e.message)
     }
