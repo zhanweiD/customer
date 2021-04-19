@@ -36,6 +36,8 @@ class Store extends ListContentStore(io.getList) {
   @observable tagList = [] // 标签列表
   @observable catList = [] // 类目标签
   @observable cates = [] // 类目标签(打平)
+  @observable defBasicList = [] // 编辑已选客户档案标签
+  @observable defPortraitList = [] // 编辑已选标签描摹标签
 
   @observable addList = [] // 新增列表
   @observable relTablesList = [] // 触点表下拉
@@ -51,30 +53,38 @@ class Store extends ListContentStore(io.getList) {
     this.detailObj = {}
     this.tagList = []
     this.catList = []
-    this.relTablesList = []
-    this.relTableFieldsList = []
   }
 
   // 显示配置详情 
   @action async showDrawer(params) {
-    // this.loading = true
     this.formLoading = true
     this.drawerVisible = true
-    this.relTableFieldsList = []
+    this.defBasicList = []
+    this.defPortraitList = []
     try {
       const res = await io.getDetails(params)
       runInAction(() => {
         this.detailObj = res
         this.objId = res.objId
-        this.eventTableInfo = res.eventTableInfo || []
+        this.portrait = res.portrait
+        this.basic = res.basic
+
+        res.basic.forEach(item => {
+          if (item.tagIdList.length > 1) {
+            this.defBasicList = [...this.defBasicList, ...item.tagIdList]
+          }
+        })
+        this.defBasicList = this.defBasicList.map(String)
+
+        res.portrait.forEach(item => {
+          if (item.tagIdList.length > 1) {
+            this.defPortraitList = [...this.defPortraitList, ...item.tagIdList]
+          }
+        })
+        this.defPortraitList = this.defPortraitList.map(String)
 
         this.getTagList({id: this.objId})
-        // this.getCatList({id: this.objId})
-        this.getRelTables({objId: this.objId})
-        this.eventTableInfo.map(item => (
-          this.getRelTableFields({objId: this.objId, tableName: item.table})
-        ))
-        userLog('系统管理/画像配置/配置画像')
+        this.getTagTree({objId: this.objId})
       })
     } catch (e) {
       errorTip(e.message)

@@ -45,13 +45,14 @@ export default class StepOne extends Component {
 
   @action checkName = (rule, value, callback) => {
     if (!value) return callback('')
+    const {objId, isCopy, detail} = this.store
     const params = {
       name: value,
-      objId: this.store.objId,
+      objId,
     }
 
-    if (this.store.detail.id) {
-      params.id = this.store.detail.id
+    if (detail.id) {
+      params.id = isCopy ? null : detail.id
     }
     
     // 防抖

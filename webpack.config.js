@@ -32,6 +32,11 @@ module.exports = {
     },
     noInfo: true,
     proxy: [
+      // {
+      //   context: ['/hub_api'],
+      //   target: 'http://192.168.10.143:8877',
+      //   changeOrigin: true,
+      // },
       {
         context: ['/hub_api', '/hub_user_api'],
         target: 'http://192.168.90.54:8173',
