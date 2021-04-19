@@ -43,7 +43,7 @@ export default inject('store')(({store}) => {
   ]
 
   return useObserver(() => (
-    <div>
+    <div className="mt24">
       <Table
         // onRow={record => {
         //   return {

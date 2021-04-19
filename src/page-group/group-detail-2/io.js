@@ -8,6 +8,7 @@ const api = {
   getTagTree: post(`${baseApi}/tag/tag_tree`), // 获取标签树
   getUsableTag: post(`${baseApi}/groupAnalysis/usableTag`), // 可用标签合集
   getUnitList: post(`${groupApi}/individuals_list`), // 获取个体列表
+  getConfigTagList: post(`${groupApi}/obj_target_tag_list`), // 获取对象对应已同步的标签列表
 }
 
 ioContext.create('groupDetail', api)

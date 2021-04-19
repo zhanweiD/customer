@@ -16,6 +16,8 @@ export default class Store {
     coveringRate: 0, // 客户覆盖率
   }
 
+  @observable detailLoading = false
+
   // 显著特征 排名
   @observable topList = []
 
@@ -65,6 +67,7 @@ export default class Store {
       data: [5978],
       type: 'bar',
     }],
+    color: ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4'],
   }
 
   @observable chartInstance
@@ -78,15 +81,62 @@ export default class Store {
    * @returns {any} void
    */
   @action async getGroupDetail(id) {
+    this.detailLoading = true
     try {
       const res = await io.getGroupDetail({
         id,
       })
 
-      this.groupDetail = res
+      const logicFormat = JSON.parse(res.logicExper)
+      const logicMap = {
+        1: '且',
+        2: '或',
+      }
+      const {comparisionList, childList, logic} = logicFormat
+      let ruleText = ''
+
+      // TODO: 不完善
+      if (comparisionList.length === 1) {
+        if (childList.length === 0) {
+          // 说明就一个条件
+          const {left, right, comparision} = comparisionList[0]
+          ruleText = `${this.findTargetTag(left.params.join())} ${comparision} ${right.params.join('')}`
+        } else {
+          // 说明不止一个条件
+          const {left, right, comparision} = comparisionList[0]
+          ruleText = `${this.findTargetTag(left.params.join())} ${comparision} ${right.params.join('')}`
+
+          ruleText = ruleText.concat(` ${logicMap[logic]} `)
+
+          childList.forEach(item => {
+            const {logic: logicC, comparisionList: comparisionC} = item
+            const [one, two] = comparisionC
+
+            ruleText = ruleText.concat(`${this.findTargetTag(one.left.params.join())} ${one.comparision} ${one.right.params.join('')} ${logicMap[logicC]} ${this.findTargetTag(two.left.params.join())} ${two.comparision} ${two.right.params.join('')}`)
+          })
+        }
+      }
+
+      console.log(ruleText)
+      // console.log(logicFormat)
+      // console.log(JSON.parse(logicFormat.posList))
+
+      this.groupDetail = {...res, logicExper: ruleText}
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.detailLoading = false
     }
+  }
+
+  findTargetTag = (id) => {
+    const target = _.find(this.objTargetTagList, e => e.objIdTagId === id)
+
+    if (target) {
+      return target.objNameTagName
+    }
+
+    return ''
   }
 
 
@@ -198,12 +248,15 @@ export default class Store {
       })
 
       this.treeData = listToTree(res || [])
+      
+      console.log(toJS(this.treeData))
 
       this.treeData.forEach(item => {
         if (!item.children) {
           item.disabled = true
         } else {
           const {children} = item
+          // 判断第二层没有子节点了
           let isLevelTwoNoChildren = true
 
           children.forEach(e => {
@@ -212,12 +265,16 @@ export default class Store {
             } else {
               isLevelTwoNoChildren = false
             }
+
+            e.disabled = true
           })
 
           if (isLevelTwoNoChildren) {
             item.disabled = true
           }
         }
+
+        item.disabled = true
       })
     } catch (e) {
       errorTip(e.message)
@@ -235,6 +292,7 @@ export default class Store {
     try {
       const res = await io.getUsableTag({
         id,
+        excludeTagType: [4],
       })
 
       // 根据 treeData 数据中的 aid 进行对应
@@ -314,10 +372,36 @@ export default class Store {
           })
         }
       }
+
+      if (this.titleList.length === 0) {
+        this.clientList = []
+        this.totalCount = 0
+      }
     } catch (e) {
       errorTip(e.message)
     } finally {
       this.clientTableLoading = false
+    }
+  }
+
+  @observable objTargetTagList = []
+
+  /**
+   * 描述 圈选规则使用
+   * @date 2021-04-19
+   * @param {any} cb cb
+   * @returns {any} void
+   */
+  async getConfigTagList(cb = () => {}) {
+    try {
+      const res = await io.getConfigTagList({
+        objId: this.objId,
+      })
+
+      this.objTargetTagList = res
+      cb()
+    } catch (e) {
+      errorTip(e.message)
     }
   }
 }
