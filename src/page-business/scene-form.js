@@ -68,7 +68,7 @@ export default inject('store')(({store}) => {
             store.checkSceneCode(
               {
                 bizCode: value,
-                id: store.formInitValue.id,
+                id: String(store.formInitValue.id),
               },
               res => {
                 if (res.isExist) {
