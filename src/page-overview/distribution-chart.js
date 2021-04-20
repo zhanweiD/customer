@@ -57,7 +57,8 @@ const DistributionChart = ({
         setMapData(cities)
       }
 
-      const newValues = values.sort((a, b) => a.count - b.count)
+      // const newValues = values.sort((a, b) => a.count - b.count)
+      const newValues = values.reverse()
 
       setBarData(newValues)
     } catch (err) {

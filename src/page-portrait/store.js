@@ -3,14 +3,14 @@ import {
 } from 'mobx'
 import {message} from 'antd'
 
-import {errorTip, successTip} from '../common/util'
+import {errorTip, successTip, listToTree} from '../common/util'
 import io from './io'
 
 const dateFormat = 'YYYY-MM-DD'
 const date = new Date()
 const nowDate = moment(+date.getTime()).format(dateFormat)
 
-function listToTree(data) {
+function busListToTree(data) {
   const newData = _.cloneDeep(data)
 
   newData.forEach(item => {
@@ -47,15 +47,23 @@ class Store {
   @observable isFirst = true // 是否是第一页
 
   @observable followList = [] // 关注客户列表
+  @observable followLoading = false // 关注客户列表
+  @observable scanList = [] // 关注客户列表
 
   // 客户档案
   @observable unitBasic = [] // 画像个体基础信息
+  @observable defaultInfo = {} // 画像个体基础信息
   @observable basicLoading = false // 画像个体基础信息loading
   @observable attention = 0 // 关注取关
 
   // 标签描摹
   @observable cloudData = [] // 标签
   @observable toAllTag = true // 切换标签描摹模式 默认全量
+  @observable treeData = [] // 切换标签描摹模式 默认全量
+  @observable businessType = null // 业务类型
+  @observable defPortraitList = [] // 已配置标签
+  @observable tagList = [] // 标签列表
+  @observable selectName = [] // 类目树选择的类目
 
   // 业务触点
   @observable contactLoading = false // 触点加载
@@ -66,6 +74,7 @@ class Store {
   @observable unitEvents = [] // 画像个体触点信息
   @observable businessList = [] // 业务类型
   @observable pieData = [] // 业务类型分布图
+  @observable barData = [] // 触点类型分布图
   @observable businessParams = {
     startTime: null,
     endTime: null,
@@ -81,11 +90,48 @@ class Store {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
   // }
 
+  // 显示配置详情 
+  @action async showDrawer() {
+    this.defPortraitList = []
+    try {
+      const res = await io.getDetails({
+        id: this.portraitId,
+      })
+      runInAction(() => {
+        res.portrait.forEach(item => {
+          if (item.tagIdList.length > 1) {
+            this.defPortraitList = [...this.defPortraitList, ...item.catIdList]
+          }
+        })
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 类目标签树
+  @action async getTagTree() {
+    try {
+      const res = await io.getTagTree({
+        objId: 9063199376998720,
+      })
+      runInAction(() => {
+        const cates = res.filter(item => item.isCate) || []
+        this.treeData = listToTree(cates)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } 
+  }
+
   // 获取关注客户列表
   @action async getFollow(currentPage = 1) {
     this.followLoading = true
     try {
-      const res = await io.getFollow({currentPage})
+      const res = await io.getFollow({
+        currentPage,
+        id: this.portraitId,
+      })
       runInAction(() => {
         this.followList = res.data
       })
@@ -93,6 +139,24 @@ class Store {
       errorTip(e.message)
     } finally {
       this.followLoading = false
+    }
+  }
+
+  // 获取最近浏览客户列表
+  @action async getScan(currentPage = 1) {
+    this.scanLoading = true
+    try {
+      const res = await io.getScan({
+        currentPage,
+        id: this.portraitId,
+      })
+      runInAction(() => {
+        this.scanList = res.data
+      })
+    } catch (e) {
+      errorTip(e.message)
+    } finally {
+      this.scanLoading = false
     }
   }
 
@@ -107,6 +171,9 @@ class Store {
         this.portraitId = res[0] ? res[0].id : undefined
         this.placeholder = res[0] ? res[0].placeholder : '请输入'
         this.isCustomer = true
+
+        this.getFollow()
+        this.getScan()
 
         // 演示环境默认展示
         // this.getUnitList()
@@ -124,7 +191,6 @@ class Store {
     try {
       const res = await io.getUnitList({
         id: this.portraitId,
-        // id: 34323626329648,
         searchKey: this.searchKey,
         currentPage: this.currentPage,
       })
@@ -138,7 +204,7 @@ class Store {
         if (res.data.length === 10) this.isLast = false
         this.unitList = res.data
         this.ident = this.unitList[0].ident
-        this.getUnitBasic()
+        // this.getUnitBasic()
       })
     } catch (e) {
       errorTip(e.message)
@@ -181,6 +247,23 @@ class Store {
     }
   }
 
+  // 获取标签列表
+  @action async getTagList() {
+    this.selectName = []
+    try {
+      const res = await io.getTagList({
+        id: this.portraitId,
+        ident: this.ident,
+      })
+      runInAction(() => {
+        this.tagList = res || []
+        res.forEach(item => this.selectName.push(item.cat))
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
   // 客户档案
   // 获取基础信息
   @action async getUnitBasic() {
@@ -191,7 +274,9 @@ class Store {
         ident: this.ident,
       })
       runInAction(() => {
-        this.unitBasic = res || []
+        this.unitBasic = res.basic || []
+        this.defaultInfo = res.info || {}
+        this.attention = res.attention
       })
     } catch (e) {
       errorTip(e.message)
@@ -199,16 +284,16 @@ class Store {
       this.basicLoading = false
     }
   }
-  // 获取基础信息
-  @action async actionFocus(type = 0) {
+  // 取关关注
+  @action async actionFocus() {
     try {
       await io.actionFocus({
         id: this.portraitId,
         ident: this.ident,
-        type,
+        type: !this.attention,
       })
       runInAction(() => {
-        successTip(type ? '关注成功' : '取关成功')
+        successTip(this.attention ? '取关成功' : '关注成功')
         this.getUnitBasic()
       })
     } catch (e) {
@@ -223,13 +308,8 @@ class Store {
     this.chartLoading = true
     try {
       const res = await io.getPieChart({
-        // ident: this.ident,
-        // ...this.businessParams,
-        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
-        startTime: '2021-01-01',
-        endTime: '2021-05-01',
-        eventType: 1,
-        bizCode: 'DC',
+        ident: this.ident,
+        ...this.businessParams,
       })
       runInAction(() => {
         this.getBarChart(cb)
@@ -246,15 +326,11 @@ class Store {
   @action async getBarChart(cb) {
     try {
       const res = await io.getBarChart({
-        // ident: this.ident,
-        // ...this.businessParams,
-        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
-        startTime: '2021-01-01',
-        endTime: '2021-05-01',
-        eventType: 1,
-        bizCode: 'DC',
+        ident: this.ident,
+        ...this.businessParams,
       })
       runInAction(() => {
+        this.barData = res
         cb(this.pieData, this.pieTotal, res)
       })
     } catch (e) {
@@ -268,11 +344,11 @@ class Store {
   @action async getBizType() {
     try {
       const res = await io.getBizType({
-        // id: this.portraitId,
-        // ident: this.ident,
+        id: this.portraitId,
+        ident: this.ident,
       })
       runInAction(() => {
-        this.businessList = listToTree(res)
+        this.businessList = busListToTree(res)
       })
     } catch (e) {
       errorTip(e.message)
@@ -284,13 +360,14 @@ class Store {
     this.contactLoading = true
     try {
       const res = await io.getUnitEvent({
-        // id: this.portraitId,
-        // ident: this.ident,
-        ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
-        startTime: '2021-01-01',
-        endTime: '2021-05-01',
-        eventType: 1,
-        bizCode: 'DC',
+        id: this.portraitId,
+        ident: this.ident,
+        ...this.businessParams,
+        // ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
+        // startTime: '2021-01-01',
+        // endTime: '2021-05-01',
+        // eventType: 1,
+        // bizCode: 'DC',
       })
       runInAction(() => {
         this.unitEvents = res.map(item => {

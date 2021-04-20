@@ -48,7 +48,7 @@ export default class BusinessContact extends Component {
 
   // 选择业务类型
   @action changeBizCode = v => {
-    this.store.businessParams.bizCode = v
+    this.store.businessParams.bizCode = v ? v[v.length - 1] : null
 
     this.store.getPieChart((pieData, total, barData) => {
       this.drawSaveTrend(pieData, total, barData)

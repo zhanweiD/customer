@@ -34,7 +34,7 @@ const StepThree = ({
         </div>
         <div className="fs12 h32 FBH">
           <div className="c85 far w50">客群描述：</div>
-          <div className="c65 fal w50">{saveInfo.desc || '-'}</div>
+          <div className="c65 fal w50">{saveInfo.descr || '-'}</div>
         </div>
         <div className="fs12 h32 FBH">
           <div className="c85 far w50">覆盖人群：</div>

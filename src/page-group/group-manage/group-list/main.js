@@ -115,11 +115,11 @@ export default class GroupList extends Component {
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">
-          <Authority
+          {/* <Authority
             authCode="group-manage:add-group"
           >
             <a className="mr16" disabled={record.status === 2} onClick={() => this.goPerform(record)} href>运行</a>
-          </Authority>
+          </Authority> */}
           <Authority
             authCode="group-manage:add-group"
           >

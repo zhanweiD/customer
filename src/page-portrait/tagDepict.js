@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import React, {Component} from 'react'
-import {Tooltip, Select, Input} from 'antd'
+import {Tooltip, Select, Input, Cascader} from 'antd'
 import {TagOutlined, UnorderedListOutlined} from '@ant-design/icons'
 
 import Cloud from './cloud'
@@ -16,12 +16,23 @@ export default class TagDepict extends Component {
     super(props)
     this.store = props.store
   }
+  componentDidMount() {
+    this.store.showDrawer()
+    this.store.getBizType()
+  }
+
   @action changeModel = () => {
     this.store.toAllTag = !this.store.toAllTag
   }
+
+  // 选择业务类型
+  @action changeBizCode = v => {
+    this.store.businessType = v ? v[v.length - 1] : null
+  }
+
   render() {
     const {index, store} = this.props
-    const {toAllTag} = store
+    const {toAllTag, businessList} = store
     return (
       <div className="tag-depict"> 
         <div className="search-condition">
@@ -36,10 +47,19 @@ export default class TagDepict extends Component {
               </Tooltip>
             )
           }
-          <Select placeholder="请选择业务域" style={{width: 156, textAlign: 'left', marginRight: '8px'}}>
-            <Option key="">111</Option>
-          </Select>
-          <Search placeholder="请输入标签名称" allowClear style={{width: 156}} />
+          {
+            toAllTag ? null : (
+              <Cascader
+                placeholder="请选择业务域"
+                options={businessList}
+                fieldNames={{label: 'bizName', value: 'bizCode'}}
+                expandTrigger="hover"
+                style={{margin: '0px 8px'}} 
+                onChange={this.changeBizCode}
+              />
+            )
+          }
+          <Search placeholder="请输入标签名称" allowClear style={{width: 156, marginLeft: '8px'}} />
         </div>
         {
           toAllTag ? <TagList store={store} /> : <Cloud index={index} store={store} />

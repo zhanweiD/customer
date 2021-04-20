@@ -43,15 +43,16 @@ export default class ChartPie extends Component {
     }
     window.addEventListener('resize', resize)
 
-    this.myChartPie.setOption(pieOption(pieData, total))
-    this.myChartBar.setOption(barOption(barData))
+    if (pieData.length) this.myChartPie.setOption(pieOption(pieData, total))
+    if (barData.length) this.myChartBar.setOption(barOption(barData))
   }
 
   render() {
-    const {pieData, pieTotal, chartLoading, color} = this.store
+    const {pieData, pieTotal, chartLoading, color, barData} = this.store
     return (
       <div className="chart m16 mt8 p16 box-border">
         <Spin spinning={chartLoading}>
+          {/* <div className="d-flex" style={{display: pieData.length ? 'flex' : 'none'}}> */}
           <div className="d-flex">
             <div ref="chartPie" style={{height: '300px', width: '50%'}} />
             <div className="w50 fs12 FBV FBJC FBAC categroy-legend-box">
@@ -67,7 +68,15 @@ export default class ChartPie extends Component {
               }
             </div>
           </div>
-          <div ref="chartBar" style={{height: '180px', width: '100%'}} />
+          {/* <NoData 
+            style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
+            text="暂无数据" 
+            size="small" 
+          /> */}
+          <div 
+            ref="chartBar" 
+            style={{height: '180px', width: '100%'}} 
+          />
         </Spin>
       </div> 
     )

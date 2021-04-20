@@ -1,22 +1,22 @@
 import {
   observable, action, runInAction,
 } from 'mobx'
-import {successTip, errorTip, userLog} from '../../common/util'
+import {successTip, errorTip, userLog, listToTree} from '../../common/util'
 import io from './io'
 import {ListContentStore} from '../../component/list-content'
 
-function listToTree(data) {
-  const newData = _.cloneDeep(data)
+// function listToTree(data) {
+//   const newData = _.cloneDeep(data)
 
-  newData.forEach(item => {
-    item.title = item.name
-    item.key = item.aid
-    const children = newData.filter(sitem => sitem.parentId === item.id)
-    if (children.length && !item.children) item.children = children
-  })
+//   newData.forEach(item => {
+//     item.title = item.name
+//     item.key = item.aid
+//     const children = newData.filter(sitem => sitem.parentId === item.id)
+//     if (children.length && !item.children) item.children = children
+//   })
 
-  return newData.filter(item => item.parentId === 0)
-}
+//   return newData.filter(item => item.parentId === 0)
+// }
 
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false
@@ -89,7 +89,7 @@ class Store extends ListContentStore(io.getList) {
     } catch (e) {
       errorTip(e.message)
     } finally {
-      setTimeout(() => this.formLoading = false, 200)
+      this.formLoading = false
     }
   }
 
@@ -227,32 +227,6 @@ class Store extends ListContentStore(io.getList) {
       errorTip(e.message)
     }
   }
-  // // 启用画像
-  // @action async enableButton(params) {
-  //   try {
-  //     const res = await io.getTaggle(params)
-  //     if (res.success) {
-  //       successTip('启用成功')
-  //     } else {
-  //       errorTip('操作失败')
-  //     }
-  //   } catch (e) {
-  //     errorTip(e.message)
-  //   }
-  // }
-  // // 禁用画像
-  // @action async disableButton(params) {
-  //   try {
-  //     const res = await io.getTaggle(params)
-  //     if (res.success) {
-  //       successTip('禁用成功')
-  //     } else {
-  //       errorTip('操作失败')
-  //     }
-  //   } catch (e) {
-  //     errorTip(e.message)
-  //   }
-  // }
 }
 
 export default new Store()

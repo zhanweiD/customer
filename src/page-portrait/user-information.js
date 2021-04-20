@@ -18,11 +18,11 @@ export default class User extends Component {
   }
 
   @action focus = () => {
-    // this.store.actionFocus()
+    this.store.actionFocus()
   }
 
   render() {
-    const {basicLoading} = this.store
+    const {basicLoading, defaultInfo, attention} = this.store
     return (
       <div className="basis-info-content ml16 mr16">
         <Spin spinning={basicLoading}>
@@ -30,11 +30,11 @@ export default class User extends Component {
             <div className="herder">客户档案</div>
             <div className="fs12 c65 pb8 bbc">
               <div className="dfjc lh24">
-                <div>姓名</div>
-                <Button onClick={this.focus}>关注</Button>
+                <div>{`姓名: ${defaultInfo.cust_name || '-'}`}</div>
+                <Button onClick={this.focus}>{attention ? '取关' : '关注'}</Button>
               </div>
-              <div className="lh24">业务身份</div>
-              <div className="lh24">联系电话</div>
+              <div className="lh24">{`业务身份: ${defaultInfo.identity || '-'}`}</div>
+              <div className="lh24">{`联系电话: ${defaultInfo.iphone || '-'}`}</div>
             </div>
             {
               this.store.unitBasic.map(item => {

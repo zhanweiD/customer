@@ -1,114 +1,44 @@
-import React, {useState} from 'react'
+import React, {Component} from 'react'
 import {Tree} from 'antd'
+import {action, toJS} from 'mobx'
+import {observer} from 'mobx-react'
 
-const treeData = [
-  {
-    title: '0-0',
-    key: '0-0',
-    children: [
-      {
-        title: '0-0-0',
-        key: '0-0-0',
-        children: [
-          {
-            title: '0-0-0-0',
-            key: '0-0-0-0',
-          },
-          {
-            title: '0-0-0-1',
-            key: '0-0-0-1',
-          },
-          {
-            title: '0-0-0-2',
-            key: '0-0-0-2',
-          },
-        ],
-      },
-      {
-        title: '0-0-1',
-        key: '0-0-1',
-        children: [
-          {
-            title: '0-0-1-0',
-            key: '0-0-1-0',
-          },
-          {
-            title: '0-0-1-1',
-            key: '0-0-1-1',
-          },
-          {
-            title: '0-0-1-2',
-            key: '0-0-1-2',
-          },
-        ],
-      },
-      {
-        title: '0-0-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-1',
-    key: '0-1',
-    children: [
-      {
-        title: '0-1-0-0',
-        key: '0-1-0-0',
-      },
-      {
-        title: '0-1-0-1',
-        key: '0-1-0-1',
-      },
-      {
-        title: '0-1-0-2',
-        key: '0-1-0-2',
-      },
-    ],
-  },
-  {
-    title: '0-2',
-    key: '0-2',
-  },
-]
+const {TreeNode} = Tree
 
-const CateTree = () => {
-  const [expandedKeys, setExpandedKeys] = useState(['0-0-0', '0-0-1'])
-  const [checkedKeys, setCheckedKeys] = useState(['0-0-0'])
-  const [selectedKeys, setSelectedKeys] = useState([])
-  const [autoExpandParent, setAutoExpandParent] = useState(true)
-
-  const onExpand = expandedKeysValue => {
-    console.log('onExpand', expandedKeysValue) // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-
-    setExpandedKeys(expandedKeysValue)
-    setAutoExpandParent(false)
+@observer
+export default class CateTree extends Component {
+  constructor(props) {
+    super(props)
+    this.store = props.store
   }
 
-  const onCheck = checkedKeysValue => {
-    console.log('onCheck', checkedKeysValue)
-    setCheckedKeys(checkedKeysValue)
+  onCheck = (checkedKeysValue, item) => {
+    this.store.selectName = []
+    item.checkedNodes.forEach(sitem => this.store.selectName.push(sitem.name))
   }
 
-  const onSelect = (selectedKeysValue, info) => {
-    console.log('onSelect', info)
-    setSelectedKeys(selectedKeysValue)
-  }
+  renderTreeNodes = data => data.map(item => {
+    if (item.children) {
+      return (
+        <TreeNode className="parents" title={item.name} key={item.aid} {...item}>
+          {this.renderTreeNodes(item.children)}
+        </TreeNode>
+      )
+    }
+    const isUse = this.store.defPortraitList.find(sitem => sitem === item.aid)
+    return <TreeNode disabled={!isUse} className="childrens" title={item.name} key={item.aid} {...item} />
+  })
 
-  return (
-    <Tree
-      checkable
-      onExpand={onExpand}
-      expandedKeys={expandedKeys}
-      autoExpandParent={autoExpandParent}
-      onCheck={onCheck}
-      checkedKeys={checkedKeys}
-      onSelect={onSelect}
-      selectedKeys={selectedKeys}
-      treeData={treeData}
-    />
-  )
+  render() {
+    const {treeData} = this.store
+    return (
+      <Tree
+        checkable
+        onCheck={this.onCheck}
+        selectable={false}
+      >
+        {this.renderTreeNodes(treeData)}
+      </Tree>
+    )
+  }
 }
-
-export default CateTree

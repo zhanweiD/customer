@@ -10,11 +10,7 @@ import SearchResult from './search-result'
 import SearchList from './search-list'
 
 const {Search} = Input
-const data = [
-  {name: '张三', type: '业主', time: '30分钟前', phone: '12345678911'},
-  {name: '李四', type: '业主', time: '60分钟前', phone: '12345678911'},
-  {name: '王二', type: '租户', time: '一小时前', phone: '12345678911'},
-]
+
 @observer
 export default class Portrait extends Component {
   constructor(props) {
@@ -32,7 +28,6 @@ export default class Portrait extends Component {
 
   componentDidMount() {
     if (store.isJump) return
-    // store.getFollow()
 
     store.getPortrait()
   }
@@ -57,6 +52,9 @@ export default class Portrait extends Component {
       placeholder, 
       unitList,
       followList,
+      followLoading,
+      scanList,
+      portraitId,
     } = store
 
     return (
@@ -73,12 +71,15 @@ export default class Portrait extends Component {
           </div>
           {
             !unitList.length ? (
-              <div className="d-flex">
-                {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
-                <SearchList data={followList} title="已关注客户" color="#00cccc" />
-                <SearchList data={data} title="最近浏览客户" color="#6699cc" />
-                {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
-              </div>
+              <Spin spinning={followLoading}>
+                <div className="d-flex">
+                  {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
+                  <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
+                  <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
+                  {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
+                </div>
+              </Spin>
+
             ) : null
           }
           

@@ -92,7 +92,6 @@ export function pieOption(data, total) {
 }
 
 export function barOption(data) {
-  console.log(data)
   return ({
     title: {
       text: '触点类型分布',
@@ -138,7 +137,7 @@ export function barOption(data) {
           show: true,
         },
         barWidth: '100%',
-        data: [data[0].value],
+        data: [data[0] ? data[0].value : null],
         color: color[0],
 
       },
@@ -151,7 +150,7 @@ export function barOption(data) {
           show: true,
         },
         barWidth: '100%',
-        data: [data[1].value],
+        data: [data[1] ? data[1].value : null],
       },
     ],
   }
