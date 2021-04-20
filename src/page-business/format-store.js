@@ -123,15 +123,11 @@ export default class Store {
    * @param {function} cb cb
    * @returns {any} void
    */
-  async checkFormatName(params, cb) {
+  async checkFormatName(params, cb = () => {}) {
     try {
       const res = await io.checkFormatName(params)
 
-      if (res.isExist) {
-        cb('已存在')
-      } else {
-        cb()
-      }
+      cb(res)
     } catch (e) {
       errorTip(e.message)
     }
@@ -145,18 +141,11 @@ export default class Store {
    * @param {function} cb cb
    * @returns {any} void
    */
-  async checkFormatCode(params, cb) {
+  async checkFormatCode(params, cb = () => {}) {
     try {
       const res = await io.checkFormatCode(params)
 
-      if (res.isExist) {
-        cb('已存在')
-      } else {
-        cb()
-      }
-
-      console.log(res)
-      console.log(999999)
+      cb(res)
     } catch (e) {
       errorTip(e.message)
     }
