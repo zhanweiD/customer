@@ -101,6 +101,8 @@ export default class TagDepict extends Component {
                 style={{width: 156}}
                 placeholder="请选择业务域"
                 onChange={this.changeBizCode}
+                okText="确认"
+                cancelText="取消"
               />
             )
           }
