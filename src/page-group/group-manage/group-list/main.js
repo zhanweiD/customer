@@ -26,6 +26,7 @@ export default class GroupList extends Component {
 
     store.searchParams = {}
     store.getEntityList()
+    // store.getUserList()
   }
 
   formRef = React.createRef()

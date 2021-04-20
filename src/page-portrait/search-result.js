@@ -105,14 +105,13 @@ export default class SearchResult extends Component {
                 <div className="basis-info bgf box-border">
                   <User store={this.store} />
                 </div>
-                
-                <div className="user-portrait">
+                <div className="user-portrait ml16 bgf">
                   <Tabs defaultActiveKey="1">
                     <TabPane tab="标签描摹" key="1">
-                      <Cloud store={this.store} loading={loading} index={1} />
+                      <TagDepict store={this.store} />
                     </TabPane>
                     <TabPane tab="业务触点" key="2">
-                      <BusinessContact store={this.store} ident={ident} />
+                      <BusinessContact store={this.store} />
                     </TabPane>
                   </Tabs>
                 </div>

@@ -13,6 +13,7 @@ import {
   DeploymentUnitOutlined,
   FileSyncOutlined,
   AppstoreOutlined,
+  TagOutlined,
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
@@ -207,6 +208,13 @@ export default class Frame extends Component {
                   codeInProduct('group-manage:view') && (
                     <Menu.Item key="/tag/market" icon={<TeamOutlined />}>
                       标签集市
+                    </Menu.Item>
+                  )
+                }
+                {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/tag/object" icon={<TagOutlined />}>
+                      标签维护
                     </Menu.Item>
                   )
                 }

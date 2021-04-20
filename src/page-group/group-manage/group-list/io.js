@@ -1,10 +1,11 @@
 import ioContext from '../../../common/io-context'
-import {get, post, groupApi, baseApi} from '../../../common/util'
+import {get, post, groupApi, baseApi, baseUser} from '../../../common/util'
 
 const api = {
   getGroupList: post(`${groupApi}/list`), // 群体分页列表
   getEntityList: post(`${groupApi}/obj_list`), // 实体列表
   getTagList: post(`${baseApi}/obj_target_tag_list`), // 标签列表
+  getUserList: post(`${baseUser}/list`), // 创建人
   checkName: post(`${groupApi}/checkName`), // 群体名称查重
   performGroup: post(`${groupApi}/manual_run`), // 规则实时执行
   removeGroup: post(`${groupApi}/delete_group`), // 删除群体

@@ -2,6 +2,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import React, {Component} from 'react'
 import {Tooltip, Select, Input, Cascader} from 'antd'
+import MultiCascader from 'antd-multi-cascader'
 import {TagOutlined, UnorderedListOutlined} from '@ant-design/icons'
 
 import Cloud from './cloud'
@@ -24,18 +25,43 @@ export default class TagDepict extends Component {
   @action changeModel = () => {
     this.store.toAllTag = !this.store.toAllTag
   }
+  @action changeBizCode = data => {
+    const {bizList} = this.store
+    const bizValue = []
+    data.forEach(item => {
+      const target = _.find(bizList, e => e.bizCode === item)
+      const parentNode = _.find(bizList, e => e.bizCode === target.parentCode)
+
+      if (!parentNode) {
+        // 没找到，说明是第一级
+        bizValue.push([target.bizCode])
+      } else if (target.parentCode === parentNode.bizCode && parentNode.parentCode === '-1') {
+        // 第二级
+        bizValue.push([target.parentCode, target.bizCode])
+      } else {
+        bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
+      }
+    })
+    this.store.businessType = bizValue
+    this.store.getObjCloud((res, max) => {
+      this.getDrawCloud(res, max)
+    })
+  }
 
   // 选择业务类型
-  @action changeBizCode = v => {
-    this.store.businessType = v ? v[v.length - 1] : null
-  }
+  // @action changeBizCode = v => {
+  //   this.store.businessType = v
+  //   this.store.getObjCloud((res, max) => {
+  //     this.getDrawCloud(res, max)
+  //   })
+  // }
 
   render() {
     const {index, store} = this.props
     const {toAllTag, businessList} = store
     return (
       <div className="tag-depict"> 
-        <div className="search-condition">
+        <div className="search-condition dfjf">
           {
             toAllTag ? (
               <Tooltip title="切换云图模式">
@@ -49,12 +75,19 @@ export default class TagDepict extends Component {
           }
           {
             toAllTag ? null : (
-              <Cascader
+              // <Cascader
+              //   placeholder="请选择业务域"
+              //   options={businessList}
+              //   fieldNames={{label: 'bizName', value: 'bizCode'}}
+              //   expandTrigger="hover"
+              //   style={{margin: '0px 8px'}} 
+              //   onChange={this.changeBizCode}
+              // />
+              <MultiCascader
+                data={businessList}
+                style={{width: 156}}
+                selectAll
                 placeholder="请选择业务域"
-                options={businessList}
-                fieldNames={{label: 'bizName', value: 'bizCode'}}
-                expandTrigger="hover"
-                style={{margin: '0px 8px'}} 
                 onChange={this.changeBizCode}
               />
             )
@@ -62,7 +95,7 @@ export default class TagDepict extends Component {
           <Search placeholder="请输入标签名称" allowClear style={{width: 156, marginLeft: '8px'}} />
         </div>
         {
-          toAllTag ? <TagList store={store} /> : <Cloud index={index} store={store} />
+          toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
         }
       </div>
     )
