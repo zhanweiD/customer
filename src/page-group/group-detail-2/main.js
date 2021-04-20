@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Tabs} from 'antd'
+import {Tabs, Spin} from 'antd'
 import {Provider, inject} from 'mobx-react'
 import {useObserver, useLocalStore} from 'mobx-react-lite'
 import ManageDetail from './manage-detail'
