@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Button, Input, Table, Cascader, Drawer, Popconfirm} from 'antd'
+import {Button, Input, Table, Cascader, Drawer, Popconfirm, Tooltip} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import _ from 'lodash'
@@ -30,12 +30,23 @@ export default inject('store')(({store}) => {
         return (
           <div>
             <span className="ac hand mr8" onClick={() => showEdit(record)}>编辑</span>
-            <Popconfirm
-              title="你确定要删除该业态吗？"
-              onConfirm={() => store.deleteFormat([record.bizCode])}
-            >
-              <span className="ac hand">删除</span>
-            </Popconfirm>
+            {
+              record.canDel === 0
+                ? (
+                  <Tooltip>
+                    <span className="disabled">删除</span>
+                  </Tooltip>
+                )
+                : (
+                  <Popconfirm
+                    title="你确定要删除该业态吗？"
+                    onConfirm={() => store.deleteFormat([record.bizCode])}
+                  >
+                    <span className="ac hand">删除</span>
+                  </Popconfirm>
+                )
+            }
+            
           </div>
         )
       },
@@ -47,7 +58,7 @@ export default inject('store')(({store}) => {
       store.selectedRows = selectedRows
     },
     getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User',
+      disabled: record.canDel === 0,
       // Column configuration not to be checked
       name: record.name,
     }),

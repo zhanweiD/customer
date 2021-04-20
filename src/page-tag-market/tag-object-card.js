@@ -37,7 +37,7 @@ export default ({data, ondelete}) => {
         <Divider style={{margin: '0'}} />
         <div className="object-down FBH">
           <div className="FBV FB1 fac">
-            <div>
+            <div className="a-href-color fs16">
               {data.tag}
             </div>
             <div className="black65">
@@ -46,7 +46,7 @@ export default ({data, ondelete}) => {
           </div>
           <Divider type="vertical" style={{height: '40px'}} />
           <div className="FBV FB1 fac">
-            <div>
+            <div className="a-href-color fs16">
               {data.tagCatalog}
             </div>
             <div className="black65">
@@ -55,7 +55,7 @@ export default ({data, ondelete}) => {
           </div>
           <Divider type="vertical" style={{height: '40px'}} />
           <div className="FBV FB1 fac">
-            <div>
+            <div className="a-href-color fs16">
               {data.tagTable}
             </div>
             <div className="black65">
