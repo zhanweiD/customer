@@ -175,4 +175,39 @@ export default class Store {
       errorTip(e.message)
     }
   }
+
+  /**
+   * 检查场景名称重名
+   * @date 2021-04-12
+   * @param {Object} params {id: , bizName: }
+   * @param {function} cb cb
+   * @returns {any} void
+   */
+  async checkSceneName(params, cb) {
+    try {
+      const res = await io.checkFormatName(params)
+
+      cb(res)
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+
+  /**
+   * 检查场景code重复
+   * @date 2021-04-12
+   * @param {any} params {id: ,bizCode: }
+   * @param {function} cb cb
+   * @returns {any} void
+   */
+  async checkSceneCode(params, cb) {
+    try {
+      const res = await io.checkFormatCode(params)
+
+      cb(res)
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
 }

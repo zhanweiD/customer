@@ -14,45 +14,83 @@ const formItemLayout = {
 export default inject('store')(({store}) => {
   const [form] = Form.useForm()
 
+  let timer1 = null
+  let timer2 = null
+
+
   const checkName = (rule, value, callback) => {
     if (value) {
       // 防抖设计
-      debounce(() => {
-        if (store.isEdit) {
-          store.checkSceneName(
-            {
-              bizName: value,
-              id: store.formInitValue.id,
-            },
-            callback
-          )
-        } else {
-          store.checkSceneName({bizName: value}, callback)
-        }
-      }, 500)
-    } else {
-      callback()
-    }
+      if (timer1) {
+        clearTimeout(timer1)
+      }
+
+      return new Promise((resolve, reject) => {
+        timer1 = setTimeout(() => {
+          if (store.isEdit) {
+            store.checkSceneName(
+              {
+                bizName: value,
+                id: store.formInitValue.id,
+              },
+              res => {
+                if (res.isExist) {
+                  reject('已存在')
+                } else {
+                  resolve()
+                }
+              }
+            )
+          } else {
+            store.checkSceneName({bizName: value}, res => {
+              if (res.isExist) {
+                reject('已存在')
+              } else {
+                resolve()
+              }
+            })
+          }
+        }, 300)
+      })
+    } 
+    callback()
   }
 
   const checkCode = (rule, value, callback) => {
     if (value) {
-      debounce(() => {
-        if (store.isEdit) {
-          store.checkSceneCode(
-            {
-              bizCode: value,
-              id: store.formInitValue.id,
-            },
-            callback
-          )
-        } else {
-          store.checkSceneCode({bizCode: value}, callback)
-        }
+      if (timer2) {
+        clearTimeout(timer2)
+      }
+
+      return new Promise((resolve, reject) => {
+        timer2 = setTimeout(() => {
+          if (store.isEdit) {
+            store.checkSceneCode(
+              {
+                bizCode: value,
+                id: store.formInitValue.id,
+              },
+              res => {
+                if (res.isExist) {
+                  reject('已存在')
+                } else {
+                  resolve()
+                }
+              }
+            )
+          } else {
+            store.checkSceneCode({bizCode: value}, res => {
+              if (res.isExist) {
+                reject('已存在')
+              } else {
+                resolve()
+              }
+            })
+          }
+        }, 300)
       })
-    } else {
-      callback()
-    }
+    } 
+    callback()
   }
 
   const formatChange = e => {
@@ -72,10 +110,9 @@ export default inject('store')(({store}) => {
           name="bizName"
           rules={[
             ...getNamePattern(),
-            // {required: true, message: '请输入业态名称'},
-            // {
-            //   validator: (rule, value, callback) => checkName(rule, value, callback),
-            // },
+            {
+              validator: (rule, value, callback) => checkName(rule, value, callback),
+            },
           ]}
         >
           <Input placeHolder="请输入场景名称" autoComplete="off" />
@@ -84,10 +121,10 @@ export default inject('store')(({store}) => {
           label="场景Code"
           name="bizCode"
           rules={[
-            {required: true, message: '请输入业态Code'},
-            // {
-            //   validator: (rule, value, callback) => checkCode(rule, value, callback),
-            // },
+            {required: true, message: 'Code 不能为空'},
+            {
+              validator: (rule, value, callback) => checkCode(rule, value, callback),
+            },
           ]}
         >
           <Input placeHolder="请输入场景Code" autoComplete="off" />

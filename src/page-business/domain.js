@@ -16,11 +16,14 @@ export default inject('store')(({store}) => {
 
   const columns = [
     {
-      title: '业态名称',
-      dataIndex: 'p_bizName',
-    }, {
       title: '业务域名称',
       dataIndex: 'bizName',
+    }, {
+      title: '业务域Code',
+      dataIndex: 'bizCode',
+    }, {
+      title: '所属业态',
+      dataIndex: 'p_bizName',
     }, {
       title: '操作',
       render: (text, record) => {
