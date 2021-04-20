@@ -31,6 +31,8 @@ class Store {
 
   @observable isEnum = false // 是否枚举
   @observable ownObject = undefined // 所属对象
+  @observable valueRadios = [] // 标签详情取值分析的数据
+  @observable nonNullCnt = 0
 
   @observable editDetail = {} // 编辑标签事的详情数据 
   @observable detailLoading = false // 请求标签详情时loading
@@ -265,6 +267,11 @@ class Store {
         this.applyInfo = res
         this.isEnum = res.isEnum
         this.ownObject = res.objId
+        this.nonNullCnt = res.nonNullCnt || 0
+        if (res.valueRadios) {
+          res.valueRadios.sort((a, b) => a.value - b.value).reverse()
+        }
+        this.valueRadios = res.valueRadios || []
         if (cb) cb()
       })
     } catch (e) {
