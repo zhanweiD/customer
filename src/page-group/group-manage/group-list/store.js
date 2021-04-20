@@ -78,6 +78,18 @@ class Store extends ListContentStore(io.getGroupList) {
     }
   }
 
+  // 获取标签列表
+  @action async getUserList() {
+    try {
+      const res = await io.getUserList()
+      runInAction(() => {
+        console.log(res)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
   // 删除群体
   @action async removeGroup(id) {
     try {

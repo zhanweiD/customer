@@ -20,7 +20,7 @@ export default class Portrait extends Component {
     store.ident = match.params.ident
     store.portraitId = +match.params.id
     store.isCustomer = !match.params.isConsultant
-    store.isJump = store.ident
+    store.isJump = !!store.ident
 
     store.portraits = []
     store.unitList = []
@@ -55,34 +55,40 @@ export default class Portrait extends Component {
       followLoading,
       scanList,
       portraitId,
+      isJump,
     } = store
 
     return (
       <div className="portrait-wrap">
         <div className="content-header">客户画像</div>
         <div className="search m16 mr0">
-          <div className="search_content mr16">
-            <Search 
-              size="large"
-              placeholder={placeholder} 
-              onSearch={this.onSearch} 
-              style={{width: '25%', borderLeft: 'none'}} 
-            />
-          </div>
           {
-            !unitList.length ? (
-              <Spin spinning={followLoading}>
-                <div className="d-flex">
-                  {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
-                  <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
-                  <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
-                  {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
+            isJump ? null : (
+              <Fragment>
+                <div className="search_content mr16">
+                  <Search 
+                    size="large"
+                    placeholder={placeholder} 
+                    onSearch={this.onSearch} 
+                    style={{width: '25%', borderLeft: 'none'}} 
+                  />
                 </div>
-              </Spin>
+                {
+                  !unitList.length ? (
+                    <Spin spinning={followLoading}>
+                      <div className="d-flex">
+                        {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
+                        <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
+                        <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
+                        {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
+                      </div>
+                    </Spin>
 
-            ) : null
+                  ) : null
+                }
+              </Fragment>
+            )
           }
-          
           <SearchResult store={store} />
         </div>
       </div>

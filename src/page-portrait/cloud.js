@@ -18,19 +18,20 @@ export default class Cloud extends Component {
   }
 
   componentDidMount() {
-    const {toAllTag} = this.store
-    this.store.getObjCloud((res, max) => {
-      if (toAllTag) return
-      this.couldLayout(res, max)
-    })
+    const {props} = this
+    props.getDrawCloud(this.couldLayout)
+    // this.store.getObjCloud((res, max) => {
+    //   if (toAllTag) return
+    //   this.couldLayout(res, max)
+    // })
   }
-  componentUpdate() {
-    const {toAllTag} = this.store
-    this.store.getObjCloud((res, max) => {
-      if (toAllTag) return
-      this.couldLayout(res, max)
-    })
-  }
+  // componentUpdate() {
+  //   const {toAllTag} = this.store
+  //   this.store.getObjCloud((res, max) => {
+  //     if (toAllTag) return
+  //     this.couldLayout(res, max)
+  //   })
+  // }
 
   // 获取最大值
   getRanKMax(arr = [], countKeyName = 'count') {
@@ -105,7 +106,7 @@ export default class Cloud extends Component {
               !cloudData.length
                 ? (
                   <div className="no-Data" style={{height: '442px'}}>
-                    <NoData text="暂无数据" size="small" />
+                    <NoData text="请选择业务域查询" size="small" />
                   </div>
                 )
                 : null

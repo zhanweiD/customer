@@ -49,6 +49,7 @@ class Store {
   @observable followList = [] // 关注客户列表
   @observable followLoading = false // 关注客户列表
   @observable scanList = [] // 关注客户列表
+  @observable bizList = [] // 业务下拉元数据
 
   // 客户档案
   @observable unitBasic = [] // 画像个体基础信息
@@ -137,14 +138,11 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
-    } finally {
-      this.followLoading = false
     }
   }
 
   // 获取最近浏览客户列表
   @action async getScan(currentPage = 1) {
-    this.scanLoading = true
     try {
       const res = await io.getScan({
         currentPage,
@@ -156,7 +154,7 @@ class Store {
     } catch (e) {
       errorTip(e.message)
     } finally {
-      this.scanLoading = false
+      this.followLoading = false
     }
   }
 
@@ -221,12 +219,13 @@ class Store {
       const res = await io.getObjCloud({
         id: this.portraitId,
         ident: this.ident,
+        bizList: this.businessType,
       })
       runInAction(() => {
         this.cloudData = []
         const list = res || []
         list.forEach((item, i) => {
-          this.cateTitle.push({text: item.cat, color: this.color[i]})
+          this.cateTitle.push({text: item.biz, color: this.color[i]})
           if (item.list) {
             // 同类标签颜色生成
             const newList = item.list.map(text => {
@@ -290,7 +289,7 @@ class Store {
       await io.actionFocus({
         id: this.portraitId,
         ident: this.ident,
-        type: !this.attention,
+        type: this.attention ? 0 : 1,
       })
       runInAction(() => {
         successTip(this.attention ? '取关成功' : '关注成功')
@@ -348,6 +347,11 @@ class Store {
         ident: this.ident,
       })
       runInAction(() => {
+        this.bizList = res
+        res.forEach(item => {
+          item.title = item.bizName
+          item.value = item.bizCode
+        })
         this.businessList = busListToTree(res)
       })
     } catch (e) {
