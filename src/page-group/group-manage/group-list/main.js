@@ -26,25 +26,12 @@ export default class GroupList extends Component {
 
     store.searchParams = {}
     store.getEntityList()
-    // store.getUserList()
+    store.getUserList()
   }
 
   formRef = React.createRef()
 
   menu = record => {
-    const {status, mode, type} = record
-    // let isClick = false
-    // if (status === 1) {
-    //   isClick = false
-    // } else if (status === 2) {
-    //   if (mode === 2 || type === 2) {
-    //     isClick = false
-    //   } else {
-    //     isClick = true
-    //   }
-    // } else {
-    //   isClick = true
-    // }
     return (
       <Menu>
         <Menu.Item>

@@ -42,7 +42,7 @@ export default class Cloud extends Component {
     return max
   }
 
-  @action.bound couldLayout(data = [], max) {
+  @action.bound couldLayout(data = [], max = 2) {
     this.box = d3.select(`#box${this.props.index}`)
     if (!this.box) return
     this.box.style('transform', 'scale(0.3, 0.3)').style('transition', 'all .3s linear')

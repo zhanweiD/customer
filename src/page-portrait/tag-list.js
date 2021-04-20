@@ -15,7 +15,7 @@ export default class TagList extends Component {
     this.store.getTagList()
   }
   render() {
-    const {tagList, selectName} = this.store
+    const {tagList, selectName, searchKey} = this.store
     return (
       <div className="p16 pt0 bgf">
         <div className="d-flex">
@@ -32,7 +32,15 @@ export default class TagList extends Component {
                     <span>{item.cat}</span>
                   </div>
                   {
-                    item.list.map(sitem => <span className="mr8 mb8 fs12 c65 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>)
+                    item.list.map(sitem => {
+                      if (searchKey) {
+                        if (sitem.tag === searchKey) {
+                          return <span className="mr8 mb8 fs12 c65 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
+                        } 
+                        return <span />
+                      }
+                      return <span className="mr8 mb8 fs12 c65 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
+                    })
                   }
                 </div>
               )

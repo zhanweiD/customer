@@ -235,7 +235,7 @@ class Store {
             this.cloudData = [...this.cloudData, ...newList]
           }
         })
-        cb(this.cloudData, 2)
+        cb(this.cloudData)
       })
     } catch (e) {
       errorTip(e.message)
