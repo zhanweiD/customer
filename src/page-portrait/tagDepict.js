@@ -9,7 +9,6 @@ import Cloud from './cloud'
 import TagList from './tag-list'
 
 const {Search} = Input
-const {Option} = Select
 
 @observer
 export default class TagDepict extends Component {
@@ -24,8 +23,20 @@ export default class TagDepict extends Component {
 
   @action changeModel = () => {
     this.store.toAllTag = !this.store.toAllTag
+    if (this.store.toAllTag) this.store.cloudData = []
+    else this.store.tagList = []
   }
+
+  // 选择业务类型
+  // @action changeBizCode = v => {
+  //   this.store.businessType = v
+  //   this.store.getObjCloud((res, max) => {
+  //     this.getDrawCloud(res, max)
+  //   })
+  // }
+
   @action changeBizCode = data => {
+    this.store.searchKey = null
     const {bizList} = this.store
     const bizValue = []
     data.forEach(item => {
@@ -48,17 +59,19 @@ export default class TagDepict extends Component {
     })
   }
 
-  // 选择业务类型
-  // @action changeBizCode = v => {
-  //   this.store.businessType = v
-  //   this.store.getObjCloud((res, max) => {
-  //     this.getDrawCloud(res, max)
-  //   })
-  // }
+  // 搜索标签
+  @action changeKey = v => {
+    const {cloudData, toAllTag} = this.store
+    this.store.searchKey = v
+    const searchData = cloudData.filter(item => item.tag === v)
+    if (!toAllTag) {
+      this.getDrawCloud(searchData)
+    }
+  }
 
   render() {
     const {index, store} = this.props
-    const {toAllTag, businessList} = store
+    const {toAllTag, businessList, searchKey} = store
     return (
       <div className="tag-depict"> 
         <div className="search-condition dfjf">
@@ -86,13 +99,20 @@ export default class TagDepict extends Component {
               <MultiCascader
                 data={businessList}
                 style={{width: 156}}
-                selectAll
                 placeholder="请选择业务域"
                 onChange={this.changeBizCode}
+                okText="确认"
+                cancelText="取消"
               />
             )
           }
-          <Search placeholder="请输入标签名称" allowClear style={{width: 156, marginLeft: '8px'}} />
+          <Search 
+            placeholder="请输入标签名称" 
+            allowClear 
+            key={toAllTag}
+            style={{width: 156, marginLeft: '8px'}} 
+            onSearch={this.changeKey}
+          />
         </div>
         {
           toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />

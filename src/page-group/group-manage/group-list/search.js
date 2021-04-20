@@ -31,14 +31,14 @@ const serach = store => [
   },
   {
     label: '创建人',
-    key: 'cUserId',
+    key: 'cuserAccount',
     initialValue: '',
     control: {
       placeholder: '请选择创建人',
     },
     options: [
       {name: '全部', value: ''},
-      // ...toJS(store.entityList),
+      ...toJS(store.userList),
     ],
     component: 'select',
   },

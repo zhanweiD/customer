@@ -22,6 +22,7 @@ class Store extends ListContentStore(io.getGroupList) {
   @observable fileRes = '' // 上传的文件返回数据
   @observable uploadList = [] // 上传文件列表
   @observable entityList = [] // 实体列表
+  @observable userList = [] // 创建人列表
   @observable entityOptions = [] // 实体option列表
   @observable tagOptions = [] // 标签option列表
 
@@ -84,6 +85,8 @@ class Store extends ListContentStore(io.getGroupList) {
       const res = await io.getUserList()
       runInAction(() => {
         console.log(res)
+        this.userList = changeToOptions(toJS(res || []))('userName', 'userAccount')
+        console.log(this.userList)
       })
     } catch (e) {
       errorTip(e.message)
