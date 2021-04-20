@@ -56,7 +56,7 @@ export default inject('store')(({store, id}) => {
               <div className="black45">
                 覆盖客户数
               </div>
-              <div className="black65">
+              <div className="a-href-color fs16">
                 {store.groupDetail.nums}
               </div>
             </div>
@@ -64,7 +64,7 @@ export default inject('store')(({store, id}) => {
               <div className="black45">
                 客户覆盖率
               </div>
-              <div className="black65">
+              <div className="a-href-color fs16">
                 {genRate(store.groupDetail.coveringRate)}
               </div>
             </div>
