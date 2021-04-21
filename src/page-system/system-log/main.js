@@ -58,7 +58,7 @@ export default class PushList extends Component {
       initParams: {...store.reqData},
       searchParams: {},
       buttons: [
-        <div>
+        <div className="dfjf mr24">
           <Input 
             placeholder="请输入用户名或者账号"
             style={{width: 180, marginRight: '8px'}}

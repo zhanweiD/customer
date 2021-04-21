@@ -99,7 +99,7 @@ export default class GroupList extends Component {
     {
       key: 'action',
       title: '操作',
-      width: 250,
+      width: 150,
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">
@@ -133,13 +133,13 @@ export default class GroupList extends Component {
             </Popconfirm>
           </Authority>
 
-          <Authority
+          {/* <Authority
             authCode="group-manage:export-group"
           >
             <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
               <a href>个体列表</a>
             </Link>
-          </Authority>
+          </Authority> */}
           
           {/* <Dropdown overlay={() => this.menu(record)}>
             <a href>

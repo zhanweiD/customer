@@ -68,6 +68,7 @@ export default class Store {
       this.drawerVis = false
       this.getList()
       successTip('添加成功')
+      userLog('系统管理/业务配置/添加业务域')
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -92,6 +93,7 @@ export default class Store {
       this.drawerVis = false
       this.getList()
       successTip('编辑成功')
+      userLog('系统管理/业务配置/编辑业务域')
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -114,6 +116,7 @@ export default class Store {
       this.getList()
       this.selectedRows = []
       successTip('删除成功')
+      userLog('系统管理/业务配置/删除业务域')
     } catch (e) {
       errorTip(e.message)
     }

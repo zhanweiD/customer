@@ -84,9 +84,7 @@ class Store extends ListContentStore(io.getGroupList) {
     try {
       const res = await io.getUserList()
       runInAction(() => {
-        console.log(res)
         this.userList = changeToOptions(toJS(res || []))('userName', 'userAccount')
-        console.log(this.userList)
       })
     } catch (e) {
       errorTip(e.message)

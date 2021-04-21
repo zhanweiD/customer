@@ -76,6 +76,7 @@ export default class Store {
       this.drawerVis = false
       this.getList()
       successTip('添加成功')
+      userLog('系统管理/业务配置/添加场景')
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -100,6 +101,7 @@ export default class Store {
       this.drawerVis = false
       this.getList()
       successTip('编辑成功')
+      userLog('系统管理/业务配置/编辑场景')
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -122,6 +124,7 @@ export default class Store {
       this.getList()
       this.selectedRows = []
       successTip('删除成功')
+      userLog('系统管理/业务配置/删除场景')
     } catch (e) {
       errorTip(e.message)
     }

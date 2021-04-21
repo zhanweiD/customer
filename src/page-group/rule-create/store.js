@@ -22,6 +22,7 @@ class Store {
   // 第一步 设置基础信息
   @observable entityList = []
   @observable objId
+  @observable isCopy = false
 
   // 第二步 设置群体圈选规则
   @observable configTagList = [] // 对象对应已同步的标签列表
@@ -144,7 +145,8 @@ class Store {
       })
 
       runInAction(() => {
-        userLog('群体管理/编辑群体')
+        if (this.isCopy) userLog('群体管理/复制群体')
+        else userLog('群体管理/编辑群体')
         // cb(res)
         this.saveInfo = res
         this.current += 1

@@ -35,7 +35,7 @@ export default class Frame extends Component {
   componentDidMount() {
     store.getUserInfo()
     store.getParams()
-    // store.getProject()
+    store.getProject()
 
     // 设置页面的ico图标
     // const tenantImageVO = res.tenantImageVO || {}
@@ -210,18 +210,17 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 } */}
-                
-                {
-                  codeInProduct('portrait:view') && (
-                    <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
-                      客户画像
-                    </Menu.Item>
-                  )
-                }
                 {
                   codeInProduct('group-manage:view') && (
                     <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
                       客群管理
+                    </Menu.Item>
+                  )
+                }
+                {
+                  codeInProduct('portrait:view') && (
+                    <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
+                      客户画像
                     </Menu.Item>
                   )
                 }

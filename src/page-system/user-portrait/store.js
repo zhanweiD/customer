@@ -180,6 +180,7 @@ class Store extends ListContentStore(io.getList) {
       errorTip(e.message)
     } 
   }
+
   // 配置新增
   @action.bound async getAdd(params) {
     this.confirmLoading = true
@@ -190,6 +191,7 @@ class Store extends ListContentStore(io.getList) {
         this.drawerVisible = false
         this.getList()
         successTip('添加成功')
+        userLog('系统管理/画像配置/添加画像')
       })
     } catch (e) {
       errorTip(e.message)
@@ -206,6 +208,7 @@ class Store extends ListContentStore(io.getList) {
         this.drawerVisible = false
         this.getList()
         successTip('编辑成功')
+        userLog('系统管理/画像配置/编辑画像')
       })
     } catch (e) {
       errorTip(e.message)
@@ -219,6 +222,7 @@ class Store extends ListContentStore(io.getList) {
       const res = await io.getDel(params)
       if (res.success) {
         successTip('删除成功')
+        userLog('系统管理/画像配置/删除画像')
         this.getList()
       } else {
         errorTip('操作失败')

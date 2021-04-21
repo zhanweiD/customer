@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react'
-import {Table} from 'antd'
+import {Table, Button} from 'antd'
 import {toJS} from 'mobx'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+
+import {downloadResult, userLog} from '../../common/util'
+import {Authority} from '../../component'
 
 const columns = [
   {
@@ -44,7 +47,20 @@ export default inject('store')(
     }, [])
 
     return useObserver(() => (
-      <div className="p16" style={{minHeight: 'calc(100vh - 204px)'}}>
+      <div className="pl16 pr16" style={{minHeight: 'calc(100vh - 204px)'}}>
+        <Authority
+          authCode="group-manage:export-group"
+        >
+          <Button 
+            type="primary" 
+            style={{marginBottom: '8px'}}
+            onClick={async () => {
+              await downloadResult({id: store.id, queryDate: store.queryDate}, 'group/individuals'); userLog('群体管理/导出群体')
+            }}
+          >
+            导出个体列表
+          </Button>
+        </Authority>
         <Table
           loading={store.clientTableLoading}
           columns={toJS(store.titleList)}
