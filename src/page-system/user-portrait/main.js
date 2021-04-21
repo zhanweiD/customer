@@ -141,9 +141,9 @@ export default class Portrait extends Component {
     }
 
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">画像配置</div>
-        <div className="m16 bgf pt16 config-content">
+        <div className="m16 bgf pt16 config-content mt72">
           <ListContent {...listContentConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

@@ -156,7 +156,7 @@ export default class Clinch extends Component {
       text: '暂无数据',
     }
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">
           <span className="mr24">成交分析</span>
           <Cascader
@@ -192,7 +192,7 @@ export default class Clinch extends Component {
             }}
           />
         </div> 
-        <div className="ml16 mr16">
+        <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
             <div className="bgf mb16">

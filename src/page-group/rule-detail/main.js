@@ -76,10 +76,10 @@ class RuleDetail extends Component {
   render() {
     const {configTagList, drawerConfigTagList, relList, posList, detailLoading, objId} = store
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">规则配置详情</div>
         <Spin spinning={detailLoading}>
-          <div className="rule-detail header-page">
+          <div className="rule-detail header-page mt72">
       
             {
               posList && !detailLoading ? (

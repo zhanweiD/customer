@@ -136,7 +136,7 @@ const Overview = () => {
   }, [])
 
   return (
-    <div className="overview">
+    <div className="overview oa">
       <div className="content-header">
         <span>客户中心</span>
         {
@@ -162,8 +162,8 @@ const Overview = () => {
         </Select>
       </div>
       <Spin spinning={orgLoading}>
-        <div className="bgf m16 ">
-          <div className="content-header">总览</div>
+        <div className="bgf m16 mt72">
+          <div className="overview-header">总览</div>
           <div className="p16">
             <OverviewCardWrap cards={cards} />
           </div>

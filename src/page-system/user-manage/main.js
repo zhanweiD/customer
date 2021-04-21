@@ -205,9 +205,9 @@ class GroupConfig extends Component {
     }
 
     return (
-      <div className="system-user">
+      <div className="system-user oa">
         <div className="content-header">用户管理</div> 
-        <div className="d-flex user-manage">
+        <div className="d-flex user-manage mt72">
           <Tree store={store} />
           <ListContent {...listConfig} />
         </div>

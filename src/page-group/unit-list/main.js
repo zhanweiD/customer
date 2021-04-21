@@ -77,16 +77,16 @@ export default class UnitList extends Component {
     }
 
     return (
-      <div className="page-unit">
+      <div className="page-unit oa">
         <div className="content-header">个体列表</div>
         <Spin spinning={tableLoading}>
           {
             list.length ? (
-              <div className="header-page list-content">
+              <div className="header-page list-content mt72">
                 <ListContent {...listConfig} />
               </div>
             ) : (
-              <div className="header-page mt64" style={{paddingTop: '15%'}}>
+              <div className="header-page mt72" style={{paddingTop: '15%'}}>
                 <NoData {...noDataConfig} />
               </div>
             )

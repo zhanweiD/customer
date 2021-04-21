@@ -181,7 +181,7 @@ export default class SupplyDemand extends Component {
       store, // 必填属性
     }
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">
           <span className="mr24">供需分析</span>
           <Cascader
@@ -207,7 +207,7 @@ export default class SupplyDemand extends Component {
             }}
           />
         </div> 
-        <div className="ml16 mr16">
+        <div className="ml16 mr16 mt72">
           {/* <Spin spinning={loading}> */}
           {/* <OverviewCardWrap cards={cards} /> */}
           <div className="bgf mb16 mt16">

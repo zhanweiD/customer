@@ -59,9 +59,9 @@ export default class Portrait extends Component {
     } = store
 
     return (
-      <div className="portrait-wrap">
+      <div className="portrait-wrap oa">
         <div className="content-header">客户画像</div>
-        <div className="search m16 mr0">
+        <div className="search m16 mr0 mt72">
           {
             isJump ? null : (
               <Fragment>

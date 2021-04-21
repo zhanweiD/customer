@@ -271,7 +271,7 @@ export default class Purchase extends Component {
     }
     
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">
           <span className="mr24">复购挖掘</span>
           <Cascader
@@ -297,7 +297,7 @@ export default class Purchase extends Component {
             }
           </Select> 
         </div> 
-        <div className="ml16 mr16">
+        <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
             <div className="bgf mb16 pt16">

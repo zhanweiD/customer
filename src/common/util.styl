@@ -76,7 +76,7 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
     margin u($n)
 
 // special margin
-for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 64
+for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   .mt{$n}
     margin-top u($n)
   .mr{$n}
@@ -85,6 +85,7 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 64
     margin-bottom u($n)
   .ml{$n}
     margin-left u($n)
+
 .c85
   color rgba(0,0,0,0.85)
 .c65
@@ -248,9 +249,11 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 64
   background #ffffff
   color rgba(0,0,0, .85)
   border-bottom 1px solid #E6EDF8
-  // position fixed
-  // z-index 10
-  // width 100%
+  position fixed
+  z-index 10
+  width 100%
+.oa
+  overflow auto
 
 /* 普通页面 start */
 .header-page
