@@ -76,7 +76,7 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
     margin u($n)
 
 // special margin
-for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
+for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 64
   .mt{$n}
     margin-top u($n)
   .mr{$n}
@@ -248,6 +248,9 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
   background #ffffff
   color rgba(0,0,0, .85)
   border-bottom 1px solid #E6EDF8
+  // position fixed
+  // z-index 10
+  // width 100%
 
 /* 普通页面 start */
 .header-page
@@ -329,6 +332,10 @@ a
   border-radius 6px
   display inline-block
 
+.fixed-header
+  position fixed
+  z-index 10
+  width 100%
 
 .ant-select-multiple
   .ant-select-selector

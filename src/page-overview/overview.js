@@ -137,32 +137,32 @@ const Overview = () => {
 
   return (
     <div className="overview">
+      <div className="content-header">
+        <span>客户中心</span>
+        {
+          org ? (
+            <Cascader
+              defaultValue={[org]}
+              changeOnSelect
+              allowClear={false}
+              options={orgList}
+              fieldNames={{label: 'orgName', value: 'orgCode'}}
+              expandTrigger="hover"
+              style={{margin: '0px 8px'}} 
+              onChange={changeOrg}
+            />
+          ) : null
+        }
+        <Select 
+          style={{width: 128}} 
+          onChange={changeTime}
+          defaultValue={7}
+        >
+          {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
+        </Select>
+      </div>
       <Spin spinning={orgLoading}>
-        <div className="content-header">
-          <span>客户中心</span>
-          {
-            org ? (
-              <Cascader
-                defaultValue={[org]}
-                changeOnSelect
-                allowClear={false}
-                options={orgList}
-                fieldNames={{label: 'orgName', value: 'orgCode'}}
-                expandTrigger="hover"
-                style={{margin: '0px 8px'}} 
-                onChange={changeOrg}
-              />
-            ) : null
-          }
-          <Select 
-            style={{width: 128}} 
-            onChange={changeTime}
-            defaultValue={7}
-          >
-            {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
-          </Select>
-        </div>
-        <div className="bgf m16 overview-count">
+        <div className="bgf m16 ">
           <div className="content-header">总览</div>
           <div className="p16">
             <OverviewCardWrap cards={cards} />

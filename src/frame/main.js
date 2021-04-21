@@ -10,6 +10,7 @@ import {
   TeamOutlined,
   UserOutlined,
   TagsOutlined,
+  HomeOutlined,
   DeploymentUnitOutlined,
   FileSyncOutlined,
   AppstoreOutlined,
@@ -134,7 +135,7 @@ export default class Frame extends Component {
     return (
       <ConfigProvider locale={zhCN} componentSize="small">
         <Layout style={{minHeight: '100vh'}}>
-          <Header className="site-layout-background" style={{padding: 0}}>
+          <Header className="site-layout-background w100" style={{padding: 0, position: 'fixed', zIndex: 10}}>
             <div className="frame_header">
               <div className="left">
                 {/* <img src="//cdn.dtwave.com/land-customer-center/source/junfa/junfa_logo.svg" alt="logo" width="138" height="17" /> */}
@@ -151,7 +152,12 @@ export default class Frame extends Component {
           </Header>
           <Layout>
             {/* <Affix> */}
-            <Sider style={{minHeight: 'calc(100vh - 48px)', overflow: 'auto'}} collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+            <Sider 
+              style={{minHeight: 'calc(100vh - 48px)', overflow: 'auto', position: 'fixed', left: 0, top: '48px'}} 
+              collapsible 
+              collapsed={collapsed} 
+              onCollapse={this.onCollapse}
+            >
               {/* <div className="logo" /> */}
               <Menu 
                 theme="dark" 
@@ -170,6 +176,27 @@ export default class Frame extends Component {
                   )
                 } */}
                 {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/overview/customer" icon={<HomeOutlined />}>
+                      客户中心
+                    </Menu.Item>
+                  )
+                }
+                {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/tag/market" icon={<TagsOutlined />}>
+                      标签集市
+                    </Menu.Item>
+                  )
+                }
+                {
+                  codeInProduct('group-manage:view') && (
+                    <Menu.Item key="/tag/object" icon={<TagOutlined />}>
+                      标签维护
+                    </Menu.Item>
+                  )
+                }
+                {
                   codeInProduct('tag-model:view') && (
                     <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
                       标签同步
@@ -183,13 +210,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 } */}
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/overview/customer" icon={<TeamOutlined />}>
-                      客户中心
-                    </Menu.Item>
-                  )
-                }
+                
                 {
                   codeInProduct('portrait:view') && (
                     <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
@@ -204,7 +225,7 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   codeInProduct('group-manage:view') && (
                     <Menu.Item key="/tag/market" icon={<TeamOutlined />}>
                       标签集市
@@ -217,7 +238,7 @@ export default class Frame extends Component {
                       标签维护
                     </Menu.Item>
                   )
-                }
+                } */}
                 {
                   showAnalyze && (
                     <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
@@ -300,7 +321,7 @@ export default class Frame extends Component {
               </Menu>
             </Sider>
             {/* </Affix> */}
-            <Content>
+            <Content style={{overflow: 'initial', marginLeft: '200px', marginTop: '48px'}}>
               {children}
             </Content>
           </Layout>

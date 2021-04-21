@@ -86,7 +86,7 @@ export default class UnitList extends Component {
                 <ListContent {...listConfig} />
               </div>
             ) : (
-              <div className="header-page" style={{paddingTop: '15%'}}>
+              <div className="header-page mt64" style={{paddingTop: '15%'}}>
                 <NoData {...noDataConfig} />
               </div>
             )
