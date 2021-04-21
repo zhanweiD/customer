@@ -394,3 +394,13 @@ export function userLog(permsName) {
 
   req.send(JSON.stringify(params))
 }
+
+/**
+ * 描述 数字千分位格式化
+ * @date 2021-04-20
+ * @param {any} number
+ * @returns {string} number
+ */
+export function moneyNumFormat(number) {
+  return number.toLocaleString('en-US')
+}

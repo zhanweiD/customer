@@ -81,8 +81,8 @@ export default class Login extends Component {
               <div className="component-new-operation">
                 <div className="action">
                   <div className="tab active">
-                    <div className="caret-blue" />
-                    <div className="caret-white" />
+                    {/* <div className="caret-blue" />
+                    <div className="caret-white" /> */}
                     登录
                   </div>
                 </div>
