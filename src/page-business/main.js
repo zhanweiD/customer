@@ -26,11 +26,11 @@ export default () => {
   }
 
   return (
-    <div className="business-config">
+    <div className="business-config oa">
       <div className="content-header">业务配置</div>
       <Tabs 
         defaultActiveKey="1" 
-        style={{backgroundColor: '#fff', margin: '16px'}}
+        style={{backgroundColor: '#fff', margin: '72px 16px 16px'}}
         onChange={key => tabsChange(key)}
       >
         <TabPane tab="场景管理" key="1">

@@ -13,7 +13,7 @@ import './main.styl'
 const {TabPane} = Tabs
 const GroupManage = () => {
   return (
-    <Fragment>
+    <div className="oa">
       <div className="content-header">群体管理</div>
       <Tabs defaultActiveKey={codeInProduct('group-manage:view') ? '0' : '1'} className="group-manage">
         {
@@ -31,7 +31,7 @@ const GroupManage = () => {
           )
         }
       </Tabs>
-    </Fragment>
+    </div>
   )
 }
 export default GroupManage

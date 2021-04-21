@@ -39,7 +39,7 @@ export default class Group extends Component {
     const {loading, tagList, groupList, groupId, tagLoading, checkList, tagData} = store
 
     return (
-      <div className="analyze-group">
+      <div className="analyze-group oa">
         <div className="content-header">
           <span className="mr24">群体画像</span>
           <Select 
@@ -54,7 +54,7 @@ export default class Group extends Component {
           </Select>
         </div> 
 
-        <div className="ml16 mr16">
+        <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             {
               tagList.length ? (

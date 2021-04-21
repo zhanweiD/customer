@@ -256,7 +256,7 @@ class Store {
       })
       runInAction(() => {
         this.tagList = res || []
-        res.forEach(item => this.selectName.push(item.cat))
+        this.tagList.forEach(item => this.selectName.push(item.cat))
       })
     } catch (e) {
       errorTip(e.message)
@@ -347,8 +347,8 @@ class Store {
         ident: this.ident,
       })
       runInAction(() => {
-        this.bizList = res
-        res.forEach(item => {
+        this.bizList = res || []
+        this.bizList.forEach(item => {
           item.title = item.bizName
           item.value = item.bizCode
         })

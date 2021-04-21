@@ -58,10 +58,10 @@ class Scene extends Component {
     }
 
     return (
-      <div className="scene-wrap">
+      <div className="scene-wrap oa">
         <div className="content-header">标签使用场景</div>
         <Spin spinning={loading}>
-          <div className="scene-box">
+          <div className="scene-box mt72">
             {
               list.length ? (
                 <Fragment>

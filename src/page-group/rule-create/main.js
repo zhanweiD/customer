@@ -92,9 +92,9 @@ export default class RuleCreate extends Component {
     } = store
     return (
       <Provider store={store}>
-        <div>
+        <div className="oa">
           <div className="content-header">{headerTitle}</div>
-          <div className="rule-create">
+          <div className="rule-create mt72">
             <Steps size="small" current={current} style={{width: '80%', margin: '0 auto'}}>
               <Step title="信息配置" />
               <Step title="圈选规则" />

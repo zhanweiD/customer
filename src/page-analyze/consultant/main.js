@@ -123,7 +123,7 @@ export default class Consultant extends Component {
       text: '暂无数据',
     }
     return (
-      <div className="consultant">
+      <div className="consultant oa">
         <div className="content-header">
           <span className="mr24">顾问分析</span>
           <Cascader
@@ -138,7 +138,7 @@ export default class Consultant extends Component {
             style={{marginRight: '8px'}}
           />
         </div> 
-        <div className="ml16 mr16">
+        <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
             <div className="bgf mb16">

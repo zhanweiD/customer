@@ -49,10 +49,10 @@ function Entry() {
           {/* 标签应用 */}
           {/* <Route path="/tag" component={TagApp} /> */}
           {/* 场景管理 */}
-          <Route path="/scene" component={Scene} />
+          {/* <Route path="/scene" component={Scene} /> */}
           {/* 客户画像 */}
           <Route path="/customer" component={Portrait} />
-          {/* 客户画像 */}
+          {/* 客户中心 */}
           <Route path="/overview" component={Overview} />
 
           {/* 群体管理 */}

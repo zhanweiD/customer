@@ -172,7 +172,7 @@ export default class Satisfaction extends Component {
     }
     
     return (
-      <div>
+      <div className="oa">
         <div className="content-header">
           <span className="mr24">满意度提升</span>
           <Cascader
@@ -247,7 +247,7 @@ export default class Satisfaction extends Component {
           />
           {/* <Button style={{marginLeft: '8px'}} type="primary" onClick={this.resetData}>重置</Button> */}
         </div> 
-        <div className="ml16 mr16 mb16">
+        <div className="ml16 mr16 mb16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
             <div className="bgf mb16 p24 pt16">
