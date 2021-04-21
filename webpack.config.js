@@ -93,6 +93,10 @@ module.exports = {
     ],
   },
   resolve: {
+    alias: {
+      '@util': path.resolve('src/common/util'),
+      '@common': path.resolve('src/common'),
+    },
     extensions: ['.js', '.jsx', '.json'],
   },
   module: {

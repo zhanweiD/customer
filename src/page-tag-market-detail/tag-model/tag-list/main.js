@@ -6,6 +6,7 @@ import {action, toJS, observable} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Modal, Drawer, Cascader} from 'antd'
 
+import {moneyNumFormat} from '@util'
 import {
   ListContent, OmitTooltip, Authority,
 } from '../../../component'
@@ -46,6 +47,7 @@ class TagList extends Component {
   }, {
     dataIndex: 'nonNullCnt',
     title: '覆盖个体数',
+    render: (text, record) => text && <span>{moneyNumFormat(text)}</span>,
   }, {
     dataIndex: 'nonNullRadio',
     title: '个体覆盖率',

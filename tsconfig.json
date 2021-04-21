@@ -13,7 +13,12 @@
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "allowJs": true
+    "allowJs": true,
+    "paths": {
+      "@util": [
+        "./src/common/util.jsx"
+      ],
+    },
   },
   "include": [
     "./src/**/*"

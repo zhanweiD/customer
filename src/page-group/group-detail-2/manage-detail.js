@@ -3,6 +3,7 @@ import {Button, Spin} from 'antd'
 import {EditOutlined, CopyOutlined, ReloadOutlined} from '@ant-design/icons'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import {moneyNumFormat} from '@util'
 
 
 export default inject('store')(({store, id}) => {
@@ -57,7 +58,7 @@ export default inject('store')(({store, id}) => {
                 覆盖客户数
               </div>
               <div className="a-href-color fs16">
-                {store.groupDetail.nums}
+                {moneyNumFormat(store.groupDetail.nums)}
               </div>
             </div>
             <div className="FBV ml24">

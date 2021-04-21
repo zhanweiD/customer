@@ -402,5 +402,5 @@ export function userLog(permsName) {
  * @returns {string} number
  */
 export function moneyNumFormat(number) {
-  return number.toLocaleString('en-US')
+  return number ? number.toLocaleString('en-US') : 0
 }

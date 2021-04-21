@@ -3,6 +3,8 @@ import {Table, Button} from 'antd'
 import {toJS} from 'mobx'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import {moneyNumFormat} from '@util'
+
 
 const colors = ['#1a98f3', '#59b7fb', '#a9d8fa', '#f3f4f9']
 
@@ -39,6 +41,7 @@ export default inject('store')(({store}) => {
     {
       title: '标签用户数',
       dataIndex: 'nums',
+      render: (text, record) => <span>{moneyNumFormat(text)}</span>,
     },
   ]
 
