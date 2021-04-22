@@ -417,7 +417,7 @@ export default class SyncList extends Component {
       <Provider bigStore={store}>
         <div className="oa">
           <div className="content-header">标签同步</div>
-          <div className="header-page mt72">
+          <div className="header-page">
             <ListContent {...listConfig} />
           </div>
           {store.visible ? <DrawerAddSync projectId={projectId} /> : null}

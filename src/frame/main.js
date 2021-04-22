@@ -19,6 +19,7 @@ import {
 import ico from '../icon/dtwave.ico'
 import store from './store'
 import {errorTip, codeInProduct} from '../common/util'
+import defaultLightLogo from '../icon/default-light-logo.svg'
 
 const {Header, Content, Sider} = Layout
 const {SubMenu} = Menu
@@ -138,8 +139,8 @@ export default class Frame extends Component {
           <Header className="site-layout-background w100" style={{padding: 0, position: 'fixed', zIndex: 10}}>
             <div className="frame_header">
               <div className="left">
-                {/* <img src="//cdn.dtwave.com/land-customer-center/source/junfa/junfa_logo.svg" alt="logo" width="138" height="17" /> */}
-                logo
+                <img src={defaultLightLogo} alt="logo" width="36" height="28" />
+                澜客
               </div>
               <Dropdown overlay={userMenu}>
                 <div className="right hand">

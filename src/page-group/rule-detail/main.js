@@ -79,7 +79,7 @@ class RuleDetail extends Component {
       <div className="oa">
         <div className="content-header">规则配置详情</div>
         <Spin spinning={detailLoading}>
-          <div className="rule-detail header-page mt72">
+          <div className="rule-detail header-page">
       
             {
               posList && !detailLoading ? (

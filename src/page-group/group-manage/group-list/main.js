@@ -231,7 +231,7 @@ export default class GroupList extends Component {
     }
 
     return (
-      <div style={{minHeight: 'calc(100vh - 203px)'}}>
+      <div style={{minHeight: 'calc(100vh - 198px)'}}>
         <ListContent {...listConfig} />
       </div>
     )

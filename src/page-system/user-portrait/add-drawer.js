@@ -245,6 +245,7 @@ class AddDrawer extends Component {
                 key="basic" 
                 name="basic"
                 label="客户档案"
+                rules={[{required: true, message: '请选择标签'}]} 
               >
                 <Tree
                   checkable
@@ -261,6 +262,7 @@ class AddDrawer extends Component {
                 key="portrait" 
                 name="portrait"
                 label="标签描摹"
+                rules={[{required: true, message: '请选择标签'}]} 
               >
                 <Tree
                   checkable

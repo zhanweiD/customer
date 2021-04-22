@@ -86,7 +86,7 @@ export default class RunLog extends Component {
       initParams: {},
     }
     return (
-      <div className="group-push-list" style={{minHeight: 'calc(100vh - 203px)'}}>
+      <div className="group-push-list" style={{minHeight: 'calc(100vh - 198px)'}}>
         {/* 表格部分 */}
         <div className="list-content">
           <ListContent {...listConfig} />
