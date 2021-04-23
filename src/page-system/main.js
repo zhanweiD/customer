@@ -4,11 +4,11 @@
 import {Route, Switch} from 'react-router-dom'
 import {codeInProduct} from '../common/util'
 
-import UserManage from './user-manage'
-import RoleManage from './role-manage'
-import Portrait from './user-portrait'
-import SystemLog from './system-log'
-import Business from '../page-business'
+import UserManage from './page-user-manage'
+import RoleManage from './page-role-manage'
+import Portrait from './page-user-portrait'
+import SystemLog from './page-system-log'
+import Business from './page-business-config'
 
 const prePath = '/system'
 

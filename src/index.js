@@ -13,17 +13,13 @@ import Group from './page-group'
 import Scene from './page-scene'
 import System from './page-system'
 import Login from './page-login'
-import Manage from './page-tag-manage'
 import Analyze from './page-analyze'
 // import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
 import Overview from './page-overview'
-
 import TagMarket from './page-tag-market'
-import TagObject from './page-tag-object'
-import TagDetail from './page-tag-market-detail'
-import Business from './page-business'
+import TagObject from './page-tag-bazaar'
 
 const njkData = {
   dict,
@@ -40,8 +36,6 @@ function Entry() {
         <Frame>
           {/* 系统管理 */}
           <Route path="/system" component={System} />
-          {/* 标签管理 */}
-          {/* <Route path="/tag" component={Manage} /> */}
           {/* 标签同步 */}
           <Route path="/tag" component={Sync} />
           {/* 群体分析 */}
@@ -56,17 +50,10 @@ function Entry() {
           <Route path="/overview" component={Overview} />
           {/* 群体管理 */}
           <Route path="/group" component={Group} />
-
-          <Route path="/tag/market" component={TagMarket} />
-          
-          <Route path="/tag/detail" component={TagDetail} />
-
-          <Route path="/tag/object" component={TagObject} />
-
-          <Route path="/tag/manage" component={Manage} />
-
-          {/* 业务配置 */}
-          {/* <Route path="/business/config" component={Business} /> */}
+          {/* 标签集市 */}
+          <Route path="/market" component={TagMarket} />
+          {/* 标签维护 */}
+          <Route path="/bazaar" component={TagObject} />
 
           {/* <Redirect to="/tag" /> */}
         </Frame>

@@ -193,14 +193,14 @@ export default class Frame extends Component {
                   }
                   {
                     codeInProduct('group-manage:view') && (
-                      <Menu.Item key="/tag/market" icon={<TagsOutlined />}>
+                      <Menu.Item key="/market/tag-market" icon={<TagsOutlined />}>
                         标签集市
                       </Menu.Item>
                     )
                   }
                   {
                     codeInProduct('group-manage:view') && (
-                      <Menu.Item key="/tag/object" icon={<TagOutlined />}>
+                      <Menu.Item key="/bazaar/tag-manage" icon={<TagOutlined />}>
                         标签维护
                       </Menu.Item>
                     )

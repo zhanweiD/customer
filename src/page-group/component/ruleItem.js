@@ -5,7 +5,7 @@ import {useState} from 'react'
 import {Select, Input, Form, Tooltip, DatePicker} from 'antd'
 import {IconDel, IconTreeAdd} from '../../icon-comp'
 import {functionList, condition, entityFunctionList, textCondition} from './util'
-import io from '../rule-create/io'
+import io from '../page-rule-create/io'
 import {getNamePattern} from '../../common/util'
 
 const {Option} = Select

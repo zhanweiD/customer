@@ -4,13 +4,13 @@
 import {Route, Switch, Redirect} from 'react-router-dom'
 import {codeInProduct} from '../common/util'
 
-import Channel from './channel'
-import Clinch from './clinch'
-import Consultant from './consultant'
-import Group from './group'
-import SupplyDemand from './supply-demand'
-import Satisfaction from './satisfaction'
-import Purchase from './purchase'
+import Channel from './page-channel'
+import Clinch from './page-clinch'
+import Consultant from './page-consultant'
+import Group from './page-group'
+import SupplyDemand from './page-supply-demand'
+import Satisfaction from './page-satisfaction'
+import Purchase from './page-purchase'
 
 const prePath = '/analyze'
 

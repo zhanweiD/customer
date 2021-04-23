@@ -1,6 +1,6 @@
 import {Route, Switch} from 'react-router-dom'
-import SceneList from './scene'
-import SceneDetail from './scene-detail'
+import SceneList from './page-scene-manage'
+import SceneDetail from './page-scene-detail'
 
 const prePath = '/scene'
 
