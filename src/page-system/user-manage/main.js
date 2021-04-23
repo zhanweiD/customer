@@ -163,6 +163,7 @@ class GroupConfig extends Component {
       columns: this.columns,
       initParams: {orgId: searchKeys},
       tableLoading,
+      scroll: {x: 960},
       buttons: [
         <div className="dfjs">
           <div>
@@ -207,7 +208,7 @@ class GroupConfig extends Component {
     return (
       <div className="system-user oa">
         <div className="content-header">用户管理</div> 
-        <div className="d-flex user-manage mt72">
+        <div className="d-flex user-manage">
           <Tree store={store} />
           <ListContent {...listConfig} />
         </div>

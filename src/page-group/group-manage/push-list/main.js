@@ -135,6 +135,7 @@ export default class PushList extends Component {
       tableLoading,
       store,
       searchParams: search(store),
+      scroll: {x: 960},
       buttons: [
         <Authority
           authCode="group-manage:add-push"

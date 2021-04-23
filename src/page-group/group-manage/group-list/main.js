@@ -205,6 +205,7 @@ export default class GroupList extends Component {
       columns: this.columns,
       searchParams: search(store),
       beforeSearch: this.beforeSearch,
+      scroll: {x: 960},
       buttons: [
         <Authority
           authCode="group-manage:add-group"

@@ -136,7 +136,7 @@ export default class Frame extends Component {
     return (
       <ConfigProvider locale={zhCN} componentSize="small">
         <Layout style={{minHeight: '100vh'}}>
-          <Header className="site-layout-background w100" style={{padding: 0, position: 'fixed', zIndex: 10}}>
+          <Header className="site-layout-background w100" style={{padding: 0, position: 'fixed', zIndex: 100}}>
             <div className="frame_header">
               <div className="left">
                 <img src={defaultLightLogo} alt="logo" width="36" height="28" />
@@ -152,80 +152,88 @@ export default class Frame extends Component {
             </div>
           </Header>
           <Layout>
-            {/* <Affix> */}
-            <Sider 
-              style={{minHeight: 'calc(100vh - 48px)', overflow: 'auto', position: 'fixed', left: 0, top: '48px'}} 
-              collapsible 
-              collapsed={collapsed} 
-              onCollapse={this.onCollapse}
-            >
-              {/* <div className="logo" /> */}
-              <Menu 
-                theme="dark" 
-                defaultOpenKeys={[`/${menuName}`]} 
-                defaultSelectedKeys={[pathName]} 
-                openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
-                onOpenChange={this.onOpenChange}
-                mode="inline"
-                onClick={this.changeMenu}
+            <Affix>
+              <Sider 
+                className="innerbox"
+                style={{
+                  minHeight: 'calc(100vh - 96px)', 
+                  overflow: 'auto', 
+                  left: 0, 
+                  top: '48px',
+                  height: 'calc(100vh - 96px)',
+                }} 
+                collapsible 
+                collapsed={collapsed} 
+                onCollapse={this.onCollapse}
               >
-                {/* {
+                {/* <div className="logo" /> */}
+                <Menu 
+                  theme="dark" 
+                  defaultOpenKeys={[`/${menuName}`]} 
+                  defaultSelectedKeys={[pathName]} 
+                  openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
+                  onOpenChange={this.onOpenChange}
+                  mode="inline"
+                  onClick={this.changeMenu}
+                  // style={{height: 'calc(100vh)'}}
+                >
+                  {/* {
                   codeInProduct('tag-manage:view') && (
                     <Menu.Item key="/tag/manage" icon={<TagsOutlined />}>
                       标签管理
                     </Menu.Item>
                   )
                 } */}
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/overview/customer" icon={<HomeOutlined />}>
-                      客户中心
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/tag/market" icon={<TagsOutlined />}>
-                      标签集市
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/tag/object" icon={<TagOutlined />}>
-                      标签维护
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('tag-model:view') && (
-                    <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
-                      标签同步
-                    </Menu.Item>
-                  )
-                }
-                {/* {
+                  {
+                    codeInProduct('group-manage:view') && (
+                      <Menu.Item key="/overview/customer" icon={<HomeOutlined />}>
+                        客户中心
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('group-manage:view') && (
+                      <Menu.Item key="/tag/market" icon={<TagsOutlined />}>
+                        标签集市
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('group-manage:view') && (
+                      <Menu.Item key="/tag/object" icon={<TagOutlined />}>
+                        标签维护
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('tag-model:view') && (
+                      <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
+                        标签同步
+                      </Menu.Item>
+                    )
+                  }
+                  {/* {
                   codeInProduct('tag-app:view') && (
                     <Menu.Item key="/tag/app" icon={<DeploymentUnitOutlined />}>
                       标签应用
                     </Menu.Item>
                   )
                 } */}
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
-                      客群管理
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('portrait:view') && (
-                    <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
-                      客户画像
-                    </Menu.Item>
-                  )
-                }
-                {/* {
+                  {
+                    codeInProduct('group-manage:view') && (
+                      <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                        客群管理
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('portrait:view') && (
+                      <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
+                        客户画像
+                      </Menu.Item>
+                    )
+                  }
+                  {/* {
                   codeInProduct('group-manage:view') && (
                     <Menu.Item key="/tag/market" icon={<TeamOutlined />}>
                       标签集市
@@ -239,89 +247,89 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 } */}
-                {
-                  showAnalyze && (
-                    <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
-                      {
-                        codeInProduct('analyze:chinch:view') && (
-                          <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:consultant:view') && (
-                          <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:supply-demand:view') && (
-                          <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:purchase:view') && (
-                          <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:channel:view') && (
-                          <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:satisfaction:view') && (
-                          <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
-                        )
-                      }
-                      {/* {
+                  {
+                    showAnalyze && (
+                      <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
+                        {
+                          codeInProduct('analyze:chinch:view') && (
+                            <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('analyze:consultant:view') && (
+                            <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('analyze:supply-demand:view') && (
+                            <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('analyze:purchase:view') && (
+                            <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('analyze:channel:view') && (
+                            <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('analyze:satisfaction:view') && (
+                            <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
+                          )
+                        }
+                        {/* {
                         codeInProduct('analyze:group-portrait:view') && (
                           <Menu.Item key="/analyze/group">群体画像</Menu.Item>
                         )
                       } */}
-                    </SubMenu>
-                  )
-                }
-                {/* {
+                      </SubMenu>
+                    )
+                  }
+                  {/* {
                   codeInProduct('scene:view') && (
                     <Menu.Item key="/scene/list" icon={<AppstoreOutlined />}>
                       场景管理
                     </Menu.Item>
                   )
                 } */}
-                {
-                  showSystem && (
-                    <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
-                      {
-                        codeInProduct('system:user-manage:view') && (
-                          <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:role-manage:view') && (
-                          <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:system-log:view') && (
-                          <Menu.Item key="/system/system-log">系统日志</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:portrait:view') && (
-                          <Menu.Item key="/system/portrait">画像配置</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:portrait:view') && (
-                          <Menu.Item key="/system/business">业务配置</Menu.Item>
-                        )
-                      }
-                    </SubMenu>
-                  )
-                }
-              </Menu>
-            </Sider>
-            {/* </Affix> */}
-            <Content style={{overflow: 'initial', marginLeft: '200px', marginTop: '48px'}}>
+                  {
+                    showSystem && (
+                      <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
+                        {
+                          codeInProduct('system:user-manage:view') && (
+                            <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('system:role-manage:view') && (
+                            <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('system:system-log:view') && (
+                            <Menu.Item key="/system/system-log">系统日志</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('system:portrait:view') && (
+                            <Menu.Item key="/system/portrait">画像配置</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('system:portrait:view') && (
+                            <Menu.Item key="/system/business">业务配置</Menu.Item>
+                          )
+                        }
+                      </SubMenu>
+                    )
+                  }
+                </Menu>
+              </Sider>
+            </Affix>
+            <Content style={{overflow: 'initial', marginTop: '48px'}}>
               {children}
             </Content>
           </Layout>

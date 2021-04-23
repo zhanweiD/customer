@@ -113,6 +113,7 @@ class GroupConfig extends Component {
       rowSelection: rowSelection || null,
       columns: this.columns,
       tableLoading,
+      scroll: {x: 960},
       buttons: [
         <div className="dfjs">
           <div>

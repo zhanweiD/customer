@@ -55,7 +55,7 @@ export default class TagCateTree extends Component {
     const treeBoxConfig = {
       titleHeight: 34,
       title: <Action store={this.store} />,
-      defaultWidth: 250,
+      defaultWidth: '100%',
       style: {minWidth: '250px'},
     }
 

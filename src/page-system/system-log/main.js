@@ -57,6 +57,7 @@ export default class PushList extends Component {
       store,
       initParams: {...store.reqData},
       searchParams: {},
+      scroll: {x: 960},
       buttons: [
         <div className="dfjf mr24">
           <Input 

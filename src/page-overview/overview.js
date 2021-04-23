@@ -119,7 +119,6 @@ const Overview = () => {
     //   if (newOrg) newOrg = `${newOrg},${v[i]}`
     //   else newOrg = v[i]
     // }
-    console.log(newOrg)
     setOrg(newOrg)
   }
 

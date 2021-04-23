@@ -250,11 +250,30 @@ export function mapOption(mapType, data) {
     // text: ['高', '低'], // 文本，默认为数值文本
     // calculable: false,
     },
+    geo: {
+      map: mapType,
+      zoom: 1.2,
+      regions: [
+        {
+          name: '南海诸岛',
+          itemStyle: {
+            // 隐藏地图
+            normal: {
+              opacity: 0, // 为 0 时不绘制该图形
+            },
+          },
+          label: {
+            show: false, // 隐藏文字
+          },
+        },
+      ],
+    },
     series: [
       {
         // name: '客户人数',
         type: 'map',
         mapType,
+        geoIndex: 0,
         top: 128,
         left: 56,
         roam: false,
@@ -309,7 +328,7 @@ export function dbarOption(data) {
     series: [
       {
         type: 'bar',
-        barWidth: '40%',
+        barWidth: 24,
         color: color[1],
         label: {
           show: true,
