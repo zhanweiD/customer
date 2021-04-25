@@ -13,7 +13,6 @@ import Group from './page-group'
 import System from './page-system'
 import Login from './page-login'
 import Analyze from './page-analyze'
-// import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
 import Overview from './page-overview'
@@ -49,9 +48,6 @@ function Entry() {
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
-          {/* 标签应用 */}
-          {/* <Route path="/tag" component={TagApp} /> */}
-          {/* <Redirect to="/tag" /> */}
         </Frame>
 
       </Switch>
