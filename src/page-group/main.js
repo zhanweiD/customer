@@ -2,11 +2,8 @@ import {Route, Switch, Redirect} from 'react-router-dom'
 
 import GroupManage from './page-group-manage'
 import GroupDetail from './page-group-detail'
-import UnitList from './page-unit-list'
 import RuleCreate from './page-rule-create'
 import RuleDetail from './page-rule-detail'
-
-import {codeInProduct} from '../common/util'
 
 const prePath = '/group'
 
