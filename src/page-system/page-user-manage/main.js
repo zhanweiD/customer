@@ -11,6 +11,7 @@ import {
   ListContent,
   ModalForm,
   Authority,
+  authView,
 } from '../../component'
 
 import store from './store'
@@ -19,7 +20,7 @@ import UserDetail from './user-detail'
 import DataDrawer from './data-drawer'
 
 @observer
-class GroupConfig extends Component {
+class UserManage extends Component {
   constructor(props) {
     super(props)
     store.getTreeList()
@@ -82,9 +83,6 @@ class GroupConfig extends Component {
   }
 
   selectContent = () => {
-    // console.log(store.nowRecord)
-    // if (!store.nowRecord.roles) return null
-    // const roleIds = store.nowRecord.roles.map(item => item.id)
     return [{
       label: '角色',
       key: 'roles',
@@ -222,4 +220,4 @@ class GroupConfig extends Component {
   }
 }
 
-export default GroupConfig
+export default authView(UserManage)

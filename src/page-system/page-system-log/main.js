@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {DatePicker, Input} from 'antd'
 import {SearchOutlined} from '@ant-design/icons'
 import {
-  ListContent,
+  ListContent, authView,
 } from '../../component'
 // import search from './search'
 import {Time, debounce} from '../../common/util'
@@ -19,7 +19,7 @@ const {RangePicker} = DatePicker
 // import {errorTip} from '../../common/util'
 
 @observer
-export default class PushList extends Component {
+class SystemLog extends Component {
   columns = [{
     key: 'userName',
     title: '昵称',
@@ -98,3 +98,4 @@ export default class PushList extends Component {
     )
   }
 }
+export default authView(SystemLog)

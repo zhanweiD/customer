@@ -5,24 +5,24 @@ import {Component} from 'react'
 import {action} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {ConfigProvider, Spin} from 'antd'
-import {NoData} from '../../component'
+import {NoData, authView} from '../../component'
 import Tree from './tree'
 import ObjectDetail from './detail'
  
 import store from './store'
  
- @observer
-export default class ObjectModel extends Component {
-   constructor(props) {
-     super(props)
-     console.log(props)
+@observer
+class TagMarketDetail extends Component {
+  constructor(props) {
+    super(props)
+    console.log(props)
  
-     const {match: {params: {id}}} = props
+    const {match: {params: {id}}} = props
  
-     store.selectedKey = +id
-     store.getObjDetailNew(id)
-     store.getTreeData()
-   }
+    store.selectedKey = +id
+    store.getObjDetailNew(id)
+    store.getTreeData()
+  }
    // @action changeTab = code => {
    //   store.typeCode = code
    //   store.objId = undefined
@@ -58,4 +58,5 @@ export default class ObjectModel extends Component {
        </ConfigProvider>
      )
    }
- }
+}
+export default authView(TagMarketDetail)

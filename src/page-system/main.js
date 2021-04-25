@@ -2,11 +2,10 @@
  * @description  系统配置
  */
 import {Route, Switch} from 'react-router-dom'
-import {codeInProduct} from '../common/util'
 
 import UserManage from './page-user-manage'
 import RoleManage from './page-role-manage'
-import Portrait from './page-user-portrait'
+import Portrait from './page-portrait-config'
 import SystemLog from './page-system-log'
 import Business from './page-business-config'
 

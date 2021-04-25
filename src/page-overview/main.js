@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Select, Cascader, Spin} from 'antd'
 
-import {OverviewCardWrap} from '../component'
+import {OverviewCardWrap, authView} from '../component'
 import ConversionChart from './conversion-chart'
 import DistributionChart from './distribution-chart'
 import CustomerChart from './customer-chart'
@@ -202,4 +202,4 @@ const Overview = () => {
     </div>
   )
 }
-export default Overview
+export default authView(Overview)

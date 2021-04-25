@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {action} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {Spin, Skeleton, Modal} from 'antd'
+
+import {authView} from '../../component'
 import ObjectCard from './tag-object-card'
 import Store from './store'
 import DrawerObject from './tree-drawer-object'
@@ -9,7 +11,7 @@ import DrawerObject from './tree-drawer-object'
 const {confirm} = Modal
 
 @observer
-export default class TagObject extends Component {
+class TagMarket extends Component {
   constructor(props) {
     super(props)
     this.store = new Store()
@@ -69,3 +71,4 @@ export default class TagObject extends Component {
     )
   }
 }
+export default authView(TagMarket)

@@ -15,7 +15,7 @@ export default ({data, ondelete}) => {
   )
 
   const gotoManage = () => {
-    window.open(`#/market/tag-market/${data.id}`, '_blank')
+    window.open(`#/tag-market/${data.id}`, '_blank')
   }
 
   return (

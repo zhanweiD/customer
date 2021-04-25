@@ -6,7 +6,7 @@ import {observer} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Checkbox, Button} from 'antd'
 
-import {NoData, OverviewCardWrap} from '../../component'
+import {NoData, authView} from '../../component'
 import Chart from './chart'
 import store from './store'
 import './main.styl'
@@ -14,7 +14,7 @@ import './main.styl'
 const {Option} = Select
 
 @observer
-export default class Group extends Component {
+class Group extends Component {
   componentDidMount() {
     store.getGroup()
   }
@@ -88,3 +88,4 @@ export default class Group extends Component {
     )
   }
 }
+export default authView(Group)

@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData} from '../../component'
+import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -26,7 +26,7 @@ const list3 = ['报备客户', '到访客户', '认筹客户', '认购客户', '
 const list4 = ['非常满意', '满意', '一般', '不满意', '非常不满意']
 
 @observer
-export default class Satisfaction extends Component {
+class Satisfaction extends Component {
   constructor(props) {
     super(props)
 
@@ -38,7 +38,7 @@ export default class Satisfaction extends Component {
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -269,3 +269,4 @@ export default class Satisfaction extends Component {
     )
   }
 }
+export default authView(Satisfaction)

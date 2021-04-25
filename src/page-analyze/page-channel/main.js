@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -16,7 +16,7 @@ const dateFormat = 'YYYY-MM-DD'
 const {Option} = Select
 
 @observer
-export default class Channel extends Component {
+class Channel extends Component {
   componentDidMount() {
     store.getAllChannel()
   }
@@ -27,7 +27,7 @@ export default class Channel extends Component {
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -246,3 +246,4 @@ export default class Channel extends Component {
     )
   }
 }
+export default authView(Channel)

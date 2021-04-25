@@ -8,13 +8,14 @@ import Format from './format'
 import SceneStore from './scene-store'
 import DomainStore from './domain-store'
 import FormatStore from './format-store'
+import {authView} from '../../component'
 
 const sceneStore = new SceneStore()
 const domainStore = new DomainStore()
 const formatStore = new FormatStore()
 const {TabPane} = Tabs
 
-export default () => {
+const Business = () => {
   const tabsChange = key => {
     if (key === '1') {
       sceneStore.getDomainFormatList()
@@ -52,3 +53,4 @@ export default () => {
     </div>
   )
 }
+export default authView(Business)

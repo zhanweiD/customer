@@ -9,6 +9,7 @@ import {
   OmitTooltip,
   ListContent,
   Authority,
+  authView,
 } from '../../component'
 import {debounce} from '../../common/util'
 
@@ -157,4 +158,4 @@ class GroupConfig extends Component {
   }
 }
 
-export default GroupConfig
+export default authView(GroupConfig)

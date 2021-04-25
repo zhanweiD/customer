@@ -3,6 +3,7 @@ import {observer, Provider} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {Steps, message, Modal} from 'antd'
 
+import {authView} from '../../component'
 import store from './store'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -12,7 +13,7 @@ import './main.styl'
 const {Step} = Steps
 let headerTitle = ''
 @observer
-export default class RuleCreate extends Component {
+class RuleCreate extends Component {
   constructor(props) {
     super(props)
 
@@ -80,11 +81,6 @@ export default class RuleCreate extends Component {
   render() {
     const {
       current, 
-      outputTags, 
-      submitLoading, 
-      detail, 
-      type,
-      entityList = [],
       objId,
       groupId,
       isCopy,
@@ -127,3 +123,4 @@ export default class RuleCreate extends Component {
     )
   }
 }
+export default authView(RuleCreate)

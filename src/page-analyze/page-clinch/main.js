@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -17,14 +17,14 @@ const dateFormat = 'YYYY-MM-DD'
 const {Option} = Select
 
 @observer
-export default class Clinch extends Component {
+class Clinch extends Component {
   columns = [{
     key: 'customerName',
     title: '客户姓名',
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -208,3 +208,4 @@ export default class Clinch extends Component {
     )
   }
 }
+export default authView(Clinch)

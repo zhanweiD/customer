@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent} from '../../component'
+import {authView, ListContent} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -17,7 +17,7 @@ const {Option} = Select
 const dateFormat = 'YYYY-MM-DD'
 
 @observer
-export default class SupplyDemand extends Component {
+class SupplyDemand extends Component {
   columns = [{
     key: 'cstName',
     title: '客户姓名',
@@ -25,7 +25,7 @@ export default class SupplyDemand extends Component {
     fixed: 'left',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -39,69 +39,7 @@ export default class SupplyDemand extends Component {
     key: 'intentProjectFormats',
     title: '意向业态',
     dataIndex: 'intentProjectFormats',
-  }, 
-  // {
-  //   key: 'intentRoomPeripheral',
-  //   title: '意向周边配套',
-  //   dataIndex: 'intentRoomPeripheral',
-  // }, 
-  // {
-  //   key: 'intentRoomNum',
-  //   title: '意向房间数',
-  //   dataIndex: 'intentRoomNum',
-  // }, 
-  // {
-  //   key: 'intentRoomMaxArea',
-  //   title: '意向房间面积最大值',
-  //   dataIndex: 'intentRoomMaxArea',
-  // }, 
-  // {
-  //   key: 'intentRoomMinArea',
-  //   title: '意向房间面积最小值',
-  //   dataIndex: 'intentRoomMinArea',
-  // }, 
-  // {
-  //   key: 'intentRoomMaxPrice',
-  //   title: '意向房间单价最大值',
-  //   dataIndex: 'intentRoomMaxPrice',
-  // }, 
-  // {
-  //   key: 'intentRoomMinPrice',
-  //   title: '意向房间单价最小值',
-  //   dataIndex: 'intentRoomMinPrice',
-  // }, 
-  // {
-  //   key: 'intentRoomMaxTotal',
-  //   title: '意向房间总价最高',
-  //   dataIndex: 'intentRoomMaxTotal',
-  // }, 
-  // {
-  //   key: 'intentRoomMinTotal',
-  //   title: '意向房间总价最低',
-  //   dataIndex: 'intentRoomMinTotal',
-  // }, 
-  // {
-  //   key: 'channelType',
-  //   title: '购房关注因素',
-  //   dataIndex: 'channelType',
-  // }, {
-  //   key: 'channelName',
-  //   title: '意向户型',
-  //   dataIndex: 'channelName',
-  // }, {
-  //   key: 'visitTime',
-  //   title: '意向面积',
-  //   dataIndex: 'visitTime',
-  // }, {
-  //   key: 'reportTime',
-  //   title: '可接受总价',
-  //   dataIndex: 'reportTime',
-  // }, {
-  //   key: 'customerType',
-  //   title: '可接受单价',
-  //   dataIndex: 'customerType',
-  // }
-  ]
+  }]
   // 选择区域
   selectPro = (v, item) => {
     // 清除条件
@@ -226,3 +164,4 @@ export default class SupplyDemand extends Component {
     )
   }
 }
+export default authView(SupplyDemand)

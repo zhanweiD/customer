@@ -11,8 +11,8 @@ class Store {
   @observable pathName = '' // 根据url选中菜单
   @observable visible = false // 修改密码
   @observable getPerLoad = false // 权限是否加载完毕
-  @observable userInfo = {} // 权限是否加载完毕
-  @observable openKeys = [] // 权限是否加载完毕
+  @observable userInfo = {} // 用户信息
+  @observable openKeys = [] // 打开菜单
 
   @action async getParams() {
     try {

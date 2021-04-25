@@ -7,13 +7,13 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
 
 @observer
-export default class Consultant extends Component {
+class Consultant extends Component {
   constructor(props) {
     super(props)
     store.getProject()
@@ -24,7 +24,7 @@ export default class Consultant extends Component {
     dataIndex: 'userName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}/1`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}/1`}>{text}</Link>
       }
       return text
     },
@@ -154,3 +154,4 @@ export default class Consultant extends Component {
     )
   }
 }
+export default authView(Consultant)

@@ -1,3 +1,3 @@
-import ModalDetail from './modal-detail'
+import ModalDetail from './main'
 
 export default ModalDetail

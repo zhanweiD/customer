@@ -1,23 +1,17 @@
 import React, {useEffect} from 'react'
 import {Tabs, Spin} from 'antd'
 import {Provider, inject} from 'mobx-react'
-import {useObserver, useLocalStore} from 'mobx-react-lite'
+
+import {authView} from '../../component'
 import ManageDetail from './manage-detail'
 import TabOne from './tab-one'
 import TabTwo from './tab-two'
 import TabThree from './tab-three'
-import {TabRoute} from '../../component'
 import Store from './store'
 
 const groupStore = new Store()
 
 const {TabPane} = Tabs
-
-const tabConfig = {
-  tabs: [{name: '标签选择', value: 1}],
-  changeUrl: false,
-}
-
 
 const Main = ({match}) => {
   groupStore.id = match.params.id
@@ -45,4 +39,4 @@ const Main = ({match}) => {
   )
 }
 
-export default Main
+export default authView(Main)

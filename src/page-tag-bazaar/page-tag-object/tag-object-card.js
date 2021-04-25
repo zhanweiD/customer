@@ -33,7 +33,7 @@ export default inject('store')(
     )
 
     const gotoManage = () => {
-      window.open(`#/bazaar/tag-manage/${data.id}`, '_blank')
+      window.open(`#/tag-manage/${data.id}`, '_blank')
     }
 
     return useObserver(() => (

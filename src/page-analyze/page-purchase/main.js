@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData} from '../../component'
+import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -36,7 +36,7 @@ function listToPro(data) {
 }
 
 @observer
-export default class Purchase extends Component {
+class Purchase extends Component {
   // constructor(props) {
   //   super(props)
   //   store.defaultProject = listToPro(window.__keeper.projectTree)
@@ -55,7 +55,7 @@ export default class Purchase extends Component {
     fixed: 'left',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -88,89 +88,13 @@ export default class Purchase extends Component {
     key: 'roomTotalPriceRange',
     title: '房间总价',
     dataIndex: 'roomTotalPriceRange',
-  }, 
-  // {
-  //   key: 'customerSourceRegion',
-  //   title: '地区来源',
-  //   dataIndex: 'customerSourceRegion',
-  // }, 
-  // {
-  //   key: 'customerIndustry',
-  //   title: '行业',
-  //   dataIndex: 'customerIndustry',
-  // }, 
-  // {
-  //   key: 'customerProfessional',
-  //   title: '职业',
-  //   dataIndex: 'customerProfessional',
-  // }, 
-  // {
-  //   key: 'customerHouseFactor',
-  //   title: '购房关注因子',
-  //   dataIndex: 'customerHouseFactor',
-  // }, 
-  // {
-  //   key: 'customerLiveCity',
-  //   title: '居住城市',
-  //   dataIndex: 'customerLiveCity',
-  // }, 
-  // {
-  //   key: 'customerLiveProvinces',
-  //   title: '居住省份',
-  //   dataIndex: 'customerLiveProvinces',
-  // }, 
-  // {
-  //   key: 'customerWorkCity',
-  //   title: '工作城市',
-  //   dataIndex: 'customerWorkCity',
-  // }, 
-  // {
-  //   key: 'customerWorkProvinces',
-  //   title: '工作省份',
-  //   dataIndex: 'customerWorkProvinces',
-  // }, 
-  // {
-  //   key: 'roomPeripheralSupport',
-  //   title: '周边配套',
-  //   dataIndex: 'roomPeripheralSupport',
-  // }, 
-  // {
-  //   key: 'customerChildNums',
-  //   title: '子女人数',
-  //   dataIndex: 'customerChildNums',
-  // }, 
-  // {
-  //   key: 'customerChildAgeGroup',
-  //   title: '子女年龄段',
-  //   dataIndex: 'customerChildAgeGroup',
-  // }, 
-  // {
-  //   key: 'customerFamilyStructure',
-  //   title: '家庭结构',
-  //   dataIndex: 'customerFamilyStructure',
-  // }, 
-  // {
-  //   key: 'customerMarriageStatus',
-  //   title: '婚姻状态',
-  //   dataIndex: 'customerMarriageStatus',
-  // }, 
-  // {
-  //   key: 'customerHouseholdIncome',
-  //   title: '家庭年收入',
-  //   dataIndex: 'customerHouseholdIncome',
-  // }
-  ]
+  }]
 
   filter = (inputValue, path) => {
     return path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1)
   }
 
   selectPro = (v, item) => {
-    // if (store.reqData.format) {
-    //   store.defaultNames = v
-    // } else {
-    //   store.defaultNames = []
-    // }
     store.defaultNames = v
     if (!v.length) {
       store.reqData = {
@@ -317,3 +241,4 @@ export default class Purchase extends Component {
     )
   }
 }
+export default authView(Purchase)

@@ -7,13 +7,13 @@ import {observer} from 'mobx-react'
 import {Popconfirm, Button} from 'antd'
 
 import {
-  ListContent, OmitTooltip, Authority,
+  ListContent, OmitTooltip, Authority, authView,
 } from '../../component'
 import AddDrawer from './add-drawer'
 import store from './store'
 
 @observer
-export default class Portrait extends Component {
+class PortraitConfig extends Component {
   columns = [{
     key: 'type',
     title: '画像类型',
@@ -45,35 +45,6 @@ export default class Portrait extends Component {
       return t ? <OmitTooltip maxWidth={300} text={t} /> : '-'
     },
   }, 
-  // {
-  //   key: 'basicStr',
-  //   title: '基础模块',
-  //   dataIndex: 'basicStr',
-  //   ellipsis: true,
-  //   width: 200,
-  //   render: t => {
-  //     if (t) {
-  //       t = t.map((item, index) => {
-  //         return index > 0 ? `、${item}` : item
-  //       })
-  //     }
-  //     return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
-  //   },
-  // }, {
-  //   key: 'portraitStr',
-  //   title: '画像模块',
-  //   dataIndex: 'portraitStr',
-  //   ellipsis: true,
-  //   width: 200,
-  //   render: t => {
-  //     if (t) {
-  //       t = t.map((item, index) => {
-  //         return index > 0 ? `、${item}` : item
-  //       })
-  //     }
-  //     return t ? <OmitTooltip maxWidth={400} text={t} /> : '-'
-  //   },
-  // }, 
   {
     key: 'action',
     title: '操作',
@@ -151,3 +122,4 @@ export default class Portrait extends Component {
     )
   }
 }
+export default authView(PortraitConfig)
