@@ -1,7 +1,7 @@
 import {
   action, runInAction, observable,
 } from 'mobx'
-import {errorTip, listToTree, userLog} from '../../common/util'
+import {errorTip, listToTree, userLog} from '../common/util'
 import io from './io'
 
 class Store {

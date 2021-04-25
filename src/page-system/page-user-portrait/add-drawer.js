@@ -5,7 +5,6 @@ import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {Spin, Drawer, Button, Form, Select, Space, Tree} from 'antd'
-import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons'
 import {errorTip} from '../../common/util'
 import {Loading} from '../../component'
 
@@ -90,7 +89,7 @@ class AddDrawer extends Component {
       this.store.resetValue()
 
       
-      this.formRef.current.resetFields(['search', 'name', 'identification', 'basic', 'portrait', 'eventTableInfo'])
+      this.formRef.current.resetFields(['search', 'name', 'identification', 'basic', 'portrait'])
       this.store.getTagList({id: option.id})
       this.store.getTagTree({objId: option.id})
 
@@ -108,6 +107,13 @@ class AddDrawer extends Component {
     }
     return <TreeNode disabled={item.isCate} className="childrens" title={item.name} key={item.aid} {...item} />
   })
+
+  @action selectTag = (rule, value, callback) => {
+    const {portrait} = this.store
+    const isSelect = portrait.find(item => item.tagIdList.length > 0)
+    if (isSelect) return callback()
+    return callback('请选择标签')
+  }
 
   render() {
     const {
@@ -182,21 +188,6 @@ class AddDrawer extends Component {
         placeholder: '请选择个体标识',
         option: this.store.tagList,
       }, 
-      // {
-      //   name: 'basic',
-      //   label: '基础模块',
-      //   placeholder: '请选择基础模块',
-      //   option: this.store.catList,
-      //   mode: 'multiple',
-      //   allowClear: true,
-      // }, {
-      //   name: 'portrait',
-      //   label: '画像模块',
-      //   placeholder: '请选择画像模块',
-      //   option: this.store.catList,
-      //   mode: 'multiple',
-      //   allowClear: true,
-      // },
     ]
 
     return (
@@ -245,7 +236,7 @@ class AddDrawer extends Component {
                 key="basic" 
                 name="basic"
                 label="客户档案"
-                rules={[{required: true, message: '请选择标签'}]} 
+                rules={[{validator: this.selectTag}]} 
               >
                 <Tree
                   checkable
@@ -262,7 +253,7 @@ class AddDrawer extends Component {
                 key="portrait" 
                 name="portrait"
                 label="标签描摹"
-                rules={[{required: true, message: '请选择标签'}]} 
+                rules={[{validator: this.selectTag}]}
               >
                 <Tree
                   checkable

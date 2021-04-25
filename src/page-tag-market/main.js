@@ -12,10 +12,8 @@ const prePath = '/market'
 export default () => {
   return (
     <Switch>
-      
       <Route exact path={`${prePath}/tag-market`} component={TagMarket} />
       <Route exact path={`${prePath}/tag-market/:id`} component={TagMarketDetail} />
- 
     </Switch>
   )
 }

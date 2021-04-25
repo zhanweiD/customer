@@ -1,4 +1,4 @@
-import {syncStatus} from '../util'
+import {syncStatus} from './util'
 
 const serach = ({
   objList,

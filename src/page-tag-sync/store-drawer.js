@@ -1,7 +1,7 @@
 import {
   action, runInAction, observable,
 } from 'mobx'
-import {errorTip, changeToOptions, listToTree, userLog} from '../../common/util'
+import {errorTip, changeToOptions, listToTree, userLog} from '../common/util'
 import io from './io'
 
 class Store {
@@ -31,12 +31,12 @@ class Store {
 
   // 上一步
   @action.bound lastStep() {
-    this.currentStep = this.currentStep - 1
+    this.currentStep -= 1
   }
 
   // 下一步
   @action.bound nextStep() {
-    this.currentStep = this.currentStep + 1
+    this.currentStep += 1
   }
 
   @observable objList = [] // 下拉对象数据

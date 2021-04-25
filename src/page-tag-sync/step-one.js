@@ -7,8 +7,8 @@ import {action} from 'mobx'
 import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import {Input, Select, Button, Switch} from 'antd'
-import {ModalStotageDetail} from '../../component'
-import {debounce, getNamePattern, getEnNamePattern} from '../../common/util'
+import {ModalStotageDetail} from '../component'
+import {debounce, getNamePattern, getEnNamePattern} from '../common/util'
 
 const FormItem = Form.Item
 const Option = {Select}

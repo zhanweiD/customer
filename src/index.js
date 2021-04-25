@@ -54,7 +54,6 @@ function Entry() {
           <Route path="/market" component={TagMarket} />
           {/* 标签维护 */}
           <Route path="/bazaar" component={TagObject} />
-
           {/* <Redirect to="/tag" /> */}
         </Frame>
 

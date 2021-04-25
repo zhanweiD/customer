@@ -15,32 +15,11 @@ const prePath = '/system'
 export default () => {
   return (
     <Switch>
-      {
-        codeInProduct('system:user-manage:view') && (
-          <Route exact path={`${prePath}/user-manage`} component={UserManage} />
-        )
-      }
-      {
-        codeInProduct('system:role-manage:view') && (
-          <Route exact path={`${prePath}/role-manage`} component={RoleManage} />
-        )
-      }
-      {
-        codeInProduct('system:portrait:view') && (
-          <Route exact path={`${prePath}/portrait`} component={Portrait} />
-        )
-      }
-      {
-        codeInProduct('system:system-log:view') && (
-          <Route exact path={`${prePath}/system-log`} component={SystemLog} />
-        )
-      }
-      {
-        codeInProduct('system:system-log:view') && (
-          <Route exact path={`${prePath}/business`} component={Business} />
-          // <Route path="/business/config" component={Business} />
-        )
-      }
+      <Route exact path={`${prePath}/user-manage`} component={UserManage} />
+      <Route exact path={`${prePath}/role-manage`} component={RoleManage} />
+      <Route exact path={`${prePath}/portrait`} component={Portrait} />
+      <Route exact path={`${prePath}/system-log`} component={SystemLog} />
+      <Route exact path={`${prePath}/business`} component={Business} />
       {/* <Redirect strict to={`${prePath}/role-manage`} /> */}
     </Switch>
   )

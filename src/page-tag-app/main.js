@@ -14,15 +14,9 @@ const prePath = '/tag'
 export default () => {
   return (
     <Switch>
-      {
-        codeInProduct('tag-app:view') && (
-          <div>
-            <Route exact path={`${prePath}/app`} component={TagApp} />
-            <Route exact path={`${prePath}/app/detail/:id`} component={VisualDetail} />
-            <Route exact path={`${prePath}/app-add/:objId/:id?`} component={VisuallConfig} />
-          </div>
-        )
-      }
+      <Route exact path={`${prePath}/app`} component={TagApp} />
+      <Route exact path={`${prePath}/app/detail/:id`} component={VisualDetail} />
+      <Route exact path={`${prePath}/app-add/:objId/:id?`} component={VisuallConfig} />
     </Switch>
   )
 }

@@ -12,14 +12,8 @@ const prePath = '/bazaar'
 export default () => {
   return (
     <Switch>
-      {
-        codeInProduct('system:system-log:view') && (
-          <Route exact path={`${prePath}/tag-manage`} component={TagObject} />
-        // <Route path="/business/config" component={Business} />
-        )
-      }
+      <Route exact path={`${prePath}/tag-manage`} component={TagObject} />
       <Route exact path={`${prePath}/tag-manage/:id`} component={TagManage} />
-
     </Switch>
   )
 }

@@ -1,8 +1,8 @@
 import {
   action, runInAction, observable,
 } from 'mobx'
-import {successTip, failureTip, errorTip, changeToOptions, userLog} from '../../common/util'
-import {ListContentStore} from '../../component/list-content'
+import {successTip, failureTip, errorTip, changeToOptions, userLog} from '../common/util'
+import {ListContentStore} from '../component/list-content'
 import io from './io'
 
 class Store extends ListContentStore(io.getList) {

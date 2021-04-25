@@ -5,7 +5,7 @@ import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import {Table, Input, Button, Tooltip} from 'antd'
 import {SearchOutlined} from '@ant-design/icons'
-import {getNamePattern} from '../../common/util'
+import {getNamePattern} from '../common/util'
 
 const EditableContext = React.createContext()
 const {Search} = Input
@@ -38,7 +38,7 @@ class EditableCell extends Component {
 
     return (
       <td {...restProps}>
-        {editing && !record.isUsed ? (
+        {editing ? (
           <Form.Item style={{margin: 0}} key={record.id}>
             {form.getFieldDecorator(record.id, {
               rules: [
@@ -64,13 +64,12 @@ class EditableCell extends Component {
             })(<Input size="small" ref={node => (this.input = node)} />)}
           </Form.Item>
         ) : (
-          <span>
+          <span> 
             {
               text.length > 10 
                 ? <Tooltip placement="top" title={text}>{`${text.slice(0, 10)}...`}</Tooltip>
                 : (text)}
           </span>
-          
         )}
       </td>
     )
@@ -124,42 +123,25 @@ export default class SyncTagList extends Component {
     render: (text, record) => {
       return (
         <div>
-          {(() => {
-            if (record.canDelete) {
-              return <a href onClick={() => this.remove(record)}>移除</a>
-            }
-
-            if (record.isUsed) {
-              return <span className="disabled">移除</span>
-            }
-
-            if (record.isMajor) {
-              return <span className="disabled">移除</span>
-            }
-
-            return (
-              <div>
-                {
-                  this.isEditing(record) ? (
-                    <EditableContext.Consumer>
-                      {form => (
-                        <a
-                          onClick={() => this.handleSave(form, record)}
-                          style={{marginRight: 8}}
-                        >
-                          保存
-                        </a>
-                      )}
-                    </EditableContext.Consumer>
-                  ) : <a href disabled={this.state.editKey !== ''} onClick={() => this.edit(record)}>编辑</a>  
-                }
-           
-                {/* <span className="table-action-line" /> */}
-                <a className="ml8" href onClick={() => this.remove(record)}>移除</a>
-              </div>
-            )
-          })()}
-        
+          {
+            this.isEditing(record) ? (
+              <EditableContext.Consumer>
+                {form => (
+                  <a
+                    onClick={() => this.handleSave(form, record)}
+                    style={{marginRight: 8}}
+                  >
+                    保存
+                  </a>
+                )}
+              </EditableContext.Consumer>
+            ) : <a href disabled={this.state.editKey !== ''} onClick={() => this.edit(record)}>编辑</a>  
+          }
+     
+          {/* <span className="table-action-line" /> */}
+          {
+            record.isMajor ? <span className="disabled ml8">移除</span> : <a href onClick={() => this.remove(record)} className="ml8">移除</a>
+          }
         </div>
       )
     }, 
@@ -178,6 +160,7 @@ export default class SyncTagList extends Component {
         editKey: '',
       })
     }
+
     remove(d)
   }
 
@@ -192,6 +175,7 @@ export default class SyncTagList extends Component {
   }
 
   @action.bound edit(data) {
+    this.store.isEdit = true
     this.setState({
       editKey: data.id,
     })
@@ -230,6 +214,7 @@ export default class SyncTagList extends Component {
       this.setState({
         editKey: '',
       })
+      this.store.isEdit = false
     })
   }
 
@@ -298,14 +283,12 @@ export default class SyncTagList extends Component {
             // className="clear-btn"
             disabled={!this.store.tableData.length}
           >
-          全部清空
+            全部清空
           </Button>
         </div>
-
         <EditableContext.Provider value={form}>
           <Table {...listConfig} />
         </EditableContext.Provider>
-
       </div>
     )
   }

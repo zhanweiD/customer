@@ -2,7 +2,7 @@ import {Component} from 'react'
 import {action} from 'mobx'
 import {observer} from 'mobx-react'
 import {Modal, Button, Spin} from 'antd'
-import {ModalDetail} from '../../component'
+import {ModalDetail} from '../component'
 
 @observer
 export default class ModalStotage extends Component {

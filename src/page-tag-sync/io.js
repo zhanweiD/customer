@@ -1,5 +1,5 @@
-import ioContext from '../../common/io-context'
-import {baseSyncApi, get, post} from '../../common/util'
+import ioContext from '../common/io-context'
+import {baseSyncApi, get, post} from '../common/util'
 
 const api = {
   getObjList: post(`${baseSyncApi}/underObjList`), // 下拉对象列表
