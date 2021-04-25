@@ -11,8 +11,8 @@ class Store {
   @observable groupId
 
   @observable current = 0 // 步骤条
-  // @observable createId = 0 // 如何创建群体 1 规则离线 2 规则实时 3 id集合
-  @observable recordObj = {} // 当前编辑群体
+  // @observable createId = 0 // 如何创建客群 1 规则离线 2 规则实时 3 id集合
+  @observable recordObj = {} // 当前编辑客群
   @observable oneForm = {} // 第一步表单
   @observable threeForm = {} // 第三步表单
   @observable submitLoading = false
@@ -24,7 +24,7 @@ class Store {
   @observable objId
   @observable isCopy = false
 
-  // 第二步 设置群体圈选规则
+  // 第二步 设置客群圈选规则
   @observable configTagList = [] // 对象对应已同步的标签列表
   @observable drawerConfigTagList = [] // 对象对应已同步的标签列表
   @observable relList = [] // 对象对应的关系列表
@@ -62,7 +62,7 @@ class Store {
     }
   }
 
-  // 添加群体
+  // 添加客群
   @action async addGroup(params) {
     this.submitLoading = true
     
@@ -81,7 +81,7 @@ class Store {
       })
 
       runInAction(() => {
-        userLog('群体管理/新建群体')
+        userLog('客群管理/新建客群')
         // cb(res)
         this.saveInfo = res
         this.current += 1
@@ -95,7 +95,7 @@ class Store {
     }
   }
 
-  // 编辑群体详情信息
+  // 编辑客群详情信息
   @action async getDetail(id) {
     this.editLoading = true
     try {
@@ -126,7 +126,7 @@ class Store {
     }
   }
 
-  // 编辑群体
+  // 编辑客群
   @action async editGroup(params) {
     this.submitLoading = true
     try {
@@ -145,8 +145,8 @@ class Store {
       })
 
       runInAction(() => {
-        if (this.isCopy) userLog('群体管理/复制群体')
-        else userLog('群体管理/编辑群体')
+        if (this.isCopy) userLog('客群管理/复制客群')
+        else userLog('客群管理/编辑客群')
         // cb(res)
         this.saveInfo = res
         this.current += 1
@@ -167,7 +167,7 @@ class Store {
         ...params,
       })
       if (res.isExist) {
-        callbak('群体名称已存在')
+        callbak('客群名称已存在')
       } else {
         callbak()
       }
@@ -183,7 +183,7 @@ class Store {
         ...params,
       })
       if (res.isExit) {
-        callbak('群体标识已存在')
+        callbak('客群标识已存在')
       } else {
         callbak()
       }

@@ -26,7 +26,7 @@ export default class PushList extends Component {
   }, 
   {
     key: 'groupName',
-    title: '群体名称',
+    title: '客群名称',
     dataIndex: 'groupName',
   }, {
     key: 'tableName',

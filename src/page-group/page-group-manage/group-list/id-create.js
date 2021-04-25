@@ -222,7 +222,7 @@ export default class IdCreate extends Component {
 
             <Item
               name="name"
-              label="群体名称"
+              label="客群名称"
               initialValue={recordObj.name}
               // 去除前后空格
               getValueFromEvent={e => {

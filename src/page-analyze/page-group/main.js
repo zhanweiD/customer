@@ -41,9 +41,9 @@ class Group extends Component {
     return (
       <div className="analyze-group oa">
         <div className="content-header">
-          <span className="mr24">群体画像</span>
+          <span className="mr24">客群画像</span>
           <Select 
-            placeholder="请选择群体"
+            placeholder="请选择客群"
             value={groupId ? `${groupId}` : null} 
             style={{width: '128px'}} 
             onChange={this.changeGroup}

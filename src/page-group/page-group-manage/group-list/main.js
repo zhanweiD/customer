@@ -1,5 +1,5 @@
 /**
- * @description 群体管理
+ * @description 客群管理
  */
 import React, {Component, Fragment} from 'react'
 import {Link} from 'react-router-dom'
@@ -52,7 +52,7 @@ export default class GroupList extends Component {
   columns = [
     {
       key: 'name',
-      title: '群体名称',
+      title: '客群名称',
       dataIndex: 'name',
       render: (text, record) => (
         <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
@@ -66,7 +66,7 @@ export default class GroupList extends Component {
     }, 
     {
       key: 'status',
-      title: '群体状态',
+      title: '客群状态',
       dataIndex: 'status',
       render: v => {
         if (v === 1) {
@@ -125,7 +125,7 @@ export default class GroupList extends Component {
           >
             <Popconfirm
               placement="topRight"
-              title="你确定要删除该群体吗？"
+              title="你确定要删除该客群吗？"
               disabled={record.status === 2}
               onConfirm={() => store.removeGroup(record.id)}
             >
@@ -162,7 +162,7 @@ export default class GroupList extends Component {
     store.pushDrawerVis = true
   }
 
-  // 群体执行
+  // 客群执行
   goPerform = record => {
     const {mode, type, id} = record
     if (type === 1 && mode === 1) {
@@ -170,7 +170,7 @@ export default class GroupList extends Component {
     }
   }
 
-  // 跳转到群体编辑
+  // 跳转到客群编辑
   goGroupEdit = (record, isCopy) => {
     store.isAdd = false
     const {id} = record
@@ -210,14 +210,14 @@ export default class GroupList extends Component {
         <Authority
           authCode="group-manage:add-group"
         >
-          <Button className="mr8" type="primary" onClick={() => this.openModal()}>新建群体</Button>
+          <Button className="mr8" type="primary" onClick={() => this.openModal()}>新建客群</Button>
         </Authority>,
         <Authority
           authCode="group-manage:add-group"
         >
           <Popconfirm
             placement="topRight"
-            title="你确定要删除群体吗？"
+            title="你确定要删除客群吗？"
             disabled={selectedRows.length === 0}
             onConfirm={removeGroupList}
           >

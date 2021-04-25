@@ -17,7 +17,7 @@ class Store extends ListContentStore(io.getList) {
   @observable detail = {} // 推送详情
 
   // step-one
-  @observable groupList = [] // 群体list
+  @observable groupList = [] // 客群list
   @observable sourceList = [] // 目的源list
   @observable tableList = [] // 数据表list
   @observable storageId = null // 目的源id
@@ -151,7 +151,7 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         successTip('新建成功')
         this.getList()
-        userLog('群体管理/新建推送')
+        userLog('客群管理/新建推送')
       })
     } catch (e) {
       errorTip(e.message)
@@ -200,7 +200,7 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         successTip('编辑成功')
         this.getList()
-        userLog('群体管理/编辑推送')
+        userLog('客群管理/编辑推送')
       })
     } catch (e) {
       errorTip(e.message)
@@ -221,7 +221,7 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         successTip('删除成功')
         this.getList()
-        userLog('群体管理/删除推送')
+        userLog('客群管理/删除推送')
       })
     } catch (e) {
       errorTip(e.message)

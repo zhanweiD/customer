@@ -40,11 +40,11 @@ function Entry() {
           <Route path="/tag-manage" component={TagObject} />
           {/* 标签同步 */}
           <Route path="/tag-sync" component={Sync} />
-          {/* 群体管理 */}
+          {/* 客群管理 */}
           <Route path="/group" component={Group} />
           {/* 客户画像 */}
           <Route path="/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
-          {/* 群体分析 */}
+          {/* 客群分析 */}
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />

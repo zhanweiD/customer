@@ -43,10 +43,10 @@ const serach = store => [
     component: 'select',
   },
   {
-    label: '群体名称',
+    label: '客群名称',
     key: 'keyword',
     control: {
-      placeholder: '请输入群体名称关键字搜索',
+      placeholder: '请输入客群名称关键字搜索',
     },
     component: 'input',
   },

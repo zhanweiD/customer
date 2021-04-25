@@ -14,7 +14,7 @@ const serach = store => [
     component: 'select',
   }, 
   {
-    label: '群体名称',
+    label: '客群名称',
     key: 'groupId',
     initialValue: '',
     control: {

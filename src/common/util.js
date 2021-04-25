@@ -29,7 +29,7 @@ export const baseUser = `${pathPrefix}hub_user_api/user` // 用户
 export const baseZtOrg = `${pathPrefix}hub_user_api/ztOrg` // 部门
 export const baseRole = `${pathPrefix}hub_user_api/role` // 角色
 export const basePerm = `${pathPrefix}hub_user_api/perm` // 权限
-export const groupApi = `${pathPrefix}hub_api/group` // 群体管理
+export const groupApi = `${pathPrefix}hub_api/group` // 客群管理
 export const derivativeApi = `${pathPrefix}hub_api/derivation` // 可视化加工
 
 // export const baseApi = `${pathPrefix}hub_api_dev` // 标签中心
@@ -40,17 +40,17 @@ export const derivativeApi = `${pathPrefix}hub_api/derivation` // 可视化加�
 // export const baseZtOrg = `${pathPrefix}hub_user_api_dev/ztOrg` // 部门
 // export const baseRole = `${pathPrefix}hub_user_api_dev/role` // 角色
 // export const basePerm = `${pathPrefix}hub_user_api_dev/perm` // 权限
-// export const groupApi = `${pathPrefix}hub_api_dev/group` // 群体管理
+// export const groupApi = `${pathPrefix}hub_api_dev/group` // 客群管理
 // export const derivativeApi = `${pathPrefix}hub_api_dev/derivation` // 可视化加工
 
 
 // 接口前缀
 
-export const relGroupApi = `${pathPrefix}/relGroup` // 群体配置
-export const groupConfigApi = `${pathPrefix}/relGroup` // 群体配置
+export const relGroupApi = `${pathPrefix}/relGroup` // 客群配置
+export const groupConfigApi = `${pathPrefix}/relGroup` // 客群配置
 
-export const groupDetailsApi = `${pathPrefix}/groupDetails` // 群体详情
-export const groupAnalysis = `${pathPrefix}/groupAnalysis` // 群体分析
+export const groupDetailsApi = `${pathPrefix}/groupDetails` // 客群详情
+export const groupAnalysis = `${pathPrefix}/groupAnalysis` // 客群分析
 
 export const overviewApi = `${pathPrefix}/overview`// 总览
 export const projectApi = `/api/tagmodel/1_0_0/project` // 项目列表

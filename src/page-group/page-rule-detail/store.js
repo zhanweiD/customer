@@ -13,7 +13,7 @@ class Store {
   @observable entityList = []
   @observable objId
 
-  // 第二步 设置群体圈选规则
+  // 第二步 设置客群圈选规则
   @observable configTagList = [] // 对象对应已同步的标签列表
   @observable drawerConfigTagList = [] // 对象对应已同步的标签列表
   @observable relList = [] // 对象对应的关系列表
@@ -27,7 +27,7 @@ class Store {
   @observable detail = {}
   @observable detailLoading = true
 
-  // 群体详情信息
+  // 客群详情信息
   @action async getDetail(id, cb) {
     this.detailLoading = true
     try {
@@ -37,7 +37,7 @@ class Store {
       })
 
       runInAction(() => {
-        if(res) {
+        if (res) {
           this.posList = JSON.parse(res)
 
           this.wherePosMap = this.posList.wherePosMap // 回显

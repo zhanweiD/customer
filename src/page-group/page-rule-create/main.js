@@ -25,12 +25,12 @@ class RuleCreate extends Component {
     store.isCopy = +params.isCopy
 
     if (params.isCopy) {
-      return headerTitle = '复制群体'
+      return headerTitle = '复制客群'
     }
     if (params.groupId) {
-      headerTitle = '编辑群体'
+      headerTitle = '编辑客群'
     } else {
-      headerTitle = '新建群体'
+      headerTitle = '新建客群'
     }
   }
 
@@ -69,11 +69,11 @@ class RuleCreate extends Component {
     const {oneForm, groupId, isCopy} = store
 
     if (result) {
-      message.success(`群体 ${oneForm.name} ${groupId && !isCopy ? '编辑' : '创建'}成功`)
+      message.success(`客群 ${oneForm.name} ${groupId && !isCopy ? '编辑' : '创建'}成功`)
       window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`
     } else {
       Modal.error({
-        content: `群体 ${oneForm.name} 创建失败 您可以重新创建`,
+        content: `客群 ${oneForm.name} 创建失败 您可以重新创建`,
       })
     }
   }
@@ -90,7 +90,7 @@ class RuleCreate extends Component {
       <Provider store={store}>
         <div className="oa">
           <div className="content-header">{headerTitle}</div>
-          <div className="rule-create mt72">
+          <div className="rule-create m16 mt72">
             <Steps size="small" current={current} style={{width: '80%', margin: '0 auto'}}>
               <Step title="信息配置" />
               <Step title="圈选规则" />

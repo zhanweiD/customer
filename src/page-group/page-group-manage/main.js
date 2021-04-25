@@ -1,5 +1,5 @@
 /**
- * @description 群体管理
+ * @description 客群管理
  */
 import {Fragment} from 'react'
 import {Tabs} from 'antd'
@@ -15,11 +15,11 @@ const {TabPane} = Tabs
 const GroupManage = () => {
   return (
     <div className="oa">
-      <div className="content-header">群体管理</div>
+      <div className="content-header">客群管理</div>
       <Tabs defaultActiveKey={codeInProduct('group-manage:view') ? '0' : '1'} className="group-manage">
         {
           codeInProduct('group-manage:view') && (
-            <TabPane tab="群体列表" key="0">
+            <TabPane tab="客群列表" key="0">
               <GroupList />
             </TabPane>
           )

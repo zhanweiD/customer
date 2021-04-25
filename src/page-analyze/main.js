@@ -1,5 +1,5 @@
 /**
- * @description  群体分析
+ * @description  客群分析
  */
 import {Route, Switch, Redirect} from 'react-router-dom'
 

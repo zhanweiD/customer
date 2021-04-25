@@ -14,7 +14,7 @@ class Store {
   @observable groupList = [] // 客群列表
   @observable tagData = [] // 标签分析数据
 
-  // 群体下拉
+  // 客群下拉
   @action async getGroup() {
     this.loading = true
     try {

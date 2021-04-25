@@ -8,17 +8,17 @@ import io from './io'
 
 const {Option} = Select
 class Store extends ListContentStore(io.getGroupList) {
-  // 只有实时规则创建群体，其他两种暂时不用
+  // 只有实时规则创建客群，其他两种暂时不用
   @observable projectId = 0 // 项目id
   @observable objId = 0 // 实体id
   @observable mode = 0 // 创建方式
-  @observable type = 0 // 群体类型
-  @observable isCreate = 0 // 是否选中创建群体方式
-  @observable current = 0 // 是否选中创建群体方式
+  @observable type = 0 // 客群类型
+  @observable isCreate = 0 // 是否选中创建客群方式
+  @observable current = 0 // 是否选中创建客群方式
   @observable submitLoading = false // 推送loading
 
-  @observable recordObj = {} // 当前编辑群体 无输出标签信息
-  @observable nowGroup = {} // 当前编辑群体 有输出标签信息
+  @observable recordObj = {} // 当前编辑客群 无输出标签信息
+  @observable nowGroup = {} // 当前编辑客群 有输出标签信息
   @observable fileRes = '' // 上传的文件返回数据
   @observable uploadList = [] // 上传文件列表
   @observable entityList = [] // 实体列表
@@ -27,8 +27,8 @@ class Store extends ListContentStore(io.getGroupList) {
   @observable tagOptions = [] // 标签option列表
 
   @observable uploadData = false // 是否有上传文件
-  @observable visible = false // 新建群体
-  @observable drawerVisible = false // id新建群体
+  @observable visible = false // 新建客群
+  @observable drawerVisible = false // id新建客群
   @observable modalVisible = false // 文件解析结果
   @observable isAdd = true // 判断编辑还是新建
   @observable confirmLoading = false // 确认按钮loading
@@ -91,17 +91,17 @@ class Store extends ListContentStore(io.getGroupList) {
     }
   }
 
-  // 删除群体
+  // 删除客群
   @action async removeGroup(id) {
     try {
       const res = await io.removeGroup({
-        id, // 群体ID
+        id, // 客群ID
       })
       runInAction(() => {
         if (res) {
           successTip('删除成功')
           this.getList()
-          userLog('群体管理/删除群体')
+          userLog('客群管理/删除客群')
         }
       })
     } catch (e) {
@@ -109,17 +109,17 @@ class Store extends ListContentStore(io.getGroupList) {
     }
   }
 
-  // 批量删除群体
+  // 批量删除客群
   @action.bound async removeGroupList() {
     try {
       const res = await io.removeGroupList({
-        ids: this.selectedRows, // 群体ID
+        ids: this.selectedRows, // 客群ID
       })
       runInAction(() => {
         if (res) {
           successTip('删除成功')
           this.getList()
-          userLog('群体管理/删除群体')
+          userLog('客群管理/删除客群')
         }
       })
     } catch (e) {
@@ -131,7 +131,7 @@ class Store extends ListContentStore(io.getGroupList) {
   @action async performGroup(id) {
     try {
       const res = await io.performGroup({
-        id, // 群体ID
+        id, // 客群ID
       })
       runInAction(() => {
         if (res) {
@@ -140,7 +140,7 @@ class Store extends ListContentStore(io.getGroupList) {
         } else {
           errorTip('执行失败')
         }
-        userLog('群体管理/执行群体')
+        userLog('客群管理/执行客群')
       })
     } catch (e) {
       errorTip(e.message)
@@ -160,7 +160,7 @@ class Store extends ListContentStore(io.getGroupList) {
       })
       runInAction(() => {
         if (res.isExist) {
-          callback('群体名称重复')
+          callback('客群名称重复')
         } else {
           callback()
         }

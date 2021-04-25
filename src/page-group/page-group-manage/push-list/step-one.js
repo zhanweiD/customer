@@ -68,14 +68,14 @@ export default class StepOne extends Component {
               {...formItemLayout}
             >
               <Form.Item
-                label="群体"
+                label="客群"
                 name="groupId"
-                rules={[{required: true, message: '请选择群体'}]}
+                rules={[{required: true, message: '请选择客群'}]}
                 initialValue={toJS(detail.groupId)}
               >
                 <Select
                   size="small"
-                  placeholder="请选择群体"
+                  placeholder="请选择客群"
                   onChange={v => this.store.groupId = v}
                 >
                   {
