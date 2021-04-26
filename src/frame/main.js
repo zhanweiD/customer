@@ -1,7 +1,10 @@
 import React, {Component} from 'react'
-import {Layout, Menu, Modal, Dropdown, Input, Form, ConfigProvider, Affix} from 'antd'
+import {
+  Layout, Menu, Modal, Dropdown, Input, Form, ConfigProvider, Affix, Spin,
+} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
+
 import zhCN from 'antd/lib/locale/zh_CN'
 import {
   DownOutlined,
@@ -16,7 +19,7 @@ import {
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
-import {errorTip, codeInProduct} from '../common/util'
+import {errorTip} from '../common/util'
 import defaultLightLogo from '../icon/default-light-logo.svg'
 
 const {Header, Content, Sider} = Layout
@@ -33,9 +36,6 @@ export default class Frame extends Component {
 
   componentDidMount() {
     store.getUserInfo()
-    store.getParams()
-    store.getProject()
-
     // 设置页面的ico图标
     // const tenantImageVO = res.tenantImageVO || {}
     const finalIco = ico
@@ -79,10 +79,9 @@ export default class Frame extends Component {
   }
 
   render() {
-    if (!store.getPerLoad || !localStorage.getItem('token')) return null
-
+    // !localStorage.getItem('token')
     const {children} = this.props
-    const {collapsed, pathName, visible, confirmLoading, userInfo} = store
+    const {collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading} = store
     const menuName = pathName.split('/')[1]
 
     const layout = {
@@ -207,7 +206,13 @@ export default class Frame extends Component {
               </Sider>
             </Affix>
             <Content style={{overflow: 'initial', marginTop: '48px'}}>
-              {children}
+              {
+                getPerLoading ? children : (
+                  <div style={{height: 'calc(100vh)'}} className="FBJC dfac">
+                    <Spin spinning />
+                  </div>
+                )
+              }
             </Content>
           </Layout>
           <Modal {...modalConfig}>
