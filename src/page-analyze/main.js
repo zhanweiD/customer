@@ -18,7 +18,7 @@ export default () => {
     <Switch>
       <Route exact path={`${prePath}/channel`} component={Channel} />
       <Route exact path={`${prePath}/clinch`} component={Clinch} />
-      <Route exact path={`${prePath}/consultant`} component={Consultant} />
+      {/* <Route exact path={`${prePath}/consultant`} component={Consultant} /> */}
       <Route exact path={`${prePath}/supply-demand`} component={SupplyDemand} />
       <Route exact path={`${prePath}/group`} component={Group} />
       <Route exact path={`${prePath}/satisfaction`} component={Satisfaction} />

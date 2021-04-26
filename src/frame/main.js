@@ -187,9 +187,9 @@ export default class Frame extends Component {
                   <Menu.Item key="/portrait" icon={<UserOutlined />}>
                     客户画像
                   </Menu.Item>
-                  <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
+                  <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
                     <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
-                    <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item>
+                    {/* <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item> */}
                     <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
                     <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
                     <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
@@ -199,9 +199,9 @@ export default class Frame extends Component {
                   <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
                     <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
                     <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
-                    <Menu.Item key="/system/system-log">系统日志</Menu.Item>
                     <Menu.Item key="/system/portrait">画像配置</Menu.Item>
                     <Menu.Item key="/system/business">业务配置</Menu.Item>
+                    <Menu.Item key="/system/system-log">行为日志</Menu.Item>
                   </SubMenu>
                 </Menu>
               </Sider>

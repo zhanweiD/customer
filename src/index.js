@@ -17,7 +17,7 @@ import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
-import TagObject from './page-tag-bazaar'
+import TagManage from './page-tag-manage'
 
 const njkData = {
   dict,
@@ -37,7 +37,7 @@ function Entry() {
           {/* 标签集市 */}
           <Route path="/tag-market" component={TagMarket} />
           {/* 标签维护 */}
-          <Route path="/tag-manage" component={TagObject} />
+          <Route path="/tag-manage" component={TagManage} />
           {/* 标签同步 */}
           <Route path="/tag-sync" component={Sync} />
           {/* 客群管理 */}
