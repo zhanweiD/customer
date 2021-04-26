@@ -352,7 +352,7 @@ class Store {
           item.title = item.bizName
           item.value = item.bizCode
         })
-        this.businessList = busListToTree(res)
+        this.businessList = busListToTree(this.bizList)
       })
     } catch (e) {
       errorTip(e.message)

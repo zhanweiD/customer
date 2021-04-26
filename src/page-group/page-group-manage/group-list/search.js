@@ -14,21 +14,21 @@ const serach = store => [
     },
     component: 'select',
   }, 
-  {
-    label: '最近更新状态',
-    key: 'status',
-    initialValue: '',
-    control: {
-      defaultAll: true,
-      options: [
-        {name: '全部', value: ''},
-        {name: '正常', value: 1},
-        {name: '失败', value: 2},
-        {name: '计算中', value: 3},
-      ],
-    },
-    component: 'select',
-  },
+  // {
+  //   label: '最近更新状态',
+  //   key: 'status',
+  //   initialValue: '',
+  //   control: {
+  //     defaultAll: true,
+  //     options: [
+  //       {name: '全部', value: ''},
+  //       {name: '正常', value: 1},
+  //       {name: '失败', value: 2},
+  //       {name: '计算中', value: 3},
+  //     ],
+  //   },
+  //   component: 'select',
+  // },
   {
     label: '创建人',
     key: 'cuserAccount',

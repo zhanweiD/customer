@@ -168,7 +168,6 @@ export default class ModalForm extends Component {
   render() {
     const {formItemLayout, form, bigStore, ...rest} = this.props
     const {getFieldDecorator} = form
-
     return (
       <Form {...rest}>
         {

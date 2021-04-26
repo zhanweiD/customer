@@ -232,6 +232,11 @@ export function mapOption(mapType, data) {
   return {
     title: {
       text: '客户分布',
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 400,
+      },
       x: 'left',
     },
     tooltip: {
