@@ -4,7 +4,7 @@
 import {Component, Fragment} from 'react'
 import {action, toJS} from 'mobx'
 import {observer, Provider} from 'mobx-react'
-import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Modal} from 'antd'
+import {Popconfirm, Button, Table, Menu, Input, Select, Dropdown, Tooltip} from 'antd'
 import {
   ListContent, OmitTooltip, Authority,
 } from '../../../../component'
@@ -71,7 +71,36 @@ class TagList extends Component {
     render: (text, record) => (
       <div className="FBH FBAC">
         {/* 标签状态: 待配置 未使用  操作: 绑定/编辑/删除 */}
-        {record.status === 0 && (
+        {
+          // 主标签不支持下线
+          record.projectId === -1 && (
+            <Fragment>
+              <Authority
+                authCode="tag-manage:release-tag"
+              >
+                <Tooltip placement="topLeft" title="主标签不支持下线">
+                  <span className="disabled">下线</span>
+                </Tooltip>
+              </Authority>
+              <Authority
+                authCode="tag-manage:add-tag"
+              >
+                <span className="disabled ml16">配置</span>
+              </Authority>
+              <Authority
+                authCode="tag-manage:add-tag"
+              >
+                <span className="disabled ml16">编辑</span>
+              </Authority>
+              <Authority
+                authCode="tag-manage:add-tag"
+              >
+                <span className="disabled ml16">删除</span>
+              </Authority>
+            </Fragment>
+          )
+        }
+        {record.status === 0 && record.projectId !== -1 && (
           <Fragment>
             <Authority
               authCode="tag-manage:release-tag"
@@ -107,7 +136,7 @@ class TagList extends Component {
         )}
 
         {/* 标签状态: 待发布 未使用  操作: 发布/绑定/编辑/删除 */}
-        {record.status === 1 && (
+        {record.status === 1 && record.projectId !== -1 && (
           <Fragment>
             <Authority
               authCode="tag-manage:release-tag"
@@ -153,7 +182,7 @@ class TagList extends Component {
 
         {/* 标签状态: 已发布 未使用 下架  操作: 取消发布/上架申请 */}
         {/* {record.status === 2 && record.isUsed === 0 && record.publish === 0 && ( */}
-        {record.status === 2 && (
+        {record.status === 2 && record.projectId !== -1 && (
           <Fragment>
             <Authority
               authCode="tag-manage:release-tag"
@@ -192,31 +221,31 @@ class TagList extends Component {
         {/* 标签状态: 已发布 已使用 */}
         {record.status === 2
           && record.isUsed === 1
-          && (
-            <Fragment>
-              <Authority
-                authCode="tag-manage:release-tag"
-              >
-                <span className="disabled">下线</span>
-              </Authority>
-              <Authority
-                authCode="tag-manage:add-tag"
-              >
-                <span className="disabled ml16">配置</span>
-              </Authority>
-              <Authority
-                authCode="tag-manage:add-tag"
-              >
-                <span className="disabled ml16">编辑</span>
-              </Authority>
-              <Authority
-                authCode="tag-manage:add-tag"
-              >
-                <span className="disabled ml16">删除</span>
-              </Authority>
-            </Fragment>
+          && record.projectId !== -1 && (
+          <Fragment>
+            <Authority
+              authCode="tag-manage:release-tag"
+            >
+              <span className="disabled">下线</span>
+            </Authority>
+            <Authority
+              authCode="tag-manage:add-tag"
+            >
+              <span className="disabled ml16">配置</span>
+            </Authority>
+            <Authority
+              authCode="tag-manage:add-tag"
+            >
+              <span className="disabled ml16">编辑</span>
+            </Authority>
+            <Authority
+              authCode="tag-manage:add-tag"
+            >
+              <span className="disabled ml16">删除</span>
+            </Authority>
+          </Fragment>
             
-          )} 
+        )} 
       </div>
     ),
   }]
