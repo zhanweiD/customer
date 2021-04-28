@@ -1,7 +1,17 @@
+/* eslint-disable no-inner-declarations */
 import {observable, action, toJS} from 'mobx'
 import _ from 'lodash'
 import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
 import io from './io'
+
+const logicMap = {
+  1: '且',
+  2: '或',
+}
+const comparisionMap = {
+  in: '等于',
+  'not in': '不等于',
+}
 
 export default class Store {
   @observable id
@@ -74,6 +84,51 @@ export default class Store {
 
   @observable treeData = []
 
+  @observable ruleText = ''
+  
+  geneRuleText(obj) {
+    const {logic, comparisionList, childList} = obj
+    
+    if (childList && childList.length) {
+      // 说明有子数据
+      const {oneText} = this.geneComparisionListOne(comparisionList)
+
+      const totalText = `${oneText} ${logicMap[logic]} `
+
+      this.ruleText = this.ruleText.concat(totalText)
+
+      childList.forEach(item => {
+        this.geneRuleText(item)
+      })
+    } else {
+      // 没有了，只需要对 comparisionList 处理
+      const {oneText, twoText} = this.geneComparisionListTwo(comparisionList)
+
+      const totalText = `${oneText} ${logicMap[logic]} ${twoText}`
+
+      this.ruleText = this.ruleText.concat(totalText)
+    }
+  }
+
+  // 有一个的
+  geneComparisionListOne(list) {
+    const [one] = list
+
+    const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
+
+    return {oneText}
+  }
+
+  // 有两个的
+  geneComparisionListTwo(list) {
+    const [one, two] = list
+
+    const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
+    const twoText = `${this.findTargetTag(two.left.params.join())} ${comparisionMap[two.comparision]} ${two.right.params.join(',')}`
+
+    return {oneText, twoText}
+  }
+
   /**
    * 描述 获取客群详情
    * @date 2021-04-09
@@ -88,40 +143,11 @@ export default class Store {
       })
 
       const logicFormat = JSON.parse(res.logicExper)
-      const logicMap = {
-        1: '且',
-        2: '或',
-      }
-      const {comparisionList, childList, logic} = logicFormat
-      let ruleText = ''
+      console.log(logicFormat)
 
-      // TODO: 不完善
-      if (comparisionList.length === 1) {
-        if (childList.length === 0) {
-          // 说明就一个条件
-          const {left, right, comparision} = comparisionList[0]
-          ruleText = `${this.findTargetTag(left.params.join())} ${comparision} ${right.params.join('')}`
-        } else {
-          // 说明不止一个条件
-          const {left, right, comparision} = comparisionList[0]
-          ruleText = `${this.findTargetTag(left.params.join())} ${comparision} ${right.params.join('')}`
+      this.geneRuleText(logicFormat)
 
-          ruleText = ruleText.concat(` ${logicMap[logic]} `)
-
-          childList.forEach(item => {
-            const {logic: logicC, comparisionList: comparisionC} = item
-            const [one, two] = comparisionC
-
-            ruleText = ruleText.concat(`${this.findTargetTag(one.left.params.join())} ${one.comparision} ${one.right.params.join('')} ${logicMap[logicC]} ${this.findTargetTag(two.left.params.join())} ${two.comparision} ${two.right.params.join('')}`)
-          })
-        }
-      }
-
-      console.log(ruleText)
-      // console.log(logicFormat)
-      // console.log(JSON.parse(logicFormat.posList))
-
-      this.groupDetail = {...res, logicExper: ruleText}
+      this.groupDetail = {...res, logicExper: this.ruleText}
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -129,7 +155,7 @@ export default class Store {
     }
   }
 
-  findTargetTag = (id) => {
+  findTargetTag = id => {
     const target = _.find(this.objTargetTagList, e => e.objIdTagId === id)
 
     if (target) {
@@ -292,7 +318,7 @@ export default class Store {
     try {
       const res = await io.getUsableTag({
         id,
-        excludeTagType: [4],
+        onlyEnum: true,
       })
 
       // 根据 treeData 数据中的 aid 进行对应

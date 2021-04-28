@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Button, Spin} from 'antd'
+import {Button, Divider, Spin} from 'antd'
 import {EditOutlined, CopyOutlined, ReloadOutlined} from '@ant-design/icons'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
@@ -35,24 +35,24 @@ export default inject('store')(({store, id}) => {
             <CopyOutlined className="header-icon ml16" />
             <ReloadOutlined className="header-icon ml16" /> */}
             </div>
-            <div>
-              <span className="black45">
+            <div className="FBH">
+              <div className="black45">
                 客群描述：
-              </span>
-              <span className="black65">
+              </div>
+              <div className="black65">
                 {store.groupDetail.descr}
-              </span>
+              </div>
             </div>
-            <div>
-              <span className="black45">
+            <div className="FBH" style={{wordBreak: 'keep-all'}}>
+              <div className="black45">
                 圈选规则：
-              </span>
-              <span className="black65">
+              </div>
+              <div className="black65" style={{marginRight: '50px'}}>
                 {store.groupDetail.logicExper}
-              </span>
+              </div>
             </div>
           </div>
-          <div className="FBH">
+          <div className="FBH" style={{wordBreak: 'keep-all'}}>
             <div className="FBV">
               <div className="black45">
                 覆盖客户数
