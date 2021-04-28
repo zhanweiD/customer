@@ -129,7 +129,7 @@ export default class StepOne extends Component {
                 if (value && value.length < 10) {
                   return Promise.resolve()
                 }
-                return Promise.reject('最多可选择20个标签')
+                return Promise.reject('最多可选择10个标签')
               },
             },
             ]}

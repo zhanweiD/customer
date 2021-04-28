@@ -188,6 +188,8 @@ export default class ModalForm extends Component {
             <MultiCascader
               data={toJS(bigStore.bizList)}
               placeholder="请选择"
+              okText="确认"
+              cancelText="取消"
             />
           )}
         </FormItem>

@@ -138,14 +138,14 @@ export function barOption(data) {
         },
         barWidth: '100%',
         data: [data[0] ? data[0].value : null],
-        color: color[0],
+        color: color[3],
 
       },
       {
         name: '线上触点',
         type: 'bar',
         stack: 'total',
-        color: color[1],
+        color: color[2],
         label: {
           show: true,
         },
