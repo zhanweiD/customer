@@ -185,6 +185,7 @@ const RuleItem = ({
         >
           <Select 
             mode="tags" 
+            size="small"
             style={{minWidth: 128}} 
             placeholder="请输入或者选择"
           >
@@ -222,6 +223,7 @@ const RuleItem = ({
         >
           <Select 
             mode="tags" 
+            size="small"
             style={{minWidth: 128}} 
             placeholder="请输入或者选择"
           >
