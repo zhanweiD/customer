@@ -170,8 +170,10 @@ class Store {
         this.placeholder = res[0] ? res[0].placeholder : '请输入'
         this.isCustomer = true
 
-        this.getFollow()
-        this.getScan()
+        if (this.portraitId) {
+          this.getFollow()
+          this.getScan()
+        }
 
         // 演示环境默认展示
         // this.getUnitList()
