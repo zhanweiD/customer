@@ -113,7 +113,6 @@ export default class Store {
   // 有一个的
   geneComparisionListOne(list) {
     const [one] = list
-
     const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
 
     return {oneText}
@@ -122,10 +121,8 @@ export default class Store {
   // 有两个的
   geneComparisionListTwo(list) {
     const [one, two] = list
-
-    const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
-    const twoText = `${this.findTargetTag(two.left.params.join())} ${comparisionMap[two.comparision]} ${two.right.params.join(',')}`
-
+    const oneText = one ? `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}` : ''
+    const twoText = two ? `${this.findTargetTag(two.left.params.join())} ${comparisionMap[two.comparision]} ${two.right.params.join(',')}` : ''
     return {oneText, twoText}
   }
 

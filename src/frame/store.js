@@ -21,7 +21,7 @@ class Store {
         this.getPerLoading = true
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     }
   }
 
@@ -36,7 +36,7 @@ class Store {
         this.getProject()
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     }
   }
 
