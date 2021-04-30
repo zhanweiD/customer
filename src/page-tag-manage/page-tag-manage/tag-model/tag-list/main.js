@@ -386,7 +386,7 @@ class TagList extends Component {
       selectedRowKeys: publishRowKeys.slice(),
       onChange: this.onTableCheck,
       getCheckboxProps: record => ({
-        disabled: record.status === 2, // 权限审批中的，不可进行申请、批量申请，且显示审批中
+        // disabled: record.status === 2, // 权限审批中的，不可进行申请、批量申请，且显示审批中
       }),
     }
 
