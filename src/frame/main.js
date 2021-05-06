@@ -208,7 +208,7 @@ export default class Frame extends Component {
             <Content style={{overflow: 'initial', marginTop: '48px'}}>
               {
                 getPerLoading ? children : (
-                  <div style={{height: 'calc(100vh)'}} className="FBJC dfac">
+                  <div style={{height: 'calc(100vh - 48px)'}} className="FBJC dfac">
                     <Spin spinning />
                   </div>
                 )

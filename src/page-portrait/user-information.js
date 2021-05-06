@@ -1,3 +1,4 @@
+/* eslint-disable guard-for-in */
 /**
  * @description 用户信息
  */
@@ -8,6 +9,8 @@ import {Button, Spin} from 'antd'
 
 @observer
 export default class User extends Component {
+  infoName = ''
+  nameValue = ''
   constructor(props) {
     super(props)
     this.store = props.store
@@ -21,8 +24,37 @@ export default class User extends Component {
     this.store.actionFocus()
   }
 
+  setInfo = () => {
+    const {defaultInfo} = this.store
+    const valueData = []
+    const keyData = []
+    const infoDom = []
+    
+    // 取出key和value
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in defaultInfo) {
+      if (key !== 'ident') {
+        valueData.push(defaultInfo[key])
+        keyData.push(key)
+      }
+    }
+
+    // 遍历key生成dom
+    keyData.forEach((item, index) => {
+      if (index > 0) {
+        infoDom.push(
+          <div className="lh24">{`${item}: ${valueData[index] || '-'}`}</div>
+        )
+      } else {
+        this.infoName = item
+        this.nameValue = valueData[index]
+      }
+    })
+    return infoDom
+  }
+
   render() {
-    const {basicLoading, defaultInfo, attention} = this.store
+    const {basicLoading, attention} = this.store
     return (
       <div className="basis-info-content ml16 mr16">
         <Spin spinning={basicLoading}>
@@ -30,11 +62,12 @@ export default class User extends Component {
             <div className="herder">客户档案</div>
             <div className="fs12 c65 pb8 bbc">
               <div className="dfjc lh24">
-                <div>{`姓名: ${defaultInfo.cust_name || '-'}`}</div>
+                <div>{`${this.infoName}: ${this.nameValue || '-'}`}</div>
                 <Button onClick={this.focus}>{attention ? '取关' : '关注'}</Button>
               </div>
-              <div className="lh24">{`业务身份: ${defaultInfo.identity || '-'}`}</div>
-              <div className="lh24">{`联系电话: ${defaultInfo.iphone || '-'}`}</div>
+              {
+                this.setInfo()
+              }
             </div>
             {
               this.store.unitBasic.map(item => {
