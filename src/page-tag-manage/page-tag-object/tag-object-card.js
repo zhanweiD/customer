@@ -21,7 +21,7 @@ export default inject('store')(
           编辑
         </Menu.Item>
         <Menu.Item
-          disabled={data.tag !== 0}
+          disabled={data.tag > 1}
           onClick={e => {
             ondelete(data)
             e.domEvent.stopPropagation()

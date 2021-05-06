@@ -35,6 +35,16 @@ const DistributionChart = ({
     myChartMap.setOption(mapOption(mapType, mapData))
     myChartBar.setOption(dbarOption(barData))
     window.addEventListener('resize', resize)
+    // myChartMap.on('click', param => {
+    //   myChartMap.clear()
+    //   if (param.name) {
+    //     echarts.registerMap(param.name, china[param.name])
+    //     myChartMap.setOption(mapOption(param.name, mapData))
+    //   } else {
+    //     echarts.registerMap('china', china.china)
+    //     myChartMap.setOption(mapOption('china', mapData))
+    //   }
+    // })
   }
 
   async function getMap() {

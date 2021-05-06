@@ -82,58 +82,6 @@ const CustomerChart = ({
   }, [sunData, funnelData])
  
   return (
-  // <Spin spinning={loading}>
-
-  //   <div className="d-flex">
-  //     <div className="bgf p16 w60 mr16">
-  //       <div className="fs14 c85">
-  //         客户渠道分布
-  //       </div>
-  //       <div style={{height: '782px', overflow: 'hidden'}}>
-  //         {
-  //           !sunData.length
-  //             ? (
-  //               <div className="no-Data d-flex" style={{height: '782px', width: '100%'}}>
-  //                 <NoData text="暂无数据" size="small" />
-  //               </div>
-  //             )
-  //             : null
-  //         }
-  //         <div className="d-flex">
-  //           <div ref={chartSun} style={{height: '782px', width: '60%'}} />
-  //           <div className="w40 FBV FBJC FBAC categroy-legend-box">
-  //             {
-  //               sunData.map((item, i) => (
-  //                 <LegendItem 
-  //                   title={item.name} 
-  //                   percent={`${((item.value / count) * 100).toFixed(2)}%`}
-  //                   counts={item.value}
-  //                   color={color[i]}
-  //                 />
-  //               ))
-  //             }
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-
-  //     <div className="w40">
-  //       <div className="bgf mb16" ref={chartFunnel} style={{height: '420px', width: '100%'}} />
-  //       <div className="bgf" style={{height: '400px', width: '100%'}}>
-  //         <div className="pt16 pl16 fs14 c85">
-  //           客户心声
-  //         </div>
-  //         <Cloud
-  //           orgCodes={orgCodes} 
-  //           timeStart={timeStart}
-  //           timeEnd={timeEnd}
-  //           projectCode={projectCode}
-  //         />
-  //       </div>
-  //     </div>
-  //   </div> 
-  // </Spin>
-
     <div>
       <Spin spinning={loading}>
         <div className="bgf p16 mb16">

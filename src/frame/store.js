@@ -89,7 +89,7 @@ class Store {
         window.__keeper.projectTree = this.listToTreePro(proList)
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     } 
   }
 }
