@@ -27,11 +27,12 @@ const {SubMenu} = Menu
 
 @observer
 export default class Frame extends Component {
+  formRef = React.createRef()
   constructor(props) {
     super(props)
     
-    const pathList = props.location.pathname.split('/')
     store.pathName = props.location.pathname
+    store.menuName = store.pathName.split('/')[1]
   }
 
   componentDidMount() {
@@ -44,9 +45,44 @@ export default class Frame extends Component {
     icoNode.setAttribute('type', 'image/x-icon')
     icoNode.setAttribute('href', finalIco)
     document.head.appendChild(icoNode)
+
+    this.setTitle()
   }
 
-  formRef = React.createRef()
+  // 设置窗口title
+  setTitle = () => {
+    let title = '客户中心'
+    switch (store.menuName) {
+      case 'overview':
+        title = '客户中心'
+        break
+      case 'tag-market':
+        title = '标签集市'
+        break
+      case 'tag-manage':
+        title = '标签维护'
+        break
+      case 'tag-sync':
+        title = '标签同步'
+        break
+      case 'group':
+        title = '客群管理'
+        break
+      case 'portrait':
+        title = '客户画像'
+        break
+      case 'analyze':
+        title = '场景管理'
+        break
+      case 'system':
+        title = '系统管理'
+        break
+      default:
+        title = '客户中心'
+        break
+    }
+    document.title = title
+  }
 
   onCollapse = collapsed => {
     store.collapsed = collapsed
@@ -59,6 +95,7 @@ export default class Frame extends Component {
   @action openModal = () => {
     store.visible = true
   }
+
   @action closeModal = () => {
     store.visible = false
   }
@@ -81,8 +118,9 @@ export default class Frame extends Component {
   render() {
     // !localStorage.getItem('token')
     const {children} = this.props
-    const {collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading} = store
-    const menuName = pathName.split('/')[1]
+    const {
+      collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
+    } = store
 
     const layout = {
       labelCol: {span: 2},
