@@ -56,6 +56,7 @@ export default class ModalTagMove extends Component {
           biz: bizValue,
         }, () => {
           treeStore.getTagCateTree()
+          this.store.updateBizVisible = false
         })
       }
     })

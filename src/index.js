@@ -18,6 +18,7 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
+import UploadTag from './page-tag-manage/upload-tag'
 
 const njkData = {
   dict,
@@ -31,6 +32,8 @@ function Entry() {
       <Switch>
         {/* 登录 */}
         <Route path="/login" component={Login} />
+        <Route path="/upload-tag" component={UploadTag} />
+
         <Frame>
           {/* 客户中心 */}
           <Route path="/overview" component={Overview} />
