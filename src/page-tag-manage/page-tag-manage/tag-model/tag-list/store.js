@@ -81,11 +81,16 @@ class Store {
     if (data) {
       const {biz, ...rest} = data
       const bizValue = []
-      biz.forEach(item => {
-        bizValue.push(item.pop())
-      })
 
-      this.drawerTagInfo = {biz: bizValue, ...rest}
+      if (biz && biz.length) {
+        biz.forEach(item => {
+          bizValue.push(item.pop())
+        })
+
+        this.drawerTagInfo = {biz: bizValue, ...rest}
+      } else if (rest.bizText === '全部') {
+        this.drawerTagInfo = {biz: ['ALL'], ...rest}
+      }
     } else {
       this.drawerTagInfo = {}
     }
@@ -440,6 +445,18 @@ class Store {
       res.forEach(item => {
         item.title = item.bizName
         item.value = item.bizCode
+
+        if (item.parentCode === '-1') {
+          item.parentCode = 'ALL'
+        }
+      })
+
+      res.push({
+        bizCode: 'ALL',
+        bizName: '全部',
+        parentCode: '-1',
+        title: '全部',
+        value: 'ALL',
       })
 
       this.bizOriginList = res

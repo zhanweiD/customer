@@ -140,12 +140,12 @@ export default class DrawerCreate extends Component {
         // 处理业务类型的数据
         const {biz, ...rest} = values
         const {bizOriginList} = store
-        const bizValue = []
+        let bizValue = []
 
         biz.forEach(item => {
           const target = _.find(bizOriginList, e => e.bizCode === item)
           const parentNode = _.find(bizOriginList, e => e.bizCode === target.parentCode)
-
+          
           if (!parentNode) {
             // 没找到，说明是第一级
             bizValue.push([target.bizCode])
@@ -157,6 +157,15 @@ export default class DrawerCreate extends Component {
           }
         })
 
+        // 去掉【全部】
+        bizValue.forEach(item => {
+          _.remove(item, e => e === 'ALL')
+        })
+
+        // 选择【全部】的情况
+        if (JSON.stringify(bizValue) === '[[]]') {
+          bizValue = undefined
+        }
 
         const params = {
           ...rest,
