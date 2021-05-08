@@ -1,0 +1,60 @@
+diff --git a/node_modules/antd-multi-cascader/dist/components/Selector.js b/node_modules/antd-multi-cascader/dist/components/Selector.js
+index 0fbf441..20d40af 100644
+--- a/node_modules/antd-multi-cascader/dist/components/Selector.js
++++ b/node_modules/antd-multi-cascader/dist/components/Selector.js
+@@ -7,8 +7,31 @@ const classnames_1 = tslib_1.__importDefault(require("classnames"));
+ const lodash_1 = require("lodash");
+ const container_1 = tslib_1.__importDefault(require("../container"));
+ const constants_1 = require("../constants");
++
++const find = (arr, title) => {
++    let stock = []
++    let going = true
++    var warker = function (arr, title) {
++        arr.forEach(item => {
++            if (!going) return
++            stock.push(item.title)
++
++            if (item.title == title) {
++                going = false
++            } else if (item.children) {
++                warker(item.children, title)
++            } else {
++                stock.pop()
++            }
++        })
++        if (going) stock.pop()
++    }
++    warker(arr, title)
++    return stock.join('/')
++}
++
+ const Tag = (props) => {
+-    const { onRemove, item, renderTitle = () => undefined } = props;
++    const { onRemove, item, renderTitle = () => undefined, data } = props;
+     const handleRemove = (event) => {
+         event.stopPropagation();
+         if (onRemove) {
+@@ -18,7 +41,7 @@ const Tag = (props) => {
+     const value = (item.value || item);
+     const title = renderTitle(value) || item.title || item;
+     return (react_1.default.createElement("span", { className: "ant-select-selection-item" },
+-        react_1.default.createElement("span", { className: "ant-select-selection-item-content" }, title),
++        react_1.default.createElement("span", {className: "ant-select-selection-item-content"}, find(data, title)),
+         react_1.default.createElement("span", { className: "ant-select-selection-item-remove" },
+             react_1.default.createElement(icons_1.CloseOutlined, { onClick: handleRemove }))));
+ };
+@@ -32,11 +55,12 @@ const Selector = (props) => {
+             onClear();
+         }
+     }, [onClear]);
++
+     return (react_1.default.createElement("div", Object.assign({ className: classnames_1.default(constants_1.prefix, 'ant-select ant-tree-select ant-select-multiple', className, {
+             'ant-select-disabled': disabled,
+         }), ref: forwardRef }, rest),
+         react_1.default.createElement("div", { className: "ant-select-selector", style: { paddingRight: !disabled && allowClear ? '24px' : undefined } }, (valueProps || hackValue.current || []).length ? ((valueProps || hackValue.current || []).map((item) => {
+-            return (react_1.default.createElement(Tag, { key: item, onRemove: onRemove, item: selectedItemsMap[item] || item, renderTitle: renderTitle }));
++            return (react_1.default.createElement(Tag, { key: item, onRemove: onRemove, item: selectedItemsMap[item] || item, renderTitle: renderTitle, data: data }));
+         })) : (react_1.default.createElement("span", { className: `${constants_1.prefix}-placeholder ant-select-selection-placeholder` }, placeholder))),
+         !disabled && allowClear ? (react_1.default.createElement("span", { className: "ant-select-clear", onClick: handleClear },
+             react_1.default.createElement(icons_1.CloseCircleFilled, null))) : null));
