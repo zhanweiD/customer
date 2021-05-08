@@ -8,6 +8,7 @@ import io from './io'
 class Store {
   @observable collapsed = false
   @observable pathName = '' // 根据url选中菜单
+  @observable menuName = '' // 匹配title
   @observable visible = false // 修改密码
   @observable getPerLoading = false // 权限是否加载完毕
   @observable userInfo = {} // 用户信息
