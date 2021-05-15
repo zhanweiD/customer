@@ -19,7 +19,7 @@ import {
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
-import {errorTip} from '../common/util'
+import {errorTip, codeInProduct} from '../common/util'
 import defaultLightLogo from '../icon/default-light-logo.svg'
 
 const {Header, Content, Sider} = Layout
@@ -164,6 +164,11 @@ export default class Frame extends Component {
       </Menu>
     )
 
+    // eslint-disable-next-line max-len
+    const showAnalyze = codeInProduct('/analyze/clinch') || codeInProduct('/analyze/supply-demand') || codeInProduct('/analyze/purchase') || codeInProduct('/analyze/channel') || codeInProduct('/analyze/satisfaction')
+    // eslint-disable-next-line max-len
+    const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
+ 
     return (
       <ConfigProvider locale={zhCN} componentSize="small">
         <Layout style={{minHeight: '100vh'}}>
@@ -206,40 +211,119 @@ export default class Frame extends Component {
                   mode="inline"
                   onClick={this.changeMenu}
                 >
-                  <Menu.Item key="/overview" icon={<HomeOutlined />}>
-                    客户中心
-                  </Menu.Item>
-                  <Menu.Item key="/tag-market" icon={<TagsOutlined />}>
-                    标签集市
-                  </Menu.Item>
-                  <Menu.Item key="/tag-manage" icon={<TagOutlined />}>
-                    标签维护
-                  </Menu.Item>
-                  <Menu.Item key="/tag-sync" icon={<FileSyncOutlined />}>
-                    标签同步
-                  </Menu.Item>
-                  <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
-                    客群管理
-                  </Menu.Item>
-                  <Menu.Item key="/portrait" icon={<UserOutlined />}>
-                    客户画像
-                  </Menu.Item>
-                  <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
-                    <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
-                    {/* <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item> */}
-                    <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
-                    <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
-                    <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
-                    <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
-                        
-                  </SubMenu>
-                  <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
-                    <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
-                    <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
-                    <Menu.Item key="/system/portrait">画像配置</Menu.Item>
-                    <Menu.Item key="/system/business">业务配置</Menu.Item>
-                    <Menu.Item key="/system/system-log">行为日志</Menu.Item>
-                  </SubMenu>
+                  {
+                    codeInProduct('/overview') && (
+                      <Menu.Item key="/overview" icon={<HomeOutlined />}>
+                        客户分析
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/tag-market') && (
+                      <Menu.Item key="/tag-market" icon={<TagsOutlined />}>
+                        标签集市
+                      </Menu.Item>
+                    )
+                  }                  
+                  {
+                    codeInProduct('/tag-manage') && (
+                      <Menu.Item key="/tag-manage" icon={<TagOutlined />}>
+                        标签维护
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/tag-sync') && (
+                      <Menu.Item key="/tag-sync" icon={<FileSyncOutlined />}>
+                        标签同步
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/group/manage') && (
+                      <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                        客群管理
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/group/manage') && (
+                      <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                        客群管理
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/portrait/:ident?/:id?/isConsultant?') && (
+                      <Menu.Item key="/portrait" icon={<UserOutlined />}>
+                        客户画像
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    showAnalyze && (
+                      <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
+                        {
+                          codeInProduct('/analyze/clinch') && (
+                            <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/supply-demand') && (
+                            <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/purchase') && (
+                            <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/channel') && (
+                            <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/satisfaction') && (
+                            <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
+                          )
+                        }
+                        {/* <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item> */}
+                      </SubMenu>
+                    )
+                  }
+
+                  {
+                    showSystem && (
+                      <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
+                        {
+                          codeInProduct('/system/user-manage') && (
+                            <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/role-manage') && (
+                            <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/portrait') && (
+                            <Menu.Item key="/system/portrait">画像配置</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/business') && (
+                            <Menu.Item key="/system/business">业务配置</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/system-log') && (
+                            <Menu.Item key="/system/system-log">行为日志</Menu.Item>
+                          )
+                        }
+                      </SubMenu>
+                    )
+                  }
                 </Menu>
               </Sider>
             </Affix>
