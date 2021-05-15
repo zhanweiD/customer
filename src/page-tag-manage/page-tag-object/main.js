@@ -48,11 +48,6 @@ class TagObject extends Component {
               ? <Skeleton active />
               : (
                 <div className="object-box mt16 pl16">
-                  {
-                    this.store.objList.map(item => {
-                      return <ObjectCard data={item} ondelete={this.deleteObject} />
-                    })
-                  }
                   <div className="object-card-box">
                     <div
                       className="object-card FBH FBAC FBJC"
@@ -66,6 +61,11 @@ class TagObject extends Component {
                       <div className="black65" style={{fontSize: '20px'}}>+ 新增对象</div>
                     </div>
                   </div>
+                  {
+                    this.store.objList.map(item => {
+                      return <ObjectCard data={item} ondelete={this.deleteObject} />
+                    })
+                  }
                 </div>
               )
           }
