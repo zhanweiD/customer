@@ -176,7 +176,7 @@ export default class Frame extends Component {
             <div className="frame_header">
               <div className="left">
                 <img src={defaultLightLogo} alt="logo" width="36" height="28" />
-                澜客
+                慧营客
               </div>
               <Dropdown overlay={userMenu}>
                 <div className="right hand">
@@ -236,13 +236,6 @@ export default class Frame extends Component {
                     codeInProduct('/tag-sync') && (
                       <Menu.Item key="/tag-sync" icon={<FileSyncOutlined />}>
                         标签同步
-                      </Menu.Item>
-                    )
-                  }
-                  {
-                    codeInProduct('/group/manage') && (
-                      <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
-                        客群管理
                       </Menu.Item>
                     )
                   }

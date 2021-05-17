@@ -73,7 +73,7 @@ class Portrait extends Component {
             <div className="search m16 mr0 mt72">
               {
                 isJump ? null : (
-                  <Fragment>
+                  <div>
                     <div className="search_content mr16">
                       <Search 
                         size="large"
@@ -86,16 +86,15 @@ class Portrait extends Component {
                       !unitList.length ? (
                         <Spin spinning={followLoading}>
                           <div className="d-flex">
-                            {/* <SearchList data={data} title="相关客户推荐" color="#339999" /> */}
+                            {/* <SearchList data={data} title="相关客户推荐" color="#339999" />
+                            <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
                             <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
                             <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
-                            {/* <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
                           </div>
                         </Spin>
-
                       ) : null
                     }
-                  </Fragment>
+                  </div>
                 )
               }
               <SearchResult store={store} />
@@ -104,7 +103,6 @@ class Portrait extends Component {
             <NoData text={noDataText} />
           )
         }
-        
       </div>
     )
   }

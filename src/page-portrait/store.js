@@ -6,9 +6,9 @@ import {message} from 'antd'
 import {errorTip, successTip, listToTree} from '../common/util'
 import io from './io'
 
-const dateFormat = 'YYYY-MM-DD'
-const date = new Date()
-const nowDate = moment(+date.getTime()).format(dateFormat)
+// const dateFormat = 'YYYY-MM-DD'
+// const date = new Date()
+// const nowDate = moment(+date.getTime()).format(dateFormat)
 
 function busListToTree(data) {
   const newData = _.cloneDeep(data)
