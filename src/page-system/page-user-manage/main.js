@@ -83,10 +83,11 @@ class UserManage extends Component {
   }
 
   selectContent = () => {
+    const {roles = undefined} = store.nowRecord
     return [{
       label: '角色',
       key: 'roles',
-      // initialValue: roleIds,
+      initialValue: roles ? roles.map(item => item.id) : undefined,
       component: 'select',
       mode: 'multiple',
       rules: [
@@ -108,6 +109,7 @@ class UserManage extends Component {
       store.nowRecord = record
       store.userIdList = [record.id]
     } else {
+      store.nowRecord = {}
       store.userIdList = store.publishRowKeys
     }
     store.visible = true

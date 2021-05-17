@@ -104,24 +104,24 @@ export default class GroupList extends Component {
       render: (text, record) => (
         <div className="FBH FBAC">
           {/* <Authority
-            authCode="group-manage:add-group"
+            authCode="/group/manage/create/:groupId?/:isCopy?"
           >
             <a className="mr16" disabled={record.status === 2} onClick={() => this.goPerform(record)} href>运行</a>
           </Authority> */}
           <Authority
-            authCode="group-manage:add-group"
+            authCode="/group/manage/create/:groupId?/:isCopy?"
           >
             <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, 0)}>编辑</a>
           </Authority>
 
           <Authority
-            authCode="group-manage:add-group"
+            authCode="/group/manage/create/:groupId?/:isCopy?"
           >
             <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, 1)}>复制</a>
           </Authority>
                
           <Authority
-            authCode="group-manage:add-group"
+            authCode="/group/manage/create/:groupId?/:isCopy?"
           >
             <Popconfirm
               placement="topRight"
@@ -208,12 +208,12 @@ export default class GroupList extends Component {
       scroll: {x: 960},
       buttons: [
         <Authority
-          authCode="group-manage:add-group"
+          authCode="/group/manage/create/:groupId?/:isCopy?"
         >
           <Button className="mr8" type="primary" onClick={() => this.openModal()}>新建客群</Button>
         </Authority>,
         <Authority
-          authCode="group-manage:add-group"
+          authCode="/group/manage/create/:groupId?/:isCopy?"
         >
           <Popconfirm
             placement="topRight"
