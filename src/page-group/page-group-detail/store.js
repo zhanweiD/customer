@@ -274,6 +274,7 @@ export default class Store {
       
       console.log(toJS(this.treeData))
 
+      /*
       this.treeData.forEach(item => {
         if (!item.children) {
           item.disabled = true
@@ -299,6 +300,7 @@ export default class Store {
 
         item.disabled = true
       })
+      */
     } catch (e) {
       errorTip(e.message)
     }

@@ -52,7 +52,14 @@ export default inject('store')(
 
     return useObserver(() => (
       <div className="tab-card FBH">
-        <div style={{border: '1px solid #f0f0f0', width: '200px', overflowX: 'auto'}}>
+        <div 
+          style={{
+            border: '1px solid #f0f0f0', 
+            width: '200px', 
+            overflowX: 'auto',
+            height: 'calc(100vh - 228px)',
+          }}
+        >
           <Tree />
         </div>
         <div className="FB1">
