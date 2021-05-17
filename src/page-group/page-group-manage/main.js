@@ -16,9 +16,9 @@ const GroupManage = () => {
   return (
     <div className="oa">
       <div className="content-header">客群管理</div>
-      <Tabs defaultActiveKey={codeInProduct('group-manage:view') ? '0' : '1'} className="group-manage">
+      <Tabs defaultActiveKey={codeInProduct('/group/manage') ? '0' : '1'} className="group-manage">
         {
-          codeInProduct('group-manage:view') && (
+          codeInProduct('/group/manage') && (
             <TabPane tab="客群列表" key="0">
               <GroupList />
             </TabPane>
