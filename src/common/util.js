@@ -359,6 +359,7 @@ export function downloadResult(params, url) {
   req.open('POST', `${baseApi}/${url}` , true)
   req.responseType = 'blob'
   req.setRequestHeader('Content-Type', 'application/json')
+  req.setRequestHeader('Authorization', `${localStorage.getItem('token')}`)
   req.onload = () => {
     const data = req.response
     const blob = new Blob([data])

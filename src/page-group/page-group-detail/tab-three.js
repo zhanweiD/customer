@@ -22,7 +22,7 @@ export default inject('store')(
             type="primary" 
             style={{marginBottom: '8px'}}
             onClick={async () => {
-              await downloadResult({id: store.id, queryDate: store.queryDate}, 'group/individuals'); userLog('客群管理/导出客群')
+              await downloadResult({id: store.id, queryDate: store.queryDate, userAccount: localStorage.getItem('userAccount')}, 'group/individuals/'); userLog('客群管理/导出客群')
             }}
           >
             导出个体列表
