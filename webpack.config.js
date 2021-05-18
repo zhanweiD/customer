@@ -227,9 +227,8 @@ module.exports = {
               showDoc: false,
               showOnlineService: false,
               showWorkOrder: false,
-              productCode: 'be_tag', // public
               productId: 2222,
-              parentProductCode: 'be_tag',
+              projectTree: [],
             },
         
           },

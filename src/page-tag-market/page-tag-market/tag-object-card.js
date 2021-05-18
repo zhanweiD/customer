@@ -1,6 +1,7 @@
 import React from 'react'
 import {Divider, Dropdown, Menu, Modal} from 'antd'
 import {MoreOutlined} from '@ant-design/icons'
+import {codeInProduct} from '@util'
 
 export default ({data, ondelete}) => {
   const menu = (
@@ -15,7 +16,9 @@ export default ({data, ondelete}) => {
   )
 
   const gotoManage = () => {
-    window.open(`#/tag-market/${data.id}`, '_blank')
+    if (codeInProduct('/tag-market/:id')) {
+      window.open(`#/tag-market/${data.id}`, '_blank')
+    }
   }
 
   return (

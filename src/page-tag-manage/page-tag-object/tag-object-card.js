@@ -3,6 +3,7 @@ import {Divider, Dropdown, Menu, Modal} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {MoreOutlined} from '@ant-design/icons'
+import {codeInProduct} from '@util'
 
 export default inject('store')(
   ({store, data, ondelete}) => {
@@ -33,7 +34,9 @@ export default inject('store')(
     )
 
     const gotoManage = () => {
-      window.open(`#/tag-manage/${data.id}`, '_blank')
+      if (codeInProduct('/tag-manage/:id')) {
+        window.open(`#/tag-manage/${data.id}`, '_blank')
+      }
     }
 
     return useObserver(() => (
@@ -47,7 +50,7 @@ export default inject('store')(
               <div className="fs16">
                 {data.name}
               </div>
-              <Dropdown overlay={menu}>
+              <Dropdown overlay={codeInProduct('tag-manage:add-object') ? menu : null}>
                 <MoreOutlined className="hand" />
               </Dropdown>
             </div>

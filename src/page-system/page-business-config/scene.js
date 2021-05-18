@@ -3,6 +3,7 @@ import {Button, Input, Table, Cascader, Drawer, Popconfirm, Tooltip} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import _ from 'lodash'
+import {codeInProduct} from '@util'
 import MyForm from './scene-form'
 
 const {Search} = Input
@@ -35,7 +36,7 @@ export default inject('store')(({store}) => {
     }, {
       title: '操作',
       render: (text, record) => {
-        return (
+        return codeInProduct('system-business:add') ? (
           <div>
             <span className="ac hand mr8" onClick={() => showEdit(record)}>编辑</span>
             {
@@ -55,7 +56,7 @@ export default inject('store')(({store}) => {
                 )
             }            
           </div>
-        )
+        ) : null
       },
     },
   ]
@@ -101,27 +102,33 @@ export default inject('store')(({store}) => {
     <div className="tab-box">
       <div className="FBH FBJB mb8">
         <div className="FBH">
-          <Button 
-            type="primary" 
-            onClick={() => {
-              store.formInitValue = {}
-              store.isEdit = false
-              store.drawerVis = true
-            }}
-          >
-            添加场景
-          </Button>
-          <Popconfirm
-            title="你确定要删除该业态吗？"
-            onConfirm={() => multiDelete()}
-          >
-            <Button 
-              className="ml8"
-              disabled={store.selectedRows.length === 0}
-            >
-              {`删除场景(${store.selectedRows.length})`}
-            </Button>
-          </Popconfirm>
+          {
+            codeInProduct('system-business:add') && (
+              <div>
+                <Button 
+                  type="primary" 
+                  onClick={() => {
+                    store.formInitValue = {}
+                    store.isEdit = false
+                    store.drawerVis = true
+                  }}
+                >
+                  添加场景
+                </Button>
+                <Popconfirm
+                  title="你确定要删除该业态吗？"
+                  onConfirm={() => multiDelete()}
+                >
+                  <Button 
+                    className="ml8"
+                    disabled={store.selectedRows.length === 0}
+                  >
+                    {`删除场景(${store.selectedRows.length})`}
+                  </Button>
+                </Popconfirm>
+              </div>
+            )
+          }
         </div>
         <div className="FBH">
           <Cascader 

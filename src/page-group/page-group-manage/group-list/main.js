@@ -8,7 +8,7 @@ import {observer} from 'mobx-react'
 import {Popconfirm, Badge, Menu, Button, Dropdown} from 'antd'
 import {DownOutlined} from '@ant-design/icons'
 
-import {Time} from '../../../common/util'
+import {codeInProduct, Time} from '../../../common/util'
 import {
   ListContent, Authority,
 } from '../../../component'
@@ -54,11 +54,11 @@ export default class GroupList extends Component {
       key: 'name',
       title: '客群名称',
       dataIndex: 'name',
-      render: (text, record) => (
+      render: (text, record) => (codeInProduct('/group/manage/:id/:objId') ? (
         <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
           {text}
         </Link>
-      ),
+      ) : text),
     }, {
       key: 'lastCount',
       title: '覆盖人数',
@@ -103,26 +103,11 @@ export default class GroupList extends Component {
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">
-          {/* <Authority
-            authCode="/group/manage/create/:groupId?/:isCopy?"
-          >
-            <a className="mr16" disabled={record.status === 2} onClick={() => this.goPerform(record)} href>运行</a>
-          </Authority> */}
           <Authority
             authCode="/group/manage/create/:groupId?/:isCopy?"
           >
             <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, 0)}>编辑</a>
-          </Authority>
-
-          <Authority
-            authCode="/group/manage/create/:groupId?/:isCopy?"
-          >
             <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, 1)}>复制</a>
-          </Authority>
-               
-          <Authority
-            authCode="/group/manage/create/:groupId?/:isCopy?"
-          >
             <Popconfirm
               placement="topRight"
               title="你确定要删除该客群吗？"
@@ -132,21 +117,6 @@ export default class GroupList extends Component {
               <a disabled={record.status === 2} href className="mr16">删除</a>
             </Popconfirm>
           </Authority>
-
-          {/* <Authority
-            authCode="group-manage:export-group"
-          >
-            <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
-              <a href>个体列表</a>
-            </Link>
-          </Authority> */}
-          
-          {/* <Dropdown overlay={() => this.menu(record)}>
-            <a href>
-              更多
-              <DownOutlined />
-            </a>
-          </Dropdown> */}
         </div>
       ),
     },
