@@ -63,6 +63,8 @@ export default inject('store')(
 
       if (keys.length > 0) {
         store.getDistributionByTagTabTwo(keys)
+      } else {
+        store.tabTwoChartDatas = []
       }
     }
 

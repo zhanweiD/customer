@@ -63,10 +63,10 @@ export default class ChartPie extends Component {
         this.myChartPie.setOption(pieOption(data, title))
         break
       case 2:
-        this.myChartPie.setOption(barOption(this.dataList, 'bar', title))
+        this.myChartPie.setOption(barOption(data, 'bar', title))
         break
       case 3:
-        this.myChartPie.setOption(barOption(this.dataList, 'line', title))
+        this.myChartPie.setOption(barOption(data, 'line', title))
         break
       default:
         this.myChartPie.setOption(pieOption(data, title))
