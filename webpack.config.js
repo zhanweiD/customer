@@ -1,12 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const safeParser = require('postcss-safe-parser')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const pkg = require('./package.json')
 
 const themeConfig = require(pkg.theme)
@@ -16,6 +17,8 @@ let commonPlugins = []
 
 const env = process.env.NODE_ENV || 'dev'
 const isDev = env === 'dev'
+const HOST = '127.0.0.1'
+const PORT = '9998'
 
 module.exports = {
   mode: isDev ? 'development' : 'production',
@@ -24,8 +27,8 @@ module.exports = {
     compress: true,
     inline: true,
     hot: true,
-    port: '9998',
-    host: '0.0.0.0',
+    port: PORT,
+    host: HOST,
     disableHostCheck: true,
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -44,13 +47,6 @@ module.exports = {
         // target: 'http://192.168.10.145:8877',
         changeOrigin: true,
       },
-      // {
-      //   context: ['/hub_api'],
-      //   target: 'http://192.168.90.134:8877',
-      //   // target: 'http://192.168.10.145:8877',
-      //   // target: 'http://172.18.100.219',
-      //   changeOrigin: true,
-      // },
     ],
     quiet: true,
     overlay: true,
@@ -196,16 +192,70 @@ module.exports = {
       filename: 'index.html',
       template: './index.html',
       chunks: ['main'],
+      public_path: isDev ? 'http://www.dtwave-dev.com' : '', // 微前端改造
+    }),
+    new ManifestPlugin({
+      fileName: 'asset-manifest.json',
+      publicPath: './',
+      generate: (seed, files, entrypoints) => {
+        const manifestFiles = files.reduce((manifest, file) => {
+          manifest[file.name] = file.path
+          return manifest
+        }, seed)
+        const entrypointFiles = entrypoints.main.filter(
+          fileName => !fileName.endsWith('.map')
+        )
+
+        return {
+          pageConfig: {
+            // 除公共资源， 项目需要加载的第三方js
+            js: [
+              './public/d3/3.3.6/d3.min.js',
+              './public/echarts/4.2.0/echarts.min.js',
+              './public/dagre/data-manage-dagre.js',
+              './public/jquery/2.0.0/jquery.min.js',
+            ],
+            // 除公共资源，项目需要加载的第三方css
+            css: [
+            ],
+            // 页面keeper
+            __keeper: {
+              pathPrefix: '/api/customer',
+              pathHrefPrefix: '/customer/index.html#',
+              isPrivate: true,
+              encryptType: 'md5',
+              showDoc: false,
+              showOnlineService: false,
+              showWorkOrder: false,
+              productCode: 'be_tag', // public
+              productId: 2222,
+              parentProductCode: 'be_tag',
+            },
+        
+          },
+          files: manifestFiles,
+          entrypoints: entrypointFiles,
+        }
+      },
+    }),
+    new FriendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: [`Your application is running here: http://${HOST}:${PORT}/#/`],
+      },
     }),
   ],
   externals: {
+    polyfill: 'BabelPolyfill',
     react: 'React',
     'react-dom': 'ReactDOM',
+    'react-router': 'ReactRouter',
+    'react-router-dom': 'ReactRouterDOM',
     mobx: 'mobx',
     'mobx-react': 'mobxReact',
-    _: '_',
-    antd: 'antd',
+    'mobx-react-lite': 'mobxReactLite',
     moment: 'moment',
+    antd: 'antd',
+    _: '_',
   },
 }
 
