@@ -9,6 +9,7 @@ import * as dict from './common/dict'
 import './common/util.styl'
 import Frame from './frame'
 
+import UploadTag from './page-tag-manage/upload-tag'
 import Group from './page-group'
 import System from './page-system'
 import Login from './page-login'
@@ -18,7 +19,7 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
-import UploadTag from './page-tag-manage/upload-tag'
+import Sales from './page-sales'
 
 const njkData = {
   dict,
@@ -51,6 +52,7 @@ function Entry() {
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
+          <Route path="/sales" component={Sales} />
         </Frame>
 
       </Switch>
