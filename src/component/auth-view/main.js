@@ -11,7 +11,7 @@ export default PageComponent => {
     const [auth, changeAuth] = useState(true)
     useEffect(() => {
       const data = window.frameInfo.perms || []
-      // changeAuth(data.find(item => item === props.match.path))
+      changeAuth(data.find(item => item === props.match.path))
     }, [])
     if (!auth) {
       return <NoData text="暂无访问权限，请联系管理员开通权限" />
