@@ -220,7 +220,7 @@ module.exports = {
             ],
             // 页面keeper
             __keeper: {
-              pathPrefix: '/api/customer',
+              pathPrefix: '/',
               pathHrefPrefix: '/customer/index.html#',
               isPrivate: true,
               encryptType: 'md5',
