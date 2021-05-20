@@ -26,7 +26,8 @@ class AddDrawer extends Component {
   @action onClose = () => {
     this.store.drawerVisible = false
     this.store.addstatus = false
-    this.store.existTablesList = []
+    this.store.defBasicList = []    
+    this.store.defPortraitList = []    
     this.store.resetValue()
   }
 
@@ -139,7 +140,6 @@ class AddDrawer extends Component {
       eventTableInfo,
       type,
     } = detailObj
-    console.log(basic)
     // drawer设施项
     const drawerProps = {
       visible: drawerVisible,

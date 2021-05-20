@@ -87,8 +87,9 @@ const Demo = () => {
   }
 
   return (
-    <div className="dag-process">
-      <div className="dag-cate">
+    <div className="dag-process oa">
+      <div className="content-header">新建营销计划</div>
+      <div className="dag-cate mt72">
         <h2>事件</h2>
         <div className="mb12">
           <Button className="containerStyle mr8 mb8" onClick={getNodes}>获取所有节点</Button>
@@ -111,7 +112,7 @@ const Demo = () => {
           }
         </div>
       </div>
-      <div>
+      <div className="dag-content w80">
         {
           isRender ? <div /> : (
             <DAG

@@ -189,6 +189,8 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         this.addstatus = false
         this.drawerVisible = false
+        this.defBasicList = []
+        this.defPortraitList = []
         this.getList()
         successTip('添加成功')
         userLog('系统管理/画像配置/添加画像')
@@ -206,6 +208,8 @@ class Store extends ListContentStore(io.getList) {
       const res = await io.getUpdate(params)
       runInAction(() => {
         this.drawerVisible = false
+        this.defBasicList = []
+        this.defPortraitList = []
         this.getList()
         successTip('编辑成功')
         userLog('系统管理/画像配置/编辑画像')

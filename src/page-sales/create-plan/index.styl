@@ -1,28 +1,39 @@
 .dag-process
+  position relative
+  display flex
   .dag-cate
     width 20%
+    padding 16px
+    background-color #fff
     .containerStyle
       margin-right 8px
       text-align center
     .dag-drag-box
       border solid 1px #49aede
-  
-  .dag-style
-    position absolute
-    width 70%
-    top 0px
-    right 0
-    bottom 0
-    border solid 1px #dbeff8
-    backgroundColor #fff
+  .dag-content
+    width 80%
+    height calc(100vh - 136px)
+    background-color #fff
+    margin 16px
+    margin-top 72px
+    position relative
+    .dag-style
+      position absolute
+      width 100%
+      top 0px
+      right 0
+      bottom 0
+      border solid 1px #dbeff8
 
-    .dag-node
-      max-width 240px
-      word-break break-word
-      white-space normal
-      line-height: 1.2
-      padding 4px 0
+      .dag-node
+        max-width 240px
+        word-break break-word
+        white-space normal
+        line-height: 1.2
+        padding 4px 0
   .dag-right
+    right 32px
+    top 96px
     .icon-style
       font-size 18px
       color rgba(0,0,0,.45)
