@@ -456,7 +456,7 @@ class TagList extends Component {
               defaultValue=""
               onChange={v => {
                 treeStore.status = v
-                treeStore.getList({currentPage: 1})
+                treeStore.getList({currentPage: 1, objId, cateId: treeStore.currentSelectKeys, keyword: treeStore.keyword, status: treeStore.status})
               }}
             >
               <Option style={{fontSize: '12px'}} value="">全部</Option>
@@ -469,7 +469,7 @@ class TagList extends Component {
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.keyword = v.target.value
-                treeStore.getList({currentPage: 1})
+                treeStore.getList({currentPage: 1, objId, cateId: treeStore.currentSelectKeys, keyword: treeStore.keyword, status: treeStore.status})
               }}
               // onChange={v => debounce(() => treeStore.getList({keyword: v.target.value}))}
             /> 
