@@ -1,7 +1,10 @@
 import React, {Component} from 'react'
-import {Layout, Menu, Modal, Dropdown, Input, Form, ConfigProvider, Affix} from 'antd'
-import {action} from 'mobx'
+import {
+  Layout, Menu, Modal, Dropdown, Input, Form, ConfigProvider, Affix, Spin,
+} from 'antd'
+import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
+
 import zhCN from 'antd/lib/locale/zh_CN'
 import {
   DownOutlined,
@@ -10,31 +13,30 @@ import {
   TeamOutlined,
   UserOutlined,
   TagsOutlined,
-  DeploymentUnitOutlined,
+  HomeOutlined,
   FileSyncOutlined,
-  AppstoreOutlined,
+  TagOutlined,
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
 import {errorTip, codeInProduct} from '../common/util'
+import defaultLightLogo from '../icon/default-light-logo.svg'
 
 const {Header, Content, Sider} = Layout
 const {SubMenu} = Menu
 
 @observer
 export default class Frame extends Component {
+  formRef = React.createRef()
   constructor(props) {
     super(props)
     
-    const pathList = props.location.pathname.split('/')
-    store.pathName = `/${pathList[1]}/${pathList[2]}`
+    store.pathName = props.location.pathname
+    store.menuName = store.pathName.split('/')[1]
   }
 
   componentDidMount() {
     store.getUserInfo()
-    store.getParams()
-    store.getProject()
-
     // 设置页面的ico图标
     // const tenantImageVO = res.tenantImageVO || {}
     const finalIco = ico
@@ -43,9 +45,44 @@ export default class Frame extends Component {
     icoNode.setAttribute('type', 'image/x-icon')
     icoNode.setAttribute('href', finalIco)
     document.head.appendChild(icoNode)
+
+    this.setTitle()
   }
 
-  formRef = React.createRef()
+  // 设置窗口title
+  setTitle = () => {
+    let title = '客户中心'
+    switch (store.menuName) {
+      case 'overview':
+        title = '客户中心'
+        break
+      case 'tag-market':
+        title = '标签集市'
+        break
+      case 'tag-manage':
+        title = '标签维护'
+        break
+      case 'tag-sync':
+        title = '标签同步'
+        break
+      case 'group':
+        title = '客群管理'
+        break
+      case 'portrait':
+        title = '客户画像'
+        break
+      case 'analyze':
+        title = '场景管理'
+        break
+      case 'system':
+        title = '系统管理'
+        break
+      default:
+        title = '客户中心'
+        break
+    }
+    document.title = title
+  }
 
   onCollapse = collapsed => {
     store.collapsed = collapsed
@@ -58,6 +95,7 @@ export default class Frame extends Component {
   @action openModal = () => {
     store.visible = true
   }
+
   @action closeModal = () => {
     store.visible = false
   }
@@ -78,11 +116,11 @@ export default class Frame extends Component {
   }
 
   render() {
-    if (!store.getPerLoad || !localStorage.getItem('token')) return null
-
+    // !localStorage.getItem('token')
     const {children} = this.props
-    const {collapsed, pathName, visible, confirmLoading, userInfo} = store
-    const menuName = pathName.split('/')[1]
+    const {
+      collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
+    } = store
 
     const layout = {
       labelCol: {span: 2},
@@ -127,17 +165,18 @@ export default class Frame extends Component {
     )
 
     // eslint-disable-next-line max-len
-    const showAnalyze = codeInProduct('analyze:channel:view') || codeInProduct('analyze:chinch:view') || codeInProduct('analyze:consultant:view') || codeInProduct('analyze:supply-demand:view') || codeInProduct('analyze:purchase:view') || codeInProduct('analyze:satisfaction:view') || codeInProduct('analyze:group:view')
+    const showAnalyze = codeInProduct('/analyze/clinch') || codeInProduct('/analyze/supply-demand') || codeInProduct('/analyze/purchase') || codeInProduct('/analyze/channel') || codeInProduct('/analyze/satisfaction')
     // eslint-disable-next-line max-len
-    const showSystem = codeInProduct('system:user-manage:view') || codeInProduct('system:role-manage:view') || codeInProduct('system:system-log:view') || codeInProduct('system:push-manage:view') || codeInProduct('system:portrait:view')
+    const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
+ 
     return (
       <ConfigProvider locale={zhCN} componentSize="small">
         <Layout style={{minHeight: '100vh'}}>
-          <Header className="site-layout-background" style={{padding: 0}}>
+          <Header className="site-layout-background w100" style={{padding: 0, position: 'fixed', zIndex: 100}}>
             <div className="frame_header">
               <div className="left">
-                {/* <img src="//cdn.dtwave.com/land-customer-center/source/junfa/junfa_logo.svg" alt="logo" width="138" height="17" /> */}
-                logo
+                <img src={defaultLightLogo} alt="logo" width="36" height="28" />
+                慧营客
               </div>
               <Dropdown overlay={userMenu}>
                 <div className="right hand">
@@ -149,132 +188,149 @@ export default class Frame extends Component {
             </div>
           </Header>
           <Layout>
-            {/* <Affix> */}
-            <Sider style={{minHeight: 'calc(100vh - 48px)', overflow: 'auto'}} collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-              {/* <div className="logo" /> */}
-              <Menu 
-                theme="dark" 
-                defaultOpenKeys={[`/${menuName}`]} 
-                defaultSelectedKeys={[pathName]} 
-                openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
-                onOpenChange={this.onOpenChange}
-                mode="inline"
-                onClick={this.changeMenu}
+            <Affix>
+              <Sider 
+                className="innerbox"
+                style={{
+                  minHeight: 'calc(100vh - 96px)', 
+                  overflow: 'auto', 
+                  left: 0, 
+                  top: '48px',
+                  height: 'calc(100vh - 96px)',
+                }} 
+                collapsible 
+                collapsed={collapsed} 
+                onCollapse={this.onCollapse}
               >
-                {
-                  codeInProduct('tag-manage:view') && (
-                    <Menu.Item key="/tag/manage" icon={<TagsOutlined />}>
-                      标签管理
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('tag-model:view') && (
-                    <Menu.Item key="/tag/sync" icon={<FileSyncOutlined />}>
-                      标签同步
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('tag-app:view') && (
-                    <Menu.Item key="/tag/app" icon={<DeploymentUnitOutlined />}>
-                      标签应用
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('portrait:view') && (
-                    <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
-                      客户画像
-                    </Menu.Item>
-                  )
-                }
-                {
-                  codeInProduct('group-manage:view') && (
-                    <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
-                      群体管理
-                    </Menu.Item>
-                  )
-                }
-                {
-                  showAnalyze && (
-                    <SubMenu key="/analyze" icon={<PieChartOutlined />} title="专项分析">
-                      {
-                        codeInProduct('analyze:chinch:view') && (
-                          <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:consultant:view') && (
-                          <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:supply-demand:view') && (
-                          <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:purchase:view') && (
-                          <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:channel:view') && (
-                          <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:satisfaction:view') && (
-                          <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('analyze:group-portrait:view') && (
-                          <Menu.Item key="/analyze/group">群体画像</Menu.Item>
-                        )
-                      }
-                    </SubMenu>
-                  )
-                }
-                {
-                  codeInProduct('scene:view') && (
-                    <Menu.Item key="/scene/list" icon={<AppstoreOutlined />}>
-                      场景管理
-                    </Menu.Item>
-                  )
-                }
-                {
-                  showSystem && (
-                    <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
-                      {
-                        codeInProduct('system:user-manage:view') && (
-                          <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:role-manage:view') && (
-                          <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:system-log:view') && (
-                          <Menu.Item key="/system/system-log">系统日志</Menu.Item>
-                        )
-                      }
-                      {
-                        codeInProduct('system:portrait:view') && (
-                          <Menu.Item key="/system/portrait">画像配置</Menu.Item>
-                        )
-                      }
-                    </SubMenu>
-                  )
-                }
-              </Menu>
-            </Sider>
-            {/* </Affix> */}
-            <Content>
-              {children}
+                <Menu 
+                  theme="dark" 
+                  defaultOpenKeys={[`/${menuName}`]} 
+                  defaultSelectedKeys={[pathName]} 
+                  openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
+                  onOpenChange={this.onOpenChange}
+                  mode="inline"
+                  onClick={this.changeMenu}
+                >
+                  {
+                    codeInProduct('/overview') && (
+                      <Menu.Item key="/overview" icon={<HomeOutlined />}>
+                        客户分析
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/tag-market') && (
+                      <Menu.Item key="/tag-market" icon={<TagsOutlined />}>
+                        标签集市
+                      </Menu.Item>
+                    )
+                  }                  
+                  {
+                    codeInProduct('/tag-manage') && (
+                      <Menu.Item key="/tag-manage" icon={<TagOutlined />}>
+                        标签维护
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/tag-sync') && (
+                      <Menu.Item key="/tag-sync" icon={<FileSyncOutlined />}>
+                        标签同步
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/group/manage') && (
+                      <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
+                        客群管理
+                      </Menu.Item>
+                    )
+                  }
+                  {
+                    codeInProduct('/portrait/:ident?/:id?/isConsultant?') && (
+                      <Menu.Item key="/portrait" icon={<UserOutlined />}>
+                        客户画像
+                      </Menu.Item>
+                    )
+                  }
+                  {/* <Menu.Item key="/sales/list" icon={<UserOutlined />}>
+                    营销分析
+                  </Menu.Item> */}
+                  {
+                    showAnalyze && (
+                      <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
+                        {
+                          codeInProduct('/analyze/clinch') && (
+                            <Menu.Item key="/analyze/clinch">成交分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/supply-demand') && (
+                            <Menu.Item key="/analyze/supply-demand">供需分析</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/purchase') && (
+                            <Menu.Item key="/analyze/purchase">复购挖掘</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/channel') && (
+                            <Menu.Item key="/analyze/channel">渠道拓客</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/analyze/satisfaction') && (
+                            <Menu.Item key="/analyze/satisfaction">满意度提升</Menu.Item>
+                          )
+                        }
+                        {/* <Menu.Item key="/analyze/consultant">顾问分析</Menu.Item> */}
+                      </SubMenu>
+                    )
+                  }
+
+                  {
+                    showSystem && (
+                      <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
+                        {
+                          codeInProduct('/system/user-manage') && (
+                            <Menu.Item key="/system/user-manage">用户管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/role-manage') && (
+                            <Menu.Item key="/system/role-manage">角色管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/portrait') && (
+                            <Menu.Item key="/system/portrait">画像配置</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/business') && (
+                            <Menu.Item key="/system/business">业务配置</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/system/system-log') && (
+                            <Menu.Item key="/system/system-log">行为日志</Menu.Item>
+                          )
+                        }
+                      </SubMenu>
+                    )
+                  }
+                </Menu>
+              </Sider>
+            </Affix>
+            <Content style={{overflow: 'initial', marginTop: '48px'}}>
+              {
+                getPerLoading ? children : (
+                  <div style={{height: 'calc(100vh - 48px)'}} className="FBJC dfac">
+                    <Spin spinning />
+                  </div>
+                )
+              }
             </Content>
           </Layout>
           <Modal {...modalConfig}>

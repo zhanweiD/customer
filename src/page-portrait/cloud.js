@@ -5,8 +5,9 @@ import * as d3 from 'd3'
 import cloud from 'd3-cloud'
 import {Component} from 'react'
 import {observer} from 'mobx-react'
-import {Spin} from 'antd'
 import {action} from 'mobx'
+import {Spin} from 'antd'
+
 import {NoData} from '../component'
 
 @observer
@@ -16,11 +17,21 @@ export default class Cloud extends Component {
     this.store = props.store
   }
 
-  componentDidMount() {  
-    this.store.getObjCloud((res, max) => {
-      this.couldLayout(res, max)
-    })
+  componentDidMount() {
+    const {props} = this
+    props.getDrawCloud(this.couldLayout)
+    // this.store.getObjCloud((res, max) => {
+    //   if (toAllTag) return
+    //   this.couldLayout(res, max)
+    // })
   }
+  // componentUpdate() {
+  //   const {toAllTag} = this.store
+  //   this.store.getObjCloud((res, max) => {
+  //     if (toAllTag) return
+  //     this.couldLayout(res, max)
+  //   })
+  // }
 
   // 获取最大值
   getRanKMax(arr = [], countKeyName = 'count') {
@@ -31,22 +42,23 @@ export default class Cloud extends Component {
     return max
   }
 
-  @action.bound couldLayout(data = [], max) {
+  @action.bound couldLayout(data = [], max = 2) {
     this.box = d3.select(`#box${this.props.index}`)
     if (!this.box) return
     this.box.style('transform', 'scale(0.3, 0.3)').style('transition', 'all .3s linear')
     this.box.selectAll('*').remove()
 
-    const scaleSize = data.length > 20 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
+    const scaleSize = d3.scaleLinear().domain([0, max]).range([14, 28])
+    // const scaleSize = data.length > 50 ? d3.scaleLinear().domain([0, max]).range([14, 20]) : d3.scaleLinear().domain([0, max]).range([14, 28]) 
 
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
-      .size([parseFloat(this.box.style('width')), 320])
+      .size([parseFloat(this.box.style('width')), 480])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
-        return {text: `${d.tag}: ${d.val ? d.val : '-'}`, size: scaleSize(scaleFont)}
+        return {text: `${d.tag}: ${d.val ? d.val : '-'}`, color: d.color, size: scaleSize(scaleFont)}
       }))
-      .padding(2)
+      .padding(0)
       .spiral('archimedean')
       .rotate(0)
       .font('Impact')
@@ -70,38 +82,46 @@ export default class Cloud extends Component {
       .append('text')
       .style('font-size', d => `${d.size}px`)
       .style('font-family', 'Impact')
-      .style('fill', (d, i) => this.fill(i))
+      .style('fill', (d, i) => d.color)
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
+      // .insert('rect', 'text')
+      // .attr('width', d => d.width)
+      // .attr('height', d => d.height)
+      // .style('fill', (d, i) => d.color)
   }
 
   render() {
     const {
-      cloudData = [], loading, unitName,
+      cloudData = [], loading, unitName, toAllTag, cateTitle,
     } = this.store
     const {index} = this.props
 
     return (
-      <div className="object-cloud ml16 mr16">
-        <div className="object-cloud-header mb16">
-          {/* <span>{`${unitName}的个人画像`}</span> */}
-          <span>个人画像</span>
-        </div>
-        {/* <span className="ml16 tag-herder">个人标签</span> */}
+      <div className="object-cloud">
         <Spin spinning={loading}>
-          <div className="object-cloud-content">
-
+          <div>
             {
               !cloudData.length
                 ? (
                   <div className="no-Data" style={{height: '442px'}}>
-                    <NoData text="暂无数据" size="small" />
+                    <NoData text="请选择业务域查询" size="small" />
                   </div>
                 )
                 : null
             }
             <div id={`box${index}`} />
+            <div className="d-flex FBJC">
+              {
+                cateTitle.map(item => (
+                  <div className="mr8" style={{color: item.color}}>
+                    <span style={{backgroundColor: item.color}} className="legend-name-icon mr4" />
+                    <span>{item.text}</span>
+                  </div>
+                ))
+              }
+            </div>
           </div>
         </Spin>
       </div>

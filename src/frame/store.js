@@ -6,22 +6,23 @@ import {successTip, errorTip} from '../common/util'
 import io from './io'
 
 class Store {
-  @observable userStatus = false // 登录状态
   @observable collapsed = false
   @observable pathName = '' // 根据url选中菜单
+  @observable menuName = '' // 匹配title
   @observable visible = false // 修改密码
-  @observable getPerLoad = false // 权限是否加载完毕
-  @observable userInfo = {} // 权限是否加载完毕
-  @observable openKeys = [] // 权限是否加载完毕
+  @observable getPerLoading = false // 权限是否加载完毕
+  @observable userInfo = {} // 用户信息
+  @observable openKeys = [] // 打开菜单
 
   @action async getParams() {
     try {
       const res = await io.getParams()
       runInAction(() => {
         window.defaultParams = res || {}
+        this.getPerLoading = true
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     }
   }
 
@@ -31,10 +32,12 @@ class Store {
       runInAction(() => {
         window.frameInfo = res
         this.userInfo = res
-        this.getPerLoad = true
+
+        this.getParams()
+        this.getProject()
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     }
   }
 
@@ -87,7 +90,7 @@ class Store {
         window.__keeper.projectTree = this.listToTreePro(proList)
       })
     } catch (e) {
-      errorTip(e.message)
+      console.log(e.message)
     } 
   }
 }

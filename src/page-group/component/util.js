@@ -6,7 +6,9 @@ export const getGroupItemData = (data, parentFlag, formItemData, logicMap, where
 
   if (data && data.length === 1) {
     const formData = formItemData[`${parentFlag}-${data[0].flag}`]
-
+    if (Object.prototype.toString.call(formData.rightParams) === '[object Object]') {
+      formData.rightParams = formData.rightParams.format('YYYY-MM-DD')
+    }
     const sOnedata = {
       comparision: formData.comparision,
       left: {
@@ -17,10 +19,8 @@ export const getGroupItemData = (data, parentFlag, formItemData, logicMap, where
         ],
       },
       right: {
-        function: '固定值',
-        params: [
-          formData.rightParams,
-        ],
+        function: formData.comparision === 'in' || formData.comparision === 'not in' ? 'array' : '固定值',
+        params: Array.isArray(formData.rightParams) ? formData.rightParams : [formData.rightParams],
       },
     }
 
@@ -39,6 +39,7 @@ export const getGroupItemData = (data, parentFlag, formItemData, logicMap, where
 
     const comparisionListResult = comparisionList.map(sd => {
       const sdata = formItemData[`${parentFlag}-${sd.flag}`]
+      console.log(sdata)
       const resultObj = {
         comparision: sdata.comparision,
         left: {
@@ -49,10 +50,8 @@ export const getGroupItemData = (data, parentFlag, formItemData, logicMap, where
           ],
         },
         right: {
-          function: '固定值',
-          params: [
-            sdata.rightParams,
-          ],
+          function: Array.isArray(sdata.rightParams) ? 'array' : '固定值',
+          params: Array.isArray(sdata.rightParams) ? sdata.rightParams : [sdata.rightParams],
         },
       }
 
@@ -266,7 +265,7 @@ export const entityFunctionList = [
   }]
 
 export const condition = [{
-  value: '=',
+  value: 'in',
   name: '等于',
 }, {
   value: '>',
@@ -281,16 +280,15 @@ export const condition = [{
   value: '<=',
   name: '小于等于',
 }, {
-  value: '!=',
+  value: 'not in',
   name: '不等于',
-}, 
-]
+}]
 
 export const textCondition = [{
-  value: '=',
+  value: 'in',
   name: '等于',
 }, {
-  value: '!=',
+  value: 'not in',
   name: '不等于',
 }]
 

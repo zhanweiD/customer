@@ -6,10 +6,9 @@ import {LeftOutlined, RightOutlined} from '@ant-design/icons'
 
 import {Loading, OmitTooltip, NoData} from '../component'
 import Cloud from './cloud'
-import Chart from './chart'
-import Cloud1 from './cloud1'
-import Contact from './contact'
+import TagDepict from './tagDepict'
 import User from './user-information'
+import BusinessContact from './business-contact'
 
 const {TabPane} = Tabs
 
@@ -23,6 +22,7 @@ export default class SearchResult extends Component {
   // 卡片信息处理
   setCard = item => {
     const cards = []
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in item) {
       if (key !== 'ident') {
         cards.push(`${key}: ${item[key]}`)
@@ -38,13 +38,16 @@ export default class SearchResult extends Component {
       </div>
     )
   }
+  // 切换个体
   @action selectPor = v => {
     this.store.ident = v
+    this.store.toAllTag = true // 标签模式切换为列表
   }
   @action btnClick = v => {
     this.store.unitName = v.姓名
   }
 
+  // 上一页
   @action prevPage = () => {
     this.store.isLast = false
     if (this.store.currentPage === 2) {
@@ -93,29 +96,26 @@ export default class SearchResult extends Component {
   render() {
     const {tabLoading, unitList, ident, loading, changeLoading, isJump} = this.store
     return (
-      <div>
+      <div className="mr16">
         <Spin spinning={tabLoading || changeLoading}>
           {
             isJump ? (
               // <Spin spinning={changeLoading}>
               <div className="d-flex user-info mb16">
                 <div className="basis-info bgf box-border">
-                  <div className="herder mb16">用户信息</div>
                   <User store={this.store} />
                 </div>
-                <div className="user-portrait">
-                  <Cloud store={this.store} loading={loading} index={1} />
-                  <div className="d-flex">
-                    <Chart store={this.store} />
-                    {/* <Cloud1 store={this.store} loading={loading} index={1} /> */}
-                  </div>
-                </div>
-                <div className="business-contact bgf box-border">
-                  <div className="herder">业务触点</div>
-                  <Contact store={this.store} ident={ident} />
+                <div className="user-portrait ml16 bgf">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="标签描摹" key="1">
+                      <TagDepict store={this.store} />
+                    </TabPane>
+                    <TabPane tab="业务触点" key="2">
+                      <BusinessContact store={this.store} />
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
-              // </Spin>
             ) : null
           }
           {
@@ -136,19 +136,17 @@ export default class SearchResult extends Component {
                         // <Spin spinning={changeLoading}>
                         <div className="d-flex user-info mb16">
                           <div className="basis-info bgf box-border">
-                            <div className="herder mb16">用户信息</div>
                             <User store={this.store} />
                           </div>
-                          <div className="user-portrait">
-                            <Cloud store={this.store} loading={loading} index={i} />
-                            <div className="d-flex">
-                              <Chart store={this.store} />
-                              {/* <Cloud1 store={this.store} loading={loading} index={i} /> */}
-                            </div>
-                          </div>
-                          <div className="business-contact bgf box-border">
-                            <div className="herder">业务触点</div>
-                            <Contact store={this.store} ident={ident} />
+                          <div className="user-portrait ml16 bgf">
+                            <Tabs defaultActiveKey="1">
+                              <TabPane tab="标签描摹" key="1">
+                                <TagDepict store={this.store} index={i} />
+                              </TabPane>
+                              <TabPane tab="业务触点" key="2">
+                                <BusinessContact store={this.store} />
+                              </TabPane>
+                            </Tabs>
                           </div>
                         </div>
                         // </Spin>

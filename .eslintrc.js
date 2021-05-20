@@ -18,7 +18,7 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures: {
       legacyDecorators: true,
-    }
+    },
   },
   rules: {
     /**
@@ -343,17 +343,24 @@ module.exports = {
     // 强制执行无状态的 React Components 作为纯函数
     'react/prefer-stateless-function': ['off', {
       // 忽略使用 this.props 或 this.context 从 React.PureComponent 扩展的组件
-      ignorePureComponents: true
+      ignorePureComponents: true,
     }],
     // prop types
     'react/prop-types': 'off',
     // 检测的文件扩展名
     'react/jsx-filename-extension': ['error', {
-      'extensions': ['.js', '.jsx'],
+      extensions: ['.js', '.jsx'],
     }],
-    "react/react-in-jsx-scope": ["off"],
-    "no-return-assign": ["off"],
-    "jsx-a11y/anchor-is-valid": ["off"],
-    "no-param-reassign": ["off"],
-  }
+    'react/react-in-jsx-scope': ['off'],
+    'no-return-assign': ['off'],
+    'jsx-a11y/anchor-is-valid': ['off'],
+    'no-param-reassign': ['off'],
+  },
+  globals: {
+    document: false,
+    window: false,
+    moment: true,
+    echarts: true,
+    _: true,
+  },
 }

@@ -9,15 +9,17 @@ import * as dict from './common/dict'
 import './common/util.styl'
 import Frame from './frame'
 
+import UploadTag from './page-tag-manage/upload-tag'
 import Group from './page-group'
-import Scene from './page-scene'
 import System from './page-system'
 import Login from './page-login'
-import Manage from './page-tag-manage'
 import Analyze from './page-analyze'
-import TagApp from './page-tag-app'
 import Portrait from './page-portrait'
 import Sync from './page-tag-sync'
+import Overview from './page-overview'
+import TagMarket from './page-tag-market'
+import TagManage from './page-tag-manage'
+import Sales from './page-sales'
 
 const njkData = {
   dict,
@@ -31,26 +33,26 @@ function Entry() {
       <Switch>
         {/* 登录 */}
         <Route path="/login" component={Login} />
+        <Route path="/upload-tag" component={UploadTag} />
+
         <Frame>
+          {/* 客户中心 */}
+          <Route path="/overview" component={Overview} />
+          {/* 标签集市 */}
+          <Route path="/tag-market" component={TagMarket} />
+          {/* 标签维护 */}
+          <Route path="/tag-manage" component={TagManage} />
+          {/* 标签同步 */}
+          <Route path="/tag-sync" component={Sync} />
+          {/* 客群管理 */}
+          <Route path="/group" component={Group} />
+          {/* 客户画像 */}
+          <Route path="/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
+          {/* 客群分析 */}
+          <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
-          {/* 标签管理 */}
-          <Route path="/tag" component={Manage} />
-          {/* 标签同步 */}
-          <Route path="/tag" component={Sync} />
-          {/* 群体分析 */}
-          <Route path="/analyze" component={Analyze} />
-          {/* 标签应用 */}
-          <Route path="/tag" component={TagApp} />
-          {/* 场景管理 */}
-          <Route path="/scene" component={Scene} />
-          {/* 客户画像 */}
-          <Route path="/customer" component={Portrait} />
-
-          {/* 群体管理 */}
-          <Route path="/group" component={Group} />
-
-          {/* <Redirect to="/tag" /> */}
+          <Route path="/sales" component={Sales} />
         </Frame>
 
       </Switch>

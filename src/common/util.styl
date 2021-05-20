@@ -31,6 +31,7 @@ $font-colors = {
 
 // 设计师喜欢用的透明度
 $opacitys = {
+  '25': 0.25,
   '45': 0.45,
   '65': 0.65,
   '85': 0.85,
@@ -49,7 +50,7 @@ for $key, $value in $opacitys
     opacity $value
 
 // font size
-for $n in 0 12 14 16 18 20 22 24 26 28 30
+for $n in 0 12 14 16 18 20 22 24 26 28 30 32
   .fs{$n}
     font-size u($n)
 
@@ -75,7 +76,7 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
     margin u($n)
 
 // special margin
-for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
+for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   .mt{$n}
     margin-top u($n)
   .mr{$n}
@@ -84,10 +85,25 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
     margin-bottom u($n)
   .ml{$n}
     margin-left u($n)
+
 .c85
   color rgba(0,0,0,0.85)
+.c65
+  color rgba(0,0,0,0.65)
+.c45
+  color rgba(0,0,0,0.45)
+.ac
+  color #2466ff
 .w100
   width 100%
+.w60
+  width 60%
+.w50
+  width 50%
+.w40
+  width 40%
+.w33
+  width 33%
 .h100
   height 100%
 .bold
@@ -124,6 +140,8 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
   justify-content center
 .FBJB, .FBJ
   justify-content space-between
+.FBJA
+  justify-content space-around
 .FBAC
   align-items center
 .FBV
@@ -131,11 +149,21 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
 .dfac
   display flex
   align-items center
+.dfjf
+  display flex
+  justify-content flex-end
+.dfjc
+  display flex
+  justify-content space-between
 .dfjs
   display flex
   justify-content space-between
+.dfsa
+  display flex
+  justify-content space-around
 .d-flex
   display flex
+  
 .omit
   overflow hidden
   text-overflow ellipsis
@@ -153,6 +181,9 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
   display -webkit-box
   -webkit-line-clamp 3
   -webkit-box-orient vertical
+
+.nowrap
+  white-space nowrap
 
 .hand
   cursor pointer
@@ -211,21 +242,27 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
 
 /* header */
 .content-header
-  margin 4px 4px 0px
+  // margin 4px 4px 0px
   line-height 56px
   font-size 16px
   padding-left 16px
   background #ffffff
   color rgba(0,0,0, .85)
   border-bottom 1px solid #E6EDF8
+  position fixed
+  z-index 10
+  width 100%
+.oa
+  overflow auto
 
 /* 普通页面 start */
 .header-page
-  min-height calc(100vh - 141px)
+  min-height calc(100vh - 136px)
   margin 16px
   background #ffffff
   border 1px solid #E6EDF8
   border-radius 2px
+  margin-top 72px
   
 /* 普通列表页面 end */
 .bgf
@@ -263,14 +300,17 @@ for $n in 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48
   margin-top -48px
   margin-bottom 16px
 
-
 .chart-title
   font-size 14px
   margin-bottom 16px
   // padding-left 8px
   position relative
   line-height 24px
-
+.object-tree-action
+  display flex
+  align-items center
+  padding-left 8px
+  background-color #f0f2f4
 
 // .ant-modal-body
 //   padding 24px!important
@@ -294,3 +334,13 @@ a
       font-size 12px  
 .h-100 
   height 100%
+.legend-name-icon
+  width 6px
+  height 6px
+  border-radius 6px
+  display inline-block
+
+.fixed-header
+  position fixed
+  z-index 10
+  width 100%

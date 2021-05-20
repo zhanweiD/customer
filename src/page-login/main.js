@@ -72,7 +72,7 @@ export default class Login extends Component {
             <div className="main-pic FB1 animated fadeIn">
               <div className="title-container FBV FBJ FBAC">
                 {/* <div className="dt-title">彰泰</div> */}
-                <div className="dt-title">地产</div>
+                <div className="dt-title">慧营客</div>
                 <div className="dt-subtitle">客户洞察</div>
               </div>
               <img src={banner} alt="" />
@@ -81,8 +81,8 @@ export default class Login extends Component {
               <div className="component-new-operation">
                 <div className="action">
                   <div className="tab active">
-                    <div className="caret-blue" />
-                    <div className="caret-white" />
+                    {/* <div className="caret-blue" />
+                    <div className="caret-white" /> */}
                     登录
                   </div>
                 </div>

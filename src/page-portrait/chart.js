@@ -4,14 +4,17 @@
 import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
+import {Spin} from 'antd'
 
-import {NoData} from '../component'
+import {NoData, LegendItem} from '../component'
 
-import radarOption from './option'
+import {pieOption, barOption} from './option'
+
 
 @observer
 export default class ChartPie extends Component {
-  myChartFun = null
+  myChartPie = null
+  myChartBar = null
 
   constructor(props) {
     super(props)
@@ -19,34 +22,62 @@ export default class ChartPie extends Component {
   }
 
   componentDidMount() {
-    this.myChartSanKey = echarts.init(this.refs.chartsSanKey)
-    this.store.getChart(data => {
-      this.drawSaveTrend(data)
+    this.myChartPie = echarts.init(this.refs.chartPie)
+    this.myChartBar = echarts.init(this.refs.chartBar)
+
+    // 将drawSaveTrend传递给父组件
+    const {props} = this
+    props.getDraw(this.drawSaveTrend)
+
+    this.store.getPieChart((pieData, total, barData) => {
+      this.drawSaveTrend(pieData, total, barData)
     })
-    window.addEventListener('resize', () => this.resize())
   }
 
-  @action resize() {
-    this.myChartSanKey && this.myChartSanKey.resize()
-  }
+  @action.bound drawSaveTrend(pieData, total, barData) {
+    const resize = () => {
+      if (this.myChartPie) {
+        this.myChartPie.resize()
+        this.myChartBar.resize()
+      }
+    }
+    window.addEventListener('resize', resize)
 
-  @action.bound drawSaveTrend(data) {
-    data.indicator ? this.myChartSanKey.setOption(radarOption(data)) : null
+    if (pieData.length) this.myChartPie.setOption(pieOption(pieData, total))
+    if (barData.length) this.myChartBar.setOption(barOption(barData))
   }
 
   render() {
-    const {chartData, isCustomer} = this.store
+    const {pieData, pieTotal, chartLoading, color, barData} = this.store
     return (
-      <div className="chart bgf ml16 mr16 p16 box-border">
-        <span className="tag-herder">{isCustomer ? '综合满意度' : '提升象限'}</span>
-        <div ref="chartsSanKey" style={{height: '300px', width: '100%', display: 'inline-block'}} />
-        {
-          chartData.indicator ? null : (
-            <div className="no-Data" style={{height: '200px'}}>
-              <NoData text="暂无数据" size="small" />
+      <div className="chart m16 mt8 p16 box-border">
+        <Spin spinning={chartLoading}>
+          {/* <div className="d-flex" style={{display: pieData.length ? 'flex' : 'none'}}> */}
+          <div className="d-flex">
+            <div ref="chartPie" style={{height: '300px', width: '50%'}} />
+            <div className="w50 fs12 FBV FBJC FBAC categroy-legend-box">
+              {
+                pieData.map((item, i) => (
+                  <LegendItem 
+                    title={item.name} 
+                    percent={`${((item.value / pieTotal) * 100).toFixed(2)}%`}
+                    counts={item.value}
+                    color={color[i]}
+                  />
+                ))
+              }
             </div>
-          )
-        }
+          </div>
+          {/* <NoData 
+            style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
+            text="暂无数据" 
+            size="small" 
+          /> */}
+          <div 
+            ref="chartBar" 
+            style={{height: '180px', width: '100%'}} 
+          />
+        </Spin>
       </div> 
     )
   }

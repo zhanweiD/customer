@@ -1,24 +1,16 @@
 /**
- * @description  标签管理
+ * @description  系统配置
  */
-import {Route, Switch, Redirect} from 'react-router-dom'
-import {codeInProduct} from '../common/util'
+import {Route, Switch} from 'react-router-dom'
 
-import ObjectModel from './tag-manage'
-
-const prePath = '/tag'
+import TagManageDetail from './page-tag-manage' 
+import TagManage from './page-tag-object'
 
 export default () => {
   return (
     <Switch>
-      {
-        codeInProduct('tag-manage:view') && (
-          <div>
-            <Route exact path={`${prePath}/manage`} component={ObjectModel} />
-            {/* <Redirect strict to={`${prePath}/manage`} /> */}
-          </div>
-        )
-      }
+      <Route exact path="/tag-manage" component={TagManage} />
+      <Route exact path="/tag-manage/:id" component={TagManageDetail} />
     </Switch>
   )
 }

@@ -1,5 +1,6 @@
 import {asyncComponent} from '../common/util'
 import './main.styl'
+import './index.less'
 
 export default asyncComponent(async () => {
   try {
