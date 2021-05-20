@@ -22,6 +22,7 @@
     "@dtwave/oner-flexbox": "2.0.1",
     "@dtwave/oner-frame": "0.0.4-alpha21",
     "@dtwave/oner-mapping": "2.1.0-alpha12",
+    "@dtwave/oner-dag": "^1.2.1-alpha2",
     "@dtwave/uikit": "3.0.0-alpha4",
     "antd": "4.9.3",
     "antd-multi-cascader": "^1.0.2",
