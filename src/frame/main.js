@@ -253,9 +253,9 @@ export default class Frame extends Component {
                       </Menu.Item>
                     )
                   }
-                  {/* <Menu.Item key="/sales/list" icon={<UserOutlined />}>
+                  <Menu.Item key="/sales/list" icon={<UserOutlined />}>
                     营销分析
-                  </Menu.Item> */}
+                  </Menu.Item>
                   {
                     showAnalyze && (
                       <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">

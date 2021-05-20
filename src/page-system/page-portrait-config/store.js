@@ -1,5 +1,5 @@
 import {
-  observable, action, runInAction,
+  observable, action, runInAction, toJS,
 } from 'mobx'
 import {successTip, errorTip, userLog, listToTree} from '../../common/util'
 import io from './io'
@@ -70,14 +70,14 @@ class Store extends ListContentStore(io.getList) {
         this.basic = res.basic
 
         res.basic.forEach(item => {
-          if (item.tagIdList.length > 1) {
+          if (item.tagIdList.length > 0) {
             this.defBasicList = [...this.defBasicList, ...item.tagIdList]
           }
         })
         this.defBasicList = this.defBasicList.map(String)
 
         res.portrait.forEach(item => {
-          if (item.tagIdList.length > 1) {
+          if (item.tagIdList.length > 0) {
             this.defPortraitList = [...this.defPortraitList, ...item.tagIdList]
           }
         })

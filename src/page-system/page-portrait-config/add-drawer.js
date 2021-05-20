@@ -44,6 +44,7 @@ class AddDrawer extends Component {
 
   @action basisCheck = (keys, item) => {
     const {cates, basic} = this.store
+    this.store.defBasicList = keys
     this.store.basic = []
     const tags = item.checkedNodes.filter(sitem => !sitem.children)
     cates.forEach(sitem => {
@@ -56,6 +57,7 @@ class AddDrawer extends Component {
   @action portraitCheck = (keys, item) => {
     const {cates, portrait} = this.store
     this.store.portrait = []
+    this.store.defPortraitList = keys
     const tags = item.checkedNodes.filter(sitem => !sitem.children)
     cates.forEach(sitem => {
       const childs = tags.filter(citem => sitem.id === citem.parentId)
@@ -126,7 +128,7 @@ class AddDrawer extends Component {
       defPortraitList,
       defBasicList,
     } = this.store
-
+    console.log(toJS(defPortraitList))
     const {
       objId,
       search,
@@ -137,7 +139,7 @@ class AddDrawer extends Component {
       eventTableInfo,
       type,
     } = detailObj
-
+    console.log(basic)
     // drawer设施项
     const drawerProps = {
       visible: drawerVisible,
@@ -236,11 +238,12 @@ class AddDrawer extends Component {
                 key="basic" 
                 name="basic"
                 label="客户档案"
+                initialValue={toJS(defBasicList)}
                 rules={[{validator: this.selectTag}]} 
               >
                 <Tree
                   checkable
-                  defaultCheckedKeys={toJS(defBasicList)}
+                  checkedKeys={toJS(defBasicList)}
                   onCheck={this.basisCheck}
                   selectable={false}
                   // treeData={catList}
@@ -253,11 +256,12 @@ class AddDrawer extends Component {
                 key="portrait" 
                 name="portrait"
                 label="标签描摹"
+                initialValue={toJS(defPortraitList)}
                 rules={[{validator: this.selectTag}]}
               >
                 <Tree
                   checkable
-                  defaultCheckedKeys={toJS(defPortraitList)}
+                  checkedKeys={toJS(defPortraitList)}
                   onCheck={this.portraitCheck}
                   selectable={false}
                 >
