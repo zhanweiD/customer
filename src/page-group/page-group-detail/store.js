@@ -11,6 +11,11 @@ const logicMap = {
 const comparisionMap = {
   in: '等于',
   'not in': '不等于',
+  '>': '大于',
+  '>=': '大于等于',
+  '=': '等于',
+  '<': '小于',
+  '<=': '小于等于',
 }
 
 export default class Store {
@@ -104,7 +109,13 @@ export default class Store {
       // 没有了，只需要对 comparisionList 处理
       const {oneText, twoText} = this.geneComparisionListTwo(comparisionList)
 
-      const totalText = `${oneText} ${logicMap[logic]} ${twoText}`
+      let totalText = ''
+
+      if (twoText) {
+        totalText = `${oneText} ${logicMap[logic]} ${twoText}`
+      } else {
+        totalText = oneText
+      }
 
       this.ruleText = this.ruleText.concat(totalText)
     }
