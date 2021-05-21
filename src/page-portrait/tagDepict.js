@@ -22,6 +22,7 @@ export default class TagDepict extends Component {
   }
 
   @action changeModel = () => {
+    this.store.cateTitle = []
     this.store.toAllTag = !this.store.toAllTag
     if (this.store.toAllTag) this.store.cloudData = []
     else this.store.tagList = []

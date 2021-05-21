@@ -212,7 +212,7 @@ module.exports = {
             js: [
               './public/d3/3.3.6/d3.min.js',
               './public/echarts/4.2.0/echarts.min.js',
-              './public/dagre/data-manage-dagre.js',
+              // './public/dagre/data-manage-dagre.js',
               './public/jquery/2.0.0/jquery.min.js',
             ],
             // 除公共资源，项目需要加载的第三方css
