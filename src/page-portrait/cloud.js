@@ -20,10 +20,10 @@ export default class Cloud extends Component {
   componentDidMount() {
     const {props} = this
     props.getDrawCloud(this.couldLayout)
-    // this.store.getObjCloud((res, max) => {
-    //   if (toAllTag) return
-    //   this.couldLayout(res, max)
-    // })
+    // 默认显示
+    this.store.getObjCloud(res => {
+      this.couldLayout(res)
+    })
   }
   // componentUpdate() {
   //   const {toAllTag} = this.store

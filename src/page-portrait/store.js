@@ -355,6 +355,7 @@ class Store {
           item.value = item.bizCode
         })
         this.businessList = busListToTree(this.bizList)
+        this.businessType = this.businessList.map(item => [item.bizCode])
       })
     } catch (e) {
       errorTip(e.message)

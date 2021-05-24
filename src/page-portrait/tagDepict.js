@@ -40,21 +40,22 @@ export default class TagDepict extends Component {
     this.store.searchKey = null
     const {bizList} = this.store
     const bizValue = []
-    data.forEach(item => {
-      const target = _.find(bizList, e => e.bizCode === item)
-      const parentNode = _.find(bizList, e => e.bizCode === target.parentCode)
+    // data.forEach(item => {
+    //   const target = _.find(bizList, e => e.bizCode === item)
+    //   const parentNode = _.find(bizList, e => e.bizCode === target.parentCode)
 
-      if (!parentNode) {
-        // 没找到，说明是第一级
-        bizValue.push([target.bizCode])
-      } else if (target.parentCode === parentNode.bizCode && parentNode.parentCode === '-1') {
-        // 第二级
-        bizValue.push([target.parentCode, target.bizCode])
-      } else {
-        bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
-      }
-    })
-    this.store.businessType = bizValue
+    //   if (!parentNode) {
+    //     // 没找到，说明是第一级
+    //     bizValue.push([target.bizCode])
+    //   } else if (target.parentCode === parentNode.bizCode && parentNode.parentCode === '-1') {
+    //     // 第二级
+    //     bizValue.push([target.parentCode, target.bizCode])
+    //   } else {
+    //     bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
+    //   }
+    // })
+    // this.store.businessType = bizValue
+    this.store.businessType = data
     this.store.getObjCloud((res, max) => {
       this.getDrawCloud(res, max)
     })
