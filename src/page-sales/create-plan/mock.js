@@ -1,14 +1,27 @@
+import newGroup1 from '../../icon/new-group1.svg'
 // mock数据
 const types = [
   {
-    nodeName: '微信事件',
+    nodeName: '微信服务号',
     value: 'weixin',
     status: 2,
-    icon: 'wp',
+    icon: <img alt="服务号" height={24} width={24} src={newGroup1} />,
   },
   {
-    nodeName: '抖音事件',
-    value: 'douyin',
+    nodeName: '微信小程序',
+    value: 'app',
+    status: 4,
+    icon: '',
+  },
+  {
+    nodeName: '邮箱',
+    value: 'email',
+    status: 4,
+    icon: 'dy',
+  },
+  {
+    nodeName: '短信',
+    value: 'duanxin',
     status: 4,
     icon: 'dy',
   },
@@ -18,45 +31,14 @@ const types = [
 const nodes = [
   {
     id: 1,
-    nodeName: '短信',
+    nodeName: '开始',
     status: 2,
-    icon: 1,
-  }, {
-    id: 2,
-    nodeName: '发消息',
-    status: 2,
-    icon: 2,
-  }, {
-    id: 4,
-    nodeName: '扫码',
-    status: 5,
-    icon: 4,
-  }, 
-  {
-    id: 5,
-    nodeName: '推文本',
-    status: 2,
-    icon: 5,
+    icon: <img alt="短信" height={24} width={24} src={newGroup1} />,
   },
 ]
   
 // 连线数据
 const links = [
-  {
-    sourceId: 1,
-    targetId: 2,
-  },
-  {
-    sourceId: 1,
-    targetId: 4,
-  },
-  {
-    sourceId: 2,
-    targetId: 5,
-  },
-  {
-    sourceId: 4,
-    targetId: 5,
-  },
+  
 ]
 export {types, nodes, links}

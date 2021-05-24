@@ -1,3 +1,4 @@
+import newGroup1 from '../../icon/new-group1.svg'
 // 构建菜单
 const buildMenu = instance => [{
   label: '删除',
@@ -6,27 +7,29 @@ const buildMenu = instance => [{
     domEvent.stopPropagation()
     instance.removeNode(item.id)
   },
-}, {
-  label: '查看日志',
-  icon: 'log',
-  action: domEvent => {
-    domEvent.stopPropagation()
-  },
-}]
+},
+// {
+//   label: '查看日志',
+//   icon: 'log',
+//   action: domEvent => {
+//     domEvent.stopPropagation()
+//   },
+// },
+]
 
 const onFlowInit = (instance, nodeList) => {
   nodeList.map(node => {
-    instance.addTargetEndPoints(node.id, [{
-      id: `target_${node.id}`,
-      // ioType: 'default',
-      maxConnections: 5,
-      // enabled: !disabled,
-    }])
+    // instance.addTargetEndPoints(node.id, [{
+    //   id: `target_${node.id}`,
+    //   ioType: 'default',
+    //   maxConnections: 1,
+    //   // enabled: !disabled,
+    // }])
 
     instance.addSourceEndPoints(node.id, [{
       id: `source_${node.id}`,
       // ioType: 'default',
-      maxConnections: 5,
+      maxConnections: 1,
       // enabled: !disabled,
     }])
 
@@ -58,6 +61,8 @@ const options = ({instance, nodeList}) => {
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
       item.position = position
+      const icon = <img alt="短信" height={24} width={24} src={newGroup1} />
+      item.icon = icon
       instance.addNode(item)
       console.log('配置model', item)
       setTimeout(() => {

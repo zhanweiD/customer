@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {Button} from 'antd'
+import {Button, Collapse, Space} from 'antd'
 import {
   RedoOutlined, 
   ZoomInOutlined, 
@@ -12,6 +12,8 @@ import DAG from '@dtwave/oner-dag'
 import option from './option'
 import {links, nodes, types} from './mock'
 import './index.styl'
+
+const {Panel} = Collapse
 
 const Demo = () => {
   const [instance, setInstance] = useState(null)
@@ -32,7 +34,7 @@ const Demo = () => {
   }
   // 开始拖动
   const onDragStart = ({nodeName, status, icon, ioType}, e) => {
-    console.log(nodeName)
+    console.log(icon)
     const newNode = {
       id: new Date().getTime(),
       nodeName,
@@ -40,6 +42,7 @@ const Demo = () => {
       icon,
       ioType,
     }
+    console.log(newNode)
     // 添加拖拽数据
     e.dataTransfer.setData('data', JSON.stringify(newNode))
     // const {target} = e
@@ -88,29 +91,60 @@ const Demo = () => {
 
   return (
     <div className="dag-process oa">
-      <div className="content-header">新建营销计划</div>
-      <div className="dag-cate mt72">
-        <h2>事件</h2>
-        <div className="mb12">
-          <Button className="containerStyle mr8 mb8" onClick={getNodes}>获取所有节点</Button>
-          <Button className="containerStyle mb8" onClick={getLinks}>获取所有连线的信息</Button>
-        </div>
-        <h2>组件</h2>
-        <div>
-          {
-            typeList.map(item => (
-              <Button
-                className="dag-drag-box mr8 mb8"
-                onDrag={onDrag}
-                onDragStart={e => onDragStart(item, e)}
-                onDragEnd={onDragEnd}
-                draggable
-              >
-                {item.nodeName}
-              </Button>
-            ))
-          }
-        </div>
+      <div className="dag-header">
+        <Button className="header-but" onClick={getLinks}>清空画布</Button>
+        <Button className="header-but" onClick={getNodes}>保存</Button>
+      </div>
+      <div className="dag-cate">
+        <Space direction="vertical" size={24}>
+          <Collapse defaultActiveKey={['1']}>
+            <Panel header="营销动作" key="1">
+              <div>
+                {
+                  typeList.map(item => (
+                    <Button
+                      className="dag-drag-box mr8 mb8"
+                      onDrag={onDrag}
+                      onDragStart={e => onDragStart(item, e)}
+                      onDragEnd={onDragEnd}
+                      draggable
+                    >
+                      {item.nodeName}
+                    </Button>
+                  ))
+                }
+              </div>
+            </Panel>
+          </Collapse>
+          <Collapse defaultActiveKey={['1']}>
+            <Panel header="条件控制" key="1">
+              <div>
+                {
+                  typeList.map(item => (
+                    <Button
+                      className="dag-drag-box mr8 mb8"
+                      onDrag={onDrag}
+                      onDragStart={e => onDragStart(item, e)}
+                      onDragEnd={onDragEnd}
+                      draggable
+                    >
+                      {item.nodeName}
+                    </Button>
+                  ))
+                }
+              </div>
+            </Panel>
+          </Collapse>
+          <Collapse defaultActiveKey={['1']}>
+            <Panel header="流程控制" key="1">
+              <div className="mb12">
+                <Button className="containerStyle mr8 mb8" onClick={getNodes}>获取所有节点</Button>
+                <Button className="containerStyle mb8" onClick={getLinks}>获取所有连线的信息</Button>
+              </div>
+            </Panel>
+          </Collapse>
+        </Space>
+
       </div>
       <div className="dag-content w80">
         {
@@ -126,7 +160,7 @@ const Demo = () => {
         
       </div>
       <div className="pa rt16 tp24 dag-right">
-        <span className="hand mr8">
+        {/* <span className="hand mr8">
           <RedoOutlined className="icon-style" />
         </span>
         {
@@ -139,7 +173,7 @@ const Demo = () => {
               <PauseCircleOutlined className="icon-style" />
             </span>
           )
-        }
+        } */}
         <span onClick={onFixView} className="hand mr8">
           <AimOutlined className="icon-style" />
         </span>

@@ -1,10 +1,20 @@
 .dag-process
   position relative
   display flex
+  .dag-header
+    height 40px
+    position fixed
+    width 100%
+    background-color #fff
+    .header-but
+      height 40px
+      border none
+      border-right 1px solid #f3f4f9
   .dag-cate
     width 20%
     padding 16px
-    background-color #fff
+    // background-color #fff
+    margin-top 40px
     .containerStyle
       margin-right 8px
       text-align center
@@ -13,9 +23,9 @@
   .dag-content
     width 80%
     height calc(100vh - 136px)
-    background-color #fff
+    // background-color #fff
     margin 16px
-    margin-top 72px
+    margin-top 56px
     position relative
     .dag-style
       position absolute
@@ -23,7 +33,7 @@
       top 0px
       right 0
       bottom 0
-      border solid 1px #dbeff8
+      // border solid 1px #dbeff8
 
       .dag-node
         max-width 240px
@@ -42,3 +52,7 @@
     .oner-dag-node
       background-color #fff
       height 40px
+  .node-inner-wrap
+    padding-left 48px !important
+    .node-icon
+      width 40px !important
