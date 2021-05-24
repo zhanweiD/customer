@@ -28,6 +28,7 @@ const onFlowInit = (instance, nodeList) => {
 
     instance.addSourceEndPoints(node.id, [{
       id: `source_${node.id}`,
+      // position: {left: 5000, top: 4000},
       // ioType: 'default',
       maxConnections: 1,
       // enabled: !disabled,
@@ -41,9 +42,10 @@ const options = ({instance, nodeList}) => {
   return ({
     className: 'dag-style',
     flowId: 1, // 任务流程id
+    // vertical: false,
     connectionsDetachable: true, // false会导致无法多输出
-    autoLayout: true, // 自动布局
-    autoFix: true, // 初始定位
+    // autoLayout: true, // 自动布局
+    // autoFix: true, // 初始定位
     nodeParse: ({id, nodeName, icon, status, position}) => {
       return {
         id,
