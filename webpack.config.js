@@ -43,8 +43,6 @@ module.exports = {
       {
         context: ['/hub_user_api', '/hub_api'],
         target: 'http://192.168.90.135',
-        // target: 'http://192.168.90.54:8173',
-        // target: 'http://192.168.10.145:8877',
         changeOrigin: true,
       },
     ],
@@ -221,7 +219,7 @@ module.exports = {
             // 页面keeper
             __keeper: {
               pathPrefix: '/',
-              pathHrefPrefix: '/customer/index.html#',
+              pathHrefPrefix: '/customer_dev/index.html#',
               isPrivate: true,
               encryptType: 'md5',
               showDoc: false,

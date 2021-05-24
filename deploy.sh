@@ -4,8 +4,8 @@
 # 打 提测包
 # eg: sh ./deploy.sh tag_name
 
-package_name="customer"
-tar_build_name="customer"
+package_name="customer_dev"
+tar_build_name="customer_dev"
 # 打包命令
 npm run build
 
