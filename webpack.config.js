@@ -42,7 +42,7 @@ module.exports = {
       // },
       {
         context: ['/hub_user_api', '/hub_api'],
-        target: 'http://192.168.90.135',
+        target: 'http://192.168.90.135:8173',
         changeOrigin: true,
       },
     ],

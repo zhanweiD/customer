@@ -247,7 +247,7 @@ export default class Frame extends Component {
                     )
                   }
                   {
-                    codeInProduct('/portrait/:ident?/:id?/isConsultant?') && (
+                    codeInProduct('/portrait/:ident?/:id?/:isConsultant?') && (
                       <Menu.Item key="/portrait" icon={<UserOutlined />}>
                         客户画像
                       </Menu.Item>
