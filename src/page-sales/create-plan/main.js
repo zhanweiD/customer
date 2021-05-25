@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons'
 import DAG from '@dtwave/oner-dag'
 
-import newGroup1 from '../../icon/new-group1.svg'
+import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import option from './option'
 import matchingIcon from './unit'
@@ -25,7 +25,7 @@ const Demo = () => {
   const [isRun, setIsRun] = useState(false)
   const [nodeList, setNodeList] = useState(nodes)
   const [linkList, setLinkList] = useState(links)
-  const [showRun, setShowRun] = useState(true)
+  const [showRun, setShowRun] = useState(false)
 
   const runDrawer = v => {
     setShowRun(v)
@@ -101,8 +101,14 @@ const Demo = () => {
   return (
     <div className="dag-process oa">
       <div className="dag-header">
-        <Button className="header-but" onClick={getLinks}>清空画布</Button>
-        <Button className="header-but" onClick={getNodes}>保存</Button>
+        <div className="pl16 lh24 hand" onClick={getLinks}>
+          <span className="radio-span"><img className="radio-img" src={clear} alt="" /></span>
+          <Button className="header-but fs12">清空画布</Button>
+        </div>
+        <div className="pl16 lh24 hand" onClick={getNodes}>
+          <span className="radio-span"><img className="radio-img" src={save} alt="" /></span>
+          <Button className="header-but">保存</Button>
+        </div>
       </div>
       <div className="dag-cate">
         <Space direction="vertical" size={24}>
@@ -118,7 +124,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
+                      <span className="ml8 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))

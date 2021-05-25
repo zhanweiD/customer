@@ -9,6 +9,9 @@ import end from './end.svg'
 import email from './email.svg'
 import copyBranch from './copy-branch.svg'
 import start from './start.svg'
+import all from './all.svg'
+import clear from './clear.svg'
+import save from './save.svg'
 // import IconWenjianjiaguan from './wenjianjiaguan'
 
 export {
@@ -22,4 +25,7 @@ export {
   email, // 文件夹-关
   copyBranch,
   start,
+  all,
+  clear,
+  save,
 }

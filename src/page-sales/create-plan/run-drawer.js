@@ -26,7 +26,7 @@ export default ({showRun, runDrawer}) => {
     runForm.validateFields().then(value => {
       console.log(value)
       // runDrawer(false)
-    })
+    }).catch(err => console.log(err))
   }
   const changePlanType = v => {
     setPlanType(v)
@@ -38,32 +38,35 @@ export default ({showRun, runDrawer}) => {
     setTouchWay(v)
   }
   const setTouchType = () => {
-    if (touchWay === 'now') {
-      return (
-        <Select onChange={changTouchWay} defaultValue="now">
-          <Option value="now">立即</Option>
-          <Option value="delay">延迟</Option>
-        </Select>
-      )
-    }
     return (
-      <Input.Group>
-        <Item noStyle name="touchWay">
-          <Select onChange={changTouchWay} defaultValue="now">
+      <Input.Group compact>
+        <Item noStyle name="way" initialValue={touchWay} rules={[{required: true, message: '请选择触达方式'}]}>
+          <Select 
+            style={{width: touchWay === 'now' ? '100%' : '30%'}} 
+            onChange={changTouchWay}
+          >
             <Option value="now">立即</Option>
             <Option value="delay">延迟</Option>
           </Select>
         </Item>
-        <Item noStyle name="touchWay">
-          <Input type="number" placeholder="请输入时间" />
-        </Item>
-        <Item noStyle name="touchWay">
-          <Select defaultValue="min">
-            <Option value="min">分钟</Option>
-            <Option value="hours">小时</Option>
-            <Option value="day">天</Option>
-          </Select>
-        </Item>
+        {
+          touchWay !== 'now' && (
+            <Item noStyle name="time" rules={[{required: true, message: '请输入时间'}]}>
+              <Input style={{width: '40%'}} type="number" placeholder="请输入时间" />
+            </Item>
+          )
+        }
+        {
+          touchWay !== 'now' && (
+            <Item noStyle name="type" initialValue="min" rules={[{required: true, message: '请选择单位'}]}>
+              <Select style={{width: '30%'}}>
+                <Option value="min">分钟</Option>
+                <Option value="hours">小时</Option>
+                <Option value="day">天</Option>
+              </Select>
+            </Item>
+          )
+        }
       </Input.Group>
     )
   }
@@ -80,8 +83,8 @@ export default ({showRun, runDrawer}) => {
     } 
     if (align === 'week') {
       return (
-        <Input.Group>
-          <Item noStyle name="date">
+        <Input.Group compact>
+          <Item noStyle name="date" rules={[{required: true, message: '请选择'}]}>
             <Select style={{width: '60%'}} placeholder="请选择">
               <Option value="monday">星期一</Option>
               <Option value="tuesday">星期二</Option>
@@ -92,7 +95,7 @@ export default ({showRun, runDrawer}) => {
               <Option value="sunday">星期日</Option>
             </Select>
           </Item>
-          <Item noStyle name="time">
+          <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
             <TimePicker style={{width: '40%'}} />
           </Item>
         </Input.Group>
@@ -100,26 +103,26 @@ export default ({showRun, runDrawer}) => {
     } 
     if (align === 'month') {
       return (
-        <Input.Group>
-          <Item noStyle name="date">
+        <Input.Group compact>
+          <Item noStyle name="date" rules={[{required: true, message: '请选择时间'}]}>
             <Select style={{width: '60%'}} placeholder="请选择">
               {
                 setMonth()
               }
             </Select>
           </Item>
-          <Item noStyle name="time">
+          <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
             <TimePicker style={{width: '40%'}} />
           </Item>
         </Input.Group>
       )
     }
     return (
-      <Input.Group>
-        <Item noStyle name="date">
+      <Input.Group compact>
+        <Item noStyle name="date" rules={[{required: true, message: '请选择时间'}]}>
           <DatePicker style={{width: '60%'}} />
         </Item>
-        <Item noStyle name="time">
+        <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
           <TimePicker style={{width: '40%'}} />
         </Item>
       </Input.Group>
@@ -160,9 +163,10 @@ export default ({showRun, runDrawer}) => {
           name="username"
           className="user-pb8"
           extra="营销活动需要触达的人群"
+          rules={[{required: true, message: '请选择人群'}]}
         >
-          <Select defaultValue="">
-            <Option value="">全部</Option>
+          <Select placeholder="请选择人群">
+            <Option value="1">全部</Option>
           </Select>
         </Item>
         <Collapse 
@@ -173,8 +177,10 @@ export default ({showRun, runDrawer}) => {
             <Item
               label="计划类型"
               name="planType"
+              initialValue={planType}
+              rules={[{required: true, message: '请选择计划类型'}]}
             >
-              <Select onChange={changePlanType} defaultValue={planType}>
+              <Select onChange={changePlanType}>
                 <Option value="timing">定时触发</Option>
                 <Option value="event">事件触发</Option>
               </Select>
@@ -186,23 +192,25 @@ export default ({showRun, runDrawer}) => {
               planType === 'event' && (
                 <Form.List
                   name="conversion-event"
+                  initialValue={[{
+                    event: undefined,
+                  }]}
                 >
                   {(fields, {add, remove}, {errors}) => (
                     <div>
                       {fields.map((field, index) => (
-                        <Form.Item
-                          required={false}
-                          key={field.key}
-                          wrapperCol={{span: 24}}
-                        >
+                        <div className="mb24 pr">
                           <Form.Item
                             {...field}
                             {...layout}
+                            name={[field.name, 'event']}
+                            fieldKey={[field.fieldKey, 'event']}
                             className="position-icon"
                             label={`事件${index + 1}`}
+                            rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Select style={{width: '95%'}} placeholder="请选择事件">
-                              <Option value="">APP注册</Option>
+                              <Option value="2">APP注册</Option>
                             </Select>
                           </Form.Item>
                           {fields.length > 1 ? (
@@ -211,16 +219,17 @@ export default ({showRun, runDrawer}) => {
                               onClick={() => remove(field.name)}
                             />
                           ) : null}
-                        </Form.Item>
+                        </div>
                       ))}
                       <Button
                         type="primary"
                         onClick={() => add()}
-                        style={{width: '40%', marginLeft: '24px'}}
+                        style={{width: '40%', marginLeft: '24px', marginBottom: '24px'}}
                         icon={<PlusOutlined />}
                       >
                         添加事件
                       </Button>
+                      {/* <Form.ErrorList errors={errors} /> */}
                     </div>
                   )}
                 </Form.List>
@@ -230,7 +239,6 @@ export default ({showRun, runDrawer}) => {
               planType === 'event' && (
                 <Item 
                   label="触达方式" 
-                  name="touchType"
                 >
                   {setTouchType()}
                 </Item>
@@ -241,6 +249,7 @@ export default ({showRun, runDrawer}) => {
                 <Item
                   label="重复"
                   name="align"
+                  rules={[{required: true, message: '请选择周期'}]}
                 >
                   <Select onChange={changeAlign} placeholder="请选择周期">
                     <Option value="never">永不</Option>
@@ -269,8 +278,13 @@ export default ({showRun, runDrawer}) => {
                 </Item>
               )
             }
-            <Item label="参与限制" name="">
-              <Radio.Group defaultValue="one">
+            <Item 
+              label="参与限制" 
+              name="join-limit" 
+              initialValue="one"
+              rules={[{required: true, message: '请选择次数'}]}
+            >
+              <Radio.Group>
                 <Radio value="one">
                   参与一次
                 </Radio>
@@ -290,16 +304,15 @@ export default ({showRun, runDrawer}) => {
             <div className="fs12 mb16 ml24">首要目标</div>
             <Item
               label="完成时间"
-              name="complete-time"
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
-              <Input.Group>
-                <Item noStyle name="number">
-                  <Input style={{width: '80%'}} type="number" />
+              <Input.Group compact>
+                <Item noStyle name="number" rules={[{required: true, message: '请输入时间'}]}>
+                  <Input style={{width: '70%'}} type="number" />
                 </Item>
-                <Item noStyle name="type">
-                  <Select style={{width: '20%'}} defaultValue="">
-                    <Option value="">分钟</Option>
+                <Item noStyle name="type" initialValue="min" rules={[{required: true, message: '请选择单位'}]}>
+                  <Select style={{width: '30%'}}>
+                    <Option value="min">分钟</Option>
                   </Select>
                 </Item>
               </Input.Group>

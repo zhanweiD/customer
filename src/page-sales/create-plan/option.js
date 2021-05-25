@@ -1,21 +1,22 @@
 import newGroup1 from '../../icon/new-group1.svg'
 // 构建菜单
-const buildMenu = (instance, runDrawer) => [{
-  label: '删除',
-  icon: 'del',
-  action: (domEvent, item) => {
-    domEvent.stopPropagation()
-    instance.removeNode(item.id)
+const buildMenu = (instance, runDrawer) => [
+  {
+    label: '配置',
+    icon: 'edit',
+    action: domEvent => {
+      domEvent.stopPropagation()
+      runDrawer(true)
+    },
   },
-},
-{
-  label: '配置',
-  icon: 'log',
-  action: domEvent => {
-    domEvent.stopPropagation()
-    runDrawer(true)
+  {
+    label: '删除',
+    icon: 'del',
+    action: (domEvent, item) => {
+      domEvent.stopPropagation()
+      instance.removeNode(item.id)
+    },
   },
-},
 ]
 
 const onFlowInit = (instance, nodeList) => {
