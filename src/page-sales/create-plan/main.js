@@ -9,9 +9,11 @@ import {
   PauseCircleOutlined,
 } from '@ant-design/icons'
 import DAG from '@dtwave/oner-dag'
+
 import newGroup1 from '../../icon/new-group1.svg'
+import RunDrawer from './run-drawer'
 import option from './option'
-import {links, nodes, types} from './mock'
+import {links, nodes, types, conditions, process} from './mock'
 import './index.styl'
 
 const {Panel} = Collapse
@@ -22,8 +24,13 @@ const Demo = () => {
   const [isRun, setIsRun] = useState(false)
   const [nodeList, setNodeList] = useState(nodes)
   const [linkList, setLinkList] = useState(links)
-  const [typeList, setTypeList] = useState(types)
+  const [showRun, setShowRun] = useState(false)
 
+  const runDrawer = v => {
+    setShowRun(v)
+  }
+
+  // 画布相关
   const onFixView = () => {
     instance.fixView()
   }
@@ -99,10 +106,10 @@ const Demo = () => {
       <div className="dag-cate">
         <Space direction="vertical" size={24}>
           <Collapse defaultActiveKey={['1']}>
-            <Panel style={{pading: 0}} header="营销动作" key="1">
+            <Panel header="营销动作" key="1">
               <div>
                 {
-                  typeList.map(item => (
+                  types.map(item => (
                     <div
                       className="dag-drag-box hand mr8 mb8"
                       onDrag={onDrag}
@@ -122,16 +129,17 @@ const Demo = () => {
             <Panel header="条件控制" key="1">
               <div>
                 {
-                  typeList.map(item => (
-                    <Button
-                      className="dag-drag-box mr8 mb8"
+                  conditions.map(item => (
+                    <div
+                      className="dag-drag-box hand mr8 mb8"
                       onDrag={onDrag}
                       onDragStart={e => onDragStart(item, e)}
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      {item.nodeName}
-                    </Button>
+                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span>{item.nodeName}</span>
+                    </div>
                   ))
                 }
               </div>
@@ -140,8 +148,20 @@ const Demo = () => {
           <Collapse defaultActiveKey={['1']}>
             <Panel header="流程控制" key="1">
               <div>
-                <Button className="containerStyle mr8 mb8" onClick={getNodes}>获取所有节点</Button>
-                <Button className="containerStyle mb8" onClick={getLinks}>获取所有连线的信息</Button>
+                {
+                  process.map(item => (
+                    <div
+                      className="dag-drag-box hand mr8 mb8"
+                      onDrag={onDrag}
+                      onDragStart={e => onDragStart(item, e)}
+                      onDragEnd={onDragEnd}
+                      draggable
+                    >
+                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span>{item.nodeName}</span>
+                    </div>
+                  ))
+                }
               </div>
             </Panel>
           </Collapse>
@@ -153,7 +173,7 @@ const Demo = () => {
           isRender ? <div /> : (
             <DAG
               ref={e => setInstance(e)}
-              {...option({instance, nodeList, setIsRender, setLinkList})}
+              {...option({instance, nodeList, setIsRender, setLinkList, runDrawer})}
               links={linkList}
               nodeList={nodeList}
             />
@@ -186,6 +206,7 @@ const Demo = () => {
           <ZoomOutOutlined className="icon-style" />
         </span>
       </div>
+      <RunDrawer showRun={showRun} runDrawer={runDrawer} />
     </div>
   )
 }

@@ -55,7 +55,7 @@ export default class TagDepict extends Component {
     //   }
     // })
     // this.store.businessType = bizValue
-    this.store.businessType = data
+    this.store.businessType = data.map(item => [item])
     this.store.getObjCloud((res, max) => {
       this.getDrawCloud(res, max)
     })

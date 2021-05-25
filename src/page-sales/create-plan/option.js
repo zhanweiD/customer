@@ -1,6 +1,6 @@
 import newGroup1 from '../../icon/new-group1.svg'
 // 构建菜单
-const buildMenu = instance => [{
+const buildMenu = (instance, runDrawer) => [{
   label: '删除',
   icon: 'del',
   action: (domEvent, item) => {
@@ -8,13 +8,14 @@ const buildMenu = instance => [{
     instance.removeNode(item.id)
   },
 },
-// {
-//   label: '查看日志',
-//   icon: 'log',
-//   action: domEvent => {
-//     domEvent.stopPropagation()
-//   },
-// },
+{
+  label: '配置',
+  icon: 'log',
+  action: domEvent => {
+    domEvent.stopPropagation()
+    runDrawer(true)
+  },
+},
 ]
 
 const onFlowInit = (instance, nodeList) => {
@@ -38,7 +39,7 @@ const onFlowInit = (instance, nodeList) => {
   })
 }
 
-const options = ({instance, nodeList}) => {
+const options = ({instance, nodeList, runDrawer}) => {
   return ({
     className: 'dag-style',
     flowId: 1, // 任务流程id
@@ -55,7 +56,7 @@ const options = ({instance, nodeList}) => {
         position,
       }
     },
-    buildMenu: () => buildMenu(instance),
+    buildMenu: () => buildMenu(instance, runDrawer),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => {
