@@ -45,8 +45,8 @@ const options = ({instance, nodeList, runDrawer}) => {
     flowId: 1, // 任务流程id
     // vertical: false,
     connectionsDetachable: true, // false会导致无法多输出
-    // autoLayout: true, // 自动布局
-    // autoFix: true, // 初始定位
+    autoLayout: true, // 自动布局
+    autoFix: true, // 初始定位
     nodeParse: ({id, nodeName, icon, status, position}) => {
       return {
         id,

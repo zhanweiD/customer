@@ -20,6 +20,7 @@ import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
 import Sales from './page-sales'
+import Weapp from './weapp'
 
 const njkData = {
   dict,
@@ -34,6 +35,7 @@ function Entry() {
         {/* 登录 */}
         <Route path="/login" component={Login} />
         <Route path="/upload-tag" component={UploadTag} />
+        <Route path="/weapp" component={Weapp} />
 
         <Frame>
           {/* 客户中心 */}

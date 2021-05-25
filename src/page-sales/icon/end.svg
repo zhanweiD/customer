@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>结束</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#86D4FF" offset="0%"></stop>
+            <stop stop-color="#2592FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2-|-创建计划开始控件定时触发" transform="translate(-205.000000, -755.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g id="编组14" transform="translate(64.000000, 688.000000)">
+                <path d="M152,89 C145.92525,89 141,84.07475 141,78 C141,71.92525 145.92525,67 152,67 C158.07475,67 163,71.92525 163,78 C163,84.07475 158.07475,89 152,89 Z M152,69.75 C147.44325,69.75 143.75,73.44325 143.75,78 C143.75,82.55675 147.44325,86.25 152,86.25 C156.55675,86.25 160.25,82.55675 160.25,78 C160.25,73.44325 156.55675,69.75 152,69.75 Z M154.75,82.125 L149.25,82.125 C148.491,82.125 147.875,81.509 147.875,80.75 L147.875,75.25 C147.875,74.491 148.491,73.875 149.25,73.875 L154.75,73.875 C155.509,73.875 156.125,74.491 156.125,75.25 L156.125,80.75 C156.125,81.509 155.509,82.125 154.75,82.125 Z" id="结束"></path>
+            </g>
+        </g>
+    </g>
+</svg>

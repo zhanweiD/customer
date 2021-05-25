@@ -3,7 +3,7 @@
  */
 import {useState, useEffect, useRef} from 'react'
 import {Spin} from 'antd'
- 
+
 import {dbarOption, mapOption} from './chart-option'
 import china from '../../public/map'
 import io from './io'

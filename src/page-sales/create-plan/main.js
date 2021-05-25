@@ -13,6 +13,7 @@ import DAG from '@dtwave/oner-dag'
 import newGroup1 from '../../icon/new-group1.svg'
 import RunDrawer from './run-drawer'
 import option from './option'
+import matchingIcon from './unit'
 import {links, nodes, types, conditions, process} from './mock'
 import './index.styl'
 
@@ -24,7 +25,7 @@ const Demo = () => {
   const [isRun, setIsRun] = useState(false)
   const [nodeList, setNodeList] = useState(nodes)
   const [linkList, setLinkList] = useState(links)
-  const [showRun, setShowRun] = useState(false)
+  const [showRun, setShowRun] = useState(true)
 
   const runDrawer = v => {
     setShowRun(v)
@@ -117,7 +118,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
@@ -137,7 +138,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
@@ -157,7 +158,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
