@@ -27,6 +27,7 @@ export default ({showRun, runDrawer}) => {
     <Drawer
       title="开始控件"
       width={560}
+      className="run-drawer"
       onClose={() => runDrawer(false)}
       visible={showRun}
       bodyStyle={{paddingBottom: 80}}
@@ -47,27 +48,55 @@ export default ({showRun, runDrawer}) => {
     >
       <Form 
         {...layout}
+        className="run-form"
         name="runDrawer"
         form={runForm}
       >
         <Item
           label="受众用户"
           name="username"
+          className="user-pb8"
           extra="营销活动需要触达的人群"
         >
           <Select defaultValue="">
             <Option value="">全部</Option>
           </Select>
         </Item>
-        {/* <Space direction="vertical" size={24}>
-          <Collapse defaultActiveKey={['1']}>
-            <Panel header="营销动作" key="1">
-              <div>
-                111
-              </div>
+        <Space 
+          className="form-panel" 
+          style={{width: 'calc(100% + 48px)', marginLeft: '-24px'}} 
+          direction="vertical" 
+          size={24}
+        >
+          <Collapse size="small" defaultActiveKey={['1']}>
+            <Panel style={{width: '100%'}} header="触发条件" key="1">
+              <Item
+                label="计划类型"
+                name="planType"
+              >
+                <Select defaultValue="">
+                  <Option value="">全部</Option>
+                </Select>
+              </Item>
+              <Item
+                label="重复"
+                name="align"
+              >
+                <Select defaultValue="">
+                  <Option value="">永不</Option>
+                </Select>
+              </Item>
+              <Item
+                label="触发时间"
+                name="time"
+              >
+                <Select defaultValue="">
+                  <Option value="">永不</Option>
+                </Select>
+              </Item>
             </Panel>
           </Collapse>
-        </Space> */}
+        </Space>
       </Form>
     </Drawer>
   )
