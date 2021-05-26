@@ -16,14 +16,16 @@ const layout = {
   },
 }
 
-export default ({showRun, runDrawer}) => {
+export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventList}) => {
   const [runForm] = Form.useForm()
-  const [planType, setPlanType] = useState('timing')
-  const [align, setAlign] = useState('never')
+  const [planType, setPlanType] = useState(runFormData.type || '0') // 计划类型
+  const [period, setPeriod] = useState(runFormData.period || '0') // 重复次数
   const [touchWay, setTouchWay] = useState('now')
+  const {clientGroupId, targetGap, targetUnit} = runFormData
 
   const onFinish = () => {
     runForm.validateFields().then(value => {
+      setRunForm(value)
       console.log(value)
       runDrawer(false)
       runForm.resetFields()
@@ -36,8 +38,8 @@ export default ({showRun, runDrawer}) => {
   const changePlanType = v => {
     setPlanType(v)
   }
-  const changeAlign = v => {
-    setAlign(v)
+  const changePeriod = v => {
+    setPeriod(v)
   }
   const changTouchWay = v => {
     setTouchWay(v)
@@ -45,7 +47,12 @@ export default ({showRun, runDrawer}) => {
   const setTouchType = () => {
     return (
       <Input.Group compact>
-        <Item noStyle name="way" initialValue={touchWay} rules={[{required: true, message: '请选择触达方式'}]}>
+        <Item 
+          noStyle 
+          name="way" 
+          initialValue={touchWay} 
+          rules={[{required: true, message: '请选择触达方式'}]}
+        >
           <Select 
             style={{width: touchWay === 'now' ? '100%' : '30%'}} 
             onChange={changTouchWay}
@@ -56,14 +63,23 @@ export default ({showRun, runDrawer}) => {
         </Item>
         {
           touchWay !== 'now' && (
-            <Item noStyle name="time" rules={[{required: true, message: '请输入时间'}]}>
+            <Item 
+              noStyle 
+              name="time" 
+              rules={[{required: true, message: '请输入时间'}]}
+            >
               <Input style={{width: '40%'}} type="number" placeholder="请输入时间" />
             </Item>
           )
         }
         {
           touchWay !== 'now' && (
-            <Item noStyle name="type" initialValue="min" rules={[{required: true, message: '请选择单位'}]}>
+            <Item 
+              noStyle 
+              name="timeType" 
+              initialValue="min" 
+              rules={[{required: true, message: '请选择单位'}]}
+            >
               <Select style={{width: '30%'}}>
                 <Option value="min">分钟</Option>
                 <Option value="hours">小时</Option>
@@ -83,13 +99,17 @@ export default ({showRun, runDrawer}) => {
       }
       return monthData
     }
-    if (align === 'day') {
+    if (period === '1') {
       return <TimePicker style={{width: '40%'}} />
     } 
-    if (align === 'week') {
+    if (period === '2') {
       return (
         <Input.Group compact>
-          <Item noStyle name="date" rules={[{required: true, message: '请选择'}]}>
+          <Item 
+            noStyle 
+            name="date" 
+            rules={[{required: true, message: '请选择'}]}
+          >
             <Select style={{width: '60%'}} placeholder="请选择">
               <Option value="monday">星期一</Option>
               <Option value="tuesday">星期二</Option>
@@ -100,23 +120,35 @@ export default ({showRun, runDrawer}) => {
               <Option value="sunday">星期日</Option>
             </Select>
           </Item>
-          <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
+          <Item 
+            noStyle 
+            name="time" 
+            rules={[{required: true, message: '请选择时间'}]}
+          >
             <TimePicker style={{width: '40%'}} />
           </Item>
         </Input.Group>
       )
     } 
-    if (align === 'month') {
+    if (period === '3') {
       return (
         <Input.Group compact>
-          <Item noStyle name="date" rules={[{required: true, message: '请选择时间'}]}>
+          <Item 
+            noStyle 
+            name="date" 
+            rules={[{required: true, message: '请选择时间'}]}
+          >
             <Select style={{width: '60%'}} placeholder="请选择">
               {
                 setMonth()
               }
             </Select>
           </Item>
-          <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
+          <Item 
+            noStyle 
+            name="time" 
+            rules={[{required: true, message: '请选择时间'}]}
+          >
             <TimePicker style={{width: '40%'}} />
           </Item>
         </Input.Group>
@@ -124,10 +156,18 @@ export default ({showRun, runDrawer}) => {
     }
     return (
       <Input.Group compact>
-        <Item noStyle name="date" rules={[{required: true, message: '请选择时间'}]}>
+        <Item 
+          noStyle 
+          name="date" 
+          rules={[{required: true, message: '请选择时间'}]}
+        >
           <DatePicker style={{width: '60%'}} />
         </Item>
-        <Item noStyle name="time" rules={[{required: true, message: '请选择时间'}]}>
+        <Item 
+          noStyle 
+          name="time" 
+          rules={[{required: true, message: '请选择时间'}]}
+        >
           <TimePicker style={{width: '40%'}} />
         </Item>
       </Input.Group>
@@ -165,13 +205,17 @@ export default ({showRun, runDrawer}) => {
       >
         <Item
           label="受众用户"
-          name="username"
+          name="clientGroupId"
           className="user-pb8"
           extra="营销活动需要触达的人群"
+          initialValue={clientGroupId}
           rules={[{required: true, message: '请选择人群'}]}
         >
           <Select placeholder="请选择人群">
             <Option value="1">全部</Option>
+            {
+              groupList.map(item => <Option value={item.id}>{item.name}</Option>)
+            }
           </Select>
         </Item>
         <Collapse 
@@ -181,20 +225,20 @@ export default ({showRun, runDrawer}) => {
           <Panel header="触发条件" key="1">
             <Item
               label="计划类型"
-              name="planType"
+              name="type"
               initialValue={planType}
               rules={[{required: true, message: '请选择计划类型'}]}
             >
               <Select onChange={changePlanType}>
-                <Option value="timing">定时触发</Option>
-                <Option value="event">事件触发</Option>
+                <Option value="0">定时触发</Option>
+                <Option value="1">事件触发</Option>
               </Select>
             </Item>
             {
-              planType === 'event' && (<div className="fs12 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
+              planType === '1' && (<div className="fs12 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
             }
             {
-              planType === 'event' && (
+              planType === '1' && (
                 <Form.List
                   name="conversion-event"
                   initialValue={[{
@@ -215,7 +259,10 @@ export default ({showRun, runDrawer}) => {
                             rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Select style={{width: '95%'}} placeholder="请选择事件">
-                              <Option value="2">APP注册</Option>
+                              <Option value="1">全部</Option>
+                              {
+                                eventList.map(item => <Option value={item.id}>{item.name}</Option>)
+                              }
                             </Select>
                           </Form.Item>
                           {fields.length > 1 ? (
@@ -241,7 +288,7 @@ export default ({showRun, runDrawer}) => {
               )
             }
             {
-              planType === 'event' && (
+              planType === '1' && (
                 <Item 
                   label="触达方式" 
                 >
@@ -250,23 +297,23 @@ export default ({showRun, runDrawer}) => {
               )
             }
             {
-              planType === 'timing' && (
+              planType === '0' && (
                 <Item
                   label="重复"
-                  name="align"
+                  name="period"
                   rules={[{required: true, message: '请选择周期'}]}
                 >
-                  <Select onChange={changeAlign} placeholder="请选择周期">
-                    <Option value="never">永不</Option>
-                    <Option value="day">每天</Option>
-                    <Option value="week">每周</Option>
-                    <Option value="month">每月</Option>
+                  <Select onChange={changePeriod} placeholder="请选择周期">
+                    <Option value="0">永不</Option>
+                    <Option value="1">每天</Option>
+                    <Option value="2">每周</Option>
+                    <Option value="3">每月</Option>
                   </Select>
                 </Item>
               )
             }
             {
-              planType === 'timing' && (
+              planType === '0' && (
                 <Item
                   label="触发时间"
                   name="time"
@@ -277,7 +324,7 @@ export default ({showRun, runDrawer}) => {
               )
             }
             {
-              align !== 'never' && (
+              period !== '0' && (
                 <Item label="起止日期" name="startDate">
                   <RangePicker />
                 </Item>
@@ -312,12 +359,24 @@ export default ({showRun, runDrawer}) => {
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
               <Input.Group compact>
-                <Item noStyle name="number" rules={[{required: true, message: '请输入时间'}]}>
+                <Item 
+                  noStyle 
+                  name="targetGap" 
+                  initialValue={targetGap}
+                  rules={[{required: true, message: '请输入时间'}]}
+                >
                   <Input style={{width: '70%'}} type="number" />
                 </Item>
-                <Item noStyle name="type" initialValue="min" rules={[{required: true, message: '请选择单位'}]}>
+                <Item 
+                  noStyle 
+                  name="targetUnit" 
+                  initialValue={targetUnit || 'min'}
+                  rules={[{required: true, message: '请选择单位'}]}
+                >
                   <Select style={{width: '30%'}}>
                     <Option value="min">分钟</Option>
+                    <Option value="hours">小时</Option>
+                    <Option value="day">天</Option>
                   </Select>
                 </Item>
               </Input.Group>

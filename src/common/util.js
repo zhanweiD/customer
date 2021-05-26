@@ -21,7 +21,8 @@ export const addPathPrefix = path => {
   return pathPrefix + path
 }
 
-export const baseApi = `${pathPrefix}hub_api` // 标签中心
+export const baseApi = `${pathPrefix}hub_api` // 客户中台
+export const marketingApi = `${pathPrefix}marketing_api` // 营销模块
 export const sceneApi = `${pathPrefix}hub_api/occasion` // 场景
 export const baseSyncApi = `${pathPrefix}hub_api/objTransmission` // 标签中心
 export const baseUserApi = `${pathPrefix}hub_api` // 用户中心

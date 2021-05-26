@@ -1,4 +1,14 @@
+import {message} from 'antd'
 import matchingIcon from './unit'
+
+const beforeConnection = ({source, target}) => {
+  console.log(source, target)
+  if (source === target) {
+    message.warning('输入源与输出源相同,连接失败')
+    return false
+  }
+  return true
+}
 // 构建菜单
 const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
   {
@@ -56,19 +66,20 @@ const onFlowInit = (instance, nodeList) => {
 const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
   return ({
     className: 'dag-style',
-    flowId: 1, // 任务流程id
+    // flowId: 1, // 任务流程id
     // vertical: false,
     allowLinkRemove: false,
     connectionsDetachable: true, // false会导致无法多输出
     // autoLayout: true, // 自动布局
     // autoFix: true, // 初始定位
-    nodeParse: ({id, nodeName, icon, status, position}) => {
+    nodeParse: ({id, nodeName, icon, status, position, maxConnections}) => {
       return {
         id,
         name: <div className="dag-node">{nodeName}</div>,
         icon,
         status,
         position,
+        maxConnections,
       }
     },
     buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer),
@@ -79,15 +90,15 @@ const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
       item.position = position
-      // const icon = <img alt="短信" height={24} width={24} src={newGroup1} />
-      const icon = matchingIcon(item.icon)
-      item.icon = icon
+      console.log(item)
+      item.icon = matchingIcon(item.icon)
       instance.addNode(item)
       setTimeout(() => {
         instance.addTargetEndPoints(item.id, [item])
-        instance.addSourceEndPoints(item.id, [item])
+        if (item.nodeName !== '结束') instance.addSourceEndPoints(item.id, [item])
       }, 0)
     },
+    beforeConnection, // 连线前校验
     showCenter: false,
     // 双击节点触发事件
     // onDoubleClick: node => {
@@ -103,6 +114,7 @@ const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
         target: `target_${targetId}`,
       }
     },
+    // 删除连线前
     // onConnectionRemove: link => new Promise((resolve, reject) => {
     //   console.log(link)
     //   setTimeout(() => resolve(), 100)

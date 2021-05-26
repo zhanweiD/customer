@@ -1,154 +1,150 @@
-import {Button} from 'antd'
-import {
-  Tag, Search, Authority, Card, DtGrid,
-} from '../component'
-import {IconDel, IconEdit} from '../icon-comp'
-
-const list = [
-  {
-    id: 1,
-    name: '测试',
-    cuser: '永久',
-    cdate: '2021-5-20',
-    used: 1,
-    tagCount: 11,
-    apiCount: 11,
-    descr: '1111',
-  },
-]
-const searchParams = [
-  {
-    label: '计划类型',
-    key: 'planType',
-    initialValue: '',
-    control: {
-      defaultAll: true,
-      options: [
-        {name: '全部', value: ''},
-      ],
-    },
-    component: 'select',
-  }, 
-  {
-    label: '创建人',
-    key: 'cuser',
-    initialValue: '',
-    control: {
-      defaultAll: true,
-      options: [
-        {name: '全部', value: ''},
-      ],
-    },
-    component: 'select',
-  }, 
-  {
-    label: '最近状态',
-    key: 'status',
-    initialValue: '',
-    control: {
-      defaultAll: true,
-      options: [
-        {name: '全部', value: ''},
-      ],
-    },
-    component: 'select',
-  },
-  {
-    label: '触达渠道',
-    key: 'cuserAccount',
-    initialValue: '',
-    control: {
-      defaultAll: true,
-      options: [
-        {name: '全部', value: ''},
-      ],
-    },
-    component: 'select',
-  },
-  {
-    label: '计划名称',
-    key: 'keyword',
-    control: {
-      placeholder: '请输入计划名称',
-    },
-    component: 'input',
-  },
-]
+import {useEffect, useState} from 'react'
+import {Button, Table, Popconfirm} from 'antd'
+import {successTip, changeToOptions} from '@util'
+import {Search} from '../component'
+import searchParams from './search'
+import io from './io'
 
 export default () => {
+  const [listDate, setListDate] = useState([]) // 表格数据
+  const [userList, setUserList] = useState([]) // 用户列表
+  const [channelList, setChannelList] = useState([]) // 渠道列表
+  
+  // 获取列表
+  const getList = async params => {
+    try {
+      const res = await io.getList(params)
+      setListDate(res)
+    } catch (error) {
+      console.log(error)
+    } 
+  }
+  // 获取创建人
+  const getUserList = async () => {
+    try {
+      const res = await io.getUserList()
+      setUserList(changeToOptions(res || [])('userName', 'userId'))
+    } catch (error) {
+      console.log(error)
+    }
+  } 
+  // 获取渠道
+  const getChannelList = async () => {
+    try {
+      const res = await io.getChannelList()
+      setChannelList(changeToOptions(res || [])('name', 'id'))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // 删除计划
+  const delPlan = async () => {
+    try {
+      await io.delPlan({})
+      getList()
+      successTip('删除成功')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // 复制计划
+  const copyPlan = async () => {
+    try {
+      await io.copyPlan({})
+      getList()
+      successTip('复制成功')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  const editPlan = () => {
+    console.log('编辑')
+  }
+
+  const columns = [
+    {
+      title: '营销计划名称',
+      dataIndex: 'name',
+      key: 'name',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '计划触达数',
+      dataIndex: 'touchCount',
+      key: 'touchCount',
+    },
+    {
+      title: '目标完成率',
+      dataIndex: 'targetRate',
+      key: 'targetRate',
+    },
+    {
+      title: '计划状态',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'startTime',
+      key: 'startTime',
+    },
+    {
+      title: '结束时间',
+      dataIndex: 'endTime',
+      key: 'endTime',
+    },
+    {
+      title: '结束时间',
+      dataIndex: 'mTime',
+      key: 'mTime',
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (text, record) => ([
+        <a className="mr16" onClick={copyPlan}>复制</a>,
+        <a className="mr16" onClick={editPlan}>编辑</a>,
+        <Popconfirm
+          title="确认删除计划吗?"
+          onConfirm={delPlan}
+          onCancel={() => {}}
+          okText="确定"
+          cancelText="取消"
+        >
+          <a>删除</a>
+        </Popconfirm>,
+      ]),
+    },
+  ]
+
   const toCreate = () => {
     window.open(`${window.__keeper.pathHrefPrefix}/sales/create`)
   }
+  
+  useEffect(() => {
+    // getList()
+    // getUserList()
+    // getChannelList()
+  }, [])
+
   return (
     <div className="oa">
       <div className="content-header">营销计划</div>
       <div className="m16 mt72 bgf p16" style={{height: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
-          onSearch={v => console.log(v)}
-          params={searchParams}
+          onSearch={v => getList(v)}
+          params={searchParams(userList, channelList)}
         />
         <Button
-          className="mb16"
           type="primary"
+          style={{marginBottom: '8px'}}
           onClick={toCreate}
         >
           创建计划
         </Button>
-        <div>
-          <DtGrid row={3} fixedHeight={192}>
-            {
-              list.map(({
-                id,
-                name,
-                cuser,
-                cdate,
-                used,
-                tagCount,
-                apiCount,
-                descr,
-              }, d) => (
-                <Card 
-                  className="card"
-                  title={name}
-                  // eslint-disable-next-line no-underscore-dangle
-                  // link={`${window.__keeper.pathHrefPrefix}/scene/${id}/${store.projectId}`}
-                  tag={[<Tag status={used ? 'process' : 'wait'} text={used ? '使用中' : '未使用'} className="mr8" />]}
-                  labelList={[{
-                    label: '有效期',
-                    value: cdate,
-                  }]}
-                  descr={descr}
-                  countList={[{
-                    label: '计划触达',
-                    value: tagCount,
-                  }, {
-                    label: '完成率',
-                    value: apiCount,
-                  }]}
-                  actions={[
-                    <Button
-                      type="link" // antd@Button 属性
-                      disabled={used}
-                      className="p0"
-                    // onClick={() => this.handleModalVisible('edit', list[d])}
-                    >
-                      <IconEdit size="14" className={used ? 'i-used' : ''} />
-                    </Button>,
-                    <Button
-                      type="link" // antd@Button 属性
-                      disabled={used}
-                      className="p0"
-                    // onClick={() => this.handleDel(id)}
-                    >
-                      <IconDel size="14" className={used ? 'i-used' : ''} />
-                    </Button>,
-                  ]}
-                />
-              )) 
-            }
-          </DtGrid>
-        </div>
+        <Table columns={columns} dataSource={listDate} scroll={{x: 960}} />
       </div>
     </div>
   )
