@@ -72,7 +72,7 @@ const process = [
 // 节点列表
 const nodes = [
   {
-    id: 1,
+    id: 0,
     nodeName: '开始',
     // status: 2,
     icon: <img alt="" height={24} width={24} src={start} />,
