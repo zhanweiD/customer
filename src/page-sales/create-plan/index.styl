@@ -2,16 +2,30 @@
   position relative
   display flex
   .dag-header
+    display flex
     height 40px
     position fixed
     width 100%
     background-color #fff
+    .radio-span
+      width 24px
+      height 24px
+      display inline-block
+      background-color #eae9ff
+      border-radius 50%
+      .radio-img
+        margin-left 7px
+        margin-bottom 1px
     .header-but
       height 40px
+      padding 0 16px
       border none
       border-right 1px solid #f3f4f9
+      .mb1
+        margin-bottom 1px
   .dag-cate
     width 25%
+    min-width 300px
     padding 16px
     // background-color #fff
     margin-top 40px
@@ -23,6 +37,7 @@
   
     .dag-drag-box
       width calc(50% - 8px)
+      min-width 100px
       display inline-block
       border solid 1px #f3f4f9
       font-size 12px
@@ -60,15 +75,24 @@
       color rgba(0,0,0,.45)
 
 .run-drawer
-  .user-pb8
+//   .user-pb8
+//     margin-bottom 0
+  .ant-picker
+    line-height 24px
+  .position-icon
     margin-bottom 0
-.form-panel
+  span.anticon.anticon-minus-circle.dynamic-delete-button
+    position absolute
+    top 5px
+    right 0px
+  .ant-form-item-extra
+    margin-bottom -12px
   .ant-collapse
     border none
     .ant-collapse-content
       border none
       .ant-collapse-content-box
-        padding 16px 24px
+        padding 16px 24px 0
     .ant-collapse-item 
       border none
       .ant-collapse-header

@@ -1,21 +1,37 @@
-import newGroup1 from '../../icon/new-group1.svg'
+import matchingIcon from './unit'
 // 构建菜单
-const buildMenu = (instance, runDrawer) => [{
-  label: '删除',
-  icon: 'del',
-  action: (domEvent, item) => {
-    domEvent.stopPropagation()
-    instance.removeNode(item.id)
+const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
+  {
+    label: '配置',
+    icon: 'edit',
+    disabled: e.name.props ? e.name.props.children === '结束' : true,
+    action: (domEvent, item) => {
+      domEvent.stopPropagation()
+      const {children} = item.name.props
+      let typeDrawer = runDrawer
+      switch (children) {
+        case '开始':
+          typeDrawer = runDrawer
+          break
+        case '微信服务号':
+          typeDrawer = weServiceDrawer
+          break
+        default:
+          typeDrawer = () => console.log('功能暂未开发')
+          break
+      }
+      typeDrawer(true)
+    },
   },
-},
-{
-  label: '配置',
-  icon: 'log',
-  action: domEvent => {
-    domEvent.stopPropagation()
-    runDrawer(true)
+  {
+    label: '删除',
+    icon: 'del',
+    disabled: e.name.props ? e.name.props.children === '开始' : true,
+    action: (domEvent, item) => {
+      domEvent.stopPropagation()
+      instance.removeNode(item.id)
+    },
   },
-},
 ]
 
 const onFlowInit = (instance, nodeList) => {
@@ -29,8 +45,6 @@ const onFlowInit = (instance, nodeList) => {
 
     instance.addSourceEndPoints(node.id, [{
       id: `source_${node.id}`,
-      // position: {left: 5000, top: 4000},
-      // ioType: 'default',
       maxConnections: 1,
       // enabled: !disabled,
     }])
@@ -39,11 +53,12 @@ const onFlowInit = (instance, nodeList) => {
   })
 }
 
-const options = ({instance, nodeList, runDrawer}) => {
+const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
   return ({
     className: 'dag-style',
     flowId: 1, // 任务流程id
     // vertical: false,
+    allowLinkRemove: false,
     connectionsDetachable: true, // false会导致无法多输出
     // autoLayout: true, // 自动布局
     // autoFix: true, // 初始定位
@@ -56,7 +71,7 @@ const options = ({instance, nodeList, runDrawer}) => {
         position,
       }
     },
-    buildMenu: () => buildMenu(instance, runDrawer),
+    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => {
@@ -64,10 +79,10 @@ const options = ({instance, nodeList, runDrawer}) => {
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
       item.position = position
-      const icon = <img alt="短信" height={24} width={24} src={newGroup1} />
+      // const icon = <img alt="短信" height={24} width={24} src={newGroup1} />
+      const icon = matchingIcon(item.icon)
       item.icon = icon
       instance.addNode(item)
-      console.log('配置model', item)
       setTimeout(() => {
         instance.addTargetEndPoints(item.id, [item])
         instance.addSourceEndPoints(item.id, [item])

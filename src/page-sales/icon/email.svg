@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="17px" viewBox="0 0 22 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>邮箱</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#BFEEA9" offset="0%"></stop>
+            <stop stop-color="#61BA46" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2-|-创建计划开始控件定时触发" transform="translate(-109.000000, -292.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g id="营销动作" transform="translate(64.000000, 128.000000)">
+                <g id="编组2备份" transform="translate(16.000000, 144.000000)">
+                    <path d="M51,21.44375 C51,21.44375 50.93125,21.44375 51,21.44375 L48.73125,22.95625 C42.75,27.0125 39.725,29.075 39.725,29.00625 L30.65,22.81875 L29,21.7875 L29,21.375 C29,20.61875 29.61875,20 30.375,20 L49.625,20 C50.38125,20 51,20.61875 51,21.44375 C51,21.375 51,21.375 51,21.44375 Z M51,23.09375 L51,35.125 C51,35.88125 50.38125,36.5 49.625,36.5 L30.375,36.5 C29.61875,36.5 29,35.88125 29,35.125 L29,23.4375 L29.825,23.9875 L38.9,30.175 C39.38125,30.51875 40,30.51875 40.48125,30.175 L49.4875,24.125 C49.55625,24.05625 50.0375,23.7125 51,23.09375 Z" id="邮箱"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

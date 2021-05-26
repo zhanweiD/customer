@@ -1,11 +1,11 @@
-import newGroup1 from '../../icon/new-group1.svg'
+import {start} from '../icon'
 // mock数据
 const types = [
   {
     nodeName: '微信服务号',
     value: 'weixin',
     // status: 2,
-    icon: 'fuwu',
+    icon: 'weService',
   },
   {
     nodeName: '微信小程序',
@@ -23,7 +23,7 @@ const types = [
     nodeName: '短信',
     value: 'duanxin',
     // status: 4,
-    icon: 'dy',
+    icon: 'sms',
   },
 ]
 const conditions = [
@@ -31,19 +31,19 @@ const conditions = [
     nodeName: '事件多分支',
     value: 'weixin',
     // status: 2,
-    icon: 'shijian',
+    icon: 'eventBranch',
   },
   {
     nodeName: '标签多分支',
     value: 'app',
     // status: 4,
-    icon: 'biaoqian',
+    icon: 'tagBranch',
   },
   {
     nodeName: '复制多分支',
     value: 'email',
     // status: 4,
-    icon: 'fuzhi',
+    icon: 'copyBranch',
   },
 ]
 // 流程控制
@@ -52,13 +52,13 @@ const process = [
     nodeName: '等待',
     value: 'wite',
     // status: 2,
-    icon: 'dengdai',
+    icon: 'waite',
   },
   {
     nodeName: '结束',
     value: 'end',
     // status: 4,
-    icon: 'jieshu',
+    icon: 'end',
   },
 ]
 
@@ -68,7 +68,7 @@ const nodes = [
     id: 1,
     nodeName: '开始',
     // status: 2,
-    icon: <img alt="服务号" height={24} width={24} src={newGroup1} />,
+    icon: <img alt="" height={24} width={24} src={start} />,
   },
 ]
   

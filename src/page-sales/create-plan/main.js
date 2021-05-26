@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {Button, Collapse, Space} from 'antd'
+import {useState, useEffect} from 'react'
+import {Button, Collapse, Input, Space} from 'antd'
 import {
   RedoOutlined, 
   ZoomInOutlined, 
@@ -10,10 +10,11 @@ import {
 } from '@ant-design/icons'
 import DAG from '@dtwave/oner-dag'
 
-import newGroup1 from '../../icon/new-group1.svg'
+import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import WechatDrawer from './wechat-drawer'
 import option from './option'
+import matchingIcon from './unit'
 import {links, nodes, types, conditions, process} from './mock'
 import './index.styl'
 
@@ -26,9 +27,25 @@ const Demo = () => {
   const [nodeList, setNodeList] = useState(nodes)
   const [linkList, setLinkList] = useState(links)
   const [showRun, setShowRun] = useState(false)
+  const [showWeService, setShowWeService] = useState(false)
+  const [isAll, setIsAll] = useState(false)
 
+  // 开始抽屉
   const runDrawer = v => {
     setShowRun(v)
+  }
+  // 微信服务号抽屉
+  const weServiceDrawer = v => {
+    setShowWeService(v)
+  }
+  // 全屏
+  const setAll = () => {
+    setIsAll(!isAll)
+  }
+  // 清除画布
+  const clearCanvas = () => {
+    setIsRender(true)
+    setTimeout(() => setIsRender(false), 10)
   }
 
   // 画布相关
@@ -41,9 +58,9 @@ const Demo = () => {
   const onZoomOut = () => {
     instance.zoomOut()
   }
+
   // 开始拖动
   const onDragStart = ({nodeName, status, icon, ioType}, e) => {
-    console.log(icon)
     const newNode = {
       id: new Date().getTime(),
       nodeName,
@@ -51,7 +68,6 @@ const Demo = () => {
       icon,
       ioType,
     }
-    console.log(newNode)
     // 添加拖拽数据
     e.dataTransfer.setData('data', JSON.stringify(newNode))
     // const {target} = e
@@ -65,7 +81,6 @@ const Demo = () => {
   
   // 拖动结束
   const onDragEnd = e => {
-    console.log(e)
     // const {target} = e
     // target.style.border = 'solid 1px #49aede'
     // target.style.margin = '8px'
@@ -98,13 +113,27 @@ const Demo = () => {
     instance.getNodes().forEach(item => instance.setNodeStatus(item.id, 2))
   }
 
+  useEffect(() => {
+    if (instance) onFixView()
+  }, [isAll])
+
   return (
     <div className="dag-process oa">
       <div className="dag-header">
-        <Button className="header-but" onClick={getLinks}>清空画布</Button>
-        <Button className="header-but" onClick={getNodes}>保存</Button>
+        <Button className="header-but" onClick={setAll}>
+          <span className="radio-span"><img className="mb1" src={all} alt="" /></span>
+          <span>{isAll ? '缩放' : '全屏'}</span>
+        </Button>
+        <Button className="header-but" onClick={clearCanvas}>
+          <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
+          <span>清空画布</span>
+        </Button>
+        <Button className="header-but">
+          <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
+          <span>保存</span>
+        </Button>
       </div>
-      <div className="dag-cate">
+      <div className="dag-cate" style={{display: isAll ? 'none' : 'inline-block'}}>
         <Space direction="vertical" size={24}>
           <Collapse defaultActiveKey={['1']}>
             <Panel header="营销动作" key="1">
@@ -118,7 +147,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml8 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
@@ -138,7 +167,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
@@ -158,7 +187,7 @@ const Demo = () => {
                       onDragEnd={onDragEnd}
                       draggable
                     >
-                      <span className="ml4 mr4"><img alt="服务号" height={24} width={24} src={newGroup1} /></span>
+                      <span className="ml4 mr4">{matchingIcon(item.icon)}</span>
                       <span>{item.nodeName}</span>
                     </div>
                   ))
@@ -167,7 +196,6 @@ const Demo = () => {
             </Panel>
           </Collapse>
         </Space>
-
       </div>
       <div className="dag-content w80">
         {
