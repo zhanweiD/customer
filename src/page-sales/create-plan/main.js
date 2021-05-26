@@ -12,6 +12,7 @@ import DAG from '@dtwave/oner-dag'
 
 import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
+import WechatDrawer from './wechat-drawer'
 import option from './option'
 import matchingIcon from './unit'
 import {links, nodes, types, conditions, process} from './mock'
@@ -282,6 +283,7 @@ const Demo = () => {
         groupList={groupList}
         eventList={eventList}
       />
+      <WechatDrawer />
     </div>
   )
 }
