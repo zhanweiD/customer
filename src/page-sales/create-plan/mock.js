@@ -68,7 +68,7 @@ const nodes = [
     id: 1,
     nodeName: '开始',
     // status: 2,
-    icon: <img alt="服务号" height={24} width={24} src={start} />,
+    icon: <img alt="" height={24} width={24} src={start} />,
   },
 ]
   

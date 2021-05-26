@@ -25,8 +25,13 @@ export default ({showRun, runDrawer}) => {
   const onFinish = () => {
     runForm.validateFields().then(value => {
       console.log(value)
-      // runDrawer(false)
+      runDrawer(false)
+      runForm.resetFields()
     }).catch(err => console.log(err))
+  }
+  const closeDrawer = () => {
+    runDrawer(false)
+    runForm.resetFields()
   }
   const changePlanType = v => {
     setPlanType(v)
@@ -134,7 +139,7 @@ export default ({showRun, runDrawer}) => {
       title="开始控件"
       width={560}
       className="run-drawer"
-      onClose={() => runDrawer(false)}
+      onClose={closeDrawer}
       visible={showRun}
       bodyStyle={{paddingBottom: 80}}
       footer={(
