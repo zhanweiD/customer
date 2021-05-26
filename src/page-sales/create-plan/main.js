@@ -12,6 +12,7 @@ import DAG from '@dtwave/oner-dag'
 
 import newGroup1 from '../../icon/new-group1.svg'
 import RunDrawer from './run-drawer'
+import WechatDrawer from './wechat-drawer'
 import option from './option'
 import {links, nodes, types, conditions, process} from './mock'
 import './index.styl'
@@ -207,6 +208,7 @@ const Demo = () => {
         </span>
       </div>
       <RunDrawer showRun={showRun} runDrawer={runDrawer} />
+      <WechatDrawer />
     </div>
   )
 }
