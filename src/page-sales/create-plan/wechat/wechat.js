@@ -30,7 +30,7 @@ class SomeCompoent extends Component {
   @observable left = 0
   @observable cursorPos = 0
 
-  @action clickEvent(e) {
+  @action.bound clickEvent(e) {
     // TODO: 为何触发了多次
     e.stopPropagation()
     const rect = e.target.getClientRects()[0]
@@ -52,20 +52,25 @@ class SomeCompoent extends Component {
     return `<span class="tag-drop" contentEditable="false" id="${this.id}">${text}</span>`
   }
 
+  @action.bound windowClickEvent(e) {
+    if (this.visibility === 'visible') {
+      console.log('window')
+
+      this.visibility = 'hidden'
+    }
+  }
+
   componentDidMount() {
-    // const drops = document.getElementsByClassName('tag-drop')
+    window.addEventListener('click', this.windowClickEvent)
+  }
 
-    // for (let i = 0; i < drops.length; i += 1) {
-    //   drops[i].addEventListener('click', e => this.clickEvent(e))
-    // }
+  componentWillUnmount() {
+    window.removeEventListener('click', this.windowClickEvent)
 
-    window.addEventListener('click', e => {
-      if (this.visibility === 'visible') {
-        console.log('window')
-
-        this.visibility = 'hidden'
-      }
-    })
+    const drops = document.getElementsByClassName('tag-drop')
+    for (let i = 0; i < drops.length; i += 1) {
+      drops[i].removeEventListener('click', this.clickEvent)
+    }
   }
 
   componentDidUpdate() {
@@ -73,7 +78,7 @@ class SomeCompoent extends Component {
     const drops = document.getElementById(id).getElementsByClassName('tag-drop')
 
     for (let i = 0; i < drops.length; i += 1) {
-      drops[i].addEventListener('click', e => this.clickEvent(e))
+      drops[i].addEventListener('click', this.clickEvent)
     }
   }
 
@@ -194,25 +199,21 @@ class SomeCompoent extends Component {
           />
         </div>
         <div
+          className="select-dropdown"
           style={{
-            position: 'absolute',
-            zIndex: 100,
-            border: '1px solid #ccc',
-            backgroundColor: '#fff',
             top: this.top,
             left: this.left,
             visibility: this.visibility,
-            cursor: 'pointer',
           }}
           onClick={e => this.dropdownClick(e)}
         >
-          <div>
+          <div className="dropdown-item">
             1111
           </div>
-          <div>
+          <div className="dropdown-item">
             222222222222
           </div>
-          <div>
+          <div className="dropdown-item">
             3333
           </div>
         </div>

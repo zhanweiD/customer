@@ -1,7 +1,9 @@
 import {useForm, useState} from 'react'
 import {Drawer, Form, Button, Col, Space, Input, Select, Collapse, Switch} from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
+import cls from 'classnames'
 import Wechat from './wechat/wechat'
+import Preview from './wechat/preview'
 
 const {Option} = Select
 const {Item} = Form
@@ -42,12 +44,18 @@ export default () => {
     console.log(a)
   }
 
+  const [vis, setVis] = useState(false)
+  const show = () => {
+    setVis(!vis)
+    console.log(vis)
+  }
+
   return (
     <Drawer
       title="微信服务号"
       width={560}
       className="run-drawer"
-      visible={false}
+      visible
       bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
@@ -79,7 +87,7 @@ export default () => {
           name="path"
           className="user-pb8"
           style={{
-            margin: '0 16px 16px 16px',
+            margin: '0 24px 16px',
           }}
         >
           <Select defaultValue="">
@@ -115,22 +123,6 @@ export default () => {
                 </Item>
               ))
             }
-            
-            {/* <div className="FBH">
-              <div 
-                style={{
-                  width: '70px',
-                  textAlign: 'right',
-                  marginRight: '10px',
-                  color: 'rgba(0,0,0,0.65)',
-                }}
-              >
-                first
-              </div>
-              <div className="FBV FB1" style={{border: '1px solid #E7EFF6'}}>
-                <Wechat />
-              </div>
-            </div> */}
           </Panel>
           <Panel header="触达设置" key="2">
             <Item
@@ -145,6 +137,23 @@ export default () => {
           </Panel>
         </Collapse>
       </Form>
+      <Button onClick={() => show()}>
+        点击
+      </Button>
+      <Preview>
+        <div 
+          className={cls({
+            'wechat-preview': true,
+            FBH: true,
+            FBJC: true,
+            'wechat-active': vis,
+          })}
+        >
+          <div className="preview-box mt20">
+            测试测试
+          </div>
+        </div>
+      </Preview>
     </Drawer>
   )
 }
