@@ -55,7 +55,7 @@ export default () => {
       title="微信服务号"
       width={560}
       className="run-drawer"
-      visible
+      visible={false}
       bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
