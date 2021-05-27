@@ -2,27 +2,32 @@ import {start} from '../icon'
 // mock数据
 const types = [
   {
+    id: 1,
     nodeName: '微信服务号',
     value: 'weixin',
     // status: 2,
+    maxConnections: 1,
     icon: 'weService',
   },
   {
     nodeName: '微信小程序',
     value: 'app',
     // status: 4,
+    maxConnections: 1,
     icon: 'weapp',
   },
   {
     nodeName: '邮箱',
     value: 'email',
     // status: 4,
+    maxConnections: 1,
     icon: 'email',
   },
   {
     nodeName: '短信',
     value: 'duanxin',
     // status: 4,
+    maxConnections: 1,
     icon: 'sms',
   },
 ]
@@ -31,6 +36,7 @@ const conditions = [
     nodeName: '事件多分支',
     value: 'weixin',
     // status: 2,
+    // maxConnections: 1,
     icon: 'eventBranch',
   },
   {
@@ -52,6 +58,7 @@ const process = [
     nodeName: '等待',
     value: 'wite',
     // status: 2,
+    maxConnections: 1,
     icon: 'waite',
   },
   {
@@ -65,7 +72,7 @@ const process = [
 // 节点列表
 const nodes = [
   {
-    id: 1,
+    id: 0,
     nodeName: '开始',
     // status: 2,
     icon: <img alt="" height={24} width={24} src={start} />,

@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Button, Collapse, Input, Space} from 'antd'
+import {Button, Collapse, Input, message, Space} from 'antd'
 import {
   RedoOutlined, 
   ZoomInOutlined, 
@@ -16,19 +16,53 @@ import WechatDrawer from './wechat-drawer'
 import option from './option'
 import matchingIcon from './unit'
 import {links, nodes, types, conditions, process} from './mock'
+import io from './io'
 import './index.styl'
 
 const {Panel} = Collapse
 
 const Demo = () => {
-  const [instance, setInstance] = useState(null)
-  const [isRender, setIsRender] = useState(false)
-  const [isRun, setIsRun] = useState(false)
-  const [nodeList, setNodeList] = useState(nodes)
-  const [linkList, setLinkList] = useState(links)
-  const [showRun, setShowRun] = useState(false)
-  const [showWeService, setShowWeService] = useState(false)
-  const [isAll, setIsAll] = useState(false)
+  const [instance, setInstance] = useState(null) // dag实例
+  const [isRender, setIsRender] = useState(false) // 用于刷新画布
+  const [isRun, setIsRun] = useState(false) // 运行
+  const [nodeList, setNodeList] = useState(nodes) // 初始化节点
+  const [linkList, setLinkList] = useState(links) // 初始化连线
+  const [showRun, setShowRun] = useState(false) // 开始抽屉
+  const [showWeService, setShowWeService] = useState(false) // 微信服务号抽屉
+  const [isAll, setIsAll] = useState(false) // 全屏
+  const [groupList, setGroupList] = useState([]) // 人群列表
+  const [eventList, setEventList] = useState([]) // 事件列表
+  const [planInfo, setPlanInfo] = useState({}) // 计划详情
+  const [channelId, setChannelId] = useState(null) // 渠道id
+  const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
+  const [weSFormData, setWeSFormData] = useState({}) // 微信服务号控件表单值
+
+  // 获取人群
+  const getGroupList = async () => {
+    try {
+      const res = await io.getGroupList()
+      setGroupList(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // 获取事件
+  const getEventList = async () => {
+    try {
+      const res = await io.getEventList()
+      setEventList(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  // 获取计划详情
+  const getPlanInfo = async () => {
+    try {
+      const res = await io.getPlanInfo()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   // 开始抽屉
   const runDrawer = v => {
@@ -47,6 +81,12 @@ const Demo = () => {
     setIsRender(true)
     setTimeout(() => setIsRender(false), 10)
   }
+  // 保存
+  const savePlan = () => {
+    if (Object.keys(runFormData).length === 0) return message.warning('请配置开始控件')
+    // if (Object.keys(weSFormData).length === 0) return message.warning('请配置微信服务号控件')
+    console.log(runFormData, channelId)
+  }
 
   // 画布相关
   const onFixView = () => {
@@ -60,13 +100,14 @@ const Demo = () => {
   }
 
   // 开始拖动
-  const onDragStart = ({nodeName, status, icon, ioType}, e) => {
+  const onDragStart = ({id = new Date().getTime(), nodeName, status, icon, ioType, maxConnections}, e) => {
     const newNode = {
-      id: new Date().getTime(),
+      id,
       nodeName,
       status,
       icon,
       ioType,
+      maxConnections,
     }
     // 添加拖拽数据
     e.dataTransfer.setData('data', JSON.stringify(newNode))
@@ -128,7 +169,7 @@ const Demo = () => {
           <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
           <span>清空画布</span>
         </Button>
-        <Button className="header-but">
+        <Button className="header-but" onClick={savePlan}>
           <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
           <span>保存</span>
         </Button>
@@ -208,7 +249,6 @@ const Demo = () => {
             />
           )
         }
-        
       </div>
       <div className="pa rt16 tp24 dag-right">
         {/* <span className="hand mr8">
@@ -235,7 +275,14 @@ const Demo = () => {
           <ZoomOutOutlined className="icon-style" />
         </span>
       </div>
-      <RunDrawer showRun={showRun} runDrawer={runDrawer} />
+      <RunDrawer 
+        showRun={showRun} 
+        runDrawer={runDrawer} 
+        setRunForm={setRunFormData} 
+        runFormData={runFormData}
+        groupList={groupList}
+        eventList={eventList}
+      />
       <WechatDrawer />
     </div>
   )

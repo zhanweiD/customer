@@ -1,10 +1,12 @@
-import ioContext from '../common/io-context'
-import {baseUser, get, post} from '../common/util'
+import ioContext from '../../common/io-context'
+import {marketingApi, get, post} from '../../common/util'
 
 const api = {
-  goLogin: post(`${baseUser}/login`), // 登录
+  getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
+  getEventList: post(`${marketingApi}/event/list`), // 事件列表
+  getPlanInfo: post(`${marketingApi}/plan/info`), // 计划详情
 } 
 
-ioContext.create('login', api) 
+ioContext.create('createPlan', api) 
 
-export default ioContext.api.login
+export default ioContext.api.createPlan
