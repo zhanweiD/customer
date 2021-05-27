@@ -4,6 +4,8 @@ import {action, observable, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import EditNode from './editnode'
 import './wechat.styl'
+import Link from '../../icon/wechat-link.svg'
+import Attr from '../../icon/wechat-attr.svg'
 
 const menu = (
   <Menu>
@@ -22,8 +24,8 @@ const menu = (
 class SomeCompoent extends Component {
   @observable id = 0 // 自增 id，用于 span
 
-  @observable html = '12345<span class="tag-drop" contentEditable="false" id="6">66666</span>6789'
-  // @observable html = ''
+  // @observable html = '12345<span class="tag-drop" contentEditable="false" id="6">66666</span>6789'
+  @observable html = ''
   @observable clickedId = ''
   @observable visibility = 'hidden'
   @observable top = 0
@@ -183,8 +185,16 @@ class SomeCompoent extends Component {
             borderBottom: '1px solid #E7EFF6',
           }}
         >
-          <Button className="ml8" onClick={() => this.add('attr')}>插入属性</Button>
-          <Button className="ml8" onClick={() => this.add('link')}>插入链接</Button>
+          <div className="FBH FBAC">
+            <div className="ml8 mr8 hand" onClick={() => this.add('attr')}>
+              <img src={Attr} alt="属性" />
+              <span className="ml4 fs12">插入属性</span>
+            </div>
+            <div className="hand" onClick={() => this.add('link')}>
+              <img src={Link} alt="链接" />
+              <span className="ml4 fs12">插入链接</span>
+            </div>
+          </div>
         </div>
         <div className="p8">
           <EditNode
