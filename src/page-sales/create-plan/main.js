@@ -330,7 +330,7 @@ export default props => {
         eventList={eventList}
       />
       <WechatDrawer 
-        showWeService={showWeService} 
+        showWeService={showWeService}
         weServiceDrawer={weServiceDrawer}
         weSFormData={weSFormData}
         setWeSFormData={setWeSFormData}

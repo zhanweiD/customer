@@ -198,7 +198,8 @@ class SomeCompoent extends Component {
         </div>
         <div className="p8">
           <EditNode
-            value={this.html}
+            // value={this.html}
+            value={value}
             onChange={val => {
               this.html = val
               onChange(val)
