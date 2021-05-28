@@ -291,7 +291,7 @@ export default ({
           rules={[{required: true, message: '请选择人群'}]}
         >
           <Select placeholder="请选择人群">
-            <Option value="1">全部</Option>
+            {/* <Option value="1">全部</Option> */}
             {
               groupList.map(item => <Option value={item.id}>{item.name}</Option>)
             }
@@ -336,7 +336,7 @@ export default ({
                             rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Select style={{width: '95%'}} placeholder="请选择事件">
-                              <Option value="1">全部</Option>
+                              {/* <Option value="1">全部</Option> */}
                               {
                                 eventList.map(item => <Option value={item.id}>{item.name}</Option>)
                               }
@@ -468,8 +468,11 @@ export default ({
               initialValue={targetEventList}
               rules={[{required: true, message: '请选择事件'}]}
             >
-              <Select placeholder="请选择事件">
-                <Option value="a">目标事件</Option>
+              <Select style={{width: '95%'}} placeholder="请选择事件">
+                {/* <Option value="1">全部</Option> */}
+                {
+                  eventList.map(item => <Option value={item.id}>{item.name}</Option>)
+                }
               </Select>
             </Item>
             {/* <Form.List

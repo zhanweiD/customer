@@ -15,7 +15,7 @@ const searchParams = (userList, channelList) => [
   }, 
   {
     label: '创建人',
-    key: 'cUserId',
+    key: 'userAccount',
     initialValue: '',
     control: {
       defaultAll: true,

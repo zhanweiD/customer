@@ -22,7 +22,7 @@ import './index.styl'
 
 const {Panel} = Collapse
 
-const Demo = () => {
+export default props => {
   const [instance, setInstance] = useState(null) // dag实例
   const [isRender, setIsRender] = useState(false) // 用于刷新画布
   const [isRun, setIsRun] = useState(false) // 运行
@@ -32,6 +32,7 @@ const Demo = () => {
   const [showWeService, setShowWeService] = useState(false) // 微信服务号抽屉
   const [showSaveModal, setShowSaveModal] = useState(false) // 保存计划
   const [saveLoading, setSaveLoading] = useState(false) // 保存计划
+  const [planId, setPlanId] = useState() // 计划id
 
   const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
   const [weSFormData, setWeSFormData] = useState({}) // 微信服务号控件表单值
@@ -62,7 +63,10 @@ const Demo = () => {
   // 获取计划详情
   const getPlanInfo = async () => {
     try {
-      const res = await io.getPlanInfo()
+      const res = await io.getPlanInfo({
+        id: planId,
+      })
+      console.log(res)
     } catch (error) {
       console.log(error)
     }
@@ -182,6 +186,15 @@ const Demo = () => {
   useEffect(() => {
     if (instance) onFixView()
   }, [isAll])
+  useEffect(() => {
+    const {params = {}} = props
+    setPlanId(params.id)
+    getGroupList()
+    getEventList()
+  }, [])
+  useEffect(() => {
+    if (planId) getPlanInfo()
+  }, [planId])
 
   return (
     <div className="dag-process oa">
@@ -330,4 +343,3 @@ const Demo = () => {
     </div>
   )
 }
-export default Demo

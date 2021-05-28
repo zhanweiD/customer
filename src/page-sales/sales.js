@@ -9,12 +9,28 @@ export default () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [userList, setUserList] = useState([]) // 用户列表
   const [channelList, setChannelList] = useState([]) // 渠道列表
+  const [searchParam, setSearchParam] = useState({}) // 搜索
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    totle: 0,
+  }) // 列表分页
   
   // 获取列表
   const getList = async params => {
     try {
-      const res = await io.getList(params)
-      setListDate(res)
+      const res = await io.getList({
+        currentPage: pagination.current,
+        pageSize: pagination.pageSize,
+        ...params,
+      })
+      const {data, currentPage, pageSize, totalCount} = res
+      setListDate(data)
+      setPagination({
+        current: currentPage,
+        pageSize,
+        totle: totalCount,
+      })
     } catch (error) {
       console.log(error)
     } 
@@ -23,7 +39,7 @@ export default () => {
   const getUserList = async () => {
     try {
       const res = await io.getUserList()
-      setUserList(changeToOptions(res || [])('userName', 'userId'))
+      setUserList(changeToOptions(res || [])('userAccount', 'userId'))
     } catch (error) {
       console.log(error)
     }
@@ -38,28 +54,32 @@ export default () => {
     }
   }
   // 删除计划
-  const delPlan = async () => {
+  const delPlan = async id => {
     try {
-      await io.delPlan({})
-      getList()
+      await io.delPlan({
+        id,
+      })
+      getList({currentPage: 1})
       successTip('删除成功')
     } catch (error) {
       console.log(error)
     }
   }
   // 复制计划
-  const copyPlan = async () => {
+  const copyPlan = async id => {
     try {
-      await io.copyPlan({})
-      getList()
+      await io.copyPlan({
+        id,
+      })
+      getList({currentPage: 1})
       successTip('复制成功')
     } catch (error) {
       console.log(error)
     }
   }
   
-  const editPlan = () => {
-    console.log('编辑')
+  const editPlan = id => {
+    window.open(`${window.__keeper.pathHrefPrefix}/sales/create/${id}`)
   }
 
   const columns = [
@@ -103,11 +123,11 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (text, record) => ([
-        <a className="mr16" onClick={copyPlan}>复制</a>,
-        <a className="mr16" onClick={editPlan}>编辑</a>,
+        <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
+        <a className="mr16" onClick={() => editPlan(record.id)}>编辑</a>,
         <Popconfirm
           title="确认删除计划吗?"
-          onConfirm={delPlan}
+          onConfirm={() => delPlan(record.id)}
           onCancel={() => {}}
           okText="确定"
           cancelText="取消"
@@ -123,10 +143,12 @@ export default () => {
   }
   
   useEffect(() => {
-    // getList()
-    // getUserList()
-    // getChannelList()
+    getUserList()
+    getChannelList()
   }, [])
+  useEffect(() => {
+    getList({currentPage: 1})
+  }, [searchParam])
 
   return (
     <div className="oa">
@@ -134,7 +156,7 @@ export default () => {
       <div className="m16 mt72 bgf p16" style={{height: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
-          onSearch={v => getList(v)}
+          onSearch={setSearchParam}
           params={searchParams(userList, channelList)}
         />
         <Button
@@ -144,7 +166,15 @@ export default () => {
         >
           创建计划
         </Button>
-        <Table columns={columns} dataSource={listDate} scroll={{x: 960}} />
+        <Table 
+          columns={columns} 
+          dataSource={listDate} 
+          scroll={{x: 960}} 
+          pagination={{
+            ...pagination,
+            onChange: v => getList({currentPage: v}),
+          }}
+        />
       </div>
     </div>
   )

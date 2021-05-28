@@ -1,6 +1,8 @@
 import ioContext from '../../common/io-context'
 import {marketingApi, get, post} from '../../common/util'
 
+const {pathPrefix} = window.__keeper
+
 const api = {
   getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
   getEventList: post(`${marketingApi}/event/list`), // 事件列表
