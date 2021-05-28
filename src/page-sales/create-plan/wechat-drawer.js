@@ -29,6 +29,12 @@ const layout2 = {
   },
 }
 
+// export default ({
+//   showWeService, // 显示
+//   weServiceDrawer, // 控制显示
+//   weSFormData, // 用于编辑回显
+//   setWeSFormData, // 收集表单
+// }) => {
 const templateListMock = [
   {
     template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
@@ -40,11 +46,12 @@ const templateListMock = [
   },
 ]
 
-export default ({showWeService, weServiceDrawer, weSFormData, setWeSFormData}) => {
-  console.log(weSFormData)
-  console.log(77777)
-
-
+export default ({
+  showWeService, // 显示
+  weServiceDrawer, // 控制显示
+  weSFormData, // 用于编辑回显
+  setWeSFormData, // 收集表单
+}) => {
   const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [myForm] = Form.useForm()
@@ -66,6 +73,16 @@ export default ({showWeService, weServiceDrawer, weSFormData, setWeSFormData}) =
   const fieldsChange = (c, a) => {
     // console.log(c)
     // console.log(a)
+  }
+
+  const saveDrawer = () => {
+    myForm.validateFields().then(values => {
+      console.log(values)
+      setWeSFormData(values)
+      weServiceDrawer(false)
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   const [vis, setVis] = useState(false)
@@ -180,6 +197,7 @@ export default ({showWeService, weServiceDrawer, weSFormData, setWeSFormData}) =
       width={560}
       className="run-drawer"
       visible={showWeService}
+      onClose={cancelData}
       bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
@@ -190,6 +208,7 @@ export default ({showWeService, weServiceDrawer, weSFormData, setWeSFormData}) =
           <Button className="mr8" onClick={cancelData}>
             取消
           </Button>
+          {/* <Button type="primary" onClick={saveDrawer}> */}
           <Button type="primary" onClick={saveData}>
             保存
           </Button>

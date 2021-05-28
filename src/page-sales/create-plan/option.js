@@ -7,10 +7,14 @@ const beforeConnection = ({source, target}) => {
     message.warning('输入源与输出源相同,连接失败')
     return false
   }
+  if (source === '2' && (target === '0' || target === '0')) {
+    message.warning('连接失败')
+    return false
+  }
   return true
 }
 // 构建菜单
-const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
+const buildMenu = (e, instance, runDrawer, weServiceDrawer, changeChannelId) => [
   {
     label: '配置',
     icon: 'edit',
@@ -40,6 +44,7 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
     action: (domEvent, item) => {
       domEvent.stopPropagation()
       instance.removeNode(item.id)
+      // changeChannelId(item.id)
     },
   },
 ]
@@ -54,7 +59,8 @@ const onFlowInit = (instance, nodeList) => {
     // }])
 
     instance.addSourceEndPoints(node.id, [{
-      id: `source_${node.id}`,
+      // id: `source_${node.id}`,
+      id: node.id,
       maxConnections: 1,
       // enabled: !disabled,
     }])
@@ -63,16 +69,29 @@ const onFlowInit = (instance, nodeList) => {
   })
 }
 
-const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
+const options = ({
+  instance, 
+  nodeList, 
+  runDrawer, 
+  weServiceDrawer, 
+  changeChannelId,
+}) => {
   return ({
     className: 'dag-style',
     // flowId: 1, // 任务流程id
     // vertical: false,
     allowLinkRemove: false,
     connectionsDetachable: true, // false会导致无法多输出
-    // autoLayout: true, // 自动布局
-    // autoFix: true, // 初始定位
-    nodeParse: ({id, nodeName, icon, status, position, maxConnections}) => {
+    autoLayout: true, // 自动布局
+    autoFix: true, // 初始定位
+    nodeParse: ({
+      id, 
+      nodeName, 
+      icon, 
+      status, 
+      position, 
+      maxConnections,
+    }) => {
       return {
         id,
         name: <div className="dag-node">{nodeName}</div>,
@@ -82,13 +101,14 @@ const options = ({instance, nodeList, runDrawer, weServiceDrawer}) => {
         maxConnections,
       }
     },
-    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer),
+    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, changeChannelId),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => {
       // position 拖拽位置
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
+      changeChannelId(item.id) // 记录拖拽控件
       item.position = position
       console.log(item)
       item.icon = matchingIcon(item.icon)

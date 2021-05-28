@@ -13,6 +13,7 @@ import DAG from '@dtwave/oner-dag'
 import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import WechatDrawer from './wechat-drawer'
+import SaveModal from './save-modal'
 import option from './option'
 import matchingIcon from './unit'
 import {links, nodes, types, conditions, process} from './mock'
@@ -29,13 +30,16 @@ const Demo = () => {
   const [linkList, setLinkList] = useState(links) // 初始化连线
   const [showRun, setShowRun] = useState(false) // 开始抽屉
   const [showWeService, setShowWeService] = useState(false) // 微信服务号抽屉
+  const [showSaveModal, setShowSaveModal] = useState(false) // 保存计划
+  const [saveLoading, setSaveLoading] = useState(false) // 保存计划
+
+  const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
+  const [weSFormData, setWeSFormData] = useState({}) // 微信服务号控件表单值
   const [isAll, setIsAll] = useState(false) // 全屏
   const [groupList, setGroupList] = useState([]) // 人群列表
   const [eventList, setEventList] = useState([]) // 事件列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [channelId, setChannelId] = useState(null) // 渠道id
-  const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
-  const [weSFormData, setWeSFormData] = useState({}) // 微信服务号控件表单值
 
   // 获取人群
   const getGroupList = async () => {
@@ -72,6 +76,14 @@ const Demo = () => {
   const weServiceDrawer = v => {
     setShowWeService(v)
   }
+  // 保存
+  const saveModal = v => {
+    setShowSaveModal(v)
+  }
+  // 保存loading
+  const setLoading = v => {
+    setSaveLoading(v)
+  }
   // 全屏
   const setAll = () => {
     setIsAll(!isAll)
@@ -82,10 +94,16 @@ const Demo = () => {
     setTimeout(() => setIsRender(false), 10)
   }
   // 保存
-  const savePlan = () => {
-    if (Object.keys(runFormData).length === 0) return message.warning('请配置开始控件')
+  const planData = {
+    // if (Object.keys(runFormData).length === 0) return message.warning('请配置开始控件')
     // if (Object.keys(weSFormData).length === 0) return message.warning('请配置微信服务号控件')
-    console.log(runFormData, channelId)
+    // setShowSaveModal(true)
+    ...runFormData,
+    ...weSFormData,
+    channelId,
+  }
+  const changeChannelId = v => {
+    setChannelId(v)
   }
 
   // 画布相关
@@ -100,7 +118,14 @@ const Demo = () => {
   }
 
   // 开始拖动
-  const onDragStart = ({id = new Date().getTime(), nodeName, status, icon, ioType, maxConnections}, e) => {
+  const onDragStart = ({
+    id = new Date().getTime(), 
+    nodeName, 
+    status, 
+    icon, 
+    ioType, 
+    maxConnections,
+  }, e) => {
     const newNode = {
       id,
       nodeName,
@@ -169,7 +194,7 @@ const Demo = () => {
           <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
           <span>清空画布</span>
         </Button>
-        <Button className="header-but" onClick={savePlan}>
+        <Button className="header-but" onClick={() => setShowSaveModal(true)}>
           <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
           <span>保存</span>
         </Button>
@@ -243,7 +268,15 @@ const Demo = () => {
           isRender ? <div /> : (
             <DAG
               ref={e => setInstance(e)}
-              {...option({instance, nodeList, setIsRender, setLinkList, runDrawer, weServiceDrawer})}
+              {...option({
+                instance, 
+                nodeList, 
+                setIsRender, 
+                setLinkList, 
+                runDrawer, 
+                weServiceDrawer,
+                changeChannelId,
+              })}
               links={linkList}
               nodeList={nodeList}
             />
@@ -288,6 +321,11 @@ const Demo = () => {
         weServiceDrawer={weServiceDrawer}
         weSFormData={weSFormData}
         setWeSFormData={setWeSFormData}
+      />
+      <SaveModal 
+        visible={showSaveModal} 
+        saveModal={saveModal} 
+        planData={planData}
       />
     </div>
   )

@@ -2,7 +2,7 @@ import {start} from '../icon'
 // mock数据
 const types = [
   {
-    id: 1,
+    id: 10,
     nodeName: '微信服务号',
     value: 'weixin',
     // status: 2,
@@ -55,6 +55,7 @@ const conditions = [
 // 流程控制
 const process = [
   {
+    id: 1,
     nodeName: '等待',
     value: 'wite',
     // status: 2,
@@ -62,6 +63,7 @@ const process = [
     icon: 'waite',
   },
   {
+    id: 0,
     nodeName: '结束',
     value: 'end',
     // status: 4,
@@ -72,7 +74,7 @@ const process = [
 // 节点列表
 const nodes = [
   {
-    id: 0,
+    id: 2,
     nodeName: '开始',
     // status: 2,
     icon: <img alt="" height={24} width={24} src={start} />,
