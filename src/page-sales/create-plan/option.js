@@ -14,7 +14,7 @@ const beforeConnection = ({source, target}) => {
   return true
 }
 // 构建菜单
-const buildMenu = (e, instance, runDrawer, weServiceDrawer, changeChannelId) => [
+const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
   {
     label: '配置',
     icon: 'edit',
@@ -101,7 +101,7 @@ const options = ({
         maxConnections,
       }
     },
-    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, changeChannelId),
+    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => {
@@ -109,6 +109,7 @@ const options = ({
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
       changeChannelId(item.id) // 记录拖拽控件
+      console.log(item.id)
       item.position = position
       console.log(item)
       item.icon = matchingIcon(item.icon)

@@ -28,8 +28,8 @@ export default ({
   eventList,
 }) => {
   const [runForm] = Form.useForm()
-  const [planType, setPlanType] = useState(runFormData.type || '0') // 计划类型 0定时1事件
-  const [period, setPeriod] = useState(runFormData.period || '0') // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
+  const [planType, setPlanType] = useState(runFormData.type || 0) // 计划类型 0定时1事件
+  const [period, setPeriod] = useState(runFormData.period || 0) // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
   let cycle = null // corn
   const [touchWay, setTouchWay] = useState(runFormData.triggerGap ? 'delay' : 'now')
   const {
@@ -44,7 +44,7 @@ export default ({
     triggerUnit,
     noRepeatTime,
     triggerEventList = [{id: undefined}],
-    targetEventList,
+    targetEvent,
   } = runFormData
 
   // const [neverTime, setNeverTime] = useState(noRepeatTime)
@@ -52,15 +52,15 @@ export default ({
   const onFinish = () => {
     runForm.validateFields().then(value => {
       const {startEndDate, interval, time} = value
-      if (planType === '0') {
+      if (planType === 0) {
         switch (period) {
-          case '1':
+          case 1:
             cycle = 'day'
             break
-          case '2':
+          case 2:
             cycle = 'week'
             break
-          case '3':
+          case 3:
             cycle = 'month'
             break
           default:
@@ -137,13 +137,13 @@ export default ({
             <Item 
               noStyle 
               name="triggerUnit" 
-              initialValue={triggerUnit || 'min'}
+              initialValue={triggerUnit || 1}
               rules={[{required: true, message: '请选择单位'}]}
             >
               <Select style={{width: '30%'}}>
-                <Option value="min">分钟</Option>
-                <Option value="hours">小时</Option>
-                <Option value="day">天</Option>
+                <Option value={1}>分钟</Option>
+                <Option value={2}>小时</Option>
+                <Option value={3}>天</Option>
               </Select>
             </Item>
           )
@@ -161,7 +161,7 @@ export default ({
       return monthData
     }
 
-    if (period === '1') {
+    if (period === 1) {
       return (
         <Item
           noStyle 
@@ -173,7 +173,7 @@ export default ({
         </Item>
       )
     } 
-    if (period === '2') {
+    if (period === 2) {
       return (
         <Input.Group compact>
           <Item 
@@ -183,13 +183,13 @@ export default ({
             initialValue={cornTime.interval}
           >
             <Select style={{width: '60%'}} placeholder="请选择日期">
-              <Option value="1">星期一</Option>
-              <Option value="2">星期二</Option>
-              <Option value="3">星期三</Option>
-              <Option value="4">星期四</Option>
-              <Option value="5">星期五</Option>
-              <Option value="6">星期六</Option>
-              <Option value="7">星期日</Option>
+              <Option value={1}>星期一</Option>
+              <Option value={2}>星期二</Option>
+              <Option value={3}>星期三</Option>
+              <Option value={4}>星期四</Option>
+              <Option value={5}>星期五</Option>
+              <Option value={6}>星期六</Option>
+              <Option value={7}>星期日</Option>
             </Select>
           </Item>
           <Item 
@@ -203,7 +203,7 @@ export default ({
         </Input.Group>
       )
     } 
-    if (period === '3') {
+    if (period === 3) {
       return (
         <Input.Group compact>
           <Item 
@@ -309,15 +309,15 @@ export default ({
               rules={[{required: true, message: '请选择计划类型'}]}
             >
               <Select onChange={changePlanType}>
-                <Option value="0">定时触发</Option>
-                <Option value="1">事件触发</Option>
+                <Option value={0}>定时触发</Option>
+                <Option value={1}>事件触发</Option>
               </Select>
             </Item>
             {
-              planType === '1' && (<div className="fs12 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
+              planType === 1 && (<div className="fs12 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
             }
             {
-              planType === '1' && (
+              planType === 1 && (
                 <Form.List
                   name="triggerEventList"
                   initialValue={triggerEventList}
@@ -364,7 +364,7 @@ export default ({
               )
             }
             {
-              planType === '1' && (
+              planType === 1 && (
                 <Item 
                   label="触达方式" 
                 >
@@ -373,24 +373,24 @@ export default ({
               )
             }
             {
-              planType === '0' && (
+              planType === 0 && (
                 <Item
                   label="重复"
                   name="period"
                   rules={[{required: true, message: '请选择周期'}]}
-                  initialValue={period || '0'}
+                  initialValue={period || 0}
                 >
                   <Select onChange={changePeriod} placeholder="请选择周期">
-                    <Option value="0">永不</Option>
-                    <Option value="1">每天</Option>
-                    <Option value="2">每周</Option>
-                    <Option value="3">每月</Option>
+                    <Option value={0}>永不</Option>
+                    <Option value={1}>每天</Option>
+                    <Option value={2}>每周</Option>
+                    <Option value={3}>每月</Option>
                   </Select>
                 </Item>
               )
             }
             {
-              planType === '0' && (
+              planType === 0 && (
                 <Item
                   label="触发时间"
                   extra="将在这个时间对受众用户进行触达"
@@ -400,7 +400,7 @@ export default ({
               )
             }
             {
-              period !== '0' && (
+              period !== 0 && (
                 <Item 
                   label="起止日期" 
                   name="startEndDate"
@@ -414,14 +414,14 @@ export default ({
             <Item 
               label="参与限制" 
               name="setRestrict" 
-              initialValue={setRestrict || '0'}
+              initialValue={setRestrict || 0}
               rules={[{required: true, message: '请选择次数'}]}
             >
               <Radio.Group>
-                <Radio value="0">
+                <Radio value={0}>
                   参与一次
                 </Radio>
-                <Radio value="1" disabled>
+                <Radio value={1} disabled>
                   参与多次
                 </Radio>
               </Radio.Group>
@@ -451,13 +451,13 @@ export default ({
                 <Item 
                   noStyle 
                   name="targetUnit" 
-                  initialValue={targetUnit || 'min'}
+                  initialValue={targetUnit || 1}
                   rules={[{required: true, message: '请选择单位'}]}
                 >
                   <Select style={{width: '30%'}}>
-                    <Option value="min">分钟</Option>
-                    <Option value="hours">小时</Option>
-                    <Option value="day">天</Option>
+                    <Option value={1}>分钟</Option>
+                    <Option value={2}>小时</Option>
+                    <Option value={3}>天</Option>
                   </Select>
                 </Item>
               </Input.Group>
@@ -465,7 +465,7 @@ export default ({
             <Item
               label="完成事件"
               name="targetEvent"
-              initialValue={targetEventList}
+              initialValue={targetEvent}
               rules={[{required: true, message: '请选择事件'}]}
             >
               <Select style={{width: '95%'}} placeholder="请选择事件">

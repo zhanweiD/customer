@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
-import {Button, Table, Popconfirm} from 'antd'
-import {successTip, changeToOptions} from '@util'
+import {Button, Table, Popconfirm, Spin} from 'antd'
+import {successTip, changeToOptions, errorTip} from '@util'
 import {Search} from '../component'
 import searchParams from './search'
 import io from './io'
@@ -10,6 +10,7 @@ export default () => {
   const [userList, setUserList] = useState([]) // 用户列表
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [searchParam, setSearchParam] = useState({}) // 搜索
+  const [tableLoading, setTableLoading] = useState(false) // 搜索
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -18,6 +19,7 @@ export default () => {
   
   // 获取列表
   const getList = async params => {
+    setTableLoading(true)
     try {
       const res = await io.getList({
         currentPage: pagination.current,
@@ -32,7 +34,9 @@ export default () => {
         totle: totalCount,
       })
     } catch (error) {
-      console.log(error)
+      errorTip(error)
+    } finally {
+      setTableLoading(false)
     } 
   }
   // 获取创建人
@@ -41,7 +45,7 @@ export default () => {
       const res = await io.getUserList()
       setUserList(changeToOptions(res || [])('userAccount', 'userId'))
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   } 
   // 获取渠道
@@ -50,7 +54,7 @@ export default () => {
       const res = await io.getChannelList()
       setChannelList(changeToOptions(res || [])('name', 'id'))
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
   // 删除计划
@@ -62,7 +66,7 @@ export default () => {
       getList({currentPage: 1})
       successTip('删除成功')
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
   // 复制计划
@@ -74,7 +78,7 @@ export default () => {
       getList({currentPage: 1})
       successTip('复制成功')
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
   
@@ -103,9 +107,35 @@ export default () => {
       title: '计划状态',
       dataIndex: 'status',
       key: 'status',
+      render: text => {
+        let status = ''
+        switch (text) {
+          case 0:
+            status = '未生效'
+            break
+          case 1:
+            status = '已生效'
+            break
+          case 2:
+            status = '暂停'
+            break
+          case 3:
+            status = '已结束'
+            break
+          default:
+            status = '待完善'
+            break
+        }
+        return status
+      },
     },
     {
       title: '创建时间',
+      dataIndex: 'ctime',
+      key: 'ctime',
+    },
+    {
+      title: '开始时间',
       dataIndex: 'startTime',
       key: 'startTime',
     },
@@ -115,9 +145,9 @@ export default () => {
       key: 'endTime',
     },
     {
-      title: '结束时间',
-      dataIndex: 'mTime',
-      key: 'mTime',
+      title: '修改时间',
+      dataIndex: 'mtime',
+      key: 'mtime',
     },
     {
       title: '操作',
@@ -170,6 +200,7 @@ export default () => {
           columns={columns} 
           dataSource={listDate} 
           scroll={{x: 960}} 
+          loading={tableLoading}
           pagination={{
             ...pagination,
             onChange: v => getList({currentPage: v}),

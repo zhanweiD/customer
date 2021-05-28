@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Modal, Form, Select, Input} from 'antd'
 
-import {getNamePattern} from '../../common/util'
+import {errorTip, getNamePattern} from '../../common/util'
 import io from './io'
 
 const {Option} = Select
@@ -18,6 +18,7 @@ export default ({
   visible, 
   saveModal, 
   planData,
+  planId,
 }) => {
   const [saveForm] = Form.useForm()
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -25,12 +26,15 @@ export default ({
 
   const addPlan = async params => {
     setConfirmLoading(true)
+    console.log(planData)
     try {
       io.addPlan({
         ...params,
+        ...planData,
+        setEnd: '1',
       })
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     } finally {
       setConfirmLoading(false)
     }
@@ -52,7 +56,7 @@ export default ({
   
   return (
     <Modal
-      title="保存计划"
+      title={planId ? '修改计划' : '保存计划'}
       visible={visible}
       destroyOnClose
       onOk={handleOk}
@@ -81,10 +85,10 @@ export default ({
               message: '请选择计划分组',
             },
           ]}
-          initialValue={groupId}
+          initialValue={groupId || 1}
         >
           <Select placeholder="请选择计划分组">
-            <Option value="f1">分组1</Option>
+            <Option value={1}>默认分组</Option>
           </Select>
         </Form.Item>
       </Form>

@@ -136,7 +136,10 @@ export default ({
       })
 
       setWeSFormData({
-        detail,
+        actionReq: {
+          detail,
+          ...value,
+        },
       })
 
       weServiceDrawer(false)

@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons'
 import DAG from '@dtwave/oner-dag'
 
+import {errorTip} from '@util'
 import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import WechatDrawer from './wechat-drawer'
@@ -48,7 +49,7 @@ export default props => {
       const res = await io.getGroupList()
       setGroupList(res)
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
   // 获取事件
@@ -57,18 +58,18 @@ export default props => {
       const res = await io.getEventList()
       setEventList(res)
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
   // 获取计划详情
-  const getPlanInfo = async () => {
+  const getPlanInfo = async id => {
     try {
       const res = await io.getPlanInfo({
-        id: planId,
+        id,
       })
-      console.log(res)
+      setPlanInfo(res)
     } catch (error) {
-      console.log(error)
+      errorTip(error)
     }
   }
 
@@ -187,14 +188,17 @@ export default props => {
     if (instance) onFixView()
   }, [isAll])
   useEffect(() => {
-    const {params = {}} = props
-    setPlanId(params.id)
+    const {params = {}} = props.match
+    if (params.id) {
+      setPlanId(params.id)
+      getPlanInfo(params.id)
+    }
     getGroupList()
     getEventList()
   }, [])
-  useEffect(() => {
-    if (planId) getPlanInfo()
-  }, [planId])
+  // useEffect(() => {
+  //   if (planId) getPlanInfo()
+  // }, [planId])
 
   return (
     <div className="dag-process oa">
@@ -207,7 +211,10 @@ export default props => {
           <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
           <span>清空画布</span>
         </Button>
-        <Button className="header-but" onClick={() => setShowSaveModal(true)}>
+        <Button
+          className="header-but"
+          onClick={() => setShowSaveModal(true)}
+        >
           <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
           <span>保存</span>
         </Button>
@@ -325,20 +332,21 @@ export default props => {
         showRun={showRun} 
         runDrawer={runDrawer} 
         setRunForm={setRunFormData} 
-        runFormData={runFormData}
+        runFormData={Object.keys(runFormData).length > 0 ? runFormData : planInfo}
         groupList={groupList}
         eventList={eventList}
       />
       <WechatDrawer 
         showWeService={showWeService}
         weServiceDrawer={weServiceDrawer}
-        weSFormData={weSFormData}
+        weSFormData={Object.keys(runFormData).length > 0 ? weSFormData : planInfo}
         setWeSFormData={setWeSFormData}
       />
       <SaveModal 
         visible={showSaveModal} 
         saveModal={saveModal} 
-        planData={planData}
+        planData={planInfo}
+        planId={planId}
       />
     </div>
   )
