@@ -1,11 +1,14 @@
 import {useState} from 'react'
 import {Drawer, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {CycleSelect} from '@dtwave/uikit'
 
 const {Option} = Select
 const {Item} = Form
 const {Panel} = Collapse
 const {RangePicker} = DatePicker
+const dateFormat = 'YYYY-MM-DD'
+const timeFormat = 'HH:mm:ss'
 
 const layout = {
   labelCol: {
@@ -16,30 +19,86 @@ const layout = {
   },
 }
 
-export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventList}) => {
+export default ({
+  showRun, 
+  runDrawer, 
+  setRunForm, 
+  runFormData = {}, 
+  groupList, 
+  eventList,
+}) => {
   const [runForm] = Form.useForm()
-  const [planType, setPlanType] = useState(runFormData.type || '0') // 计划类型
-  const [period, setPeriod] = useState(runFormData.period || '0') // 重复次数
-  const [touchWay, setTouchWay] = useState('now')
-  const {clientGroupId, targetGap, targetUnit} = runFormData
+  const [planType, setPlanType] = useState(runFormData.type || '0') // 计划类型 0定时1事件
+  const [period, setPeriod] = useState(runFormData.period || '0') // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
+  let cycle = null // corn
+  const [touchWay, setTouchWay] = useState(runFormData.triggerGap ? 'delay' : 'now')
+  const {
+    clientGroupId, 
+    targetGap, 
+    targetUnit, 
+    setRestrict,
+    endTime,
+    startTime,
+    triggerTime,
+    triggerGap,
+    triggerUnit,
+    noRepeatTime,
+    triggerEventList = [{id: undefined}],
+    targetEventList,
+  } = runFormData
 
+  // const [neverTime, setNeverTime] = useState(noRepeatTime)
+  let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
   const onFinish = () => {
     runForm.validateFields().then(value => {
+      const {startEndDate, interval, time} = value
+      if (planType === '0') {
+        switch (period) {
+          case '1':
+            cycle = 'day'
+            break
+          case '2':
+            cycle = 'week'
+            break
+          case '3':
+            cycle = 'month'
+            break
+          default:
+            cycle = ''
+            value.noRepeatTime = `${interval.format(dateFormat)} ${time.format(timeFormat)}`
+            break
+        }
+      }
+
+      if (time && cycle) {
+        const ctime = CycleSelect.formatCron(
+          {cycle, time: time.format(timeFormat), interval}
+        )
+        value.triggerTime = ctime
+      }
+      // CycleSelect.cronSrialize('0 45 3 1,2,3 * ? *')
+      if (startEndDate) {
+        value.startTime = startEndDate[0].format(dateFormat)
+        value.endTime = startEndDate[1].format(dateFormat)
+      }
       setRunForm(value)
       console.log(value)
       runDrawer(false)
-      runForm.resetFields()
+      // runForm.resetFields() // 时间类控件重置有问题
     }).catch(err => console.log(err))
   }
   const closeDrawer = () => {
+    // runForm.resetFields()
     runDrawer(false)
-    runForm.resetFields()
   }
   const changePlanType = v => {
     setPlanType(v)
   }
   const changePeriod = v => {
     setPeriod(v)
+    cornTime = {}
+    // setNeverTime('')
+    runForm.resetFields(['time', 'interval'])
   }
   const changTouchWay = v => {
     setTouchWay(v)
@@ -65,8 +124,9 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
           touchWay !== 'now' && (
             <Item 
               noStyle 
-              name="time" 
+              name="triggerGap" 
               rules={[{required: true, message: '请输入时间'}]}
+              initialValue={triggerGap}
             >
               <Input style={{width: '40%'}} type="number" placeholder="请输入时间" />
             </Item>
@@ -76,8 +136,8 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
           touchWay !== 'now' && (
             <Item 
               noStyle 
-              name="timeType" 
-              initialValue="min" 
+              name="triggerUnit" 
+              initialValue={triggerUnit || 'min'}
               rules={[{required: true, message: '请选择单位'}]}
             >
               <Select style={{width: '30%'}}>
@@ -91,6 +151,7 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
       </Input.Group>
     )
   }
+  // 触发时间组件
   const setTime = () => {
     const setMonth = () => {
       const monthData = []
@@ -99,33 +160,45 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
       }
       return monthData
     }
+
     if (period === '1') {
-      return <TimePicker style={{width: '40%'}} />
+      return (
+        <Item
+          noStyle 
+          name="time"
+          rules={[{required: true, message: '请选择时间'}]}
+          initialValue={cornTime.time}
+        >
+          <TimePicker format={timeFormat} style={{width: '40%'}} />
+        </Item>
+      )
     } 
     if (period === '2') {
       return (
         <Input.Group compact>
           <Item 
             noStyle 
-            name="date" 
-            rules={[{required: true, message: '请选择'}]}
+            name="interval" 
+            rules={[{required: true, message: '请选择日期'}]}
+            initialValue={cornTime.interval}
           >
-            <Select style={{width: '60%'}} placeholder="请选择">
-              <Option value="monday">星期一</Option>
-              <Option value="tuesday">星期二</Option>
-              <Option value="wednesday">星期三</Option>
-              <Option value="thursday">星期四</Option>
-              <Option value="friday">星期五</Option>
-              <Option value="saturday">星期六</Option>
-              <Option value="sunday">星期日</Option>
+            <Select style={{width: '60%'}} placeholder="请选择日期">
+              <Option value="1">星期一</Option>
+              <Option value="2">星期二</Option>
+              <Option value="3">星期三</Option>
+              <Option value="4">星期四</Option>
+              <Option value="5">星期五</Option>
+              <Option value="6">星期六</Option>
+              <Option value="7">星期日</Option>
             </Select>
           </Item>
           <Item 
             noStyle 
             name="time" 
             rules={[{required: true, message: '请选择时间'}]}
+            initialValue={cornTime.time}
           >
-            <TimePicker style={{width: '40%'}} />
+            <TimePicker format={timeFormat} style={{width: '40%'}} />
           </Item>
         </Input.Group>
       )
@@ -135,10 +208,11 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
         <Input.Group compact>
           <Item 
             noStyle 
-            name="date" 
-            rules={[{required: true, message: '请选择时间'}]}
+            name="interval" 
+            rules={[{required: true, message: '请选择日期'}]}
+            initialValue={cornTime.interval}
           >
-            <Select style={{width: '60%'}} placeholder="请选择">
+            <Select style={{width: '60%'}} placeholder="请选择日期">
               {
                 setMonth()
               }
@@ -147,28 +221,32 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
           <Item 
             noStyle 
             name="time" 
+            initialValue={cornTime.time}
             rules={[{required: true, message: '请选择时间'}]}
           >
-            <TimePicker style={{width: '40%'}} />
+            <TimePicker format={timeFormat} style={{width: '40%'}} />
           </Item>
         </Input.Group>
       )
     }
+
     return (
       <Input.Group compact>
         <Item 
           noStyle 
-          name="date" 
-          rules={[{required: true, message: '请选择时间'}]}
+          name="interval" 
+          rules={[{required: true, message: '请选择日期'}]}
+          initialValue={noRepeatTime ? noRepeatTime.split(' ')[0] : undefined}
         >
-          <DatePicker style={{width: '60%'}} />
+          <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
         <Item 
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
+          initialValue={noRepeatTime ? noRepeatTime.split(' ')[1] : undefined}
         >
-          <TimePicker style={{width: '40%'}} />
+          <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
       </Input.Group>
     )
@@ -179,6 +257,7 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
       title="开始控件"
       width={560}
       className="run-drawer"
+      destroyOnClose
       onClose={closeDrawer}
       visible={showRun}
       bodyStyle={{paddingBottom: 80}}
@@ -188,11 +267,11 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
             textAlign: 'right',
           }}
         >
-          <Button onClick={() => runDrawer(false)} style={{marginRight: 8}}>
+          <Button onClick={closeDrawer} style={{marginRight: 8}}>
             取消
           </Button>
           <Button onClick={onFinish} type="primary">
-            保存
+            确定
           </Button>
         </div>
       )}
@@ -240,10 +319,8 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
             {
               planType === '1' && (
                 <Form.List
-                  name="conversion-event"
-                  initialValue={[{
-                    event: undefined,
-                  }]}
+                  name="triggerEventList"
+                  initialValue={triggerEventList}
                 >
                   {(fields, {add, remove}, {errors}) => (
                     <div>
@@ -252,8 +329,8 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
                           <Form.Item
                             {...field}
                             {...layout}
-                            name={[field.name, 'event']}
-                            fieldKey={[field.fieldKey, 'event']}
+                            name={[field.name, 'id']}
+                            fieldKey={[field.fieldKey, 'id']}
                             className="position-icon"
                             label={`事件${index + 1}`}
                             rules={[{required: true, message: '请选择事件'}]}
@@ -281,7 +358,6 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
                       >
                         添加事件
                       </Button>
-                      {/* <Form.ErrorList errors={errors} /> */}
                     </div>
                   )}
                 </Form.List>
@@ -302,6 +378,7 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
                   label="重复"
                   name="period"
                   rules={[{required: true, message: '请选择周期'}]}
+                  initialValue={period || '0'}
                 >
                   <Select onChange={changePeriod} placeholder="请选择周期">
                     <Option value="0">永不</Option>
@@ -316,7 +393,6 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
               planType === '0' && (
                 <Item
                   label="触发时间"
-                  name="time"
                   extra="将在这个时间对受众用户进行触达"
                 >
                   {setTime()}
@@ -325,22 +401,27 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
             }
             {
               period !== '0' && (
-                <Item label="起止日期" name="startDate">
-                  <RangePicker />
+                <Item 
+                  label="起止日期" 
+                  name="startEndDate"
+                  rules={[{required: true, message: '请选择日期'}]}
+                  initialValue={[startTime, endTime]}
+                >
+                  <RangePicker format={dateFormat} />
                 </Item>
               )
             }
             <Item 
               label="参与限制" 
-              name="join-limit" 
-              initialValue="one"
+              name="setRestrict" 
+              initialValue={setRestrict || '0'}
               rules={[{required: true, message: '请选择次数'}]}
             >
               <Radio.Group>
-                <Radio value="one">
+                <Radio value="0">
                   参与一次
                 </Radio>
-                <Radio value="more" disabled>
+                <Radio value="1" disabled>
                   参与多次
                 </Radio>
               </Radio.Group>
@@ -365,7 +446,7 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
                   initialValue={targetGap}
                   rules={[{required: true, message: '请输入时间'}]}
                 >
-                  <Input style={{width: '70%'}} type="number" />
+                  <Input placeholder="请输入时间" style={{width: '70%'}} type="number" />
                 </Item>
                 <Item 
                   noStyle 
@@ -380,6 +461,16 @@ export default ({showRun, runDrawer, setRunForm, runFormData, groupList, eventLi
                   </Select>
                 </Item>
               </Input.Group>
+            </Item>
+            <Item
+              label="完成事件"
+              name="targetEvent"
+              initialValue={targetEventList}
+              rules={[{required: true, message: '请选择事件'}]}
+            >
+              <Select placeholder="请选择事件">
+                <Option value="a">目标事件</Option>
+              </Select>
             </Item>
             {/* <Form.List
               name="conversion-event"

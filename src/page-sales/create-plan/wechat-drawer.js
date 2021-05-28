@@ -24,7 +24,12 @@ const layout2 = {
   },
 }
 
-export default () => {
+export default ({
+  showWeService, // 显示
+  weServiceDrawer, // 控制显示
+  weSFormData, // 用于编辑回显
+  setWeSFormData, // 收集表单
+}) => {
   const [myForm] = Form.useForm()
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
@@ -42,12 +47,26 @@ export default () => {
     console.log(a)
   }
 
+  const closeDrawer = () => {
+    weServiceDrawer(false)
+  }
+  const saveDrawer = () => {
+    myForm.validateFields().then(values => {
+      console.log(values)
+      setWeSFormData(values)
+      weServiceDrawer(false)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
   return (
     <Drawer
       title="微信服务号"
       width={560}
       className="run-drawer"
-      visible={false}
+      visible={showWeService}
+      onClose={closeDrawer}
       bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
@@ -55,10 +74,10 @@ export default () => {
             textAlign: 'right',
           }}
         >
-          <Button>
+          <Button onClick={closeDrawer}>
             取消
           </Button>
-          <Button type="primary">
+          <Button type="primary" onClick={saveDrawer}>
             保存
           </Button>
         </div>
