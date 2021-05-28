@@ -48,14 +48,14 @@
       color #bfbfbf
 
 .wechat-preview
-  background-color #ededed
+  background-color transparent
   position absolute
   width 375px
   height 600px
-  border 1px solid #d3d3d3
+  // border 1px solid #d3d3d3
   right 560px
   top 55px
-  z-index 2000
+  z-index 20
   transition width 0.4s ease-out, opacity 0.2s ease-in, visibility 0.2s ease-in
   width 0
   height 80%
@@ -64,11 +64,14 @@
 
 
   .preview-box
-    width 340px
+    width 280px
     height 250px
     background-color #fff
+    position absolute
+    margin-top 100px
 
 .wechat-active
   opacity 1
   visibility 1
   width 300px
+  z-index 2000

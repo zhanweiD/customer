@@ -243,7 +243,7 @@ const Demo = () => {
           isRender ? <div /> : (
             <DAG
               ref={e => setInstance(e)}
-              {...option({instance, nodeList, setIsRender, setLinkList, runDrawer})}
+              {...option({instance, nodeList, setIsRender, setLinkList, runDrawer, weServiceDrawer})}
               links={linkList}
               nodeList={nodeList}
             />
@@ -283,7 +283,12 @@ const Demo = () => {
         groupList={groupList}
         eventList={eventList}
       />
-      <WechatDrawer />
+      <WechatDrawer 
+        showWeService={showWeService}
+        weServiceDrawer={weServiceDrawer}
+        weSFormData={weSFormData}
+        setWeSFormData={setWeSFormData}
+      />
     </div>
   )
 }

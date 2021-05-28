@@ -5,6 +5,7 @@ import _ from 'lodash'
 import cls from 'classnames'
 import Wechat from './wechat/wechat'
 import Preview from './wechat/preview'
+import Frame from '../icon/wechat-frame.svg'
 import io from './io'
 
 const {Option} = Select
@@ -39,10 +40,18 @@ const templateListMock = [
   },
 ]
 
-export default () => {
+export default ({showWeService, weServiceDrawer, weSFormData, setWeSFormData}) => {
+  console.log(weSFormData)
+  console.log(77777)
+
+
   const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [myForm] = Form.useForm()
+  const [formInitValue, setFormInitValue] = useState({
+    astrict: true,
+    myInput: 'aaaaa',
+  })
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
   const switchChange = e => {
@@ -55,8 +64,8 @@ export default () => {
   }
 
   const fieldsChange = (c, a) => {
-    console.log(c)
-    console.log(a)
+    // console.log(c)
+    // console.log(a)
   }
 
   const [vis, setVis] = useState(false)
@@ -97,17 +106,41 @@ export default () => {
   */
   const saveData = () => {
     console.log(myForm.getFieldsValue())
-    const detail = []
 
-    const values = myForm.getFieldsValue()
-
-    // TODO: 字段的数据
-    templateKeyList.forEach(item => {
-      detail.push({
-        name: item,
-        value: values[item],
+    myForm.validateFields().then(value => {
+      // TODO:
+      // 把数据存起来
+      const detail = []
+      templateKeyList.forEach(item => {
+        detail.push({
+          name: item,
+          value: value[item],
+        })
       })
-    })
+
+      setWeSFormData({
+        detail,
+      })
+
+      weServiceDrawer(false)
+    }).catch(err => console.log(err))
+  }
+
+  const cancelData = () => {    
+    weServiceDrawer(false)
+    const templateObj = {}
+
+    if (weSFormData.detail) {
+      // 说明有数据
+      weSFormData.detail.forEach(e => {
+        templateObj[e.name] = e.value
+      })
+      myForm.setFieldsValue(templateObj)
+    } else {
+      // 没数据
+      setTemplateKeyList([])
+      myForm.resetFields()
+    }
   }
 
   // TODO:
@@ -124,6 +157,21 @@ export default () => {
 
   useEffect(() => {
     getTemplate()
+
+    if (weSFormData.detail && weSFormData.detail.length > 0) {
+      // 有模板数据
+      const templateObj = {}
+
+      weSFormData.detail.forEach(e => {
+        templateObj[e.name] = e.value
+      })
+
+      setTemplateKeyList(_.map(weSFormData.detail, 'name'))
+      setFormInitValue({
+        ...formInitValue,
+        ...templateObj,
+      })
+    }
   }, [])
 
   return (
@@ -131,7 +179,7 @@ export default () => {
       title="微信服务号"
       width={560}
       className="run-drawer"
-      visible={false}
+      visible={showWeService}
       bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
@@ -139,7 +187,7 @@ export default () => {
             textAlign: 'right',
           }}
         >
-          <Button className="mr8">
+          <Button className="mr8" onClick={cancelData}>
             取消
           </Button>
           <Button type="primary" onClick={saveData}>
@@ -152,10 +200,7 @@ export default () => {
         {...layout1}
         name="wechatDrawer"
         form={myForm}
-        initialValues={{
-          astrict: true,
-          myInput: 'aaaaa',
-        }}
+        initialValues={formInitValue}
         onFieldsChange={(c, a) => fieldsChange(c, a)}
       >
         <Item
@@ -175,6 +220,7 @@ export default () => {
             <Item
               label="内容模板"
               name="template"
+              rules={[{required: true, message: '模板不能为空'}]}
             >
               <Select onChange={templateChange}>
                 {
@@ -198,22 +244,12 @@ export default () => {
                   {...layout2}
                   name={item}
                   label={item}
+                  rules={[{required: true, message: '输入不能为空'}]}
                 >
                   <Wechat id={item} />
                 </Item>
               ))
             }
-            {/* {
-              ['first', 'add', 'eee'].map(item => (
-                <Item
-                  {...layout2}
-                  name={item}
-                  label={item}
-                >
-                  <Wechat id={item} />
-                </Item>
-              ))
-            } */}
           </Panel>
           <Panel header="触达设置" key="2">
             <Item
@@ -240,6 +276,7 @@ export default () => {
             'wechat-active': vis,
           })}
         >
+          <img src={Frame} alt="frame" />
           <div className="preview-box mt20">
             测试测试
           </div>
