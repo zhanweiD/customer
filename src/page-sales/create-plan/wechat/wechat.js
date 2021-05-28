@@ -4,6 +4,8 @@ import {action, observable, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import EditNode from './editnode'
 import './wechat.styl'
+import Link from '../../icon/wechat-link.svg'
+import Attr from '../../icon/wechat-attr.svg'
 
 const menu = (
   <Menu>
@@ -22,15 +24,15 @@ const menu = (
 class SomeCompoent extends Component {
   @observable id = 0 // 自增 id，用于 span
 
-  @observable html = '12345<span class="tag-drop" contentEditable="false" id="6">66666</span>6789'
-  // @observable html = ''
+  // @observable html = '12345<span class="tag-drop" contentEditable="false" id="6">66666</span>6789'
+  @observable html = ''
   @observable clickedId = ''
   @observable visibility = 'hidden'
   @observable top = 0
   @observable left = 0
   @observable cursorPos = 0
 
-  @action clickEvent(e) {
+  @action.bound clickEvent(e) {
     // TODO: 为何触发了多次
     e.stopPropagation()
     const rect = e.target.getClientRects()[0]
@@ -52,20 +54,25 @@ class SomeCompoent extends Component {
     return `<span class="tag-drop" contentEditable="false" id="${this.id}">${text}</span>`
   }
 
+  @action.bound windowClickEvent(e) {
+    if (this.visibility === 'visible') {
+      console.log('window')
+
+      this.visibility = 'hidden'
+    }
+  }
+
   componentDidMount() {
-    // const drops = document.getElementsByClassName('tag-drop')
+    window.addEventListener('click', this.windowClickEvent)
+  }
 
-    // for (let i = 0; i < drops.length; i += 1) {
-    //   drops[i].addEventListener('click', e => this.clickEvent(e))
-    // }
+  componentWillUnmount() {
+    window.removeEventListener('click', this.windowClickEvent)
 
-    window.addEventListener('click', e => {
-      if (this.visibility === 'visible') {
-        console.log('window')
-
-        this.visibility = 'hidden'
-      }
-    })
+    const drops = document.getElementsByClassName('tag-drop')
+    for (let i = 0; i < drops.length; i += 1) {
+      drops[i].removeEventListener('click', this.clickEvent)
+    }
   }
 
   componentDidUpdate() {
@@ -73,7 +80,7 @@ class SomeCompoent extends Component {
     const drops = document.getElementById(id).getElementsByClassName('tag-drop')
 
     for (let i = 0; i < drops.length; i += 1) {
-      drops[i].addEventListener('click', e => this.clickEvent(e))
+      drops[i].addEventListener('click', this.clickEvent)
     }
   }
 
@@ -178,8 +185,16 @@ class SomeCompoent extends Component {
             borderBottom: '1px solid #E7EFF6',
           }}
         >
-          <Button className="ml8" onClick={() => this.add('attr')}>插入属性</Button>
-          <Button className="ml8" onClick={() => this.add('link')}>插入链接</Button>
+          <div className="FBH FBAC">
+            <div className="ml8 mr8 hand" onClick={() => this.add('attr')}>
+              <img src={Attr} alt="属性" />
+              <span className="ml4 fs12">插入属性</span>
+            </div>
+            <div className="hand" onClick={() => this.add('link')}>
+              <img src={Link} alt="链接" />
+              <span className="ml4 fs12">插入链接</span>
+            </div>
+          </div>
         </div>
         <div className="p8">
           <EditNode
@@ -194,25 +209,21 @@ class SomeCompoent extends Component {
           />
         </div>
         <div
+          className="select-dropdown"
           style={{
-            position: 'absolute',
-            zIndex: 100,
-            border: '1px solid #ccc',
-            backgroundColor: '#fff',
             top: this.top,
             left: this.left,
             visibility: this.visibility,
-            cursor: 'pointer',
           }}
           onClick={e => this.dropdownClick(e)}
         >
-          <div>
+          <div className="dropdown-item">
             1111
           </div>
-          <div>
+          <div className="dropdown-item">
             222222222222
           </div>
-          <div>
+          <div className="dropdown-item">
             3333
           </div>
         </div>

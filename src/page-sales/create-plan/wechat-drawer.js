@@ -1,7 +1,11 @@
-import {useForm, useState} from 'react'
+import {useForm, useState, useEffect} from 'react'
 import {Drawer, Form, Button, Col, Space, Input, Select, Collapse, Switch} from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
+import _ from 'lodash'
+import cls from 'classnames'
 import Wechat from './wechat/wechat'
+import Preview from './wechat/preview'
+import io from './io'
 
 const {Option} = Select
 const {Item} = Form
@@ -9,7 +13,7 @@ const {Panel} = Collapse
 
 const layout1 = {
   labelCol: {
-    span: 4,
+    span: 6,
   },
   wrapperCol: {
     span: 10,
@@ -17,12 +21,29 @@ const layout1 = {
 }
 const layout2 = {
   labelCol: {
-    span: 4,
+    span: 6,
   },
   wrapperCol: {
-    span: 20,
+    span: 18,
   },
 }
+
+// export default ({
+//   showWeService, // 显示
+//   weServiceDrawer, // 控制显示
+//   weSFormData, // 用于编辑回显
+//   setWeSFormData, // 收集表单
+// }) => {
+const templateListMock = [
+  {
+    template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
+    title: '领取奖金提醒',
+    primary_industry: 'IT科技',
+    deputy_industry: '互联网|电子商务',
+    content: '{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:    { {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间:  { {arrivedTime.DATA} }\n{ {remark.DATA} }',
+    example: '您已提交领奖申请\n\n领奖金额：xxxx元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx银行(尾号xxxx)\n到账时间：预计xxxxxxx\n\n预计将于xxxx到达您的银行卡',
+  },
+]
 
 export default ({
   showWeService, // 显示
@@ -30,6 +51,8 @@ export default ({
   weSFormData, // 用于编辑回显
   setWeSFormData, // 收集表单
 }) => {
+  const [templateList, setTemplateList] = useState(templateListMock)
+  const [templateKeyList, setTemplateKeyList] = useState([])
   const [myForm] = Form.useForm()
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
@@ -60,6 +83,73 @@ export default ({
     })
   }
 
+  const [vis, setVis] = useState(false)
+  const show = () => {
+    setVis(!vis)
+    console.log(vis)
+  }
+
+  const templateChange = e => {
+    // 目标模板数据
+    const target = _.find(templateList, item => item.title === e)
+    const req = /{(\w+).DATA}/g
+    const matchData = target.content.match(req)
+    const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
+
+    setTemplateKeyList(matchKeys)
+  }
+
+  /*
+  "actionReq": {
+    "id": 1,
+    "channelCode": "渠道code",
+    "templateId": 1,
+    "detail": [
+      {
+        "name": "first",
+        "value": "XXX"
+      }
+    ],
+    "openDetail": [
+      {
+        "name": "first",
+        "value": "XXX"
+      }
+    ],
+    "openType": 1
+  }
+  */
+  const saveData = () => {
+    console.log(myForm.getFieldsValue())
+    const detail = []
+
+    const values = myForm.getFieldsValue()
+
+    // TODO: 字段的数据
+    templateKeyList.forEach(item => {
+      detail.push({
+        name: item,
+        value: values[item],
+      })
+    })
+  }
+
+  // TODO:
+  const getTemplate = async () => {
+    try {
+      const res = await io.getTemplate({
+        accountId: 'wxe2b3f176ba1a4f33',
+      })
+      // setGroupList(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getTemplate()
+  }, [])
+
   return (
     <Drawer
       title="微信服务号"
@@ -74,10 +164,11 @@ export default ({
             textAlign: 'right',
           }}
         >
-          <Button onClick={closeDrawer}>
+          <Button className="mr8" onClick={closeDrawer}>
             取消
           </Button>
-          <Button type="primary" onClick={saveDrawer}>
+          {/* <Button type="primary" onClick={saveDrawer}> */}
+          <Button type="primary" onClick={saveData}>
             保存
           </Button>
         </div>
@@ -98,7 +189,7 @@ export default ({
           name="path"
           className="user-pb8"
           style={{
-            margin: '0 16px 16px 16px',
+            margin: '0 24px 16px',
           }}
         >
           <Select defaultValue="">
@@ -111,7 +202,11 @@ export default ({
               label="内容模板"
               name="template"
             >
-              <Select />
+              <Select onChange={templateChange}>
+                {
+                  templateList.map(item => <Option value={item.title}>{item.title}</Option>)
+                }
+              </Select>
             </Item>
             <div 
               style={{
@@ -124,7 +219,7 @@ export default ({
               内容设置
             </div>
             {
-              ['first', 'add', 'eee'].map(item => (
+              templateKeyList.map(item => (
                 <Item
                   {...layout2}
                   name={item}
@@ -134,22 +229,17 @@ export default ({
                 </Item>
               ))
             }
-            
-            {/* <div className="FBH">
-              <div 
-                style={{
-                  width: '70px',
-                  textAlign: 'right',
-                  marginRight: '10px',
-                  color: 'rgba(0,0,0,0.65)',
-                }}
-              >
-                first
-              </div>
-              <div className="FBV FB1" style={{border: '1px solid #E7EFF6'}}>
-                <Wechat />
-              </div>
-            </div> */}
+            {/* {
+              ['first', 'add', 'eee'].map(item => (
+                <Item
+                  {...layout2}
+                  name={item}
+                  label={item}
+                >
+                  <Wechat id={item} />
+                </Item>
+              ))
+            } */}
           </Panel>
           <Panel header="触达设置" key="2">
             <Item
@@ -164,6 +254,23 @@ export default ({
           </Panel>
         </Collapse>
       </Form>
+      <Button onClick={() => show()}>
+        点击
+      </Button>
+      <Preview>
+        <div 
+          className={cls({
+            'wechat-preview': true,
+            FBH: true,
+            FBJC: true,
+            'wechat-active': vis,
+          })}
+        >
+          <div className="preview-box mt20">
+            测试测试
+          </div>
+        </div>
+      </Preview>
     </Drawer>
   )
 }

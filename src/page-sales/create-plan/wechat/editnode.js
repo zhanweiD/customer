@@ -82,13 +82,8 @@ class EditNode extends Component {
     const {value} = this.props
     return (
       <div
-        style={{
-          display: 'inline-block',
-          wordBreak: 'break-all',
-          // outline: '#1890ff',
-          outline: 'none',
-          color: 'rgba(0, 0, 0, 0.65)',
-        }}
+        className="edit-item"
+        placeholder="请输入"
         contentEditable="true"
         spellCheck="false"
         ref={this.ref}
