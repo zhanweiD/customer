@@ -42,6 +42,23 @@ export default ({
     }
   }
 
+  const updatePlan = async params => {
+    setConfirmLoading(true)
+    try {
+      io.updatePlan({
+        ...params,
+        ...planData,
+        id: planId,
+        setEnd: '1',
+      })
+      successTip('保存成功')
+    } catch (error) {
+      errorTip(error)
+    } finally {
+      setConfirmLoading(false)
+    }
+  }
+
   const handleCancel = () => {
     saveForm.resetFields()
     saveModal(false)
@@ -51,7 +68,11 @@ export default ({
     console.log(planData)
     saveForm.validateFields().then(value => {
       console.log(value)
-      addPlan(value)
+      if (planId) {
+        updatePlan(value)
+      } else {
+        addPlan(value)
+      }
       handleCancel()
     }).catch(err => console.log(err))
   }

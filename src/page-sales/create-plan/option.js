@@ -52,11 +52,11 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
 const onFlowInit = (instance, nodeList) => {
   nodeList.map(node => {
     const {nodeName} = node
-    console.log(node)
     if (nodeName === '开始') {
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
         // id: node.id,
+        ioType: 'default',
         maxConnections: 1,
         // enabled: !disabled,
       }])
@@ -78,11 +78,11 @@ const onFlowInit = (instance, nodeList) => {
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
         // id: node.id,
+        ioType: 'default',
         maxConnections: 1,
         // enabled: !disabled,
       }])
     }
-    console.log(instance)
     return node
   })
 }
@@ -131,7 +131,8 @@ const options = ({
       console.log(item.id)
       item.position = position
       console.log(item)
-      item.icon = matchingIcon(item.icon)
+      console.log(item.icon)
+      // item.icon = matchingIcon(item.icon)
       instance.addNode(item)
       setTimeout(() => {
         instance.addTargetEndPoints(item.id, [item])

@@ -100,6 +100,17 @@ export default props => {
     }
   }
 
+    
+  // 获取节点
+  const getNodes = () => {
+    console.log(instance.getNodes())
+  }
+  
+  // 获取连线信息
+  const getLinks = () => {
+    console.log(instance.getLinks())
+  }
+
   // 开始抽屉
   const runDrawer = v => {
     setShowRun(v)
@@ -118,6 +129,7 @@ export default props => {
   }
   // 全屏
   const setAll = () => {
+    getLinks()
     setIsAll(!isAll)
   }
   // 清除画布
@@ -166,6 +178,7 @@ export default props => {
       ioType,
       maxConnections,
     }
+    console.log(newNode)
     // 添加拖拽数据
     e.dataTransfer.setData('data', JSON.stringify(newNode))
     // const {target} = e
@@ -182,16 +195,6 @@ export default props => {
     // const {target} = e
     // target.style.border = 'solid 1px #49aede'
     // target.style.margin = '8px'
-  }
-  
-  // 获取节点
-  const getNodes = () => {
-    console.log(instance.getNodes())
-  }
-  
-  // 获取连线信息
-  const getLinks = () => {
-    console.log(instance.getLinks())
   }
 
   // 运行

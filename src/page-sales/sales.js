@@ -25,6 +25,7 @@ export default () => {
         currentPage: pagination.current,
         pageSize: pagination.pageSize,
         ...params,
+        ...searchParam,
       })
       const {data, currentPage, pageSize, totalCount} = res
       setListDate(data)
@@ -43,7 +44,7 @@ export default () => {
   const getUserList = async () => {
     try {
       const res = await io.getUserList()
-      setUserList(changeToOptions(res || [])('userAccount', 'userId'))
+      setUserList(changeToOptions(res || [])('userAccount', 'id'))
     } catch (error) {
       errorTip(error)
     }
@@ -183,7 +184,7 @@ export default () => {
   return (
     <div className="oa">
       <div className="content-header">营销计划</div>
-      <div className="m16 mt72 bgf p16" style={{height: 'calc(100vh - 137px)'}}>
+      <div className="m16 mt72 bgf p16 pt0" style={{height: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSearchParam}

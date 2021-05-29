@@ -167,7 +167,7 @@ export default ({
           noStyle 
           name="time"
           rules={[{required: true, message: '请选择时间'}]}
-          initialValue={cornTime.time}
+          initialValue={moment(cornTime.time, timeFormat)}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -196,7 +196,7 @@ export default ({
             noStyle 
             name="time" 
             rules={[{required: true, message: '请选择时间'}]}
-            initialValue={cornTime.time}
+            initialValue={moment(cornTime.time, timeFormat)}
           >
             <TimePicker format={timeFormat} style={{width: '40%'}} />
           </Item>
@@ -221,7 +221,7 @@ export default ({
           <Item 
             noStyle 
             name="time" 
-            initialValue={cornTime.time}
+            initialValue={moment(cornTime.time, timeFormat)}
             rules={[{required: true, message: '请选择时间'}]}
           >
             <TimePicker format={timeFormat} style={{width: '40%'}} />
@@ -229,14 +229,13 @@ export default ({
         </Input.Group>
       )
     }
-
     return (
       <Input.Group compact>
         <Item 
           noStyle 
           name="interval" 
           rules={[{required: true, message: '请选择日期'}]}
-          initialValue={noRepeatTime ? noRepeatTime.split(' ')[0] : undefined}
+          initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[0], dateFormat) : undefined}
         >
           <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
@@ -244,7 +243,7 @@ export default ({
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
-          initialValue={noRepeatTime ? noRepeatTime.split(' ')[1] : undefined}
+          initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[1], timeFormat) : undefined}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -381,7 +380,7 @@ export default ({
                   initialValue={period || 0}
                 >
                   <Select onChange={changePeriod} placeholder="请选择周期">
-                    <Option value={0}>永不</Option>
+                    <Option value={0}>单次</Option>
                     <Option value={1}>每天</Option>
                     <Option value={2}>每周</Option>
                     <Option value={3}>每月</Option>
