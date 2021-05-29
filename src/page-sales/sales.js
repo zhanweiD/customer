@@ -14,7 +14,7 @@ export default () => {
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
-    totle: 0,
+    total: 0,
   }) // 列表分页
   
   // 获取列表
@@ -32,7 +32,7 @@ export default () => {
       setPagination({
         current: currentPage,
         pageSize,
-        totle: totalCount,
+        total: totalCount,
       })
     } catch (error) {
       errorTip(error.message)
@@ -200,10 +200,11 @@ export default () => {
         <Table 
           columns={columns} 
           dataSource={listDate} 
-          scroll={{x: 960}} 
+          scroll={{x: 1120}} 
           loading={tableLoading}
           pagination={{
             ...pagination,
+            showTotal: () => `合计${pagination.total}条记录`,
             onChange: v => getList({currentPage: v}),
           }}
         />
