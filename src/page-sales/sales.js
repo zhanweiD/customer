@@ -200,7 +200,8 @@ export default () => {
         <Table 
           columns={columns} 
           dataSource={listDate} 
-          scroll={{x: 1120}} 
+          rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
+          scroll={{x: 1280}} 
           loading={tableLoading}
           pagination={{
             ...pagination,

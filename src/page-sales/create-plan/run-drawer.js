@@ -264,7 +264,7 @@ export default ({
       destroyOnClose
       onClose={closeDrawer}
       visible={showRun}
-      bodyStyle={{paddingBottom: 80}}
+      // bodyStyle={{paddingBottom: 80}}
       footer={(
         <div
           style={{
