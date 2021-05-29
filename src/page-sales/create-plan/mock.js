@@ -79,10 +79,27 @@ const nodes = [
     // status: 2,
     icon: 'start',
   },
+  // {
+  //   id: 'weixin',
+  //   nodeName: '微信服务号',
+  //   // status: 2,
+  //   icon: 'weService',
+  // }, {
+  //   id: 0,
+  //   nodeName: '结束',
+  //   // status: 4,
+  //   icon: 'end',
+  // },
 ]
   
 // 连线数据
 const links = [
-  
+  // {
+  //   sourceId: '2',
+  //   targetId: 'weixin',
+  // }, {
+  //   sourceId: 'weixin',
+  //   targetId: '0',
+  // },
 ]
 export {types, nodes, links, conditions, process}

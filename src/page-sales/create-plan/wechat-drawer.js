@@ -176,7 +176,7 @@ export default ({
     }
   }
 
-  const getTagList = async (objId) => {
+  const getTagList = async objId => {
     try {
       const res = await io.getTagList({objId: String(objId)})
       
@@ -210,11 +210,11 @@ export default ({
   }, [])
 
   useEffect(() => {
-    if (runFormData.clientGroupId) {
-      const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
-      // 客群id
-      getTagList(target.objId)
-    }
+    // if (runFormData.clientGroupId) {
+    //   const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
+    //   // 客群id
+    //   getTagList(target.objId)
+    // }
   }, [runFormData])
 
   return (
