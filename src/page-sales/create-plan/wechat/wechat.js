@@ -23,7 +23,7 @@ const menu = (
 
 @observer
 class SomeCompoent extends Component {
-  @observable id = 0 // 自增 id，用于 span
+  @observable id = 100 // 自增 id，用于 span
 
   // @observable html = '12345<span class="tag-drop" contentEditable="false" id="6">66666</span>6789'
   @observable html = ''

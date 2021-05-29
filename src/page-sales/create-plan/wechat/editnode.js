@@ -12,7 +12,6 @@ class EditNode extends Component {
     }
   }
 
-
   onChange(e) {
     const {onCursorChange, onChange} = this.props
     const html = this.ref.current.innerHTML
@@ -73,8 +72,6 @@ class EditNode extends Component {
 
   getCursortPosition(e) {
     const pos = this.getDivPosition(e.target)
-
-    console.log(pos)
   }
 
 
