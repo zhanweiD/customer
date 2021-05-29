@@ -31,14 +31,24 @@ const layout2 = {
 }
 
 const templateListMock = [
-  {
-    template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
-    title: '领取奖金提醒',
-    primary_industry: 'IT科技',
-    deputy_industry: '互联网|电子商务',
-    content: '{ {result.DATA} }\n\n领奖金额:{ {withdrawMoney.DATA} }\n领奖  时间:    { {withdrawTime.DATA} }\n银行信息:{ {cardInfo.DATA} }\n到账时间:  { {arrivedTime.DATA} }\n{ {remark.DATA} }',
-    example: '您已提交领奖申请\n\n领奖金额：xxxx元\n领奖时间：2013-10-10 12:22:22\n银行信息：xx银行(尾号xxxx)\n到账时间：预计xxxxxxx\n\n预计将于xxxx到达您的银行卡',
-  },
+  [
+    {
+      template_id: 'qdJWd_NP89dVXoZm16OnMbVpmHAKeEYJhiuXQI-u9wM',
+      title: '异地登录提醒',
+      primary_industry: 'IT科技',
+      deputy_industry: 'IT软件与服务',
+      content: '{{first.DATA}}\n\n您的企业邮帐号{{account.DATA}}于{{time.DATA}}在{{city.DATA}}登录。地址信息有误差，如有疑问请在电脑登录并查看“自助查询”。\n{{remark.DATA}}',
+      example: '你好，samueldeng\n\n你的企业邮帐号samueldeng@gzmailteam.com于今天11:22在北京登录。地址信息有误差，如有疑问请在电脑登录并查看自助查询。',
+    },
+    {
+      template_id: '5ZQaDUG6m_nzKlgrAJznbawATtN1XqHzJ6Bbrn_FDaI',
+      title: '服务器恢复通知',
+      primary_industry: 'IT科技',
+      deputy_industry: 'IT软件与服务',
+      content: '{{first.DATA}}\n\n故障停止时间：{{time.DATA}}\n故障持续时间：{{last.DATA}}\n{{reason.DATA}}',
+      example: '您好，您的网站 abc.com 恢复访问\n\n故障停止时间：2013-11-21 11:11:11\n故障持续时间：3小时\n故障原因：无法连接服务器',
+    },
+  ],
 ]
 
 export default ({
@@ -49,7 +59,7 @@ export default ({
   runFormData, // 开始的数据，需要获取客群 id
   groupList,
 }) => {
-  const [templateList, setTemplateList] = useState([])
+  const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [myForm] = Form.useForm()
   const [formInitValue, setFormInitValue] = useState({
@@ -57,6 +67,7 @@ export default ({
     channelCode: '微信',
   })
   const [tagList, setTagList] = useState(data)
+  const [previewData, setPreviewData] = useState('')
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
   const switchChange = e => {
@@ -91,16 +102,18 @@ export default ({
 
   const templateChange = e => {
     // 目标模板数据
-    const target = _.find(templateList, item => item.title === e)
+    const target = _.find(templateList, item => item.template_id === e)
     const req = /{(\w+).DATA}/g
     const matchData = target.content.match(req)
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
 
     setTemplateKeyList(matchKeys)
+    setPreviewData(target.content)
+    setVis(true)
   }
 
   /*
-  "actionReq": {
+  "action": {
     "id": 1,
     "channelCode": "渠道code",
     "templateId": 1,
@@ -120,7 +133,6 @@ export default ({
   }
   */
   const saveData = () => {
-    console.log(myForm.getFieldsValue())
     const tagMap = {}
     tagList.forEach(item => {
       tagMap[item.objNameTagName] = item.objIdTagId
@@ -148,7 +160,7 @@ export default ({
       })
 
       setWeSFormData({
-        actionReq: {
+        action: {
           detail,
           channelCode: value.channelCode,
           templateId: value.templateId,
@@ -157,7 +169,7 @@ export default ({
       })
 
       console.log({
-        actionReq: {
+        action: {
           detail,
           channelCode: value.channelCode,
           templateId: value.templateId,
@@ -166,17 +178,36 @@ export default ({
       })
 
       weServiceDrawer(false)
+      setVis(false)
     }).catch(err => console.log(err))
   }
 
   const cancelData = () => {    
     weServiceDrawer(false)
+    setVis(false)
     const templateObj = {}
 
-    if (weSFormData.detail) {
+    if (weSFormData.action && weSFormData.action.detail) {
       // 说明有数据
-      weSFormData.detail.forEach(e => {
-        templateObj[e.name] = e.value
+      weSFormData.action.detail.forEach(e => {
+        let valueTemp = e.value
+        tagList.forEach(item => {
+          if (valueTemp.indexOf(item.objIdTagId) > -1) {
+            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
+          }
+        })
+
+        // 对 span 的处理
+        if (valueTemp.indexOf('${') > -1) {
+          valueTemp = valueTemp.replace(/}/g, '</span>')
+          let id = 0
+          while (valueTemp.indexOf('${') > -1) {
+            id += 1
+            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">`)
+          }
+        }
+
+        templateObj[e.name] = valueTemp
       })
       myForm.setFieldsValue(templateObj)
     } else {
@@ -216,20 +247,20 @@ export default ({
   useEffect(() => {
     getTemplate()
 
-    if (weSFormData.detail && weSFormData.detail.length > 0) {
-      // 有模板数据
-      const templateObj = {}
+    // if (weSFormData.detail && weSFormData.detail.length > 0) {
+    //   // 有模板数据
+    //   const templateObj = {}
 
-      weSFormData.detail.forEach(e => {
-        templateObj[e.name] = e.value
-      })
+    //   weSFormData.detail.forEach(e => {
+    //     templateObj[e.name] = e.value
+    //   })
 
-      setTemplateKeyList(_.map(weSFormData.detail, 'name'))
-      setFormInitValue({
-        ...formInitValue,
-        ...templateObj,
-      })
-    }
+    //   setTemplateKeyList(_.map(weSFormData.detail, 'name'))
+    //   setFormInitValue({
+    //     ...formInitValue,
+    //     ...templateObj,
+    //   })
+    // }
   }, [])
 
   useEffect(() => {
@@ -239,6 +270,54 @@ export default ({
       getTagList(target.objId)
     }
   }, [groupList])
+
+  useEffect(() => {
+    if (weSFormData.action && weSFormData.action.detail && weSFormData.action.detail.length > 0) {
+      // 有模板数据
+      const templateObj = {}
+
+      // 要处理数据
+      weSFormData.action.detail.forEach(e => {
+        let valueTemp = e.value
+        tagList.forEach(item => {
+          if (valueTemp.indexOf(item.objIdTagId) > -1) {
+            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
+          }
+        })
+
+        // 对 span 的处理
+        if (valueTemp.indexOf('${') > -1) {
+          valueTemp = valueTemp.replace(/}/g, '</span>')
+          let id = 0
+          while (valueTemp.indexOf('${') > -1) {
+            id += 1
+            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">`)
+          }
+        }
+
+        templateObj[e.name] = valueTemp
+      })
+
+      const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
+      setPreviewData(target.content)
+      setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
+      setFormInitValue({
+        ...formInitValue,
+        ...templateObj,
+        setRestrict: weSFormData.action.setRestrict,
+        templateId: weSFormData.action.templateId,
+        channelCode: weSFormData.action.channelCode,
+      })
+    }
+  }, [weSFormData])
+
+  useEffect(() => {
+    if (showWeService) {
+      if (weSFormData.action && weSFormData.action.templateId) {
+        setVis(true)
+      }
+    }
+  }, [showWeService])
 
   return (
     <Drawer
@@ -257,7 +336,6 @@ export default ({
           <Button className="mr8" onClick={cancelData}>
             取消
           </Button>
-          {/* <Button type="primary" onClick={saveDrawer}> */}
           <Button type="primary" onClick={saveData}>
             保存
           </Button>
@@ -292,7 +370,7 @@ export default ({
             >
               <Select onChange={templateChange}>
                 {
-                  templateList.map(item => <Option value={item.title}>{item.title}</Option>)
+                  templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
                 }
               </Select>
             </Item>
@@ -345,9 +423,10 @@ export default ({
           })}
         >
           <img src={Frame} alt="frame" style={{width: '300px'}} />
-          <div className="preview-box mt20">
-            测试测试
-          </div>
+          <div 
+            className="preview-box mt20" 
+            dangerouslySetInnerHTML={{__html: previewData}} 
+          />
         </div>
       </Preview>
     </Drawer>
