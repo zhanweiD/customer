@@ -13,6 +13,11 @@ const {Option} = Select
 const {Item} = Form
 const {Panel} = Collapse
 
+data.forEach(item => {
+  item.objIdTagId = item.objIdTagId.split('.')[1]
+  item.objNameTagName = item.objNameTagName.split('.')[1]
+})
+
 const layout1 = {
   labelCol: {
     span: 6,
@@ -237,6 +242,10 @@ export default ({
       const res = await io.getTagList({objId: String(objId)})
       
       if (res && res.length > 0) {
+        res.forEach(item => {
+          item.objIdTagId = item.objIdTagId.split('.')[1]
+          item.objNameTagName = item.objNameTagName.split('.')[1]
+        })
         setTagList(res)
       } else {
         setTagList(data)
