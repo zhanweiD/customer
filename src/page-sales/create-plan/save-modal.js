@@ -39,7 +39,7 @@ export default ({
       await io.addPlan({
         ...params,
         ...planData,
-        setEnd: '1',
+        setEnd: status,
       })
       successTip('保存成功')
       handleCancel()
