@@ -71,7 +71,7 @@ export default ({
     setRestrict: 1,
     channelCode: '微信',
   })
-  const [tagList, setTagList] = useState(data)
+  const [tagList, setTagList] = useState([])
   const [previewData, setPreviewData] = useState('')
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
@@ -247,9 +247,10 @@ export default ({
           item.objNameTagName = item.objNameTagName.split('.')[1]
         })
         setTagList(res)
-      } else {
-        setTagList(data)
-      }  
+      } 
+      // else {
+      //   setTagList(data)
+      // }  
     } catch (error) {
       console.log(error)
     }
@@ -280,7 +281,7 @@ export default ({
       // 客群id
       getTagList(target.objId)
     }
-  }, [groupList])
+  }, [runFormData])
 
   useEffect(() => {
     if (weSFormData.action && weSFormData.action.detail && weSFormData.action.detail.length > 0) {
@@ -371,8 +372,8 @@ export default ({
             margin: '0 24px 16px',
           }}
         >
-          <Select defaultValue="微信">
-            <Option value="微信">微信</Option>
+          <Select defaultValue="wexin">
+            <Option value="wexin">微信</Option>
           </Select>
         </Item>
         <Collapse size="small" defaultActiveKey={['1', '2']}>

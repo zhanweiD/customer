@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react'
-import {Dropdown, Menu, Button} from 'antd'
+import {Dropdown, Menu, Button, message} from 'antd'
 import {action, observable, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import EditNode from './editnode'
@@ -190,6 +190,7 @@ class SomeCompoent extends Component {
                   this.add(tagList[0].objNameTagName)
                 }
                 console.error('没有属性')
+                message.error('暂无属性')
               }}
             >
               <img src={Attr} alt="属性" />
