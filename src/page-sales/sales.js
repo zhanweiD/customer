@@ -35,7 +35,7 @@ export default () => {
         totle: totalCount,
       })
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     } finally {
       setTableLoading(false)
     } 
@@ -46,7 +46,7 @@ export default () => {
       const res = await io.getUserList()
       setUserList(changeToOptions(res || [])('userAccount', 'id'))
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   } 
   // 获取渠道
@@ -55,7 +55,7 @@ export default () => {
       const res = await io.getChannelList()
       setChannelList(changeToOptions(res || [])('name', 'id'))
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
   // 删除计划
@@ -67,7 +67,7 @@ export default () => {
       getList({currentPage: 1})
       successTip('删除成功')
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
   // 复制计划
@@ -79,12 +79,12 @@ export default () => {
       getList({currentPage: 1})
       successTip('复制成功')
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
   
   const editPlan = id => {
-    window.open(`${window.__keeper.pathHrefPrefix}/sales/create/${id}`)
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${id}`
   }
 
   const columns = [
@@ -170,7 +170,7 @@ export default () => {
   ]
 
   const toCreate = () => {
-    window.open(`${window.__keeper.pathHrefPrefix}/sales/create`)
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create`
   }
   
   useEffect(() => {
@@ -184,7 +184,7 @@ export default () => {
   return (
     <div className="oa">
       <div className="content-header">营销计划</div>
-      <div className="m16 mt72 bgf p16 pt0" style={{height: 'calc(100vh - 137px)'}}>
+      <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSearchParam}

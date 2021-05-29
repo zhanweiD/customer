@@ -20,23 +20,32 @@ export default ({
   planData,
   planInfo,
   planId,
+  instance,
 }) => {
   const [saveForm] = Form.useForm()
   const [confirmLoading, setConfirmLoading] = useState(false)
+  const [status, setStatus] = useState(0)
   const {name, groupId} = planInfo
+
+  const handleCancel = () => {
+    saveForm.resetFields()
+    saveModal(false)
+  }
 
   const addPlan = async params => {
     setConfirmLoading(true)
     console.log(planData)
     try {
-      io.addPlan({
+      await io.addPlan({
         ...params,
         ...planData,
         setEnd: '1',
       })
       successTip('保存成功')
+      handleCancel()
+      window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     } finally {
       setConfirmLoading(false)
     }
@@ -45,27 +54,34 @@ export default ({
   const updatePlan = async params => {
     setConfirmLoading(true)
     try {
-      io.updatePlan({
+      await io.updatePlan({
         ...params,
         ...planData,
         id: planId,
-        setEnd: '1',
+        setEnd: status,
       })
       successTip('保存成功')
+      handleCancel()
+      window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     } finally {
       setConfirmLoading(false)
     }
   }
 
-  const handleCancel = () => {
-    saveForm.resetFields()
-    saveModal(false)
-  }
-
   const handleOk = () => {
     console.log(planData)
+    console.log(instance.getNodes())
+    if (instance.getNodes().length >= 3) {
+      if (instance.getLinks >= 2) {
+        setStatus(1)
+      } else {
+        setStatus(0)
+      }
+    } else {
+      setStatus(0)
+    }
     saveForm.validateFields().then(value => {
       console.log(value)
       if (planId) {
@@ -73,7 +89,6 @@ export default ({
       } else {
         addPlan(value)
       }
-      handleCancel()
     }).catch(err => console.log(err))
   }
   

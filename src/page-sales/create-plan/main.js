@@ -51,7 +51,7 @@ export default props => {
       const res = await io.getGroupList()
       setGroupList(res)
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
   // 获取事件
@@ -60,7 +60,7 @@ export default props => {
       const res = await io.getEventList()
       setEventList(res)
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
   // 获取计划详情
@@ -71,6 +71,8 @@ export default props => {
         id,
       })
       setPlanInfo(res)
+      setRunFormData(res)
+      setWeSFormData({actionRsp: res.actionRsp})
       setNodeList([...nodes, {
         id: 'weixin',
         nodeName: '微信服务号',
@@ -94,7 +96,7 @@ export default props => {
         targetId: '0',
       }])
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     } finally {
       setInfoLoading(false)
     }
@@ -144,7 +146,8 @@ export default props => {
     // setShowSaveModal(true)
     ...runFormData,
     ...weSFormData,
-    channelCode: channelId,
+    // channelCode: channelId || planInfo.channelCode,
+    channelCode: 'weixin',
   }
   const changeChannelId = v => {
     setChannelId(v)
@@ -385,6 +388,7 @@ export default props => {
         planData={planData}
         planInfo={planInfo}
         planId={planId}
+        instance={instance}
       />
     </div>
   )

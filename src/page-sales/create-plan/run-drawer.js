@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Drawer, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
@@ -8,6 +8,7 @@ const {Item} = Form
 const {Panel} = Collapse
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
+const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
 const timeFormat = 'HH:mm:ss'
 
 const layout = {
@@ -28,10 +29,10 @@ export default ({
   eventList,
 }) => {
   const [runForm] = Form.useForm()
-  const [planType, setPlanType] = useState(runFormData.type || 0) // 计划类型 0定时1事件
-  const [period, setPeriod] = useState(runFormData.period || 0) // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
+  const [planType, setPlanType] = useState(0) // 计划类型 0定时1事件
+  const [period, setPeriod] = useState(0) // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
   let cycle = null // corn
-  const [touchWay, setTouchWay] = useState(runFormData.triggerGap ? 'delay' : 'now')
+  const [touchWay, setTouchWay] = useState('now')
   const {
     clientGroupId, 
     targetGap, 
@@ -46,7 +47,6 @@ export default ({
     triggerEventList = [{id: undefined}],
     targetEvent,
   } = runFormData
-
   // const [neverTime, setNeverTime] = useState(noRepeatTime)
   let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
   const onFinish = () => {
@@ -78,8 +78,8 @@ export default ({
       }
       // CycleSelect.cronSrialize('0 45 3 1,2,3 * ? *')
       if (startEndDate) {
-        value.startTime = startEndDate[0].format(dateFormat)
-        value.endTime = startEndDate[1].format(dateFormat)
+        value.startTime = startEndDate[0].format(dateTimeFormat)
+        value.endTime = startEndDate[1].format(dateTimeFormat)
       }
       setRunForm(value)
       console.log(value)
@@ -103,6 +103,11 @@ export default ({
   const changTouchWay = v => {
     setTouchWay(v)
   }
+  useEffect(() => {
+    setPlanType(runFormData.type || 0)
+    setPeriod(runFormData.period || 0)
+    setTouchWay(triggerGap ? 'delay' : 'now')
+  }, [runFormData])
   const setTouchType = () => {
     return (
       <Input.Group compact>
@@ -167,7 +172,7 @@ export default ({
           noStyle 
           name="time"
           rules={[{required: true, message: '请选择时间'}]}
-          initialValue={moment(cornTime.time, timeFormat)}
+          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -196,7 +201,7 @@ export default ({
             noStyle 
             name="time" 
             rules={[{required: true, message: '请选择时间'}]}
-            initialValue={moment(cornTime.time, timeFormat)}
+            initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
           >
             <TimePicker format={timeFormat} style={{width: '40%'}} />
           </Item>
@@ -221,7 +226,7 @@ export default ({
           <Item 
             noStyle 
             name="time" 
-            initialValue={moment(cornTime.time, timeFormat)}
+            initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
             rules={[{required: true, message: '请选择时间'}]}
           >
             <TimePicker format={timeFormat} style={{width: '40%'}} />
@@ -377,7 +382,7 @@ export default ({
                   label="重复"
                   name="period"
                   rules={[{required: true, message: '请选择周期'}]}
-                  initialValue={period || 0}
+                  initialValue={period}
                 >
                   <Select onChange={changePeriod} placeholder="请选择周期">
                     <Option value={0}>单次</Option>
@@ -404,9 +409,9 @@ export default ({
                   label="起止日期" 
                   name="startEndDate"
                   rules={[{required: true, message: '请选择日期'}]}
-                  initialValue={[startTime, endTime]}
+                  initialValue={startTime ? [moment(startTime, dateTimeFormat), moment(endTime, dateTimeFormat)] : undefined}
                 >
-                  <RangePicker format={dateFormat} />
+                  <RangePicker showTime format={dateTimeFormat} />
                 </Item>
               )
             }

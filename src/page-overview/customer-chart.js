@@ -37,7 +37,7 @@ const CustomerChart = ({
       setSunData(res)
       setCount(res.reduce((total, item) => total + item.value, 0))
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     } finally {
       setLoading(false)
     }
@@ -53,7 +53,7 @@ const CustomerChart = ({
       })
       setFunnelData(res)
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
 

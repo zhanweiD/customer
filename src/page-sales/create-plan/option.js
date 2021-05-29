@@ -56,21 +56,21 @@ const onFlowInit = (instance, nodeList) => {
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
         // id: node.id,
-        ioType: 'default',
+        ioType: '2',
         maxConnections: 1,
         // enabled: !disabled,
       }])
     } else if (nodeName === '结束') {
       instance.addTargetEndPoints(node.id, [{
         id: `target_${node.id}`,
-        ioType: 'default',
+        ioType: '2',
         maxConnections: 1,
         // enabled: !disabled,
       }])
     } else {
       instance.addTargetEndPoints(node.id, [{
         id: `target_${node.id}`,
-        ioType: 'default',
+        ioType: '2',
         maxConnections: 1,
         // enabled: !disabled,
       }])
@@ -78,7 +78,7 @@ const onFlowInit = (instance, nodeList) => {
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
         // id: node.id,
-        ioType: 'default',
+        ioType: '2',
         maxConnections: 1,
         // enabled: !disabled,
       }])
@@ -132,6 +132,7 @@ const options = ({
       item.position = position
       console.log(item)
       console.log(item.icon)
+      item.ioType = '2'
       // item.icon = matchingIcon(item.icon)
       instance.addNode(item)
       setTimeout(() => {
