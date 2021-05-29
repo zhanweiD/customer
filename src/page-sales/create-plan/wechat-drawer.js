@@ -224,7 +224,9 @@ export default ({
         accountId: 'wxe2b3f176ba1a4f33',
       })
 
-      setTemplateList(res.template_list || [])
+      if (res && res.template_list) {
+        setTemplateList(res.template_list)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -298,8 +300,6 @@ export default ({
         templateObj[e.name] = valueTemp
       })
 
-      const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
-      setPreviewData(target.content)
       setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
       setFormInitValue({
         ...formInitValue,
@@ -312,8 +312,13 @@ export default ({
   }, [weSFormData])
 
   useEffect(() => {
-    if (showWeService) {
+    if (showWeService) {      
       if (weSFormData.action && weSFormData.action.templateId) {
+        const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
+
+        if (target && target.content) {
+          setPreviewData(target.content)
+        }
         setVis(true)
       }
     }

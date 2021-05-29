@@ -72,7 +72,7 @@ export default props => {
       })
       setPlanInfo(res)
       setRunFormData(res)
-      setWeSFormData({actionRsp: res.actionRsp})
+      setWeSFormData({action: res.action})
       setNodeList([...nodes, {
         id: 'weixin',
         nodeName: '微信服务号',
