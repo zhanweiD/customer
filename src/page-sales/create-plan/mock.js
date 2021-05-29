@@ -2,7 +2,7 @@ import {start} from '../icon'
 // mock数据
 const types = [
   {
-    id: 10,
+    id: 'weixin',
     nodeName: '微信服务号',
     value: 'weixin',
     // status: 2,
@@ -77,7 +77,7 @@ const nodes = [
     id: 2,
     nodeName: '开始',
     // status: 2,
-    icon: <img alt="" height={24} width={24} src={start} />,
+    icon: 'start',
   },
 ]
   

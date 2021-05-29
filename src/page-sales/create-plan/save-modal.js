@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Modal, Form, Select, Input} from 'antd'
 
-import {errorTip, getNamePattern} from '../../common/util'
+import {errorTip, getNamePattern, successTip} from '../../common/util'
 import io from './io'
 
 const {Option} = Select
@@ -18,11 +18,12 @@ export default ({
   visible, 
   saveModal, 
   planData,
+  planInfo,
   planId,
 }) => {
   const [saveForm] = Form.useForm()
   const [confirmLoading, setConfirmLoading] = useState(false)
-  const {name, groupId} = planData
+  const {name, groupId} = planInfo
 
   const addPlan = async params => {
     setConfirmLoading(true)
@@ -33,6 +34,7 @@ export default ({
         ...planData,
         setEnd: '1',
       })
+      successTip('保存成功')
     } catch (error) {
       errorTip(error)
     } finally {

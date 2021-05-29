@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Button, Collapse, Input, message, Space} from 'antd'
+import {Button, Collapse, Spin, message, Space} from 'antd'
 import {
   RedoOutlined, 
   ZoomInOutlined, 
@@ -11,6 +11,7 @@ import {
 import DAG from '@dtwave/oner-dag'
 
 import {errorTip} from '@util'
+import {Loading} from '../../component'
 import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import WechatDrawer from './wechat-drawer'
@@ -33,6 +34,7 @@ export default props => {
   const [showWeService, setShowWeService] = useState(false) // 微信服务号抽屉
   const [showSaveModal, setShowSaveModal] = useState(false) // 保存计划
   const [saveLoading, setSaveLoading] = useState(false) // 保存计划
+  const [infoLoading, setInfoLoading] = useState(false) // 详情loading
   const [planId, setPlanId] = useState() // 计划id
 
   const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
@@ -63,13 +65,38 @@ export default props => {
   }
   // 获取计划详情
   const getPlanInfo = async id => {
+    setInfoLoading(true)
     try {
       const res = await io.getPlanInfo({
         id,
       })
       setPlanInfo(res)
+      setNodeList([...nodes, {
+        id: 'weixin',
+        nodeName: '微信服务号',
+        value: 'weixin',
+        // status: 2,
+        maxConnections: 1,
+        icon: 'weService',
+      }, {
+        id: 0,
+        nodeName: '结束',
+        value: 'end',
+        // status: 4,
+        icon: 'end',
+      },
+      ])
+      setLinkList([...links, {
+        sourceId: '2',
+        targetId: 'weixin',
+      }, {
+        sourceId: 'weixin',
+        targetId: '0',
+      }])
     } catch (error) {
       errorTip(error)
+    } finally {
+      setInfoLoading(false)
     }
   }
 
@@ -105,7 +132,7 @@ export default props => {
     // setShowSaveModal(true)
     ...runFormData,
     ...weSFormData,
-    channelId,
+    channelCode: channelId,
   }
   const changeChannelId = v => {
     setChannelId(v)
@@ -283,26 +310,31 @@ export default props => {
           </Collapse>
         </Space>
       </div>
-      <div className="dag-content w80">
-        {
-          isRender ? <div /> : (
-            <DAG
-              ref={e => setInstance(e)}
-              {...option({
-                instance, 
-                nodeList, 
-                setIsRender, 
-                setLinkList, 
-                runDrawer, 
-                weServiceDrawer,
-                changeChannelId,
-              })}
-              links={linkList}
-              nodeList={nodeList}
-            />
-          )
-        }
-      </div>
+      {
+        infoLoading ? <Loading /> : (
+          <div className="dag-content w80">
+            {
+              isRender ? <div /> : (
+                <DAG
+                  ref={e => setInstance(e)}
+                  {...option({
+                    instance, 
+                    nodeList, 
+                    setIsRender, 
+                    setLinkList, 
+                    runDrawer, 
+                    weServiceDrawer,
+                    changeChannelId,
+                  })}
+                  links={linkList}
+                  nodeList={nodeList}
+                />
+              )
+            }
+          </div>
+        )
+      }
+      
       <div className="pa rt16 tp24 dag-right">
         {/* <span className="hand mr8">
           <RedoOutlined className="icon-style" />
@@ -345,7 +377,8 @@ export default props => {
       <SaveModal 
         visible={showSaveModal} 
         saveModal={saveModal} 
-        planData={planInfo}
+        planData={planData}
+        planInfo={planInfo}
         planId={planId}
       />
     </div>

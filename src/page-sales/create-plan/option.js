@@ -51,20 +51,38 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
 
 const onFlowInit = (instance, nodeList) => {
   nodeList.map(node => {
-    // instance.addTargetEndPoints(node.id, [{
-    //   id: `target_${node.id}`,
-    //   ioType: 'default',
-    //   maxConnections: 1,
-    //   // enabled: !disabled,
-    // }])
-
-    instance.addSourceEndPoints(node.id, [{
-      // id: `source_${node.id}`,
-      id: node.id,
-      maxConnections: 1,
-      // enabled: !disabled,
-    }])
-
+    const {nodeName} = node
+    console.log(node)
+    if (nodeName === '开始') {
+      instance.addSourceEndPoints(node.id, [{
+        id: `source_${node.id}`,
+        // id: node.id,
+        maxConnections: 1,
+        // enabled: !disabled,
+      }])
+    } else if (nodeName === '结束') {
+      instance.addTargetEndPoints(node.id, [{
+        id: `target_${node.id}`,
+        ioType: 'default',
+        maxConnections: 1,
+        // enabled: !disabled,
+      }])
+    } else {
+      instance.addTargetEndPoints(node.id, [{
+        id: `target_${node.id}`,
+        ioType: 'default',
+        maxConnections: 1,
+        // enabled: !disabled,
+      }])
+  
+      instance.addSourceEndPoints(node.id, [{
+        id: `source_${node.id}`,
+        // id: node.id,
+        maxConnections: 1,
+        // enabled: !disabled,
+      }])
+    }
+    console.log(instance)
     return node
   })
 }
@@ -72,6 +90,7 @@ const onFlowInit = (instance, nodeList) => {
 const options = ({
   instance, 
   nodeList, 
+  links,
   runDrawer, 
   weServiceDrawer, 
   changeChannelId,
@@ -95,7 +114,7 @@ const options = ({
       return {
         id,
         name: <div className="dag-node">{nodeName}</div>,
-        icon,
+        icon: matchingIcon(icon),
         status,
         position,
         maxConnections,
@@ -128,6 +147,7 @@ const options = ({
     // onNodeSelect: (node, index) => console.log(node, index),
 
     // 用于构造连线数据，需要返回如下格式：{id,source,target}，字段详情查看下的数据格式参考
+    links,
     linkParse: ({sourceId, targetId}) => {
       return {
         id: `${sourceId}-${targetId}`,

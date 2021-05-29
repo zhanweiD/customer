@@ -8,6 +8,7 @@ import {
   end,
   email,
   copyBranch,
+  start,
 } from '../icon'
 
 // 匹配icon
@@ -37,6 +38,9 @@ const matchingIcon = type => {
       break
     case 'waite':
       imgDom = <img alt="" height={24} width={24} src={waite} />
+      break
+    case 'start':
+      imgDom = <img alt="" height={24} width={24} src={start} />
       break
     default:
       imgDom = <img alt="" height={24} width={24} src={end} />
