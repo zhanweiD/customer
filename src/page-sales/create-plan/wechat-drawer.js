@@ -69,7 +69,7 @@ export default ({
   const [myForm] = Form.useForm()
   const [formInitValue, setFormInitValue] = useState({
     setRestrict: 1,
-    channelCode: '微信',
+    channelCode: 'wexin',
   })
   const [tagList, setTagList] = useState([])
   const [previewData, setPreviewData] = useState('')
