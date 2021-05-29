@@ -339,8 +339,10 @@ export default props => {
       <WechatDrawer 
         showWeService={showWeService}
         weServiceDrawer={weServiceDrawer}
-        weSFormData={Object.keys(runFormData).length > 0 ? weSFormData : planInfo}
+        weSFormData={Object.keys(weSFormData).length > 0 ? weSFormData : planInfo}
         setWeSFormData={setWeSFormData}
+        runFormData={Object.keys(runFormData).length > 0 ? runFormData : planInfo}
+        groupList={groupList}
       />
       <SaveModal 
         visible={showSaveModal} 

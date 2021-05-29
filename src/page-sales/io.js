@@ -1,5 +1,5 @@
 import ioContext from '../common/io-context'
-import {marketingApi, get, post} from '../common/util'
+import {baseApi, marketingApi, get, post} from '../common/util'
 
 const api = {
   getList: post(`${marketingApi}/plan/list`), // 获取列表

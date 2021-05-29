@@ -35,13 +35,13 @@ module.exports = {
     },
     noInfo: true,
     proxy: [
+      // {
+      //   context: ['/marketing_api'],
+      //   target: 'http://192.168.10.143:8787',
+      //   changeOrigin: true,
+      // },
       {
-        context: ['/marketing_api'],
-        target: 'http://192.168.10.143:8787',
-        changeOrigin: true,
-      },
-      {
-        context: ['/hub_user_api', '/hub_api'],
+        context: ['/hub_user_api', '/hub_api', '/marketing_api'],
         target: 'http://192.168.90.135:8173',
         changeOrigin: true,
       },
