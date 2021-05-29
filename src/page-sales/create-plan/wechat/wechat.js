@@ -7,6 +7,7 @@ import './wechat.styl'
 import Link from '../../icon/wechat-link.svg'
 import Attr from '../../icon/wechat-attr.svg'
 
+
 const menu = (
   <Menu>
     <Menu.Item key="0">
@@ -111,10 +112,6 @@ class SomeCompoent extends Component {
 
   // 要处理含有 span 的情况
   mySlice(str, newStr, start) {
-    console.log(str)
-    console.log(newStr)
-    console.log(start)
-
     let myIndex = 0
     let finalStr = ''
     let isChanged = false // 判断是否是中途改变的
@@ -173,7 +170,7 @@ class SomeCompoent extends Component {
   }
 
   render() {
-    const {value, onChange, id} = this.props
+    const {value, onChange, id, tagList} = this.props
 
     return (
       <div className="wechat-node" id={id}>
@@ -186,7 +183,15 @@ class SomeCompoent extends Component {
           }}
         >
           <div className="FBH FBAC">
-            <div className="ml8 mr8 hand" onClick={() => this.add('attr')}>
+            <div
+              className="ml8 mr8 hand"
+              onClick={() => {
+                if (tagList && tagList.length && tagList.length > 0) {
+                  this.add(tagList[0].objNameTagName)
+                }
+                console.error('没有属性')
+              }}
+            >
               <img src={Attr} alt="属性" />
               <span className="ml4 fs12">插入属性</span>
             </div>
@@ -218,15 +223,9 @@ class SomeCompoent extends Component {
           }}
           onClick={e => this.dropdownClick(e)}
         >
-          <div className="dropdown-item">
-            1111
-          </div>
-          <div className="dropdown-item">
-            222222222222
-          </div>
-          <div className="dropdown-item">
-            3333
-          </div>
+          {
+            tagList.map(item => <div className="dropdown-item">{item.objNameTagName}</div>)
+          }
         </div>
       </div>
     )

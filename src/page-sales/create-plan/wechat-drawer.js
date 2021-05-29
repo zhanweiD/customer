@@ -7,6 +7,7 @@ import Wechat from './wechat/wechat'
 import Preview from './wechat/preview'
 import Frame from '../icon/wechat-frame.svg'
 import io from './io'
+import data from './wechat/data'
 
 const {Option} = Select
 const {Item} = Form
@@ -29,12 +30,6 @@ const layout2 = {
   },
 }
 
-// export default ({
-//   showWeService, // 显示
-//   weServiceDrawer, // 控制显示
-//   weSFormData, // 用于编辑回显
-//   setWeSFormData, // 收集表单
-// }) => {
 const templateListMock = [
   {
     template_id: 'iPk5sOIt5X_flOVKn5GrTFpncEYTojx6ddbt8WYoV5s',
@@ -51,14 +46,17 @@ export default ({
   weServiceDrawer, // 控制显示
   weSFormData, // 用于编辑回显
   setWeSFormData, // 收集表单
+  runFormData, // 开始的数据，需要获取客群 id
+  groupList,
 }) => {
-  const [templateList, setTemplateList] = useState(templateListMock)
+  const [templateList, setTemplateList] = useState([])
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [myForm] = Form.useForm()
   const [formInitValue, setFormInitValue] = useState({
-    astrict: true,
-    myInput: 'aaaaa',
+    setRestrict: 1,
+    channelCode: '微信',
   })
+  const [tagList, setTagList] = useState([])
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
   const switchChange = e => {
@@ -123,7 +121,7 @@ export default ({
   */
   const saveData = () => {
     console.log(myForm.getFieldsValue())
-
+    
     myForm.validateFields().then(value => {
       // TODO:
       // 把数据存起来
@@ -138,7 +136,9 @@ export default ({
       setWeSFormData({
         actionReq: {
           detail,
-          ...value,
+          channelCode: value.channelCode,
+          templateId: value.templateId,
+          setRestrict: value.setRestrict,
         },
       })
 
@@ -169,7 +169,22 @@ export default ({
       const res = await io.getTemplate({
         accountId: 'wxe2b3f176ba1a4f33',
       })
-      // setGroupList(res)
+
+      setTemplateList(res.template_list || [])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getTagList = async (objId) => {
+    try {
+      const res = await io.getTagList({objId: String(objId)})
+      
+      if (res && res.length > 0) {
+        setTagList(res)
+      } else {
+        setTagList(data)
+      }  
     } catch (error) {
       console.log(error)
     }
@@ -193,6 +208,14 @@ export default ({
       })
     }
   }, [])
+
+  useEffect(() => {
+    if (runFormData.clientGroupId) {
+      const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
+      // 客群id
+      getTagList(target.objId)
+    }
+  }, [runFormData])
 
   return (
     <Drawer
@@ -227,21 +250,21 @@ export default ({
       >
         <Item
           label="触达通道"
-          name="path"
+          name="channelCode"
           className="user-pb8"
           style={{
             margin: '0 24px 16px',
           }}
         >
-          <Select defaultValue="">
-            <Option value="">微信</Option>
+          <Select defaultValue="微信">
+            <Option value="微信">微信</Option>
           </Select>
         </Item>
         <Collapse size="small" defaultActiveKey={['1', '2']}>
           <Panel header="触达内容" key="1">
             <Item
               label="内容模板"
-              name="template"
+              name="templateId"
               rules={[{required: true, message: '模板不能为空'}]}
             >
               <Select onChange={templateChange}>
@@ -268,7 +291,7 @@ export default ({
                   label={item}
                   rules={[{required: true, message: '输入不能为空'}]}
                 >
-                  <Wechat id={item} />
+                  <Wechat id={item} tagList={tagList} />
                 </Item>
               ))
             }
@@ -277,7 +300,7 @@ export default ({
             <Item
               {...layout2}
               label="触达限制"
-              name="astrict"
+              name="setRestrict"
               extra={switchText}
               valuePropName="checked"
             >
@@ -298,7 +321,7 @@ export default ({
             'wechat-active': vis,
           })}
         >
-          <img src={Frame} alt="frame" />
+          <img src={Frame} alt="frame" style={{width: '300px'}} />
           <div className="preview-box mt20">
             测试测试
           </div>
