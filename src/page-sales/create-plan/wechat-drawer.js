@@ -56,7 +56,7 @@ export default ({
     setRestrict: 1,
     channelCode: '微信',
   })
-  const [tagList, setTagList] = useState([])
+  const [tagList, setTagList] = useState(data)
 
   const [switchText, setSwitchText] = useState('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
   const switchChange = e => {
@@ -121,19 +121,42 @@ export default ({
   */
   const saveData = () => {
     console.log(myForm.getFieldsValue())
-    
+    const tagMap = {}
+    tagList.forEach(item => {
+      tagMap[item.objNameTagName] = item.objIdTagId
+    })
+
     myForm.validateFields().then(value => {
       // TODO:
       // 把数据存起来
       const detail = []
       templateKeyList.forEach(item => {
+        let itemValue = value[item]
+
+        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}')
+
+        tagList.forEach(e => {
+          if (itemValue.indexOf(e.objNameTagName) > -1) {
+            itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
+          }
+        })
+
         detail.push({
           name: item,
-          value: value[item],
+          value: itemValue,
         })
       })
 
       setWeSFormData({
+        actionReq: {
+          detail,
+          channelCode: value.channelCode,
+          templateId: value.templateId,
+          setRestrict: value.setRestrict,
+        },
+      })
+
+      console.log({
         actionReq: {
           detail,
           channelCode: value.channelCode,
@@ -210,12 +233,12 @@ export default ({
   }, [])
 
   useEffect(() => {
-    // if (runFormData.clientGroupId) {
-    //   const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
-    //   // 客群id
-    //   getTagList(target.objId)
-    // }
-  }, [runFormData])
+    if (runFormData.clientGroupId) {
+      const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
+      // 客群id
+      getTagList(target.objId)
+    }
+  }, [groupList])
 
   return (
     <Drawer
@@ -309,9 +332,9 @@ export default ({
           </Panel>
         </Collapse>
       </Form>
-      <Button onClick={() => show()}>
+      {/* <Button onClick={() => show()}>
         点击
-      </Button>
+      </Button> */}
       <Preview>
         <div 
           className={cls({
