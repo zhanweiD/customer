@@ -2,7 +2,6 @@ import {message} from 'antd'
 import matchingIcon from './unit'
 
 const beforeConnection = ({source, target}) => {
-  console.log(source, target)
   if (source === target) {
     message.warning('输入源与输出源相同,连接失败')
     return false
@@ -22,7 +21,7 @@ const dragEnd = (position, e, instance, changeChannelId, setShowWeService) => {
     default:
       break
   }
-  changeChannelId(item.id) // 记录拖拽控件
+  // changeChannelId(item.id) // 记录拖拽控件
   item.position = position
   item.ioType = '2'
   instance.addNode(item)
@@ -63,6 +62,7 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer, setWeSFormData) => [
       domEvent.stopPropagation()
       instance.removeNode(item.id)
       const {children} = item.name.props
+      console.log(children)
       switch (children) {
         case '微信服务号':
           setWeSFormData({})

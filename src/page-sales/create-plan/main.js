@@ -23,6 +23,7 @@ import io from './io'
 import './index.styl'
 
 const {Panel} = Collapse
+const channelCode = 'WECHAT_OFFICIAL_ACCOUNTS'
 
 export default props => {
   const [instance, setInstance] = useState(null) // dag实例
@@ -71,9 +72,12 @@ export default props => {
         id,
       })
       setPlanInfo(res)
-      setRunFormData(res)
       setWeSFormData({action: res.action})
-      if (res.channelCode === 'weixin') {
+      setRunFormData(() => {
+        res.action = null
+        return res
+      })
+      if (res.channelCode === channelCode) {
         if (res.setEnd) {
           setNodeList([...nodes, {
             id: 'weixin',
@@ -118,7 +122,6 @@ export default props => {
       setInfoLoading(false)
     }
   }
-
     
   // 获取节点
   const getNodes = () => {
@@ -164,7 +167,7 @@ export default props => {
     ...runFormData,
     ...weSFormData,
     // channelCode: channelId || planInfo.channelCode,
-    channelCode: 'weixin',
+    channelCode,
   }
   const changeChannelId = v => {
     setChannelId(v)
@@ -404,6 +407,9 @@ export default props => {
       <SaveModal 
         visible={showSaveModal} 
         saveModal={saveModal} 
+        // channelCode={channelCode}
+        // runFormData={runFormData}
+        // weSFormData={weSFormData}
         planData={planData}
         planInfo={planInfo}
         planId={planId}
