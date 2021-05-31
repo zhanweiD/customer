@@ -83,7 +83,7 @@ export default props => {
             maxConnections: 1,
             icon: 'weService',
           }, {
-            id: 0,
+            id: 'end',
             nodeName: '结束',
             value: 'end',
             // status: 4,
@@ -91,11 +91,11 @@ export default props => {
           },
           ])
           setLinkList([...links, {
-            sourceId: '2',
+            sourceId: 'start',
             targetId: 'weixin',
           }, {
             sourceId: 'weixin',
-            targetId: '0',
+            targetId: 'end',
           }])
         } else {
           setNodeList([...nodes, {
@@ -107,7 +107,7 @@ export default props => {
             icon: 'weService',
           }])
           setLinkList([...links, {
-            sourceId: '2',
+            sourceId: 'start',
             targetId: 'weixin',
           }])
         }
@@ -198,7 +198,6 @@ export default props => {
       ioType,
       maxConnections,
     }
-    console.log(newNode)
     // 添加拖拽数据
     e.dataTransfer.setData('data', JSON.stringify(newNode))
     // const {target} = e

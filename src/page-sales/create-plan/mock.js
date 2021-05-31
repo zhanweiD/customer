@@ -1,4 +1,3 @@
-import {start} from '../icon'
 // mock数据
 const types = [
   {
@@ -33,21 +32,24 @@ const types = [
 ]
 const conditions = [
   {
+    id: 'eventBranch',
     nodeName: '事件多分支',
-    value: 'weixin',
+    value: 'eventBranch',
     // status: 2,
     // maxConnections: 1,
     icon: 'eventBranch',
   },
   {
+    id: 'tagBranch',
     nodeName: '标签多分支',
-    value: 'app',
+    value: 'tagBranch',
     // status: 4,
     icon: 'tagBranch',
   },
   {
+    id: 'copyBranch',
     nodeName: '复制多分支',
-    value: 'email',
+    value: 'copyBranch',
     // status: 4,
     icon: 'copyBranch',
   },
@@ -55,7 +57,7 @@ const conditions = [
 // 流程控制
 const process = [
   {
-    id: 1,
+    id: 'wait',
     nodeName: '等待',
     value: 'wite',
     // status: 2,
@@ -63,7 +65,7 @@ const process = [
     icon: 'waite',
   },
   {
-    id: 0,
+    id: 'end',
     nodeName: '结束',
     value: 'end',
     // status: 4,
@@ -74,22 +76,11 @@ const process = [
 // 节点列表
 const nodes = [
   {
-    id: 2,
+    id: 'start',
     nodeName: '开始',
     // status: 2,
     icon: 'start',
   },
-  // {
-  //   id: 'weixin',
-  //   nodeName: '微信服务号',
-  //   // status: 2,
-  //   icon: 'weService',
-  // }, {
-  //   id: 0,
-  //   nodeName: '结束',
-  //   // status: 4,
-  //   icon: 'end',
-  // },
 ]
   
 // 连线数据

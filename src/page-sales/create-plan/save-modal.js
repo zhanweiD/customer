@@ -33,7 +33,6 @@ export default ({
 
   const addPlan = async params => {
     setConfirmLoading(true)
-    console.log(planData)
     try {
       await io.addPlan({
         ...planData,
@@ -68,9 +67,7 @@ export default ({
   }
 
   const handleOk = () => {
-    console.log(planData)
     let setEnd = 0
-    console.log(instance.getNodes())
     if (instance.getNodes().length > 2) {
       if (instance.getLinks().length > 1) {
         setEnd = 1
@@ -82,7 +79,6 @@ export default ({
     }
     saveForm.validateFields().then(value => {
       value.setEnd = setEnd
-      console.log(value)
       if (planId) {
         updatePlan(value)
       } else {

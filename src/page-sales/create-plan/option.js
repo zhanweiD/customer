@@ -7,7 +7,7 @@ const beforeConnection = ({source, target}) => {
     message.warning('输入源与输出源相同,连接失败')
     return false
   }
-  if (source === '2' && (target === '0' || target === '0')) {
+  if (source === 'start' && (target === 'end' || target === 'wait')) {
     message.warning('连接失败')
     return false
   }

@@ -47,7 +47,6 @@ export default ({
     triggerEventList = [{id: undefined}],
     targetEvent,
   } = runFormData
-  // const [neverTime, setNeverTime] = useState(noRepeatTime)
   let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
 
   const onFinish = () => {
@@ -81,13 +80,10 @@ export default ({
         value.endTime = startEndDate[1].format(dateTimeFormat)
       }
       setRunForm(value)
-      console.log(value)
       runDrawer(false)
-      // runForm.resetFields() // 时间类控件重置有问题
     }).catch(err => console.log(err))
   }
   const closeDrawer = () => {
-    // runForm.resetFields()
     runDrawer(false)
   }
   const changePlanType = v => {
@@ -96,7 +92,6 @@ export default ({
   const changePeriod = v => {
     setPeriod(v)
     cornTime = {}
-    // setNeverTime('')
     runForm.resetFields(['time', 'interval'])
   }
   const changTouchWay = v => {
@@ -294,7 +289,6 @@ export default ({
           rules={[{required: true, message: '请选择人群'}]}
         >
           <Select placeholder="请选择人群">
-            {/* <Option value="1">全部</Option> */}
             {
               groupList.map(item => <Option value={item.id}>{item.name}</Option>)
             }
@@ -339,7 +333,6 @@ export default ({
                             rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Select style={{width: '95%'}} placeholder="请选择事件">
-                              {/* <Option value="1">全部</Option> */}
                               {
                                 eventList.map(item => <Option value={item.id}>{item.name}</Option>)
                               }
