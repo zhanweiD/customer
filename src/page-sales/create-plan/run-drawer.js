@@ -396,7 +396,7 @@ export default ({
               )
             }
             {
-              period !== 0 && (
+              (period !== 0 || planType === 1) && (
                 <Item 
                   label="起止日期" 
                   name="startEndDate"
