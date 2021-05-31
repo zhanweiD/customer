@@ -9,7 +9,7 @@ const {Panel} = Collapse
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
 const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
-const timeFormat = 'HH:mm:ss'
+const timeFormat = 'HH:mm'
 
 const layout = {
   labelCol: {
