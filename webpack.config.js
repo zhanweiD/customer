@@ -52,7 +52,7 @@ module.exports = {
   entry: './src/index',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: `${pkg.version}/[name].js`,
+    filename: isDev ? `${pkg.version}/[name].js` : `${pkg.version}/[name].[contenthash].js`,
     chunkFilename: isDev ? '[name].chunk.js' : `${pkg.version}/[name].[contenthash].js`,
     // 决定静态资源的 url 前缀, 注意包括 chunk 文件, 所以要同时把 dev 和 pro 环境都配对
     publicPath: isDev ? '/' : './',
