@@ -22,7 +22,7 @@ const dragEnd = (position, e, instance, changeChannelId, setShowWeService) => {
     default:
       break
   }
-  changeChannelId(item.id) // 记录拖拽控件
+  // changeChannelId(item.id) // 记录拖拽控件
   item.position = position
   item.ioType = '2'
   instance.addNode(item)
