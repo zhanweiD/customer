@@ -33,4 +33,4 @@ tar -zcvf tgz/$tar_name $package_name/
 rm -rf $package_name/
 
 echo "打包完成!"
-echo "可使用scp命令进行上传：scp tgz/${tar_name} deploy@192.168.90.54:/opt/workspace/front"
+echo "可使用scp命令进行上传：scp tgz/${tar_name} deploy@192.168.90.135:/opt/workspace/front"

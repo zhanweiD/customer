@@ -258,21 +258,6 @@ export default ({
 
   useEffect(() => {
     getTemplate()
-
-    // if (weSFormData.detail && weSFormData.detail.length > 0) {
-    //   // 有模板数据
-    //   const templateObj = {}
-
-    //   weSFormData.detail.forEach(e => {
-    //     templateObj[e.name] = e.value
-    //   })
-
-    //   setTemplateKeyList(_.map(weSFormData.detail, 'name'))
-    //   setFormInitValue({
-    //     ...formInitValue,
-    //     ...templateObj,
-    //   })
-    // }
   }, [])
 
   useEffect(() => {
@@ -281,7 +266,7 @@ export default ({
       // 客群id
       getTagList(target.objId)
     }
-  }, [runFormData])
+  }, [groupList])
 
   useEffect(() => {
     if (weSFormData.action && weSFormData.action.detail && weSFormData.action.detail.length > 0) {
@@ -373,7 +358,7 @@ export default ({
           }}
         >
           <Select defaultValue="wexin">
-            <Option value="wexin">微信</Option>
+            <Option value="wexin">微信公众号</Option>
           </Select>
         </Item>
         <Collapse size="small" defaultActiveKey={['1', '2']}>
@@ -392,7 +377,7 @@ export default ({
             <div 
               style={{
                 fontSize: '12px', 
-                marginLeft: '20px', 
+                marginLeft: '58px', 
                 color: 'rgba(0,0,0,0.65)',
                 marginBottom: '12px',
               }}
