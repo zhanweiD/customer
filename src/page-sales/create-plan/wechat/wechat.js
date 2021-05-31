@@ -7,20 +7,6 @@ import './wechat.styl'
 import Link from '../../icon/wechat-link.svg'
 import Attr from '../../icon/wechat-attr.svg'
 
-
-const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      1st menu item
-    </Menu.Item>
-    <Menu.Item key="1">
-      2nd menu ite
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="3">3rd menu item</Menu.Item>
-  </Menu>
-)
-
 @observer
 class SomeCompoent extends Component {
   @observable id = 100 // 自增 id，用于 span

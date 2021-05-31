@@ -163,23 +163,26 @@ export default ({
         })
       })
 
-      setWeSFormData({
-        action: {
-          detail,
-          channelCode: value.channelCode,
-          templateId: value.templateId,
-          setRestrict: value.setRestrict,
-        },
-      })
-
-      console.log({
-        action: {
-          detail,
-          channelCode: value.channelCode,
-          templateId: value.templateId,
-          setRestrict: value.setRestrict,
-        },
-      })
+      if (weSFormData && weSFormData.action && weSFormData.action.id) {
+        setWeSFormData({
+          action: {
+            detail,
+            channelCode: value.channelCode,
+            templateId: value.templateId,
+            setRestrict: value.setRestrict,
+            id: weSFormData.action.id,
+          },
+        })
+      } else {
+        setWeSFormData({
+          action: {
+            detail,
+            channelCode: value.channelCode,
+            templateId: value.templateId,
+            setRestrict: value.setRestrict,
+          },
+        })
+      }
 
       weServiceDrawer(false)
       setVis(false)
