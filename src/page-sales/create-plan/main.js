@@ -73,28 +73,30 @@ export default props => {
       setPlanInfo(res)
       setRunFormData(res)
       setWeSFormData({action: res.action})
-      setNodeList([...nodes, {
-        id: 'weixin',
-        nodeName: '微信服务号',
-        value: 'weixin',
-        // status: 2,
-        maxConnections: 1,
-        icon: 'weService',
-      }, {
-        id: 0,
-        nodeName: '结束',
-        value: 'end',
-        // status: 4,
-        icon: 'end',
-      },
-      ])
-      setLinkList([...links, {
-        sourceId: '2',
-        targetId: 'weixin',
-      }, {
-        sourceId: 'weixin',
-        targetId: '0',
-      }])
+      if (res.channelCode === 'weixin') {
+        setNodeList([...nodes, {
+          id: 'weixin',
+          nodeName: '微信服务号',
+          value: 'weixin',
+          // status: 2,
+          maxConnections: 1,
+          icon: 'weService',
+        }, {
+          id: 0,
+          nodeName: '结束',
+          value: 'end',
+          // status: 4,
+          icon: 'end',
+        },
+        ])
+        setLinkList([...links, {
+          sourceId: '2',
+          targetId: 'weixin',
+        }, {
+          sourceId: 'weixin',
+          targetId: '0',
+        }])
+      }
     } catch (error) {
       errorTip(error.message)
     } finally {
@@ -222,7 +224,8 @@ export default props => {
   }, [isAll])
   useEffect(() => {
     if (!planId) setShowRun(true)
-  }, [])
+    else setShowRun(false)
+  }, [planId])
   useEffect(() => {
     const {params = {}} = props.match
     if (params.id) {
