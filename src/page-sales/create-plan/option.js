@@ -13,8 +13,26 @@ const beforeConnection = ({source, target}) => {
   }
   return true
 }
+const dragEnd = (position, e, instance, changeChannelId, setShowWeService) => {
+  const item = JSON.parse(e.dataTransfer.getData('data'))
+  switch (item.nodeName) {
+    case '微信服务号':
+      setShowWeService(true)
+      break
+    default:
+      break
+  }
+  changeChannelId(item.id) // 记录拖拽控件
+  item.position = position
+  item.ioType = '2'
+  instance.addNode(item)
+  setTimeout(() => {
+    instance.addTargetEndPoints(item.id, [item])
+    if (item.nodeName !== '结束') instance.addSourceEndPoints(item.id, [item])
+  }, 0)
+}
 // 构建菜单
-const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
+const buildMenu = (e, instance, runDrawer, weServiceDrawer, setWeSFormData) => [
   {
     label: '配置',
     icon: 'edit',
@@ -44,6 +62,14 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer) => [
     action: (domEvent, item) => {
       domEvent.stopPropagation()
       instance.removeNode(item.id)
+      const {children} = item.name.props
+      switch (children) {
+        case '微信服务号':
+          setWeSFormData({})
+          break
+        default:
+          break
+      }
       // changeChannelId(item.id)
     },
   },
@@ -95,11 +121,12 @@ const options = ({
   weServiceDrawer, 
   changeChannelId,
   setShowWeService,
+  setWeSFormData,
 }) => {
   return ({
     className: 'dag-style',
     // flowId: 1, // 任务流程id
-    // vertical: false,
+    // vertical: false, // false横向
     allowLinkRemove: false,
     connectionsDetachable: true, // false会导致无法多输出
     autoLayout: true, // 自动布局
@@ -121,29 +148,10 @@ const options = ({
         maxConnections,
       }
     },
-    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer),
+    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, setWeSFormData),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
-    onDrop: (position, e) => {
-      // position 拖拽位置
-      // 获取setData添加的拖拽数据
-      const item = JSON.parse(e.dataTransfer.getData('data'))
-      switch (item.nodeName) {
-        case '微信服务号':
-          setShowWeService(true)
-          break
-        default:
-          break
-      }
-      changeChannelId(item.id) // 记录拖拽控件
-      item.position = position
-      item.ioType = '2'
-      instance.addNode(item)
-      setTimeout(() => {
-        instance.addTargetEndPoints(item.id, [item])
-        if (item.nodeName !== '结束') instance.addSourceEndPoints(item.id, [item])
-      }, 0)
-    },
+    onDrop: (position, e) => dragEnd(position, e, instance, changeChannelId, setShowWeService),
     beforeConnection, // 连线前校验
     showCenter: false,
     // 双击节点触发事件

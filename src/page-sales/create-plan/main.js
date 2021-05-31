@@ -348,6 +348,7 @@ export default props => {
                     weServiceDrawer,
                     changeChannelId,
                     setShowWeService,
+                    setWeSFormData,
                   })}
                   links={linkList}
                   nodeList={nodeList}
