@@ -1,6 +1,5 @@
 import {useForm, useState, useEffect} from 'react'
 import {Drawer, Form, Button, Col, Space, Input, Select, Collapse, Switch} from 'antd'
-import {PlusOutlined} from '@ant-design/icons'
 import _ from 'lodash'
 import cls from 'classnames'
 import Wechat from './wechat/wechat'
@@ -261,16 +260,6 @@ export default ({
   }, [])
 
   useEffect(() => {
-    if (runFormData.clientGroupId) {
-      const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
-      // 客群id
-      if (target && target.objId) {
-        getTagList(target.objId)
-      }
-    }
-  }, [groupList])
-
-  useEffect(() => {
     if (weSFormData.action && weSFormData.action.detail && weSFormData.action.detail.length > 0) {
       // 有模板数据
       const templateObj = {}
@@ -296,9 +285,8 @@ export default ({
 
         templateObj[e.name] = valueTemp
       })
-
-      setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
-      setFormInitValue({
+      
+      myForm.setFieldsValue({
         ...formInitValue,
         ...templateObj,
         setRestrict: weSFormData.action.setRestrict,
@@ -306,10 +294,18 @@ export default ({
         channelCode: weSFormData.action.channelCode,
       })
     }
-  }, [weSFormData])
+  }, [tagList])
 
   useEffect(() => {
     if (showWeService) {      
+      if (runFormData.clientGroupId) {
+        const targetData = _.find(groupList, item => item.id === runFormData.clientGroupId)
+        // 客群id
+        if (targetData && targetData.objId) {
+          getTagList(targetData.objId)
+        }
+      }
+
       if (weSFormData.action && weSFormData.action.templateId) {
         const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
 
@@ -317,6 +313,8 @@ export default ({
           setPreviewData(target.content)
         }
         setVis(true)
+
+        setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
       }
     }
   }, [showWeService])

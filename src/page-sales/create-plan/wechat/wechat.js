@@ -188,9 +188,10 @@ class SomeCompoent extends Component {
               onClick={() => {
                 if (tagList && tagList.length && tagList.length > 0) {
                   this.add(tagList[0].objNameTagName)
+                } else {
+                  console.error('暂无属性')
+                  message.error('暂无属性')
                 }
-                console.error('没有属性')
-                message.error('暂无属性')
               }}
             >
               <img src={Attr} alt="属性" />
