@@ -72,8 +72,11 @@ export default props => {
         id,
       })
       setPlanInfo(res)
-      setRunFormData(res)
       setWeSFormData({action: res.action})
+      setRunFormData(() => {
+        res.action = null
+        return res
+      })
       if (res.channelCode === channelCode) {
         if (res.setEnd) {
           setNodeList([...nodes, {
@@ -119,7 +122,6 @@ export default props => {
       setInfoLoading(false)
     }
   }
-
     
   // 获取节点
   const getNodes = () => {
@@ -405,6 +407,9 @@ export default props => {
       <SaveModal 
         visible={showSaveModal} 
         saveModal={saveModal} 
+        // channelCode={channelCode}
+        // runFormData={runFormData}
+        // weSFormData={weSFormData}
         planData={planData}
         planInfo={planInfo}
         planId={planId}

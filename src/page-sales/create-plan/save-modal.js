@@ -18,6 +18,9 @@ export default ({
   visible, 
   saveModal, 
   planData,
+  // runFormData,
+  // weSFormData,
+  // channelCode,
   planInfo,
   planId,
   instance,
@@ -35,6 +38,9 @@ export default ({
     setConfirmLoading(true)
     try {
       await io.addPlan({
+        // channelCode,
+        // ...runFormData,
+        // ...weSFormData,
         ...planData,
         ...params,
       })
@@ -52,6 +58,9 @@ export default ({
     setConfirmLoading(true)
     try {
       await io.updatePlan({
+        // channelCode,
+        // ...runFormData,
+        // ...weSFormData,
         ...planData,
         id: planId,
         ...params,
