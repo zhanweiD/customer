@@ -24,7 +24,6 @@ export default ({
 }) => {
   const [saveForm] = Form.useForm()
   const [confirmLoading, setConfirmLoading] = useState(false)
-  const [status, setStatus] = useState(0)
   const {name, groupId} = planInfo
 
   const handleCancel = () => {
@@ -37,9 +36,8 @@ export default ({
     console.log(planData)
     try {
       await io.addPlan({
-        ...params,
         ...planData,
-        setEnd: status,
+        ...params,
       })
       successTip('保存成功')
       handleCancel()
@@ -55,10 +53,9 @@ export default ({
     setConfirmLoading(true)
     try {
       await io.updatePlan({
-        ...params,
         ...planData,
         id: planId,
-        setEnd: status,
+        ...params,
       })
       successTip('保存成功')
       handleCancel()
@@ -72,17 +69,19 @@ export default ({
 
   const handleOk = () => {
     console.log(planData)
+    let setEnd = 0
     console.log(instance.getNodes())
-    if (instance.getNodes().length >= 3) {
-      if (instance.getLinks >= 2) {
-        setStatus(1)
+    if (instance.getNodes().length > 2) {
+      if (instance.getLinks().length > 1) {
+        setEnd = 1
       } else {
-        setStatus(0)
+        setEnd = 0
       }
     } else {
-      setStatus(0)
+      setEnd = 0
     }
     saveForm.validateFields().then(value => {
+      value.setEnd = setEnd
       console.log(value)
       if (planId) {
         updatePlan(value)

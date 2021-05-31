@@ -49,6 +49,7 @@ export default ({
   } = runFormData
   // const [neverTime, setNeverTime] = useState(noRepeatTime)
   let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
+
   const onFinish = () => {
     runForm.validateFields().then(value => {
       const {startEndDate, interval, time} = value
@@ -69,14 +70,12 @@ export default ({
             break
         }
       }
-
       if (time && cycle) {
         const ctime = CycleSelect.formatCron(
           {cycle, time: time.format(timeFormat), interval}
         )
         value.triggerTime = ctime
       }
-      // CycleSelect.cronSrialize('0 45 3 1,2,3 * ? *')
       if (startEndDate) {
         value.startTime = startEndDate[0].format(dateTimeFormat)
         value.endTime = startEndDate[1].format(dateTimeFormat)

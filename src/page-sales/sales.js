@@ -44,7 +44,7 @@ export default () => {
   const getUserList = async () => {
     try {
       const res = await io.getUserList()
-      setUserList(changeToOptions(res || [])('userAccount', 'id'))
+      setUserList(changeToOptions(res || [])('userName', 'userAccount'))
     } catch (error) {
       errorTip(error.message)
     }
@@ -92,7 +92,7 @@ export default () => {
       title: '营销计划名称',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
+      // render: text => <a>{text}</a>,
     },
     {
       title: '计划触达数',

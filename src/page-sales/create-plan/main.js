@@ -74,28 +74,43 @@ export default props => {
       setRunFormData(res)
       setWeSFormData({action: res.action})
       if (res.channelCode === 'weixin') {
-        setNodeList([...nodes, {
-          id: 'weixin',
-          nodeName: '微信服务号',
-          value: 'weixin',
-          // status: 2,
-          maxConnections: 1,
-          icon: 'weService',
-        }, {
-          id: 0,
-          nodeName: '结束',
-          value: 'end',
-          // status: 4,
-          icon: 'end',
-        },
-        ])
-        setLinkList([...links, {
-          sourceId: '2',
-          targetId: 'weixin',
-        }, {
-          sourceId: 'weixin',
-          targetId: '0',
-        }])
+        if (res.setEnd) {
+          setNodeList([...nodes, {
+            id: 'weixin',
+            nodeName: '微信服务号',
+            value: 'weixin',
+            // status: 2,
+            maxConnections: 1,
+            icon: 'weService',
+          }, {
+            id: 0,
+            nodeName: '结束',
+            value: 'end',
+            // status: 4,
+            icon: 'end',
+          },
+          ])
+          setLinkList([...links, {
+            sourceId: '2',
+            targetId: 'weixin',
+          }, {
+            sourceId: 'weixin',
+            targetId: '0',
+          }])
+        } else {
+          setNodeList([...nodes, {
+            id: 'weixin',
+            nodeName: '微信服务号',
+            value: 'weixin',
+            // status: 2,
+            maxConnections: 1,
+            icon: 'weService',
+          }])
+          setLinkList([...links, {
+            sourceId: '2',
+            targetId: 'weixin',
+          }])
+        }
       }
     } catch (error) {
       errorTip(error.message)
@@ -223,14 +238,13 @@ export default props => {
     if (instance) onFixView()
   }, [isAll])
   useEffect(() => {
-    if (!planId) setShowRun(true)
-    else setShowRun(false)
-  }, [planId])
-  useEffect(() => {
     const {params = {}} = props.match
     if (params.id) {
+      setShowRun(false)
       setPlanId(params.id)
       getPlanInfo(params.id)
+    } else {
+      setShowRun(true)
     }
     getGroupList()
     getEventList()
