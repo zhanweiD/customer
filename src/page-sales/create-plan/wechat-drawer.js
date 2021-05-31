@@ -264,7 +264,9 @@ export default ({
     if (runFormData.clientGroupId) {
       const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
       // 客群id
-      getTagList(target.objId)
+      if (target && target.objId) {
+        getTagList(target.objId)
+      }
     }
   }, [groupList])
 
