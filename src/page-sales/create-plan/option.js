@@ -94,6 +94,7 @@ const options = ({
   runDrawer, 
   weServiceDrawer, 
   changeChannelId,
+  setShowWeService,
 }) => {
   return ({
     className: 'dag-style',
@@ -127,13 +128,16 @@ const options = ({
       // position 拖拽位置
       // 获取setData添加的拖拽数据
       const item = JSON.parse(e.dataTransfer.getData('data'))
+      switch (item.nodeName) {
+        case '微信服务号':
+          setShowWeService(true)
+          break
+        default:
+          break
+      }
       changeChannelId(item.id) // 记录拖拽控件
-      console.log(item.id)
       item.position = position
-      console.log(item)
-      console.log(item.icon)
       item.ioType = '2'
-      // item.icon = matchingIcon(item.icon)
       instance.addNode(item)
       setTimeout(() => {
         instance.addTargetEndPoints(item.id, [item])

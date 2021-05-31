@@ -16,6 +16,7 @@ import {
   HomeOutlined,
   FileSyncOutlined,
   TagOutlined,
+  DeploymentUnitOutlined,
 } from '@ant-design/icons'
 import ico from '../icon/dtwave.ico'
 import store from './store'
@@ -253,7 +254,7 @@ export default class Frame extends Component {
                       </Menu.Item>
                     )
                   }
-                  <Menu.Item key="/sales/list" icon={<UserOutlined />}>
+                  <Menu.Item key="/sales/list" icon={<DeploymentUnitOutlined />}>
                     营销分析
                   </Menu.Item>
                   {

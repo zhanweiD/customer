@@ -221,6 +221,9 @@ export default props => {
     if (instance) onFixView()
   }, [isAll])
   useEffect(() => {
+    if (!planId) setShowRun(true)
+  }, [])
+  useEffect(() => {
     const {params = {}} = props.match
     if (params.id) {
       setPlanId(params.id)
@@ -229,9 +232,6 @@ export default props => {
     getGroupList()
     getEventList()
   }, [])
-  // useEffect(() => {
-  //   if (planId) getPlanInfo()
-  // }, [planId])
 
   return (
     <div className="dag-process oa">
@@ -331,6 +331,7 @@ export default props => {
                     runDrawer, 
                     weServiceDrawer,
                     changeChannelId,
+                    setShowWeService,
                   })}
                   links={linkList}
                   nodeList={nodeList}
@@ -373,6 +374,7 @@ export default props => {
         runFormData={Object.keys(runFormData).length > 0 ? runFormData : planInfo}
         groupList={groupList}
         eventList={eventList}
+        planId={planId}
       />
       <WechatDrawer 
         showWeService={showWeService}
