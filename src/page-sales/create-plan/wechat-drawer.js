@@ -1,6 +1,5 @@
 import {useForm, useState, useEffect} from 'react'
 import {Drawer, Form, Button, Col, Space, Input, Select, Collapse, Switch} from 'antd'
-import {PlusOutlined} from '@ant-design/icons'
 import _ from 'lodash'
 import cls from 'classnames'
 import Wechat from './wechat/wechat'
@@ -261,16 +260,6 @@ export default ({
   }, [])
 
   useEffect(() => {
-    if (runFormData.clientGroupId) {
-      const target = _.find(groupList, item => item.id === runFormData.clientGroupId)
-      // 客群id
-      if (target && target.objId) {
-        getTagList(target.objId)
-      }
-    }
-  }, [groupList])
-
-  useEffect(() => {
     if (weSFormData.action && weSFormData.action.detail && weSFormData.action.detail.length > 0) {
       // 有模板数据
       const templateObj = {}
@@ -317,6 +306,14 @@ export default ({
           setPreviewData(target.content)
         }
         setVis(true)
+      }
+
+      if (runFormData.clientGroupId) {
+        const targetData = _.find(groupList, item => item.id === runFormData.clientGroupId)
+        // 客群id
+        if (targetData && targetData.objId) {
+          getTagList(targetData.objId)
+        }
       }
     }
   }, [showWeService])
