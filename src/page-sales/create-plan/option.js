@@ -62,7 +62,6 @@ const buildMenu = (e, instance, runDrawer, weServiceDrawer, setWeSFormData) => [
       domEvent.stopPropagation()
       instance.removeNode(item.id)
       const {children} = item.name.props
-      console.log(children)
       switch (children) {
         case '微信服务号':
           setWeSFormData({})
