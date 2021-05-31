@@ -285,9 +285,8 @@ export default ({
 
         templateObj[e.name] = valueTemp
       })
-
-      setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
-      setFormInitValue({
+      
+      myForm.setFieldsValue({
         ...formInitValue,
         ...templateObj,
         setRestrict: weSFormData.action.setRestrict,
@@ -295,10 +294,18 @@ export default ({
         channelCode: weSFormData.action.channelCode,
       })
     }
-  }, [weSFormData])
+  }, [tagList])
 
   useEffect(() => {
     if (showWeService) {      
+      if (runFormData.clientGroupId) {
+        const targetData = _.find(groupList, item => item.id === runFormData.clientGroupId)
+        // 客群id
+        if (targetData && targetData.objId) {
+          getTagList(targetData.objId)
+        }
+      }
+
       if (weSFormData.action && weSFormData.action.templateId) {
         const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
 
@@ -306,14 +313,8 @@ export default ({
           setPreviewData(target.content)
         }
         setVis(true)
-      }
 
-      if (runFormData.clientGroupId) {
-        const targetData = _.find(groupList, item => item.id === runFormData.clientGroupId)
-        // 客群id
-        if (targetData && targetData.objId) {
-          getTagList(targetData.objId)
-        }
+        setTemplateKeyList(_.map(weSFormData.action.detail, 'name'))
       }
     }
   }, [showWeService])
