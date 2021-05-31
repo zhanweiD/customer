@@ -68,7 +68,7 @@ export default ({
   const [myForm] = Form.useForm()
   const [formInitValue, setFormInitValue] = useState({
     setRestrict: 1,
-    channelCode: 'wexin',
+    channelCode: 'WECHAT_OFFICIAL_ACCOUNTS',
   })
   const [tagList, setTagList] = useState([])
   const [previewData, setPreviewData] = useState('')
@@ -88,21 +88,7 @@ export default ({
     // console.log(a)
   }
 
-  const saveDrawer = () => {
-    myForm.validateFields().then(values => {
-      console.log(values)
-      setWeSFormData(values)
-      weServiceDrawer(false)
-    }).catch(err => {
-      console.log(err)
-    })
-  }
-
   const [vis, setVis] = useState(false)
-  const show = () => {
-    setVis(!vis)
-    console.log(vis)
-  }
 
   const templateChange = e => {
     // 目标模板数据
@@ -110,6 +96,18 @@ export default ({
     const req = /{(\w+).DATA}/g
     const matchData = target.content.match(req)
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
+
+    const keys = Object.keys(myForm.getFieldsValue())
+    const originKeys = ['channelCode', 'setRestrict', 'templateId']
+    const oldObj = {}
+
+    keys.forEach(item => {
+      if (!originKeys.includes(item)) {
+        oldObj[item] = ''
+      }
+    })
+
+    myForm.setFieldsValue(oldObj)
 
     setTemplateKeyList(matchKeys)
     setPreviewData(target.content)
@@ -360,8 +358,8 @@ export default ({
             margin: '0 24px 16px',
           }}
         >
-          <Select defaultValue="wexin">
-            <Option value="wexin">微信公众号</Option>
+          <Select defaultValue="WECHAT_OFFICIAL_ACCOUNTS">
+            <Option value="WECHAT_OFFICIAL_ACCOUNTS">微信公众号</Option>
           </Select>
         </Item>
         <Collapse size="small" defaultActiveKey={['1', '2']}>
@@ -413,9 +411,6 @@ export default ({
           </Panel>
         </Collapse>
       </Form>
-      {/* <Button onClick={() => show()}>
-        点击
-      </Button> */}
       <Preview>
         <div 
           className={cls({
