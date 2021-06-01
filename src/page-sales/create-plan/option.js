@@ -172,8 +172,8 @@ const options = ({
             onDragEnd={() => console.log(222)}
             draggable
             onClick={e => {
-              // e.preventDefault()
-              // e.stopPropagation()
+              e.preventDefault()
+              e.stopPropagation()
               edit(nodeName, runDrawer, weServiceDrawer)
             }
             }
@@ -181,8 +181,8 @@ const options = ({
             <span>{nodeName}</span>
             <span
               onClick={e => {
-                // e.preventDefault()
-                // e.stopPropagation()
+                e.preventDefault()
+                e.stopPropagation()
                 deleteNode(instance, id, nodeName, setWeSFormData)
               }}
               className="dag-node-del"
