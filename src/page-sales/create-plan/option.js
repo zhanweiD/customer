@@ -1,10 +1,10 @@
 import {message} from 'antd'
-import {CloseOutlined} from '@ant-design/icons'
+import {CloseOutlined, MinusCircleOutlined} from '@ant-design/icons'
 import matchingIcon from './unit'
 
 const beforeConnection = ({source, target}) => {
   if (source === target) {
-    message.warning('输入源与输出源相同,连接失败')
+    message.warning('连接失败')
     return false
   }
   if (source === 'start' && (target === 'end' || target === 'wait')) {
@@ -13,10 +13,9 @@ const beforeConnection = ({source, target}) => {
   }
   return true
 }
-const edit = (item, runDrawer, weServiceDrawer) => {
-  const {children} = item.name.props
+const edit = (name, runDrawer, weServiceDrawer) => {
   let typeDrawer = runDrawer
-  switch (children) {
+  switch (name) {
     case '开始':
       typeDrawer = runDrawer
       break
@@ -28,6 +27,18 @@ const edit = (item, runDrawer, weServiceDrawer) => {
       break
   }
   typeDrawer(true)
+}
+const deleteNode = (instance, nodeId, nodeName, setWeSFormData) => {
+  if (!instance) return 
+  instance.removeNode(nodeId)
+  switch (nodeName) {
+    case '微信服务号':
+      setWeSFormData({})
+      break
+    default:
+      break
+  }
+  // changeChannelId(item.id)
 }
 const dragEnd = (position, e, instance, changeChannelId, setShowWeService) => {
   const item = JSON.parse(e.dataTransfer.getData('data'))
@@ -97,32 +108,26 @@ const onFlowInit = (instance, nodeList) => {
     if (nodeName === '开始') {
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
-        // id: node.id,
         ioType: '2',
         maxConnections: 1,
-        // enabled: !disabled,
       }])
     } else if (nodeName === '结束') {
       instance.addTargetEndPoints(node.id, [{
         id: `target_${node.id}`,
         ioType: '2',
         maxConnections: 1,
-        // enabled: !disabled,
       }])
     } else {
       instance.addTargetEndPoints(node.id, [{
         id: `target_${node.id}`,
         ioType: '2',
         maxConnections: 1,
-        // enabled: !disabled,
       }])
   
       instance.addSourceEndPoints(node.id, [{
         id: `source_${node.id}`,
-        // id: node.id,
         ioType: '2',
         maxConnections: 1,
-        // enabled: !disabled,
       }])
     }
     return node
@@ -157,14 +162,43 @@ const options = ({
     }) => {
       return {
         id,
-        name: <div className="dag-node">{nodeName}</div>,
+        name: (
+          <div 
+            className="dag-node"
+            onDragStart={() => {
+              console.log(111)
+            }}
+            onDrag={() => console.log(333)}
+            onDragEnd={() => console.log(222)}
+            draggable
+            onClick={e => {
+              // e.preventDefault()
+              // e.stopPropagation()
+              edit(nodeName, runDrawer, weServiceDrawer)
+            }
+            }
+          >
+            <span>{nodeName}</span>
+            <span
+              onClick={e => {
+                // e.preventDefault()
+                // e.stopPropagation()
+                deleteNode(instance, id, nodeName, setWeSFormData)
+              }}
+              className="dag-node-del"
+            >
+              <CloseOutlined />
+            </span>
+          </div>
+        ),
         icon: matchingIcon(icon),
         status,
         position,
         maxConnections,
       }
     },
-    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, setWeSFormData),
+    onClick: () => console.log(222),
+    // buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, setWeSFormData),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => dragEnd(position, e, instance, changeChannelId, setShowWeService),
