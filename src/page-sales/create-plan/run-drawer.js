@@ -8,7 +8,8 @@ const {Item} = Form
 const {Panel} = Collapse
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
-const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
+const dateTimeFormat = 'YYYY-MM-DD'
+const dateTimeSFormat = 'YYYY-MM-DD HH:mm:ss'
 const timeFormat = 'HH:mm:ss'
 
 const layout = {
@@ -51,7 +52,7 @@ export default ({
 
   const onFinish = () => {
     runForm.validateFields().then(value => {
-      const {startEndDate, interval, time} = value
+      const {startEndDate, interval, time, way} = value
       if (planType === 0) {
         switch (period) {
           case 1:
@@ -76,8 +77,12 @@ export default ({
         value.triggerTime = ctime
       }
       if (startEndDate) {
-        value.startTime = startEndDate[0].format(dateTimeFormat)
-        value.endTime = startEndDate[1].format(dateTimeFormat)
+        value.startTime = `${startEndDate[0].format(dateTimeFormat)} 00:00:00`
+        value.endTime = `${startEndDate[1].format(dateTimeFormat)} 00:00:00`
+      }
+      if (way === 'now') {
+        value.triggerGap = ''
+        value.triggerUnit = ''
       }
       setRunForm(value)
       runDrawer(false)
@@ -92,11 +97,17 @@ export default ({
   const changePeriod = v => {
     setPeriod(v)
     cornTime = {}
-    runForm.resetFields(['time', 'interval'])
+    runForm.setFields([{
+      time: '', 
+      interval: '',
+    }])
   }
   const changTouchWay = v => {
     setTouchWay(v)
-    runForm.resetFields(['triggerGap', 'triggerUnit'])
+    runForm.setFields([{
+      triggerGap: '',
+      triggerUnit: '',
+    }])
   }
   useEffect(() => {
     setPlanType(runFormData.type || 0)
@@ -404,7 +415,7 @@ export default ({
                   rules={[{required: true, message: '请选择日期'}]}
                   initialValue={startTime ? [moment(startTime, dateTimeFormat), moment(endTime, dateTimeFormat)] : undefined}
                 >
-                  <RangePicker showTime format={dateTimeFormat} />
+                  <RangePicker format={dateTimeFormat} />
                 </Item>
               )
             }

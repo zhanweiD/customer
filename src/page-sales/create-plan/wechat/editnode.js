@@ -33,7 +33,7 @@ class EditNode extends Component {
     if (this.props.value !== this.ref.current.innerHTML) {
       this.ref.current.innerHTML = this.props.value
     }
-    console.log('child')
+    // console.log('child')
   }
 
   onClick() {

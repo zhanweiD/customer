@@ -157,10 +157,7 @@ const options = ({
     }) => {
       return {
         id,
-        name: <div className="dag-node">
-          {nodeName}
-          {/* <CloseOutlined /> */}
-        </div>,
+        name: <div className="dag-node">{nodeName}</div>,
         icon: matchingIcon(icon),
         status,
         position,
