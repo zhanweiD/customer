@@ -96,6 +96,7 @@ export default ({
   }
   const changTouchWay = v => {
     setTouchWay(v)
+    runForm.resetFields(['triggerGap', 'triggerUnit'])
   }
   useEffect(() => {
     setPlanType(runFormData.type || 0)
@@ -136,13 +137,13 @@ export default ({
             <Item 
               noStyle 
               name="triggerUnit" 
-              initialValue={triggerUnit || 1}
+              initialValue={triggerUnit || 'MINUTE'}
               rules={[{required: true, message: '请选择单位'}]}
             >
               <Select style={{width: '30%'}}>
-                <Option value={1}>分钟</Option>
-                <Option value={2}>小时</Option>
-                <Option value={3}>天</Option>
+                <Option value="MINUTE">分钟</Option>
+                <Option value="HOUR">小时</Option>
+                <Option value="DAY">天</Option>
               </Select>
             </Item>
           )
@@ -447,13 +448,13 @@ export default ({
                 <Item 
                   noStyle 
                   name="targetUnit" 
-                  initialValue={targetUnit || 1}
+                  initialValue={targetUnit || 'MINUTE'}
                   rules={[{required: true, message: '请选择单位'}]}
                 >
                   <Select style={{width: '30%'}}>
-                    <Option value={1}>分钟</Option>
-                    <Option value={2}>小时</Option>
-                    <Option value={3}>天</Option>
+                    <Option value="MINUTE">分钟</Option>
+                    <Option value="HOUR">小时</Option>
+                    <Option value="DAY">天</Option>
                   </Select>
                 </Item>
               </Input.Group>

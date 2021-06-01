@@ -1,4 +1,5 @@
 import {message} from 'antd'
+import {CloseOutlined} from '@ant-design/icons'
 import matchingIcon from './unit'
 
 const beforeConnection = ({source, target}) => {
@@ -11,6 +12,22 @@ const beforeConnection = ({source, target}) => {
     return false
   }
   return true
+}
+const edit = (item, runDrawer, weServiceDrawer) => {
+  const {children} = item.name.props
+  let typeDrawer = runDrawer
+  switch (children) {
+    case '开始':
+      typeDrawer = runDrawer
+      break
+    case '微信服务号':
+      typeDrawer = weServiceDrawer
+      break
+    default:
+      typeDrawer = () => console.log('功能暂未开发')
+      break
+  }
+  typeDrawer(true)
 }
 const dragEnd = (position, e, instance, changeChannelId, setShowWeService) => {
   const item = JSON.parse(e.dataTransfer.getData('data'))
@@ -140,7 +157,10 @@ const options = ({
     }) => {
       return {
         id,
-        name: <div className="dag-node">{nodeName}</div>,
+        name: <div className="dag-node">
+          {nodeName}
+          {/* <CloseOutlined /> */}
+        </div>,
         icon: matchingIcon(icon),
         status,
         position,
@@ -157,7 +177,7 @@ const options = ({
     // onDoubleClick: node => {
     //   console.log(node)
     // },
-    // onNodeSelect: (node, index) => console.log(node, index),
+    // onNodeSelect: (node, index) => edit(node, runDrawer, weServiceDrawer),
 
     // 用于构造连线数据，需要返回如下格式：{id,source,target}，字段详情查看下的数据格式参考
     links,

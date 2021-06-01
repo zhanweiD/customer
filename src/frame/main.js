@@ -255,7 +255,7 @@ export default class Frame extends Component {
                     )
                   }
                   <Menu.Item key="/sales/list" icon={<DeploymentUnitOutlined />}>
-                    营销分析
+                    自动化营销
                   </Menu.Item>
                   {
                     showAnalyze && (
