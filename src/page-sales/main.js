@@ -10,7 +10,7 @@ export default () => {
       {/* 营销计划列表 */}
       <Route exact path={`${prePath}/list`} component={Sales} />
       {/* 营销计划创建/编辑 */}
-      <Route exact path={`${prePath}/create/:id?`} component={CreatePlan} />
+      <Route exact path={`${prePath}/create/:id?/:name?`} component={CreatePlan} />
     </Switch>
   )
 }

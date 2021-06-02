@@ -83,8 +83,8 @@ export default () => {
     }
   }
   
-  const editPlan = id => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${id}`
+  const editPlan = item => {
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${item.id}/${item.name}`
   }
 
   const columns = [
@@ -155,7 +155,7 @@ export default () => {
       key: 'action',
       render: (text, record) => ([
         <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
-        <a className="mr16" onClick={() => editPlan(record.id)}>编辑</a>,
+        <a className="mr16" onClick={() => editPlan(record)}>编辑</a>,
         <Popconfirm
           title="确认删除计划吗?"
           onConfirm={() => delPlan(record.id)}

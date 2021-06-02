@@ -37,6 +37,7 @@ export default props => {
   const [saveLoading, setSaveLoading] = useState(false) // 保存计划
   const [infoLoading, setInfoLoading] = useState(false) // 详情loading
   const [planId, setPlanId] = useState() // 计划id
+  const [planName, setPlanName] = useState() // 计划name
 
   const [runFormData, setRunFormData] = useState({}) // 开始控件表单值
   const [weSFormData, setWeSFormData] = useState({}) // 微信服务号控件表单值
@@ -244,6 +245,7 @@ export default props => {
     if (params.id) {
       setShowRun(false)
       setPlanId(params.id)
+      setPlanName(params.name)
       getPlanInfo(params.id)
     } else {
       setShowRun(true)
@@ -255,21 +257,26 @@ export default props => {
   return (
     <div className="dag-process oa">
       <div className="dag-header">
-        <Button className="header-but" onClick={setAll}>
-          <span className="radio-span"><img className="mb1" src={all} alt="" /></span>
-          <span>{isAll ? '缩放' : '全屏'}</span>
-        </Button>
-        <Button className="header-but" onClick={clearCanvas}>
-          <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
-          <span>清空画布</span>
-        </Button>
-        <Button
-          className="header-but"
-          onClick={() => setShowSaveModal(true)}
-        >
-          <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
-          <span>保存</span>
-        </Button>
+        {
+          planId ? <div className="dag-header-title">{`计划名称: ${planName}`}</div> : <div className="dag-header-title">创建计划</div>
+        }
+        <div className="dag-header-btn">
+          <Button className="header-btn" onClick={setAll}>
+            <span className="radio-span"><img className="mb1" src={all} alt="" /></span>
+            <span>{isAll ? '缩放' : '全屏'}</span>
+          </Button>
+          <Button className="header-btn" onClick={clearCanvas}>
+            <span className="radio-span"><img className="mb1" src={clear} alt="" /></span>
+            <span>清空画布</span>
+          </Button>
+          <Button
+            className="header-btn"
+            onClick={() => setShowSaveModal(true)}
+          >
+            <span className="radio-span"><img className="mb1" src={save} alt="" /></span>
+            <span>保存</span>
+          </Button>
+        </div>
       </div>
       <div className="dag-cate" style={{display: isAll ? 'none' : 'inline-block'}}>
         <Space direction="vertical" size={24}>
