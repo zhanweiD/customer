@@ -152,6 +152,7 @@ class SomeCompoent extends Component {
   add(type) {
     const {onChange} = this.props
     this.html = this.mySlice(this.html, this.generateSpan(type), this.cursorPos)
+    console.log(this.html)
     onChange(this.html)
   }
 
@@ -172,10 +173,10 @@ class SomeCompoent extends Component {
             <div
               className="ml8 mr8 hand"
               onClick={() => {
-                if (this.id > 104) {
-                  message.warning('最多插入5个属性！')
-                  return
-                }
+                // if (this.id > 104) {
+                //   message.warning('最多插入5个属性！')
+                //   return
+                // }
                 if (tagList && tagList.length && tagList.length > 0) {
                   this.add(tagList[0].objNameTagName)
                 } else {

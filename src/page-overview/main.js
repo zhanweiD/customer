@@ -38,7 +38,7 @@ const Overview = () => {
   const [orgList, setOrgList] = useState([]) // 组织架构
   const [card, setCard] = useState({}) // 指标卡
   const [orgLoading, setOrgLoading] = useState(false)
-  const [timeStart, setTimeStart] = useState(pastDate(7))
+  const [timeStart, setTimeStart] = useState(pastDate(365))
   const [timeEnd, setTimeEnd] = useState(moment(+date.getTime()).format(dateFormat))
 
   // 组织架构

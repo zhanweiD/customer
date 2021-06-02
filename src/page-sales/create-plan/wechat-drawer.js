@@ -369,7 +369,7 @@ export default ({
               name="templateId"
               rules={[{required: true, message: '模板不能为空'}]}
             >
-              <Select onChange={templateChange}>
+              <Select onChange={templateChange} placeholder="请选择模版">
                 {
                   templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
                 }
