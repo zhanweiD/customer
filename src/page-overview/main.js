@@ -155,7 +155,7 @@ const Overview = () => {
         <Select 
           style={{width: 128}} 
           onChange={changeTime}
-          defaultValue={7}
+          defaultValue={365}
         >
           {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
         </Select>
