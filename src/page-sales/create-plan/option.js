@@ -29,6 +29,7 @@ const edit = (name, runDrawer, weServiceDrawer) => {
   typeDrawer(true)
 }
 const deleteNode = (instance, nodeId, nodeName, setWeSFormData) => {
+  // console.log(instance)
   if (!instance) return 
   instance.removeNode(nodeId)
   switch (nodeName) {
@@ -163,34 +164,31 @@ const options = ({
       return {
         id,
         name: (
-          <div 
-            className="dag-node"
-            onDragStart={() => {
-              console.log(111)
-            }}
-            onDrag={() => console.log(333)}
-            onDragEnd={() => console.log(222)}
-            draggable
-            onClick={e => {
-              e.preventDefault()
-              e.stopPropagation()
-              edit(nodeName, runDrawer, weServiceDrawer)
-            }
-            }
-          >
-            <span>{nodeName}</span>
-            <span
-              onClick={e => {
-                e.preventDefault()
-                e.stopPropagation()
-                deleteNode(instance, id, nodeName, setWeSFormData)
-              }}
-              className="dag-node-del"
-            >
-              <CloseOutlined />
-            </span>
-          </div>
+          <div className="dag-node">{nodeName}</div>
         ),
+        // name: (
+        //   <div 
+        //     className="dag-node"
+        //     onClick={e => {
+        //       e.preventDefault()
+        //       e.stopPropagation()
+        //       edit(nodeName, runDrawer, weServiceDrawer)
+        //     }
+        //     }
+        //   >
+        //     <span>{nodeName}</span>
+        //     <span
+        //       onClick={e => {
+        //         e.preventDefault()
+        //         e.stopPropagation()
+        //         deleteNode(instance, id, nodeName, setWeSFormData)
+        //       }}
+        //       className="dag-node-del"
+        //     >
+        //       <CloseOutlined />
+        //     </span>
+        //   </div>
+        // ),
         icon: matchingIcon(icon),
         status,
         position,
@@ -198,7 +196,7 @@ const options = ({
       }
     },
     onClick: () => console.log(222),
-    // buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, setWeSFormData),
+    buildMenu: e => buildMenu(e, instance, runDrawer, weServiceDrawer, setWeSFormData),
     onFlowInit: v => onFlowInit(v, nodeList),
     // 拖入画布事件
     onDrop: (position, e) => dragEnd(position, e, instance, changeChannelId, setShowWeService),
