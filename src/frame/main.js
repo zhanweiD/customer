@@ -254,9 +254,14 @@ export default class Frame extends Component {
                       </Menu.Item>
                     )
                   }
-                  <Menu.Item key="/sales/list" icon={<DeploymentUnitOutlined />}>
-                    自动化营销
-                  </Menu.Item>
+                  {
+                    codeInProduct('/sales/list') && (
+                      <Menu.Item key="/sales/list" icon={<DeploymentUnitOutlined />}>
+                        自动化营销
+                      </Menu.Item>
+                    )
+                  }
+                  
                   {
                     showAnalyze && (
                       <SubMenu key="/analyze" icon={<PieChartOutlined />} title="场景洞察">
