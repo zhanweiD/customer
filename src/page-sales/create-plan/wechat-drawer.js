@@ -147,7 +147,7 @@ export default ({
       templateKeyList.forEach(item => {
         let itemValue = value[item]
 
-        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}')
+        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
 
         tagList.forEach(e => {
           if (itemValue.indexOf(e.objNameTagName) > -1) {
@@ -161,6 +161,17 @@ export default ({
         })
       })
 
+      console.log('======')
+      console.log({
+        action: {
+          detail,
+          channelCode: value.channelCode,
+          templateId: value.templateId,
+          setRestrict: value.setRestrict,
+        },
+      })
+
+      
       if (weSFormData && weSFormData.action && weSFormData.action.id) {
         setWeSFormData({
           action: {
@@ -276,11 +287,11 @@ export default ({
 
         // 对 span 的处理
         if (valueTemp.indexOf('${') > -1) {
-          valueTemp = valueTemp.replace(/}/g, '</span>')
+          valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
           let id = 0
           while (valueTemp.indexOf('${') > -1) {
             id += 1
-            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">`)
+            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
           }
         }
 

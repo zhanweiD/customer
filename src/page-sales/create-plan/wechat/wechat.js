@@ -38,7 +38,10 @@ class SomeCompoent extends Component {
 
   generateSpan(text) {
     this.id += 1
-    return `<span class="tag-drop" contentEditable="false" id="${this.id}">${text}</span>`
+
+    // &nbsp; 用于填充空间，解决光标位置问题
+    // 前 2 后 6
+    return `<span class="tag-drop" contentEditable="false" id="${this.id}">&nbsp;&nbsp;${text}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`
   }
 
   @action.bound windowClickEvent(e) {
@@ -85,7 +88,7 @@ class SomeCompoent extends Component {
     const newArray = []
     currentHtmlArray.forEach(item => {
       if (item.indexOf(`id="${this.clickedId}"`) > -1) {
-        item = item.replace(/>([\s\S]*)$/g, `>${targetText}`)
+        item = item.replace(/>([\s\S]*)$/g, `>&nbsp;&nbsp;${targetText}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`)
       }
       newArray.push(item)
     })
@@ -102,6 +105,8 @@ class SomeCompoent extends Component {
     let finalStr = ''
     let isChanged = false // 判断是否是中途改变的
     let isInSpan = false
+
+    str = str.replace(/&nbsp;/g, '@') // 将空格字符先进行替换，光标会将空格字符识别为一位
 
     for (let i = 0; i < str.length; i += 1) {
       if (str[i] === '<') {
@@ -146,13 +151,19 @@ class SomeCompoent extends Component {
     }
     // 判断是后面加的
 
-    return finalStr
+    return finalStr.replace(/@/g, '&nbsp;')
   }
 
   add(type) {
-    const {onChange} = this.props
-    this.html = this.mySlice(this.html, this.generateSpan(type), this.cursorPos)
-    console.log(this.html)
+    const {onChange, value} = this.props
+
+    if (value && !this.html) {
+      // 有内容但是想直接插入属性，直接添加在后面
+      this.html = value + this.generateSpan(type)
+    } else {
+      this.html = this.mySlice(this.html, this.generateSpan(type), this.cursorPos)
+    }
+
     onChange(this.html)
   }
 
