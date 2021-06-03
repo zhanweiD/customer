@@ -156,7 +156,10 @@ class SomeCompoent extends Component {
 
   add(type) {
     const {onChange, value} = this.props
-
+    if (this.html.split('/').length > 5) {
+      message.warning('最多插入5个属性！')
+      return 
+    }
     if (value && !this.html) {
       // 有内容但是想直接插入属性，直接添加在后面
       this.html = value + this.generateSpan(type)
