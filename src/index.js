@@ -21,6 +21,7 @@ import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
 import Sales from './page-sales'
 import Weapp from './weapp'
+import Material from './page-material'
 
 const njkData = {
   dict,
@@ -54,7 +55,10 @@ function Entry() {
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
+          {/* 自动化营销 */}
           <Route path="/sales" component={Sales} />
+          {/* 素材管理 */}
+          <Route path="/material" component={Material} />
         </Frame>
 
       </Switch>
