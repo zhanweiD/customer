@@ -23,6 +23,7 @@ import Sales from './page-sales'
 import Weapp from './weapp'
 import Material from './page-material'
 import EventManage from './page-event-manage'
+import ChannelManage from './page-channel-manage'
 
 const njkData = {
   dict,
@@ -62,6 +63,8 @@ function Entry() {
           <Route path="/material" component={Material} />
           {/* 事件管理 */}
           <Route path="/event-manage" component={EventManage} />
+          {/* 渠道管理 */}
+          <Route path="/channel-manage" component={ChannelManage} />
         </Frame>
 
       </Switch>
