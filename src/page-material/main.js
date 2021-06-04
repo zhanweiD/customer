@@ -1,13 +1,15 @@
 import {useEffect, useState} from 'react'
-import {Button, Table, Popconfirm, Spin} from 'antd'
+import {Button, Table, Popconfirm, Spin, Modal} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {Search} from '../component'
 import AddModal from './add-modal'
 import searchParams from './search'
+import groupImg from '../icon/new-group1.svg'
 import io from './io'
 
 export default () => {
   const [addVisible, setAddVisible] = useState(false) // add visible
+  const [previewVisible, setPreviewVisible] = useState(false) // add visible
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [searchParam, setSearchParam] = useState({}) // 搜索
@@ -114,6 +116,7 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (text, record) => ([
+        <a className="mr16" onClick={() => setPreviewVisible(true)}>查看</a>,
         <a className="mr16" onClick={() => console.log(record)}>编辑</a>,
         <Popconfirm
           title="确认删除计划吗?"
@@ -160,6 +163,14 @@ export default () => {
           visible={addVisible} 
           setVisible={showAdd}
         />
+        <Modal
+          visible={previewVisible}
+          // title="素材"
+          footer={null}
+          onCancel={() => setPreviewVisible(false)}
+        >
+          <img className="mb16" alt="example" style={{width: '100%'}} src={groupImg} />
+        </Modal>
       </div>
     </div>
   )

@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import {Button, Upload, message, Modal, Form, Input, Radio} from 'antd'
 import {LoadingOutlined, PlusOutlined} from '@ant-design/icons'
 
+import {baseApi} from '../common/util'
+
 const layout = {
   labelCol: {span: 4},
   wrapperCol: {span: 20},
@@ -19,6 +21,7 @@ export default ({
   const [loading, setLoading] = useState(false)
   const [materialType, setMaterialType] = useState(1)
   const [uploadData, setUploadData] = useState(null)
+  const [imageUrl, setImageUrl] = useState(null)
   const [uploadExtra, setUploadExtra] = useState(extraText.picture)
   const [uploadForm] = Form.useForm()
 
@@ -27,55 +30,53 @@ export default ({
     reader.addEventListener('load', () => callback(reader.result))
     reader.readAsDataURL(img)
   }
+  // 上传前校验
   const beforeUpload = file => {
+    console.log(file)
+    setUploadData(file.uid)
     const {type} = file
+    let isFormat = true
+    let isLt2M = true
+    let isLt60 = true
     if (materialType === 1 || materialType === 2) {
-      const isFormat = type === 'image/jpeg' || type === 'image/png'
-      if (isFormat) message.error('格式错误，仅支持PNG和JPG')
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (isLt2M) message.error('大小不超过2M')
+      isFormat = type === 'image/jpeg' || type === 'image/png'
+      if (!isFormat) message.error('格式错误，仅支持PNG和JPG')
+      isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) message.error('大小不超过2M')
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onloadend = () => {
+        setImageUrl(reader.result)
+      }
     }
-    // switch (materialType) {
-    //   case 1:
-    //     isFormat = type === 'image/jpeg' || type === 'image/png'
-    //     if (isFormat) message.error('格式错误，仅支持PNG和JPG')
-    //     break
-    //   case 2:
-    //     isFormat = type === 'image/jpeg' || type === 'image/png'
-    //     if (isFormat) message.error('格式错误，仅支持PNG和JPG')
-    //     break
-    //   case 3:
-    //     isFormat = type === 'audio/mpeg' || type === 'audio/mp3'
-    //     if (isFormat) message.error('格式错误，仅支持mp3')
-    //     break
-    //   default:
-    //     isFormat = type === 'video/mp4'
-    //     if (isFormat) message.error('格式错误，仅支持mp4')
-    //     break
-    // }
     if (materialType === 3) {
+      isFormat = type === 'audio/mpeg' || type === 'audio/mp3' || type === 'audio/wma' || type === 'audio/wav' || type === 'audio/amr'
+      if (!isFormat) message.error('格式错误，仅支持mp3/wma/wav/amr')
       const video = document.createElement('video')
       video.src = URL.createObjectURL(file)
       video.onloadedmetadata = () => {
-        if (video.duration > 60) message.error('播放长度不超过60s')
+        if (video.duration > 60) {
+          isLt60 = false
+          message.error('播放长度不超过60s')
+        } else {
+          isLt60 = true
+        }
       }
+      isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) message.error('大小不超过2M')
     }
-
-    
-    const isJpgOrPng = file.type === 'audio/mpeg'
-    // if (!isJpgOrPng) {
-    //   message.error('You can only upload JPG/PNG file!')
-    // }
-    const isLt2M = file.size / 1024 / 1024 < 6
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!')
+    if (materialType === 4) {
+      isFormat = type === 'video/mp4'
+      if (!isFormat) message.error('格式错误，仅支持mp4')
+      isLt2M = file.size / 1024 / 1024 < 10
+      if (!isLt2M) message.error('大小不超过10M')
     }
-    return isJpgOrPng && isLt2M
+    // return isFormat && isLt2M && isLt60
+    return false
   }
   
   // 上传状态
   const uploadChange = info => {
-    console.log(info.file)
     if (info.file.status === 'uploading') {
       setLoading(true)
       return
@@ -88,19 +89,28 @@ export default ({
     }
     if (info.file.status === 'done') {
       setUploadData(info.file.uid)
+      if (materialType === 1 || materialType === 2) {
+        getBase64(info.file.originFileObj, url => {
+          setImageUrl(url)
+        })
+      }
       setLoading(false)
-      // Get this url from response in real world.
-      // getBase64(info.file.originFileObj, imageUrl =>
-      // );
     }
   }
+
+  const handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj)
+    }
+  }
+
 
   const handleCancel = () => {
     setVisible(false)
   }
   const handleOk = () => {
     uploadForm.validateFields().then(value => {
-      console.log(value)
+      console.log(value, imageUrl, uploadData)
       handleCancel()
     }).catch(err => console.log(err))
   }
@@ -164,12 +174,13 @@ export default ({
             listType="picture-card"
             className="avatar-uploader"
             showUploadList={false}
-            action="/upload.do" 
+            // action={`${baseApi}/import/import_id_collection`} 
             beforeUpload={beforeUpload}
             onChange={uploadChange}
+            onPreview={handlePreview}
           >
-            {/* {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton} */}
-            {uploadButton}
+            {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}} /> : uploadButton}
+            {/* {uploadButton} */}
           </Upload>
         </Form.Item>
         <Form.Item

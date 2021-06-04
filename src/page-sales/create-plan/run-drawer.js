@@ -33,7 +33,7 @@ export default ({
   const [planType, setPlanType] = useState(0) // 计划类型 0定时1事件
   const [period, setPeriod] = useState(0) // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
   let cycle = null // corn
-  const [touchWay, setTouchWay] = useState('now')
+  const [touchWay, setTouchWay] = useState('now') // 触发方式 立即/延迟
   const {
     clientGroupId, 
     targetGap, 
@@ -114,6 +114,8 @@ export default ({
     setPeriod(runFormData.period || 0)
     setTouchWay(triggerGap ? 'delay' : 'now')
   }, [runFormData])
+
+  // 根据触达方式生成对应dom
   const setTouchType = () => {
     return (
       <Input.Group compact>
@@ -162,7 +164,7 @@ export default ({
       </Input.Group>
     )
   }
-  // 触发时间组件
+  // 根据重复方式生成触发时间组件
   const setTime = () => {
     const setMonth = () => {
       const monthData = []
