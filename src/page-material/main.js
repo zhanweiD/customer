@@ -1,140 +1,166 @@
-import React, {useState} from 'react'
-import {Button, Upload, message, Modal, Form, Input, Radio} from 'antd'
-import {LoadingOutlined, PlusOutlined} from '@ant-design/icons'
-
-const layout = {
-  labelCol: {span: 4},
-  wrapperCol: {span: 20},
-}
-const extraText = {
-  picture: '支持jpg/png格式，大小1MB以内',
-  audio: '支持mp3/wma/wav/amr格式，播放长度不超过60s，大小2MB以内',
-  video: '支持mp4格式，大小10MB以内',
-}
-function beforeUpload(file) {
-  console.log(file)
-  const video = document.createElement('video')
-  video.src = URL.createObjectURL(file)
-  video.onloadedmetadata = function () {
-    console.log('长度', video)
-  }
-  const isJpgOrPng = file.type === 'audio/mpeg'
-  // if (!isJpgOrPng) {
-  //   message.error('You can only upload JPG/PNG file!')
-  // }
-  const isLt2M = file.size / 1024 / 1024 < 6
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJpgOrPng && isLt2M
-}
+import {useEffect, useState} from 'react'
+import {Button, Table, Popconfirm, Spin} from 'antd'
+import {successTip, changeToOptions, errorTip} from '@util'
+import {Search} from '../component'
+import AddModal from './add-modal'
+import searchParams from './search'
+import io from './io'
 
 export default () => {
-  const [loading, setLoading] = useState(false)
-  const [materialType, setMaterialType] = useState(1)
-  const [uploadExtra, setUploadExtra] = useState(extraText.picture)
-  const [uploadForm] = Form.useForm()
+  const [addVisible, setAddVisible] = useState(false) // add visible
+  const [listDate, setListDate] = useState([]) // 表格数据
+  const [channelList, setChannelList] = useState([]) // 渠道列表
+  const [searchParam, setSearchParam] = useState({}) // 搜索
+  const [tableLoading, setTableLoading] = useState(false) // 搜索loading
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  }) // 列表分页
+  
+  // 获取列表
+  const getList = async params => {
+    setTableLoading(true)
+    try {
+      const res = await io.getList({
+        currentPage: pagination.current,
+        pageSize: pagination.pageSize,
+        ...params,
+        ...searchParam,
+      })
+      const {data, currentPage, pageSize, totalCount} = res
+      setListDate(data)
+      setPagination({
+        current: currentPage,
+        pageSize,
+        total: totalCount,
+      })
+    } catch (error) {
+      errorTip(error.message)
+    } finally {
+      setTableLoading(false)
+    } 
+  }
+  // 获取渠道
+  const getChannelList = async () => {
+    try {
+      const res = await io.getChannelList()
+      setChannelList(changeToOptions(res || [])('name', 'id'))
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 删除计划
+  const delPlan = async id => {
+    try {
+      await io.delPlan({
+        id,
+      })
+      getList({currentPage: 1})
+      successTip('删除成功')
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
 
-  function getBase64(img, callback) {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
+  const showAdd = v => {
+    setAddVisible(v)
   }
   
-  
-  const handleChange = info => {
-    console.log(info)
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return
-    }
-    if (info.file.status === 'done') {
-      setLoading(false)
-      // Get this url from response in real world.
-      // getBase64(info.file.originFileObj, imageUrl =>
-      // );
-    }
-  }
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{marginTop: 8}}>Upload</div>
-    </div>
-  )
+  useEffect(() => {
+    getChannelList()
+  }, [])
+  useEffect(() => {
+    getList({currentPage: 1})
+  }, [searchParam])
 
-  const handleOk = () => {
-    console.log('ok')
-  }
-  const handleCancel = () => {
-    console.log('cancel')
-  }
-  const changeRadio = v => {
-    const {value} = v.target
-    const {audio, video, picture} = extraText
-    console.log(v.target.value)
-    if (value === 1 || value === 2) setUploadExtra(picture)
-    if (value === 3) setUploadExtra(audio)
-    if (value === 4) setUploadExtra(video)
-    setMaterialType(v)
-  }
+  const columns = [
+    {
+      title: '素材名称',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '类型',
+      dataIndex: 'touchCount',
+      key: 'touchCount',
+    },
+    {
+      title: '内容',
+      dataIndex: 'targetRate',
+      key: 'targetRate',
+    },
+    {
+      title: '描述',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: '大小',
+      dataIndex: 'ctime',
+      key: 'ctime',
+    },
+    {
+      title: '创建人',
+      dataIndex: 'startTime',
+      key: 'startTime',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'endTime',
+      key: 'endTime',
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (text, record) => ([
+        <a className="mr16" onClick={() => console.log(record)}>编辑</a>,
+        <Popconfirm
+          title="确认删除计划吗?"
+          onConfirm={() => delPlan(record.id)}
+          onCancel={() => {}}
+          okText="确定"
+          cancelText="取消"
+        >
+          <a>删除</a>
+        </Popconfirm>,
+      ]),
+    },
+  ]
 
   return (
-    <Modal
-      title="上传素材"
-      visible
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form
-        {...layout}
-        name="basic"
-        form={uploadForm}
-      >
-        <Form.Item
-          label="素材类型"
-          name="materialType"
-          initialValue={materialType}
-          rules={[{required: true, message: 'Please input your username!'}]}
+    <div className="oa">
+      <div className="content-header">素材管理</div>
+      <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
+        <Search
+          onReset={() => console.log('重置')}
+          onSearch={setSearchParam}
+          params={searchParams(channelList)}
+        />
+        <Button
+          type="primary"
+          style={{marginBottom: '8px'}}
+          onClick={() => showAdd(true)}
         >
-          <Radio.Group onChange={changeRadio}>
-            <Radio value={1}>图片</Radio>
-            <Radio value={2}>二维码</Radio>
-            <Radio value={3}>音频</Radio>
-            <Radio value={4}>视频</Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item
-          label="上传素材"
-          name="material"
-          extra={uploadExtra}
-          // rules={[{ required: true, message: 'Please input your username!' }]}
-        >
-          <Upload
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-          >
-            {/* {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton} */}
-            {uploadButton}
-          </Upload>
-        </Form.Item>
-        <Form.Item
-          label="素材名称"
-          name="name"
-          rules={[{required: true, message: '请输入名称'}]}
-        >
-          <Input placeholder="请输入名称" />
-        </Form.Item>
-        <Form.Item
-          label="描述"
-          name="descr"
-        >
-          <Input placeholder="请输入描述" />
-        </Form.Item>
-      </Form>
-    </Modal>
+          上传素材
+        </Button>
+        <Table 
+          columns={columns} 
+          dataSource={listDate} 
+          rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
+          scroll={{x: 1280}} 
+          loading={tableLoading}
+          pagination={{
+            ...pagination,
+            showTotal: () => `合计${pagination.total}条记录`,
+            onChange: v => getList({currentPage: v}),
+          }}
+        />
+        <AddModal 
+          visible={addVisible} 
+          setVisible={showAdd}
+        />
+      </div>
+    </div>
   )
 }
