@@ -48,6 +48,7 @@
     "d3-drag": "^1.2.5",
     "d3-selection": "^1.4.1",
     "dagre-d3": "^0.6.4",
+    "react-beautiful-dnd": "^13.1.0",
     "eslint": "^7.15.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-config-standard": "^16.0.2",
