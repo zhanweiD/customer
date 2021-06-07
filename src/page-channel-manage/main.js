@@ -75,7 +75,6 @@ export default () => {
       dataIndex: 'name',
       key: 'name',
     },
-    
     {
       title: '创建人',
       dataIndex: 'targetRate',
@@ -104,7 +103,6 @@ export default () => {
         <a onClick={() => authorization(record)}>重新授权</a>,
       ]),
     },
-    
   ]
 
   return (

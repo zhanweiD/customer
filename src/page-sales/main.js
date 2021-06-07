@@ -1,6 +1,7 @@
 import {Route, Switch, Redirect} from 'react-router-dom'
 import Sales from './sales'
 import CreatePlan from './create-plan'
+import SalesDetail from './page-sales-detail'
 
 const prePath = '/sales'
 
@@ -9,6 +10,8 @@ export default () => {
     <Switch>
       {/* 营销计划列表 */}
       <Route exact path={`${prePath}/list`} component={Sales} />
+      {/* 营销计划详情 */}
+      <Route exact path={`${prePath}/detail`} component={SalesDetail} />
       {/* 营销计划创建/编辑 */}
       <Route exact path={`${prePath}/create/:id?/:name?`} component={CreatePlan} />
     </Switch>
