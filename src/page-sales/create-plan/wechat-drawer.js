@@ -349,7 +349,7 @@ export default ({
             取消
           </Button>
           <Button type="primary" onClick={saveData}>
-            保存
+            确定
           </Button>
         </div>
       )}
@@ -373,7 +373,7 @@ export default ({
             <Option value="WECHAT_OFFICIAL_ACCOUNTS">微信公众号</Option>
           </Select>
         </Item>
-        <Collapse size="small" defaultActiveKey={['1', '2']}>
+        <Collapse className="collapse-whole" size="small" defaultActiveKey={['1', '2']}>
           <Panel header="触达内容" key="1">
             <Item
               label="内容模板"
