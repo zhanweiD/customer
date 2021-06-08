@@ -1,33 +1,34 @@
-const searchParams = channelList => {
+const searchParams = (channelList, accountList) => {
   return [
     {
       label: '渠道类型',
-      key: 'type',
+      key: 'channelId',
       initialValue: '',
       control: {
         defaultAll: true,
         options: [
           {name: '全部', value: ''},
-          {name: '微信公众号', value: 0},
+          ...channelList,
         ],
       },
       component: 'select',
     }, 
     {
       label: '渠道名称',
-      key: 'channelId',
-      // initialValue: '',
+      key: 'accountId',
+      initialValue: '',
       control: {
-        placeholder: '请选择计划',
+        defaultAll: true,
         options: [
-          ...channelList,
+          {name: '全部', value: ''},
+          ...accountList,
         ],
       },
       component: 'select',
     },
     {
       label: '触发事件',
-      key: 'touchEvent',
+      key: 'isTrigger',
       initialValue: '',
       control: {
         defaultAll: true,
@@ -41,7 +42,7 @@ const searchParams = channelList => {
     }, 
     {
       label: '目标事件',
-      key: 'targetEvent',
+      key: 'isTarget',
       initialValue: '',
       control: {
         defaultAll: true,

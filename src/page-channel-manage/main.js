@@ -68,12 +68,13 @@ export default () => {
 
   // 授权跳转
   const authoriza = async () => {
-    try {
-      const res = await io.authoriza()
-      if (res) window.open(res)
-    } catch (error) {
-      errorTip(error.message)
-    }
+    window.open('http://zdhyx.dc.dtwave.com/customer_dev/index.html#/weapp')
+    // try {
+    //   const res = await io.authoriza()
+    //   if (res) window.open(res)
+    // } catch (error) {
+    //   errorTip(error.message)
+    // }
   }
 
   const changeTabs = v => {
