@@ -156,6 +156,7 @@ export default () => {
       key: 'action',
       render: (text, record) => ([
         <a className="mr16" onClick={() => console.log(111)}>启动</a>,
+        <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
         <a className="mr16" onClick={() => editPlan(record)}>编辑</a>,
         <Popconfirm
           title="确认删除计划吗?"
