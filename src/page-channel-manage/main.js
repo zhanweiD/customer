@@ -5,7 +5,7 @@ import io from './io'
 
 const {TabPane} = Tabs
 
-export default () => {
+export default props => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [channelCode, setChannelCode] = useState() // channelCode
@@ -68,13 +68,12 @@ export default () => {
 
   // 授权跳转
   const authoriza = async () => {
-    window.open('http://zdhyx.dc.dtwave.com/customer_dev/index.html#/weapp')
-    // try {
-    //   const res = await io.authoriza()
-    //   if (res) window.open(res)
-    // } catch (error) {
-    //   errorTip(error.message)
-    // }
+    const host = window.location.href.split('#')
+    // console.log(host[0])
+    // window.open(`${host[0]}customer/index.html#/weappCode/${host[0]}`)
+    // window.history.go(-3)
+    // window.location.reload()
+    window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${host[0]}`)
   }
 
   const changeTabs = v => {

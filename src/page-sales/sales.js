@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
 import {Button, Table, Popconfirm, Spin} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {Search} from '../component'
@@ -92,7 +93,7 @@ export default () => {
       title: '营销计划名称',
       dataIndex: 'name',
       key: 'name',
-      // render: text => <a>{text}</a>,
+      render: (text, record) => <Link target="_blank" to="/sales/detail">{text}</Link>,
     },
     {
       title: '计划触达数',
@@ -154,7 +155,7 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (text, record) => ([
-        <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
+        <a className="mr16" onClick={() => console.log(111)}>启动</a>,
         <a className="mr16" onClick={() => editPlan(record)}>编辑</a>,
         <Popconfirm
           title="确认删除计划吗?"
