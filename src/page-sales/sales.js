@@ -1,22 +1,28 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import {Button, Table, Popconfirm, Spin} from 'antd'
+import {Button, Table, Popconfirm, Badge} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
-import {Search} from '../component'
+import {Search, Tag} from '../component'
 import searchParams from './search'
+import AddModal from './add-modal'
 import io from './io'
 
 export default () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [userList, setUserList] = useState([]) // 用户列表
-  const [channelList, setChannelList] = useState([]) // 渠道列表
+  const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [searchParam, setSearchParam] = useState({}) // 搜索
   const [tableLoading, setTableLoading] = useState(false) // 搜索
+  const [showModal, setShowModal] = useState(false) // 创建计划
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
   }) // 列表分页
+
+  const setModal = v => {
+    setShowModal(v)
+  }
   
   // 获取列表
   const getList = async params => {
@@ -50,15 +56,6 @@ export default () => {
       errorTip(error.message)
     }
   } 
-  // 获取渠道
-  const getChannelList = async () => {
-    try {
-      const res = await io.getChannelList()
-      setChannelList(changeToOptions(res || [])('name', 'id'))
-    } catch (error) {
-      errorTip(error.message)
-    }
-  }
   // 删除计划
   const delPlan = async id => {
     try {
@@ -83,17 +80,84 @@ export default () => {
       errorTip(error.message)
     }
   }
-  
-  const editPlan = item => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${item.id}/${item.name}`
+  // 创建计划
+  const addPlan = async params => {
+    try {
+      await io.addPlan({
+        ...params,
+      })
+      successTip('创建成功')
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 编辑计划
+  const editPlan = async params => {
+    try {
+      await io.editPlan({
+        ...params,
+      })
+      successTip('编辑成功')
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 计划详情
+  const detailPlan = async id => {
+    setModal(true)
+    try {
+      const res = await io.detailPlan({
+        id,
+      })
+      setPlanInfo(res)
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 启动计划
+  const startPlan = async id => {
+    try {
+      await io.startPlan({
+        id,
+      })
+      getList()
+      successTip('启动成功')
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 暂停计划
+  const stopPlan = async id => {
+    try {
+      await io.stopPlan({
+        id,
+      })
+      getList()
+      successTip('暂停成功')
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
+  const toStrategy = record => {
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales-create`
   }
 
   const columns = [
     {
       title: '营销计划名称',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => <Link target="_blank" to="/sales/detail">{text}</Link>,
+      dataIndex: 'planName',
+      key: 'planName',
+      render: (text, record) => (
+        record.targetStatisticsStatus ? text : (
+          <div>
+            <Link target="_blank" to="/sales/detail">
+              <span className="mr4">{text}</span>
+            </Link>
+            <Tag text="结果统计中" status="process" />
+          </div>
+        )
+      ),
     },
     {
       title: '计划触达数',
@@ -107,28 +171,30 @@ export default () => {
     },
     {
       title: '计划状态',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'planStatus',
+      key: 'planStatus',
       render: text => {
         let status = ''
+        let color = ''
         switch (text) {
           case 0:
             status = '未生效'
+            color = 'default'
             break
           case 1:
             status = '已生效'
+            color = 'green'
             break
           case 2:
             status = '暂停'
-            break
-          case 3:
-            status = '已结束'
+            color = 'orange'
             break
           default:
-            status = '待完善'
+            status = '已结束'
+            color = 'blue'
             break
         }
-        return status
+        return <Badge color={color} text={status} />
       },
     },
     {
@@ -155,9 +221,16 @@ export default () => {
       title: '操作',
       key: 'action',
       render: (text, record) => ([
-        <a className="mr16" onClick={() => console.log(111)}>启动</a>,
-        <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
-        <a className="mr16" onClick={() => editPlan(record)}>编辑</a>,
+        <a 
+          className="mr16" 
+          style={{display: record.planStatus === 3 ? 'none' : 'inline-block'}}
+          onClick={() => (record.planStatus === 1 ? stopPlan(record.id) : startPlan(record.id))}
+        >
+          {record.planStatus === 1 ? '暂停' : '启动'}
+        </a>,
+        // <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
+        <a className="mr16" onClick={() => detailPlan(record.id)}>编辑</a>,
+        <a className="mr16" onClick={() => toStrategy(record)}>策略管理</a>,
         <Popconfirm
           title="确认删除计划吗?"
           onConfirm={() => delPlan(record.id)}
@@ -177,7 +250,6 @@ export default () => {
   
   useEffect(() => {
     getUserList()
-    getChannelList()
   }, [])
   useEffect(() => {
     getList({currentPage: 1})
@@ -190,12 +262,12 @@ export default () => {
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSearchParam}
-          params={searchParams(userList, channelList)}
+          params={searchParams(userList)}
         />
         <Button
           type="primary"
           style={{marginBottom: '8px'}}
-          onClick={toCreate}
+          onClick={() => setModal(true)}
         >
           创建计划
         </Button>
@@ -212,6 +284,13 @@ export default () => {
           }}
         />
       </div>
+      <AddModal 
+        showModal={showModal}
+        setModal={setModal}
+        addPlan={addPlan}
+        editPlan={editPlan}
+        planInfo={planInfo}
+      />
     </div>
   )
 }
