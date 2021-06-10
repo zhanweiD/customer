@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {Form, Select, Button, Input, Radio, Collapse} from 'antd'
+import {Form, Select, Button, Input, Radio, Collapse, Cascader} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
 
@@ -34,26 +34,69 @@ const data = [
     conditions: false,
   },
 ]
+const options = [
+  {
+    value: 'zhejiang',
+    label: 'Zhejiang',
+    children: [
+      {
+        value: 'hangzhou',
+        label: 'Hangzhou',
+        children: [
+          {
+            value: 'xihu',
+            label: 'West Lake',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'jiangsu',
+    label: 'Jiangsu',
+    children: [
+      {
+        value: 'nanjing',
+        label: 'Nanjing',
+        children: [
+          {
+            value: 'zhonghuamen',
+            label: 'Zhong Hua Men',
+          },
+        ],
+      },
+    ],
+  },
+]
 
-const CreateSales = () => {
+const CreateSales = ({nextStep, current}) => {
   const [oneForm] = Form.useForm()
   const [condCount, setCondCount] = useState(0)
   const [radioType, setRadioType] = useState(0)
   const [condList, setCondList] = useState([true])
 
   const complete = () => {
+    nextStep()
     console.log(condList)
     console.log(condList.map(item => (!!item)))
 
-    oneForm.validateFields().then(value => {
-      console.log(value)
-    })
+    // oneForm.validateFields().then(value => {
+    //   console.log(value)
+    // })
   }
 
   const changeConditions = index => {
     const cDate = [...condList]
     cDate[index] = !cDate[index]
     setCondList(cDate)
+  }
+
+  const onChange = value => {
+    console.log(value)
+  }
+  
+  const displayRender = label => {
+    return label[label.length - 1]
   }
 
   // useEffect(() => {
@@ -71,7 +114,10 @@ const CreateSales = () => {
   }, [condList])
 
   return (
-    <div className="p24 pt0 bgf pr step-one">
+    <div 
+      style={{display: current === 0 ? 'block' : 'none'}} 
+      className="p24 pt0 bgf pr step-one step-content"
+    >
       <Form
         name="create-form"
         {...layout}
@@ -103,9 +149,40 @@ const CreateSales = () => {
                 return (
                   <div>
                     {fields.map(({key, name, fieldKey, ...restField}, index) => {
-                      return (  
+                      return radioType ? (
                         <div className="pr">
-                          {index && !radioType ? (
+                          <Item
+                            {...restField}
+                            name={[name, 'event']}
+                            fieldKey={[fieldKey, 'event']}
+                            rules={[{required: true, message: '请选择事件'}]}
+                          >
+                            <Cascader
+                              placeholder="请选择事件"
+                              options={options}
+                              expandTrigger="hover"
+                              // displayRender={displayRender}
+                              onChange={onChange}
+                            />
+                          </Item>
+                          {
+                            fields.length > 1 ? (
+                              <MinusCircleOutlined 
+                                style={{
+                                  position: 'absolute', top: 5, right: 112, color: '#999'}} 
+                                onClick={() => { 
+                                  remove(name) 
+                                  const newData = [...condList]
+                                  newData.splice(index, 1)
+                                  setCondList(newData)
+                                }}
+                              />
+                            ) : null
+                          }
+                        </div>
+                      ) : (  
+                        <div className="pr">
+                          {index ? (
                             <div className="conditions-div">
                               <span 
                                 className="conditions-btn hand"
@@ -121,9 +198,9 @@ const CreateSales = () => {
                               {...restField}
                               name={[name, 'one']}
                               fieldKey={[fieldKey, 'one']}
-                              rules={[{required: true, message: radioType ? '请选择渠道' : '请选择标签'}]}
+                              rules={[{required: true, message: '请选择标签'}]}
                             >
-                              <Select style={{width: 160}} placeholder={radioType ? '请选择渠道' : '请选择标签'}>
+                              <Select style={{width: 160}} placeholder="请选择标签">
                                 <Option value="0">全部</Option>
                                 <Option value="1">测试</Option>
                               </Select>
@@ -132,9 +209,9 @@ const CreateSales = () => {
                               {...restField}
                               name={[name, 'two']}
                               fieldKey={[fieldKey, 'two']}
-                              rules={[{required: true, message: radioType ? '请选择账号' : '请选择条件'}]}
+                              rules={[{required: true, message: '请选择条件'}]}
                             >
-                              <Select style={{width: 128}} placeholder={radioType ? '请选择账号' : '请选择条件'}>
+                              <Select style={{width: 128}} placeholder="请选择条件">
                                 <Option value="0">全部</Option>
                                 <Option value="1">测试</Option>
                               </Select>
@@ -143,9 +220,9 @@ const CreateSales = () => {
                               {...restField}
                               name={[name, 'three']}
                               fieldKey={[fieldKey, 'three']}
-                              rules={[{required: true, message: radioType ? '请选择事件' : '请输入或选择'}]}
+                              rules={[{required: true, message: '请输入或选择'}]}
                             >
-                              <Select mode={radioType ? '' : 'tags'} style={{width: 160}} placeholder={radioType ? '请选择事件' : '请输入或选择'}>
+                              <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
                                 <Option value="0">全部</Option>
                                 <Option value="1">测试</Option>
                               </Select>

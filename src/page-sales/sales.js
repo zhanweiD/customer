@@ -4,7 +4,7 @@ import {Button, Table, Popconfirm, Badge} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {Search, Tag} from '../component'
 import searchParams from './search'
-import AddModal from './add-modal'
+import AddDrawer from './add-darwer'
 import io from './io'
 
 export default () => {
@@ -284,7 +284,7 @@ export default () => {
           }}
         />
       </div>
-      <AddModal 
+      <AddDrawer 
         showModal={showModal}
         setModal={setModal}
         addPlan={addPlan}

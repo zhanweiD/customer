@@ -3,6 +3,8 @@ import {Input, Steps, Button, message} from 'antd'
 import {PlusOutlined} from '@ant-design/icons'
 import {DetailHeader, Tag} from '../../component'
 import StepOne from './step-one'
+import StepTwo from './step-two'
+import StepThree from './step-three'
 
 const {Step} = Steps
 
@@ -35,11 +37,11 @@ export default () => {
     3: <Tag status="blue" text="已结束" />,
   }
 
-  const next = () => {
+  const nextStep = () => {
     setCurrent(current + 1)
   }
 
-  const prev = () => {
+  const prevStep = () => {
     setCurrent(current - 1)
   }
 
@@ -79,15 +81,27 @@ export default () => {
         </div>
         
         <div className="content-right bgf">
-          <div className="pt8 pb8 pl16 right-header">
+          <div className="pt12 pb12 pl16 right-header">
             <Input style={{width: 160}} placeholder="请输入策略名称" />
           </div>
-          <Steps style={{padding: '24px'}} current={current}>
+          <Steps style={{padding: '24px 60px'}} current={current}>
             <Step key={0} title="用户筛选" />
             <Step key={1} title="触发条件" />
             <Step key={2} title="触达设置" />
           </Steps>
-          <StepOne />
+          <StepOne 
+            nextStep={nextStep} 
+            current={current} 
+          />
+          <StepTwo 
+            nextStep={nextStep} 
+            prevStep={prevStep}
+            current={current}
+          />
+          <StepThree
+            prevStep={prevStep}
+            current={current}
+          />
         </div>
       </div>
     </div>
