@@ -326,7 +326,7 @@ export default class Frame extends Component {
           </div>
           <div className="FBV FB1">
             <div className="frame-header FBH FBJB FBAC">
-              <div className="FBH FBAC">
+              <div className="FBH FBAC ml24">
                 <img src={defaultLightLogo} alt="logo" width="36" height="28" />
                 <div className="fcf fs18">慧营客</div>
               </div>

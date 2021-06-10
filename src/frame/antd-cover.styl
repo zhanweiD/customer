@@ -1,12 +1,12 @@
 html
   body
-    font-size 12px
-  .ant-legacy-form label, .ant-legacy-form-item
-    font-size 12px !important
-  .ant-legacy-form-explain
-    font-size 12px !important
-  .ant-legacy-form-extra
-    font-size 12px !important
+    // font-size 12px
+  // .ant-legacy-form label, .ant-legacy-form-item
+  //   font-size 12px !important
+  // .ant-legacy-form-explain
+  //   font-size 12px !important
+  // .ant-legacy-form-extra
+  //   font-size 12px !important
   .ant-modal-body
     padding 24px 24px 0px!important
     .ant-row
@@ -104,9 +104,21 @@ html
 
   // /* 5.0样式 -- 按钮大小 */
   .ant-btn
-    height 24px
-    line-height 24px
+    // height 24px
+    // line-height 24px
     padding 0px 16px
+    height 32px
+    line-height 32px
+    border-radius 16px
+    transition none // TODO: 要不要这么改，或者改成其他动画效果
+  
+  .ant-btn-primary
+    border $main-color-end
+    background linear-gradient(151deg, $main-color-start 0%, $main-color-end 100%)
+  
+  .ant-btn-primary:hover, .ant-btn-primary:focus
+    background $main-color-end
+    border-color $main-color-end
 
   // /* 5.0样式 -- 选择框 */
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector
@@ -153,13 +165,16 @@ html
   line-height 22px
 
 // 主颜色修改
-.ant-btn-primary
-  background-color #2466ff
-  border-color #2466ff
+// .ant-btn-primary
+//   background-color #2466ff
+//   border-color #2466ff
 .ant-pagination-item-active a, a, .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn, .ant-tabs-tab-btn:hover
-  color #2466ff
+  color $main-color-end
 .ant-pagination-item-active
-  border-color #2466ff
+  border-color $main-color-end
+
+  &:hover
+    border-color $main-color-end
 
 // 图片上传提示
 .img-tooltip
@@ -174,7 +189,7 @@ textarea.ant-input
 tbody > tr > td > .ant-form-item
   margin-bottom 0px
 .ant-input, .ant-select, .ant-select-item, .antd-select-open, .ant-btn-sm, .ant-table-small, .ant-btn, .ant-table, .ant-form-item-label > label, .ant-pagination, .ant-picker
-  font-size 12px !important
+  // font-size 12px !important
 .ant-badge, .ant-badge-status-text, .label-item, .ant-cascader-picker, .ant-picker-input > input, .ant-radio-button-wrapper, .ant-cascader-menus, .ant-message, .ant-picker-panel
   font-size 12px
 .ant-input-sm

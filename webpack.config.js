@@ -113,7 +113,12 @@ module.exports = {
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          'stylus-loader',
+          {
+            loader: 'stylus-loader',
+            options: {
+              import: [path.join(__dirname, 'src/common/theme.styl')],
+            },
+          },
         ],
         include: [path.resolve(__dirname, 'src')],
         exclude: /node_modules/,

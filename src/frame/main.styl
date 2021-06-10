@@ -1,7 +1,6 @@
-@import '../../node_modules/antd/dist/antd.css'
+
 @import './antd-cover.styl'
 
-$main-color = #3F5FF4
 
 #root
   width 100%
@@ -54,12 +53,12 @@ $main-color = #3F5FF4
 
 
 .ant-menu-dark .ant-menu-inline.ant-menu-sub
-  background-color #5370e6
+  background-color #5370e6 !important
   border-radius 4px
 
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected
-  background-color #fff
-  color $main-color
+  background-color #fff !important
+  color $main-color-end !important
 
 .ant-menu-item
   border-radius 4px
@@ -67,10 +66,10 @@ $main-color = #3F5FF4
   line-height 32px !important
   
 .ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon, .ant-menu-dark .ant-menu-item-selected .anticon
-  color $main-color
+  color $main-color-end !important
 
 .ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span, .ant-menu-dark .ant-menu-item-selected .anticon + span
-  color $main-color
+  color $main-color-end !important
 
 
 .innerbox::-webkit-scrollbar {
