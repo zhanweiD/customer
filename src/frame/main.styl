@@ -1,70 +1,77 @@
 @import '../../node_modules/antd/dist/antd.css'
 @import './antd-cover.styl'
 
-.logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
-}
+$main-color = #3F5FF4
+
+#root
+  width 100%
+  height 100%
+
+.frame-main
+
+  .frame-sider
+    width 160px
+    transition background 0.3s, width 0.3s cubic-bezier(0.2, 0, 0, 1) 0s
+
+  .frame-sider-fold
+    width 50px
+
+    .ant-menu
+      width 30px
+
+  .sider-button
+    background linear-gradient(180deg, #6F92FF 9%, #4A64DD 100%)
+    height 48px
+    width 160px
+    
+    .sider-fold
+      width 32px
+      height 32px
+      color #fff
+      cursor pointer
+      margin-left 10px
+
+      span
+        margin-top 35%
+
+  .sider-box
+    padding 0 10px
+    background linear-gradient(180deg, #4A64DD 9%, #6F92FF 100%)
+    overflow-y auto
+
+    .sider-menu
+      height 100%
+      background linear-gradient(180deg, #4A64DD 9%, #6F92FF 100%) !important
+
+  .frame-header
+    background linear-gradient(90deg, #4A64DD 13%, #6F92FF 99%)
+    box-shadow 0px 2px 6px 0px rgba(7, 56, 156, 0.15)
+    height 48px
+
+
 .dt-tree-container
   background-color #fff
 
-.ant-layout-header
-  height 48px
-  background #2466ff
-  .frame_header
-    box-shadow 0px 2px 6px 0px rgba(7, 56, 156, 0.15)
-    z-index 2
-    padding 0 12px
-    padding-left 0
-    display flex
-    align-items center
-    justify-content space-between
-    .left
-      // width 200px
-      height 48px
-      margin-left 24px
-      // opacity 0
-      display flex
-      color #fff
-      font-size 22px
-      font-weight bold
-      // background-color #f9f9f9
-      align-items center
-      justify-content center
-      img
-        display inline-block
-    .right
-      margin-right 8px
-      color #fff
-      height 48px
-      display flex
-      align-items center
-      justify-content center
-      font-size 14px
-      .nickName
-        margin 0 6px
-        display inline-block
-        vertical-align middle
-        text-overflow ellipsis
-        overflow hidden
-        white-space nowrap
-        max-width 128px
 
-.site-layout .site-layout-background {
-  background: #fff;
-}
-  [data-theme="dark"] .site-layout .site-layout-background {
-    background: #152751;
-  }
-.ant-menu.ant-menu-dark, .ant-layout-sider
-  background: #152751
 .ant-menu-dark .ant-menu-inline.ant-menu-sub
-  background #121634
-// .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected
-//   background #121634
-// .ant-menu-dark .ant-menu-item-selected
-//   color #6bc1ff
+  background-color #5370e6
+  border-radius 4px
+
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected
+  background-color #fff
+  color $main-color
+
+.ant-menu-item
+  border-radius 4px
+  height 32px !important
+  line-height 32px !important
+  
+.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon, .ant-menu-dark .ant-menu-item-selected .anticon
+  color $main-color
+
+.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon + span, .ant-menu-dark .ant-menu-item-selected .anticon + span
+  color $main-color
+
 
 .innerbox::-webkit-scrollbar {
 /*滚动条整体样式*/
@@ -89,6 +96,6 @@
 .innerbox::-webkit-scrollbar-track {
 /*滚动条里面轨道*/
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  background: #000;
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
 }
