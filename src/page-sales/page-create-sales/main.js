@@ -1,175 +1,95 @@
 import {useEffect, useState} from 'react'
-import {Form, Select, Button, Input} from 'antd'
-import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {Input, Steps, Button, message} from 'antd'
+import {PlusOutlined} from '@ant-design/icons'
+import {DetailHeader, Tag} from '../../component'
+import StepOne from './step-one'
 
-const {Item, List} = Form
-const {Option} = Select 
-const layout = {
-  labelCol: {
-    offset: 1,
-    span: 4,
-  },
-  wrapperCol: {
-    span: 18,
-  },
-}
-const data = [
-  {
-    one: '0',
-    two: '0',
-    three: '0',
-    conditions: false,
-  },
-  {
-    one: '0',
-    two: '0',
-    three: '0',
-    conditions: false,
-  },
-  {
-    one: '1',
-    two: '1',
-    three: '1',
-    conditions: false,
-  },
-]
+const {Step} = Steps
 
-const CreateSales = () => {
-  const [oneForm] = Form.useForm()
-  const [condCount, setCondCount] = useState(0)
-  const [condList, setCondList] = useState([true])
-
-  const complete = () => {
-    console.log(condList)
-    console.log(condList.map(item => (!!item)))
-
-    oneForm.validateFields().then(value => {
-      console.log(value)
-    })
+export default () => {
+  const [itemCount, setItemCount] = useState(1)
+  const [current, setCurrent] = useState(0)
+  const baseInfo = [
+    {
+      title: '实体',
+      value: '测试',
+    },
+    {
+      title: '群体类型',
+      value: '实时群体',
+    },
+    {
+      title: '创建方式',
+      value: 'ID集合创建',
+    },
+    {
+      title: '创建人',
+      value: '111',
+    },
+  ]
+  // 0 未生效、1 已生效、2 已暂停 、3 已结束
+  const tagMap = {
+    0: <Tag status="default" text="未生效" />,
+    1: <Tag status="green" text="已生效" />,
+    2: <Tag status="orange" text="暂停" />,
+    3: <Tag status="blue" text="已结束" />,
   }
 
-  const changeConditions = index => {
-    const cDate = [...condList]
-    cDate[index] = !cDate[index]
-    setCondList(cDate)
+  const next = () => {
+    setCurrent(current + 1)
   }
 
-  // useEffect(() => {
-  //   if (condCount) {
-  //     const newDate = []
-  //     for (let i = 0; i < condCount; i++) {
-  //       newDate.push(true)
-  //     }
-  //     setCondList(newDate)
-  //   }
-  // }, [condCount])
+  const prev = () => {
+    setCurrent(current - 1)
+  }
 
-  useEffect(() => {
-    console.log(condList)
-  }, [condList])
-
+  const setLeftItem = () => {
+    const itemList = []
+    for (let i = 0; i < itemCount; i++) {
+      itemList.push((
+        <div className="left-item-select mb16" style={{minHeight: 72}}>
+          <div className="left-item-header-select pl16 pt8 pb8 fs14">{`策略${i + 1}`}</div>
+          <div className="mt8 mb8 ml16 mr16 c45">配置受众用户、触达条件及触达渠道</div>
+        </div>
+      ))
+    }
+    return itemList
+  } 
   return (
-    <div className="p24 bgf">
-      <Form
-        name="create-form"
-        {...layout}
-        form={oneForm}
-      >
-        <List
-          name="triggerEventList"
-          initialValue={[{one: undefined, tow: undefined, three: undefined}]}
-          // initialValue={data}
-        >
-          {(fields, {add, remove}) => {
-            return (
-              <div>
-                {fields.map(({key, name, fieldKey, ...restField}, index) => {
-                  return (
-                    <div className="pr">
-                      {index ? (
-                        <div className="conditions-div">
-                          <Button 
-                            id={`btn-${index}`}
-                            className="conditions-btn"
-                            onClick={() => changeConditions(index)}
-                            // style={{position: 'relative', top: '11px', right: '24px'}}
-                          >
-                            {condList[index] ? '或' : '且'}
-                          </Button>
-                        </div>
-                      ) : null}
-                      <Input.Group id={`item-${index}`} compact style={{marginLeft: '48px'}}>
-                        <Item
-                          {...restField}
-                          name={[name, 'one']}
-                          fieldKey={[fieldKey, 'one']}
-                          rules={[{required: true, message: 'Missing first name'}]}
-                        >
-                          <Select style={{width: 160}} placeholder="First Name">
-                            <Option value="0">全部</Option>
-                            <Option value="1">测试</Option>
-                          </Select>
-                        </Item>
-                        <Item
-                          {...restField}
-                          name={[name, 'two']}
-                          fieldKey={[fieldKey, 'two']}
-                          rules={[{required: true, message: 'Missing last name'}]}
-                        >
-                          <Select style={{width: 160}} placeholder="First Name">
-                            <Option value="0">全部</Option>
-                            <Option value="1">测试</Option>
-                          </Select>
-                        </Item>
-                        <Item
-                          {...restField}
-                          name={[name, 'three']}
-                          fieldKey={[fieldKey, 'three']}
-                          rules={[{required: true, message: 'Missing last name'}]}
-                        >
-                          <Select mode="tags" style={{width: 160}} placeholder="First Name">
-                            <Option value="0">全部</Option>
-                            <Option value="1">测试</Option>
-                          </Select>
-                        </Item>
-                        {
-                          fields.length > 1 ? (
-                            <MinusCircleOutlined 
-                              style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
-                              onClick={() => { 
-                                remove(name) 
-                                const newData = [...condList]
-                                newData.splice(index, 1)
-                                setCondList(newData)
-                              }}
-                            />
-                          ) : null
-                        }
-                      </Input.Group>
-                    </div>
-                  )
-                })}
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    add()
-                    setCondList([...condList, true])
-                  }}
-                  style={{width: '40%', marginLeft: '24px', marginBottom: '24px', display: 'block'}}
-                  icon={<PlusOutlined />}
-                >
-                  添加事件
-                </Button>
-              </div>
-            )
-          }}
-        </List>
-      </Form>
-      <Button onClick={complete}>
-        提交
-      </Button>
+    <div className="create-sales">
+      <DetailHeader
+        name="测试"
+        descr="描述"
+        // btnMinWidth={230}
+        baseInfo={baseInfo}
+        tag={tagMap[0]}
+      />
+      <div className="m16 create-content">
+        <div className="content-left bgf mr16 p16">
+          <div className="left-header mb12">策略配置</div>
+          {setLeftItem()}
+          <Button 
+            type="dashed" 
+            onClick={() => setItemCount(itemCount + 1)} 
+            block 
+            icon={<PlusOutlined />}
+          >
+            添加
+          </Button>
+        </div>
+        
+        <div className="content-right bgf">
+          <div className="pt8 pb8 pl16 right-header">
+            <Input style={{width: 160}} placeholder="请输入策略名称" />
+          </div>
+          <Steps style={{padding: '24px'}} current={current}>
+            <Step key={0} title="用户筛选" />
+            <Step key={1} title="触发条件" />
+            <Step key={2} title="触达设置" />
+          </Steps>
+          <StepOne />
+        </div>
+      </div>
     </div>
   )
 }
-
-export default CreateSales

@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {
-  Drawer, Form, Button, DatePicker, TimePicker, Input, Select, Collapse, Tooltip,
+  Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip,
 } from 'antd'
 import {errorTip} from '@util'
 import io from './io'
@@ -11,8 +11,6 @@ const {Panel} = Collapse
 const {RangePicker} = DatePicker
 const {TextArea} = Input
 const dateFormat = 'YYYY-MM-DD'
-const dateTimeFormat = 'YYYY-MM-DD'
-const timeFormat = 'HH:mm:ss'
 
 const layout = {
   labelCol: {
@@ -51,8 +49,8 @@ export default ({
       value.type = 1 // 首要目标
       // 时间处理
       if (startEndDate) {
-        value.startTime = `${startEndDate[0].format(dateTimeFormat)} 00:00:00`
-        value.endTime = `${startEndDate[1].format(dateTimeFormat)} 23:59:59`
+        value.startTime = `${startEndDate[0].format(dateFormat)} 00:00:00`
+        value.endTime = `${startEndDate[1].format(dateFormat)} 23:59:59`
         delete value.startEndDate
       }
       // 目标设置处理
@@ -149,9 +147,9 @@ export default ({
               label="有效时间"
               name="startEndDate"
               rules={[{required: true, message: '请选择日期'}]}
-              // initialValue={startTime ? [moment(startTime, dateTimeFormat), moment(endTime, dateTimeFormat)] : undefined}
+              // initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
             >
-              <RangePicker format={dateTimeFormat} />
+              <RangePicker format={dateFormat} />
             </Item>
             <Item
               label="描述"
