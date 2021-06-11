@@ -56,6 +56,7 @@ export default ({
   groupList = [],
   current,
   prevStep,
+  nextStep,
 }) => {
   const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
@@ -441,7 +442,7 @@ export default ({
         <Button className="mr8" onClick={prevStep}>
           上一步
         </Button>
-        <Button type="primary" onClick={() => console.log(11)}>
+        <Button type="primary" onClick={nextStep}>
           完成
         </Button>
       </div>

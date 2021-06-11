@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Input, Steps, Button, message} from 'antd'
-import {PlusOutlined} from '@ant-design/icons'
+import {PlusOutlined, CheckCircleFilled} from '@ant-design/icons'
 import {DetailHeader, Tag} from '../../component'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -89,6 +89,10 @@ export default () => {
             <Step key={1} title="触发条件" />
             <Step key={2} title="触达设置" />
           </Steps>
+          <div className="fac mt72" style={{display: current === 3 ? 'block' : 'none'}}>
+            <CheckCircleFilled style={{color: '#52C41A', fontSize: 72}} />
+            <div className="fs24 mt12 bold">完成策略配置</div>
+          </div>
           <StepOne 
             nextStep={nextStep} 
             current={current} 
@@ -101,6 +105,7 @@ export default () => {
           <StepThree
             prevStep={prevStep}
             current={current}
+            nextStep={nextStep}
           />
         </div>
       </div>
