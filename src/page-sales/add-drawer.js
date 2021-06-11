@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react'
 import {
-  Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip, Cascader,
+  Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip, Cascader, Spin,
 } from 'antd'
-import {errorTip} from '@util'
+import {errorTip, debounce} from '@util'
 import io from './io'
 
 const {Option} = Select
@@ -35,15 +35,26 @@ const layout = {
 export default ({
   showModal, 
   setModal, 
-  addPlan,
   planInfo,
+  addPlan,
   editPlan,
 }) => {
   const [groupList, setGroupList] = useState([])
   const [eventList, setEventList] = useState([])
   const [eventOriginList, setOriginEventList] = useState([])
+  
   const [addForm] = Form.useForm()
-
+  const {
+    id,
+    planName,
+    clientGroupId,
+    startTime,
+    endTime,
+    descr,
+    firstTargetContent = {},
+  } = planInfo
+  const {event} = firstTargetContent
+  const defaultEvent = event ? [event.channelId, event.accountId, event.eventId] : undefined
   // 获取人群
   const getGroupList = async () => {
     try {
@@ -63,6 +74,25 @@ export default ({
       errorTip(error.message)
     }
   }
+  // 计划名称查重
+  const checkPlanName = async (name, callback) => {
+    try {
+      const res = await io.checkName({planName: name})
+      if (res.isExist) callback('计划名称重复')
+      else callback()
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
+  const checkName = (rule, value, callback) => {
+    if (value) {
+      // 防抖设计
+      debounce(() => checkPlanName(value, callback), 500)
+    } else {
+      callback()
+    }
+  }
 
   const changeEvent = v => {
     console.log(v)
@@ -70,20 +100,19 @@ export default ({
   const setEvent = data => {
     const channel = eventOriginList.filter(item => item.id === data[0])[0] || {}
     const account = eventOriginList.filter(item => item.id === data[1])[0] || {}
-    const event = eventOriginList.filter(item => item.id === data[2])[0] || {}
+    const eventItem = eventOriginList.filter(item => item.id === data[2])[0] || {}
     return {
       channelId: channel.id,
       channelCode: channel.code,
       accountId: account.id,
       accountCode: account.code,
-      eventId: event.id,
-      eventCode: event.code,
+      eventId: eventItem.id,
+      eventCode: eventItem.code,
     }
   }
   const onFinish = () => {
     addForm.validateFields().then(value => {
-      const {startEndDate, event} = value
-      value.type = 1 // 首要目标
+      const {startEndDate} = value
       // 时间处理
       value.startTime = `${startEndDate[0].format(dateFormat)} 00:00:00`
       value.endTime = `${startEndDate[1].format(dateFormat)} 23:59:59`
@@ -92,12 +121,11 @@ export default ({
       value.firstTargetContents = {
         timeGap: value.timeGap,
         timeUnit: value.timeUnit,
-        event: setEvent(event),
+        event: setEvent(value.event),
       }
       delete value.timeGap
       delete value.timeUnit
       delete value.event
-      // 目标事件处理
       console.log(value)
       // 编辑新增
       if (planInfo.id) {
@@ -106,7 +134,7 @@ export default ({
       } else {
         addPlan(value)
       }
-      setModal(false, true)
+      setModal(false)
     }).catch(err => console.log(err))
   }
   const closeDrawer = () => {
@@ -118,13 +146,19 @@ export default ({
     getGroupList()
   }, [])
 
+  useEffect(() => {
+    addForm.resetFields()
+  }, [planInfo])
+
   return (
     <Drawer
-      title="计划配置"
+      title={id ? '编辑计划' : '新建计划'}
       width={525}
       className="add-form"
       visible={showModal}
-      onCancel={closeDrawer}
+      onClose={closeDrawer}
+      destroyOnClose
+      maskClosable={false}
       footer={(
         <div
           style={{
@@ -132,7 +166,7 @@ export default ({
           }}
         >
           <Button onClick={closeDrawer} style={{marginRight: 8}}>
-            取消
+            {planInfo.planName}
           </Button>
           <Tooltip title="保存之后，自动跳转至策略配置页面">
             <Button onClick={onFinish} type="primary">
@@ -143,10 +177,10 @@ export default ({
       )}
     >
       <Form 
-        {...layout}
-        className="run-form"
-        name="runDrawer"
         form={addForm}
+        {...layout}
+        className="add-form"
+        name="addDrawer"
       >
         <Collapse 
           // style={{width: 'calc(100% + 48px)', marginLeft: '-24px'}} 
@@ -156,7 +190,11 @@ export default ({
             <Item
               label="计划名称"
               name="planName"
-              rules={[{required: true, message: '输入计划名称'}]}
+              initialValue={planName}
+              rules={[
+                {required: true, message: '输入计划名称'},
+                {validator: checkName},
+              ]}
             >
               <Input placeholder="请输入计划名称" />
             </Item>
@@ -173,6 +211,7 @@ export default ({
             <Item
               label="受众用户"
               name="clientGroupId"
+              initialValue={clientGroupId}
               rules={[{required: true, message: '请选择人群'}]}
             >
               <Select placeholder="请选择人群">
@@ -185,13 +224,14 @@ export default ({
               label="有效时间"
               name="startEndDate"
               rules={[{required: true, message: '请选择日期'}]}
-              // initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
+              initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
             >
               <RangePicker format={dateFormat} />
             </Item>
             <Item
               label="描述"
               name="descr"
+              initialValue={descr}
             >
               <TextArea placeholder="请输入描述" autoSize={{minRows: 3, maxRows: 5}} />
             </Item>
@@ -213,6 +253,7 @@ export default ({
                 <Item 
                   noStyle 
                   name="timeGap" 
+                  initialValue={firstTargetContent.timeGap}
                   rules={[{required: true, message: '请输入时间'}]}
                 >
                   <Input placeholder="请输入时间" style={{width: '70%'}} type="number" />
@@ -220,7 +261,7 @@ export default ({
                 <Item 
                   noStyle 
                   name="timeUnit" 
-                  initialValue="MINUTE"
+                  initialValue={firstTargetContent.timeUnit || 'MINUTES'}
                   rules={[{required: true, message: '请选择单位'}]}
                 >
                   <Select style={{width: '30%'}}>
@@ -234,6 +275,7 @@ export default ({
             <Item
               label="完成事件"
               name="event"
+              initialValue={defaultEvent}
               rules={[{required: true, message: '请选择事件'}]}
             >
               <Cascader

@@ -4,6 +4,7 @@ import {baseApi, marketingApi, get, post} from '../common/util'
 const api = {
   getList: post(`${marketingApi}/planInfo/list`), // 获取列表
   addPlan: post(`${marketingApi}/planInfo/add`), // 创建计划
+  checkName: post(`${marketingApi}/planInfo/checkName`), // 计划查重
   editPlan: post(`${marketingApi}/planInfo/edit`), // 编辑计划
   detailPlan: post(`${marketingApi}/planInfo/details`), // 计划详情
   delPlan: post(`${marketingApi}/planInfo/delete`), // 删除计划

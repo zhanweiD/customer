@@ -125,7 +125,7 @@ const SalesDetail = ({visible, setVisible}) => {
                           provided.draggableProps.style
                         )}
                       >
-                        <div style={{position: 'relative'}}>
+                        <div className="pr">
                           <Item
                             name={item}
                             initialValue="0"

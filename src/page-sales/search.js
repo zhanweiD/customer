@@ -1,4 +1,4 @@
-const searchParams = (userList, channelList) => {
+const searchParams = userList => {
   return [
     // {
     //   label: '计划类型',
@@ -17,11 +17,11 @@ const searchParams = (userList, channelList) => {
     {
       label: '创建人',
       key: 'userAccount',
-      initialValue: '',
+      initialValue: null,
       control: {
         defaultAll: true,
         options: [
-          {name: '全部', value: ''},
+          {name: '全部', value: null},
           ...userList,
         ],
       },
@@ -29,12 +29,12 @@ const searchParams = (userList, channelList) => {
     }, 
     {
       label: '最近状态',
-      key: 'status',
-      initialValue: '',
+      key: 'planStatus',
+      initialValue: null,
       control: {
         defaultAll: true,
         options: [
-          {name: '全部', value: ''},
+          {name: '全部', value: null},
           {name: '未生效', value: '0'},
           {name: '已生效', value: '1'},
           {name: '暂停', value: '2'},
@@ -58,7 +58,7 @@ const searchParams = (userList, channelList) => {
     // },
     {
       label: '计划名称',
-      key: 'name',
+      key: 'planName',
       control: {
         placeholder: '请输入计划名称',
       },

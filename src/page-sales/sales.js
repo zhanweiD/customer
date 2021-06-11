@@ -4,13 +4,14 @@ import {Button, Table, Popconfirm, Badge} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {Search, Tag} from '../component'
 import searchParams from './search'
-import AddDrawer from './add-darwer'
+import AddDrawer from './add-drawer'
 import io from './io'
 
 export default () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [userList, setUserList] = useState([]) // 用户列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
+  const [detailLoading, setDetailLoading] = useState(false) // 计划详情loading
   const [searchParam, setSearchParam] = useState({}) // 搜索
   const [tableLoading, setTableLoading] = useState(false) // 搜索
   const [showModal, setShowModal] = useState(false) // 创建计划
@@ -43,9 +44,8 @@ export default () => {
       setTableLoading(false)
     } 
   }
-  const setModal = (v, isRender) => {
+  const setModal = v => {
     setShowModal(v)
-    if (isRender) getList()
   }
   // 获取创建人
   const getUserList = async () => {
@@ -87,6 +87,7 @@ export default () => {
         ...params,
       })
       successTip('创建成功')
+      getList()
     } catch (error) {
       errorTip(error.message)
     }
@@ -105,11 +106,13 @@ export default () => {
   // 计划详情
   const detailPlan = async id => {
     setModal(true)
+    setDetailLoading(true)
     try {
       const res = await io.detailPlan({
         id,
       })
       setPlanInfo(res)
+      setDetailLoading(false)
     } catch (error) {
       errorTip(error.message)
     }
@@ -140,7 +143,7 @@ export default () => {
   }
 
   const toStrategy = record => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales-create`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create`
   }
 
   const columns = [
@@ -149,25 +152,27 @@ export default () => {
       dataIndex: 'planName',
       key: 'planName',
       render: (text, record) => (
-        record.targetStatisticsStatus ? text : (
+        record.targetStatisticsStatus === 0 ? (
           <div>
             <Link target="_blank" to="/sales/detail">
               <span className="mr4">{text}</span>
             </Link>
             <Tag text="结果统计中" status="process" />
           </div>
-        )
+        ) : text
       ),
     },
     {
       title: '计划触达数',
       dataIndex: 'touchCount',
       key: 'touchCount',
+      render: text => text || '-',
     },
     {
       title: '目标完成率',
       dataIndex: 'targetRate',
       key: 'targetRate',
+      render: text => text || '-',
     },
     {
       title: '计划状态',
@@ -267,7 +272,10 @@ export default () => {
         <Button
           type="primary"
           style={{marginBottom: '8px'}}
-          onClick={() => setModal(true)}
+          onClick={() => {
+            setPlanInfo({})
+            setModal(true)
+          }}
         >
           创建计划
         </Button>
@@ -283,14 +291,15 @@ export default () => {
             onChange: v => getList({currentPage: v}),
           }}
         />
+        <AddDrawer 
+          showModal={showModal}
+          setModal={setModal}
+          addPlan={addPlan}
+          editPlan={editPlan}
+          planInfo={planInfo}
+          detailLoading={detailLoading}
+        />
       </div>
-      <AddDrawer 
-        showModal={showModal}
-        setModal={setModal}
-        addPlan={addPlan}
-        editPlan={editPlan}
-        planInfo={planInfo}
-      />
     </div>
   )
 }
