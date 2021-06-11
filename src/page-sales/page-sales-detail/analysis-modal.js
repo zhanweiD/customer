@@ -136,7 +136,7 @@ const SalesDetail = ({visible, setVisible}) => {
                               <Option value="1">测试</Option>
                             </Select>
                           </Item>
-                          {index ? (
+                          {dragItems.length > 1 ? (
                             <div className="dynamic-delete-button">
                               <div>
                                 <DragOutlined className="mr8" style={{cursor: 'grab'}} />
