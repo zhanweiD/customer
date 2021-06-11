@@ -3,7 +3,7 @@ import {Button} from 'antd'
 import AnalysisModal from './analysis-modal'
 
 const SalesDetail = () => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   const changeVisible = v => {
     setVisible(v)
   }

@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import {
-  Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip,
+  Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip, Cascader,
 } from 'antd'
 import {errorTip} from '@util'
 import io from './io'
@@ -11,6 +11,17 @@ const {Panel} = Collapse
 const {RangePicker} = DatePicker
 const {TextArea} = Input
 const dateFormat = 'YYYY-MM-DD'
+
+const listToTree = data => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === -1)
+}
 
 const layout = {
   labelCol: {
@@ -27,49 +38,75 @@ export default ({
   addPlan,
   planInfo,
   editPlan,
-  eventList = [],
 }) => {
   const [groupList, setGroupList] = useState([])
+  const [eventList, setEventList] = useState([])
+  const [eventOriginList, setOriginEventList] = useState([])
   const [addForm] = Form.useForm()
 
   // 获取人群
   const getGroupList = async () => {
     try {
       const res = await io.getGroupList()
-      setGroupList(res)
+      setGroupList(res || [])
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 获取目标事件
+  const getTargetChannelList = async () => {
+    try {
+      const res = await io.getTargetChannelList()
+      setOriginEventList(res || [])
+      setEventList(listToTree(res || []))
     } catch (error) {
       errorTip(error.message)
     }
   }
 
+  const changeEvent = v => {
+    console.log(v)
+  }
+  const setEvent = data => {
+    const channel = eventOriginList.filter(item => item.id === data[0])[0] || {}
+    const account = eventOriginList.filter(item => item.id === data[1])[0] || {}
+    const event = eventOriginList.filter(item => item.id === data[2])[0] || {}
+    return {
+      channelId: channel.id,
+      channelCode: channel.code,
+      accountId: account.id,
+      accountCode: account.code,
+      eventId: event.id,
+      eventCode: event.code,
+    }
+  }
   const onFinish = () => {
     addForm.validateFields().then(value => {
-      const {startEndDate} = value
-      console.log(value)
+      const {startEndDate, event} = value
       value.type = 1 // 首要目标
       // 时间处理
-      if (startEndDate) {
-        value.startTime = `${startEndDate[0].format(dateFormat)} 00:00:00`
-        value.endTime = `${startEndDate[1].format(dateFormat)} 23:59:59`
-        delete value.startEndDate
-      }
+      value.startTime = `${startEndDate[0].format(dateFormat)} 00:00:00`
+      value.endTime = `${startEndDate[1].format(dateFormat)} 23:59:59`
+      delete value.startEndDate
       // 目标设置处理
       value.firstTargetContents = {
         timeGap: value.timeGap,
         timeUnit: value.timeUnit,
-        event: value.event,
+        event: setEvent(event),
       }
       delete value.timeGap
       delete value.timeUnit
       delete value.event
+      // 目标事件处理
+      console.log(value)
       // 编辑新增
-      if (planInfo) {
+      if (planInfo.id) {
         value.id = planInfo.id
         editPlan(value)
       } else {
         addPlan(value)
       }
-      setModal(false)
+      setModal(false, true)
     }).catch(err => console.log(err))
   }
   const closeDrawer = () => {
@@ -77,6 +114,7 @@ export default ({
   }
   
   useEffect(() => {
+    getTargetChannelList()
     getGroupList()
   }, [])
 
@@ -186,9 +224,9 @@ export default ({
                   rules={[{required: true, message: '请选择单位'}]}
                 >
                   <Select style={{width: '30%'}}>
-                    <Option value="MINUTE">分钟</Option>
-                    <Option value="HOUR">小时</Option>
-                    <Option value="DAY">天</Option>
+                    <Option value="MINUTES">分钟</Option>
+                    <Option value="HOURS">小时</Option>
+                    <Option value="DAYS">天</Option>
                   </Select>
                 </Item>
               </Input.Group>
@@ -198,12 +236,17 @@ export default ({
               name="event"
               rules={[{required: true, message: '请选择事件'}]}
             >
-              <Select style={{width: '95%'}} placeholder="请选择事件">
-                <Option value="1">全部</Option>
-                {
-                  eventList.map(item => <Option value={item.id}>{item.name}</Option>)
-                }
-              </Select>
+              <Cascader
+                placeholder="请选择事件"
+                options={eventList}
+                expandTrigger="hover"
+                fieldNames={{
+                  label: 'name',
+                  value: 'id',
+                  children: 'children',
+                }}
+                onChange={changeEvent}
+              />
             </Item>
           </Panel>
         </Collapse>

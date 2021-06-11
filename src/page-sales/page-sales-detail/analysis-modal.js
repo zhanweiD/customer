@@ -81,6 +81,7 @@ const SalesDetail = ({visible, setVisible}) => {
           {...layout}
           name="savePlan"
           form={configForm}
+          className="analysis-form"
         >
           <Item
             label="开始事件"
@@ -125,8 +126,9 @@ const SalesDetail = ({visible, setVisible}) => {
                             name={`process_${index}`}
                             initialValue="0"
                             {...layout1}
+                            draggable={false}
                           >
-                            <Select placeholder="请选择" onDragStart={() => false}>
+                            <Select placeholder="请选择" draggable={false} onDragStart={() => false}>
                               <Option value="0">全部</Option>
                               <Option value="1">测试</Option>
                             </Select>

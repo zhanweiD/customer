@@ -19,10 +19,6 @@ export default () => {
     pageSize: 10,
     total: 0,
   }) // 列表分页
-
-  const setModal = v => {
-    setShowModal(v)
-  }
   
   // 获取列表
   const getList = async params => {
@@ -46,6 +42,10 @@ export default () => {
     } finally {
       setTableLoading(false)
     } 
+  }
+  const setModal = (v, isRender) => {
+    setShowModal(v)
+    if (isRender) getList()
   }
   // 获取创建人
   const getUserList = async () => {
@@ -194,7 +194,7 @@ export default () => {
             color = 'blue'
             break
         }
-        return <Badge color={color} text={status} />
+        return <Badge status={color} text={status} />
       },
     },
     {

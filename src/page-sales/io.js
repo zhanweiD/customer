@@ -13,6 +13,7 @@ const api = {
   getUserList: post(`${marketingApi}/plan/getUserList`), // 创建人列表
   getChannelList: post(`${marketingApi}/plan/getChannelList`), // 渠道列表
   getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
+  getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
 } 
 
 ioContext.create('sales', api) 
