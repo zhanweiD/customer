@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Modal, Form, Select, Button} from 'antd'
 import {PlusOutlined, MinusCircleOutlined, DragOutlined} from '@ant-design/icons'
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
@@ -68,6 +68,9 @@ const SalesDetail = ({visible, setVisible}) => {
   const handleCancel = () => {
     setVisible(false)
   }
+  useEffect(() => {
+    console.log(dragItems)
+  }, [dragItems])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -76,6 +79,7 @@ const SalesDetail = ({visible, setVisible}) => {
         visible={visible}
         onOk={handleOk} 
         onCancel={handleCancel}
+        maskClosable={false}
       >
         <Form
           {...layout}
@@ -123,12 +127,11 @@ const SalesDetail = ({visible, setVisible}) => {
                       >
                         <div style={{position: 'relative'}}>
                           <Item
-                            name={`process_${index}`}
+                            name={item}
                             initialValue="0"
                             {...layout1}
-                            draggable={false}
                           >
-                            <Select placeholder="请选择" draggable={false} onDragStart={() => false}>
+                            <Select placeholder="请选择" draggable="false">
                               <Option value="0">全部</Option>
                               <Option value="1">测试</Option>
                             </Select>
@@ -138,7 +141,7 @@ const SalesDetail = ({visible, setVisible}) => {
                               <div>
                                 <DragOutlined className="mr8" style={{cursor: 'grab'}} />
                               </div>
-                              <div draggable={false}>
+                              <div>
                                 <MinusCircleOutlined
                                   draggable={false}
                                   onClick={() => removeItems(item)}
