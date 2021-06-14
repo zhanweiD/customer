@@ -109,6 +109,9 @@ export default ({
   const changeNotDoneLogic = v => {
     setnotDoneLogic(v)
   }
+  const disabledDate = time => {
+    return time && time < moment().endOf('day')
+  }
  
   useEffect(() => {
     // setPlanType(runFormData.type || 0)
@@ -405,52 +408,6 @@ export default ({
           )
         }
 
-        {/* {
-          planType === 1 && (
-            <Form.List
-              name="triggerEventList"
-              initialValue={triggerEventList}
-            >
-              {(fields, {add, remove}, {errors}) => (
-                <div>
-                  {fields.map((field, index) => (
-                    <div className="mb24 pr">
-                      <Form.Item
-                        {...field}
-                        {...layout}
-                        name={[field.name, 'id']}
-                        fieldKey={[field.fieldKey, 'id']}
-                        className="position-icon"
-                        label={`事件${index + 1}`}
-                        rules={[{required: true, message: '请选择事件'}]}
-                      >
-                        <Select style={{width: '95%'}} placeholder="请选择事件">
-                          {
-                            eventList.map(item => <Option value={item.id}>{item.name}</Option>)
-                          }
-                        </Select>
-                      </Form.Item>
-                      {fields.length > 1 ? (
-                        <MinusCircleOutlined
-                          className="dynamic-delete-button"
-                          onClick={() => remove(field.name)}
-                        />
-                      ) : null}
-                    </div>
-                  ))}
-                  <div
-                    className="add-event-btn fs12 hand"
-                    onClick={() => { add() }}
-                  >
-                    <img style={{marginBottom: 1}} src={Attr} alt="属性" />
-                    <span className="ml4">添加事件</span>
-                  </div>
-                </div>
-              )}
-            </Form.List>
-          )
-        } */}
-
         {
           planType === 0 && (
             <Item
@@ -489,7 +446,7 @@ export default ({
               rules={[{required: true, message: '请选择日期'}]}
               initialValue={startTime ? [moment(startTime, dateTimeFormat), moment(endTime, dateTimeFormat)] : undefined}
             >
-              <RangePicker format={dateTimeFormat} />
+              <RangePicker disabledDate={disabledDate} format={dateTimeFormat} />
             </Item>
           )
         }

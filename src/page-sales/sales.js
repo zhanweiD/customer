@@ -143,7 +143,7 @@ export default () => {
   }
 
   const toStrategy = record => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${record.id}`
   }
 
   const columns = [

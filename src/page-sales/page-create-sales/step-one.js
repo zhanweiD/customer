@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react'
 import {Form, Select, Button, Input, Radio, Collapse, Cascader} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {errorTip} from '@util'
 import Attr from '../icon/wechat-attr.svg'
+import io from './io'
 
 const {Item, List} = Form
 const {Option} = Select 
@@ -14,26 +16,6 @@ const layout = {
     span: 18,
   },
 }
-const data = [
-  {
-    one: '0',
-    two: '0',
-    three: '0',
-    conditions: false,
-  },
-  {
-    one: '0',
-    two: '0',
-    three: '0',
-    conditions: false,
-  },
-  {
-    one: '1',
-    two: '1',
-    three: '1',
-    conditions: false,
-  },
-]
 const options = [
   {
     value: 'zhejiang',
@@ -69,11 +51,35 @@ const options = [
   },
 ]
 
+const listToTree = data => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === -1)
+}
+
 const CreateSales = ({nextStep, current}) => {
   const [oneForm] = Form.useForm()
   const [condCount, setCondCount] = useState(0)
   const [radioType, setRadioType] = useState(0)
   const [condList, setCondList] = useState([true])
+  const [filterChannelList, setFilterChannelList] = useState([]) // 行为筛选事件
+  const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
+
+  // 获取目标事件
+  const getFilterChannelList = async () => {
+    try {
+      const res = await io.getFilterChannelList()
+      setOriginEventList(res || [])
+      setFilterChannelList(listToTree(res || []))
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
 
   const complete = () => {
     nextStep()
@@ -95,10 +101,6 @@ const CreateSales = ({nextStep, current}) => {
     console.log(value)
   }
   
-  const displayRender = label => {
-    return label[label.length - 1]
-  }
-
   // useEffect(() => {
   //   if (condCount) {
   //     const newDate = []
@@ -112,7 +114,10 @@ const CreateSales = ({nextStep, current}) => {
   useEffect(() => {
     console.log(condList)
   }, [condList])
-
+  useEffect(() => {
+    getFilterChannelList()
+  }, [])
+  console.log(filterChannelList)
   return (
     <div 
       style={{display: current === 0 ? 'block' : 'none'}} 
@@ -159,9 +164,13 @@ const CreateSales = ({nextStep, current}) => {
                           >
                             <Cascader
                               placeholder="请选择事件"
-                              options={options}
+                              options={filterChannelList}
                               expandTrigger="hover"
-                              // displayRender={displayRender}
+                              fieldNames={{
+                                label: 'name',
+                                value: 'id',
+                                children: 'children',
+                              }}
                               onChange={onChange}
                             />
                           </Item>
