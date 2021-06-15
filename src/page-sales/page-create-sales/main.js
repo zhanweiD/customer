@@ -1,12 +1,11 @@
 import {useEffect, useState} from 'react'
-import {Input, Steps, Button, message} from 'antd'
+import {Input, Steps, Button, message, Popconfirm} from 'antd'
 import {PlusOutlined, CheckCircleFilled, DeleteOutlined} from '@ant-design/icons'
 import {DetailHeader, Tag} from '../../component'
-import {errorTip} from '../../common/util'
+import {errorTip, successTip} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
 import StepThree from './step-three'
-import Strategy from '../page-sales-detail/strategy'
 import io from './io'
 
 const {Step} = Steps
@@ -27,14 +26,22 @@ export default props => {
   const [current, setCurrent] = useState(0)
   const [planId, setPlanId] = useState(null) // 计划id
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
+  const [selectItemId, setSelectItemId] = useState(null) // 选中策略id
   const [conditionList, setConditionList] = useState([]) // 触发条件事件
+  const [treeConditionList, setTreeConditionList] = useState([]) // 触发条件事件
   const [tagList, setTagList] = useState([]) // 标签列表
+  const [objTagList, setObjTagList] = useState([]) // 对象标签列表
   const [groupList, setGroupList] = useState([]) // 人群列表
   const [treeStrChannelList, setTreeStrChannelList] = useState([]) // 触达渠道列表
   const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
   const [channelActions, setChannelActions] = useState([]) // 营销动作列表
   const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
   const [templateList, setTemplateList] = useState([]) // 内容模版列表
+  // formData
+  const [oneFormData, setOneFormData] = useState({})
+  const [twoFormData, setTwoFormData] = useState({})
+  const [threeFormData, setThreeFormData] = useState({})
+  const [strategyDetail, setStrategyDetail] = useState({})
   const baseInfo = [
     {
       title: '分组',
@@ -72,7 +79,7 @@ export default props => {
     }
   }
 
-  // 列表/详情
+  // 列表
   const getList = async params => {
     try {
       const res = await io.getList(params)
@@ -81,6 +88,42 @@ export default props => {
         const {channel} = item.sendOutContent
         getChannelActions(channel.channelId)
       })
+      if (!selectItemId) {
+        setSelectItemId(res[0].id)
+      }
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
+  // 配置新增
+  const addStrategy = async (params, cb) => {
+    try {
+      await io.addStrategy(params)
+      successTip('添加成功')
+      getList({planId})
+      if (cb) cb()
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 配置编辑
+  const editStrategy = async (params, cb) => {
+    try {
+      await io.editStrategy(params)
+      successTip('编辑成功')
+      getList({planId})
+      if (cb) cb()
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 配置删除
+  const deleteStrategy = async id => {
+    try {
+      await io.deleteStrategy({id})
+      successTip('删除成功')
+      getList({planId})
     } catch (error) {
       errorTip(error.message)
     }
@@ -89,10 +132,15 @@ export default props => {
   const getTagList = async objId => {
     try {
       const res = await io.getTagList({objId: String(objId)})
-      
+      const data = res.map(item => {
+        item.name = item.objNameTagName.split('.')[1]
+        item.id = item.objIdTagId
+        return item
+      })
+      setObjTagList(data)
       if (res && res.length > 0) {
         res.forEach(item => {
-          // item.objIdTagId = item.objIdTagId.split('.')[1]
+          item.objIdTagId = item.objIdTagId.split('.')[1]
           item.objNameTagName = item.objNameTagName.split('.')[1]
         })
         setTagList(res)
@@ -126,6 +174,7 @@ export default props => {
     try {
       const res = await io.getConditionChannelList()
       setConditionList(res)
+      setTreeConditionList(listToTree(res || []))
     } catch (error) {
       errorTip(error.message)
     }
@@ -154,6 +203,10 @@ export default props => {
     }
   }
 
+  const changeStrategyDetail = v => {
+    setStrategyDetail(v)
+  }
+
   const nextStep = () => {
     setCurrent(current + 1)
   }
@@ -162,8 +215,12 @@ export default props => {
     setCurrent(current - 1)
   }
 
+  const changeName = v => {
+    setStrategyDetail({...strategyDetail, strategyName: v.target.value})
+  }
+
   // 添加策略校验
-  const addStrategy = () => {
+  const addStrategyCheck = () => {
     const index = strategyList.findIndex(item => !item.id)
     console.log(index)
     if (index === -1) {
@@ -171,6 +228,10 @@ export default props => {
     } else {
       message.warning(`请完善策略${index + 1}的配置`)
     }
+  }
+
+  const selectItem = v => {
+    setSelectItemId(v)
   }
 
   // 设置策略dom
@@ -195,7 +256,7 @@ export default props => {
       const {channel, actionId, templateId} = sendOutContent
       const channelName = strChannelList.filter(item => channel.channelId === item.id)[0].name
       const accountName = strChannelList.filter(item => channel.accountId === item.id)[0].name
-      const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0]
+      const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
       // const templateName = templateList.filter(item => templateId === item.template_id)[0].title
       // return `${channelName}-${accountName} ${actionName}(${templateName})`
       return `${channelName}-${accountName} ${actionName}`
@@ -212,16 +273,29 @@ export default props => {
       } = sendOutContent // 触发设置
       if (strategyName) {
         return (
-          <div className="left-item-select mb16" style={{minHeight: 72}}>
-            <div className="left-item-header-select pl16 pt8 pb8 fs14 FBH FBJB">
+          <div 
+            onClick={() => selectItem(item.id)} 
+            className={`${selectItemId === item.id ? 'left-item-select' : 'left-item'} mb16`} 
+            style={{minHeight: 72}}
+          >
+            <div 
+              className={`${selectItemId === item.id ? 'left-item-header-select' : 'left-item-header'} pl16 pt8 pb8 fs14 FBH FBJB`} 
+            >
               {/* <span>{`策略${i + 1}`}</span> */}
               <span>{strategyName}</span>
-              <span 
-                onClick={() => console.log('del')}
-                className="hand mr12" 
+              <Popconfirm
+                title={`你确定删除策略${item.strategyName}吗?`}
+                onConfirm={() => deleteStrategy(item.id)}
+                onCancel={() => console.log(11)}
+                okText="确定"
+                cancelText="取消"
               >
-                <DeleteOutlined />
-              </span>
+                <span 
+                  className="hand mr12" 
+                >
+                  <DeleteOutlined />
+                </span>
+              </Popconfirm>
             </div>
             {/* <div className="mt8 mb8 ml16 mr16 c45">配置受众用户、触达条件及触达渠道</div> */}
             <div className="mt8 mb8 ml16 mr16 c45">
@@ -264,11 +338,17 @@ export default props => {
         )
       } 
       return (
-        <div className="left-item-select mb16" style={{minHeight: 72}}>
-          <div className="left-item-header-select pl16 pt8 pb8 fs14 FBH FBJB">
+        <div 
+          onClick={() => selectItem(item.id)} 
+          className={`${selectItemId === item.id ? 'left-item-select' : 'left-item'} mb16`} 
+          style={{minHeight: 72}}
+        >
+          <div 
+            className={`${selectItemId === item.id ? 'left-item-header-select' : 'left-item-header'} pl16 pt8 pb8 fs14 FBH FBJB`} 
+          >
             <span>{`策略${i + 1}`}</span>
             <span 
-              onClick={() => console.log('del')}
+              onClick={() => deleteStrategy(item.id)}
               className="hand mr12" 
             >
               <DeleteOutlined />
@@ -293,6 +373,7 @@ export default props => {
   }, [])
   useEffect(() => {
     const obj = groupList.filter(item => item.id === planInfo.clientGroupId)
+    setStrategyDetail({...strategyDetail, planId: planInfo.id, clientGroupId: planInfo.clientGroupId})
     if (obj.length) {
       getTagList(obj[0].objId)
     }
@@ -313,7 +394,7 @@ export default props => {
           {setLeftItem()}
           <Button 
             type="dashed" 
-            onClick={addStrategy} 
+            onClick={addStrategyCheck} 
             block 
             icon={<PlusOutlined />}
           >
@@ -323,7 +404,11 @@ export default props => {
         
         <div className="content-right bgf">
           <div className="pt12 pb12 pl16 right-header">
-            <Input style={{width: 160}} placeholder="请输入策略名称" />
+            <Input 
+              style={{width: 160}} 
+              placeholder="请输入策略名称" 
+              onChange={changeName}
+            />
           </div>
           <Steps style={{padding: '24px 60px'}} current={current}>
             <Step key={0} title="用户筛选" />
@@ -338,12 +423,23 @@ export default props => {
             nextStep={nextStep} 
             current={current} 
             tagList={tagList}
+            objTagList={objTagList}
+            // oneFormData={oneFormData}
+            // setOneFormData={setOneFormData}
+            strategyDetail={strategyDetail}
+            setStrategyDetail={changeStrategyDetail}
           />
           <StepTwo 
             nextStep={nextStep} 
             prevStep={prevStep}
             current={current}
             planInfo={planInfo}
+            treeConditionList={treeConditionList}
+            conditionList={conditionList}
+            // twoFormData={twoFormData}
+            // setTwoFormData={setTwoFormData}
+            strategyDetail={strategyDetail}
+            setStrategyDetail={changeStrategyDetail}
           />
           <StepThree
             prevStep={prevStep}
@@ -354,6 +450,14 @@ export default props => {
             treeStrChannelList={treeStrChannelList}
             channelActions={channelActions}
             getChannelActions={getChannelActions}
+            planInfo={planInfo}
+            // threeFormData={threeFormData}
+            // setThreeFormData={setThreeFormData}
+            strategyDetail={strategyDetail}
+            setStrategyDetail={changeStrategyDetail}
+            tagList={tagList}
+            addStrategy={addStrategy}
+            editStrategy={editStrategy}
           />
         </div>
       </div>

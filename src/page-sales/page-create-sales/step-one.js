@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Form, Select, Button, Input, Radio, Collapse, Cascader} from 'antd'
-import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {MinusCircleOutlined} from '@ant-design/icons'
 import {errorTip} from '@util'
 import Attr from '../icon/wechat-attr.svg'
 import io from './io'
@@ -16,40 +16,6 @@ const layout = {
     span: 18,
   },
 }
-const options = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-]
 
 const listToTree = data => {
   const newData = _.cloneDeep(data)
@@ -63,16 +29,15 @@ const listToTree = data => {
 }
 
 const CreateSales = ({
-  nextStep, current, tagList,
+  nextStep, current, objTagList, oneFormData, setOneFormData, setStrategyDetail, strategyDetail,
 }) => {
   const [oneForm] = Form.useForm()
-  const [condCount, setCondCount] = useState(0)
   const [radioType, setRadioType] = useState(0)
-  const [condList, setCondList] = useState([true])
+  const [condList, setCondList] = useState([1])
   const [filterChannelList, setFilterChannelList] = useState([]) // 行为筛选事件
   const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
   const [promptTags, setPromptTags] = useState([]) // 标签预提示
-
+  const [userLogic, setUserLogic] = useState('or') // 用户筛选关系
   // 获取目标事件
   const getFilterChannelList = async () => {
     try {
@@ -97,41 +62,43 @@ const CreateSales = ({
   }
 
   const complete = () => {
-    nextStep()
-    console.log(condList)
-    console.log(condList.map(item => (!!item)))
-
-    // oneForm.validateFields().then(value => {
-    //   console.log(value)
-    // })
+    oneForm.validateFields().then(value => {
+      const param = value.clientGroupFilterContent.map(item => {
+        item.leftTagId = item.tagId.split('.')[1] || null
+        // item.logic = condList[index]
+        return item
+      })
+      value.clientGroupFilterContent = JSON.stringify({logic: userLogic, express: param})
+      console.log(value)
+      setStrategyDetail({
+        ...strategyDetail,
+        ...value,
+      })
+      nextStep()
+    })
   }
 
   const changeConditions = index => {
     const cDate = [...condList]
-    cDate[index] = !cDate[index]
+    cDate[index] = cDate[index] ? 0 : 1
     setCondList(cDate)
   }
 
   const onChange = value => {
     console.log(value)
   }
-  
-  // useEffect(() => {
-  //   if (condCount) {
-  //     const newDate = []
-  //     for (let i = 0; i < condCount; i++) {
-  //       newDate.push(true)
-  //     }
-  //     setCondList(newDate)
-  //   }
-  // }, [condCount])
 
+  const changeUserLogic = (e, v) => {
+    e.stopPropagation()
+    setUserLogic(v)
+  }
+  
   useEffect(() => {
-    console.log(condList)
   }, [condList])
   useEffect(() => {
     getFilterChannelList()
   }, [])
+
   return (
     <div 
       style={{display: current === 0 ? 'block' : 'none'}} 
@@ -143,7 +110,7 @@ const CreateSales = ({
         form={oneForm}
       >
         <Item
-          name="type"
+          name="clientGroupFilterType"
           label="筛选类型"
           initialValue={0}
           style={{marginBottom: 12}}
@@ -158,10 +125,26 @@ const CreateSales = ({
           defaultActiveKey={['1']}
           style={{position: 'relative'}}
         >
-          <Panel header={radioType ? '用户行为属性满足' : '用户实体属性满足'} key="1">
+          <Panel 
+            header={radioType ? '用户行为属性满足' : (
+              <div className="FBH header-select">
+                用户实体属性满足
+                <Select 
+                  defaultValue="or"
+                  style={{width: 72, margin: '8px'}} 
+                  onClick={(e, v) => changeUserLogic(e, v)}
+                >
+                  <Option value="or">任意</Option>
+                  <Option value="and">全部</Option>
+                </Select>
+              </div>
+              // '用户实体属性满足'
+            )} 
+            key="1"
+          >
             <List
               name="clientGroupFilterContent"
-              initialValue={[{one: undefined, tow: undefined, three: undefined}]}
+              initialValue={[{tagId: undefined, comparision: undefined, rightParams: undefined}]}
               // initialValue={data}
             >
               {(fields, {add, remove}) => {
@@ -205,7 +188,7 @@ const CreateSales = ({
                         </div>
                       ) : (  
                         <div className="pr">
-                          {index ? (
+                          {/* {index ? (
                             <div className="conditions-div">
                               <span 
                                 className="conditions-btn hand"
@@ -215,24 +198,25 @@ const CreateSales = ({
                                 {condList[index] ? '或' : '且'}
                               </span>
                             </div>
-                          ) : null}
-                          <Input.Group compact style={{marginLeft: '48px'}}>
+                          ) : null} */}
+                          {/* <Input.Group compact style={{marginLeft: '48px'}}> */}
+                          <Input.Group compact>
                             <Item
                               {...restField}
-                              name={[name, 'one']}
-                              fieldKey={[fieldKey, 'one']}
+                              name={[name, 'tagId']}
+                              fieldKey={[fieldKey, 'tagId']}
                               rules={[{required: true, message: '请选择标签'}]}
                             >
                               <Select style={{width: 160}} placeholder="请选择标签" onChange={getPromptTag}>
                                 {
-                                  tagList.map(item => <Option value={item.objIdTagId}>{item.objNameTagName}</Option>)
+                                  objTagList.map(item => <Option value={item.id}>{item.name}</Option>)
                                 }
                               </Select>
                             </Item>
                             <Item
                               {...restField}
-                              name={[name, 'two']}
-                              fieldKey={[fieldKey, 'two']}
+                              name={[name, 'comparision']}
+                              fieldKey={[fieldKey, 'comparision']}
                               rules={[{required: true, message: '请选择条件'}]}
                             >
                               <Select style={{width: 128}} placeholder="请选择条件">
@@ -242,8 +226,8 @@ const CreateSales = ({
                             </Item>
                             <Item
                               {...restField}
-                              name={[name, 'three']}
-                              fieldKey={[fieldKey, 'three']}
+                              name={[name, 'rightParams']}
+                              fieldKey={[fieldKey, 'rightParams']}
                               rules={[{required: true, message: '请输入或选择'}]}
                             >
                               <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
@@ -273,7 +257,7 @@ const CreateSales = ({
                       className="add-event-btn fs12 hand"
                       onClick={() => {
                         add()
-                        setCondList([...condList, true])
+                        setCondList([...condList, 1])
                       }}
                     >
                       <img style={{marginBottom: 1}} src={Attr} alt="属性" />
