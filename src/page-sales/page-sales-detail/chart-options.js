@@ -4,155 +4,176 @@ const fontColor = 'rgba(0,0,0,0.65)'
 const titleColor = 'rgba(0,0,0,0.85)'
 const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
 
-export const circleOneOption = {
-  title: {
-    // text: `{name|${title}}\n{val|${total}}`,
-    text: '计划触达',
-    top: 'center',
-    left: 'center',
-    textStyle: {
-      rich: {
-        name: {
-          fontSize: 14,
-          fontWeight: 'normal',
-          color: fontColor,
-          padding: [10, 0],
-        },
-        val: {
-          fontSize: 32,
-          fontWeight: 'bold',
-          color: titleColor,
-        },
-      },
-    },
-  },
-  series: [
+export function circleOneOption(data) {
+  return (
     {
-      name: '访问来源',
-      type: 'pie',
-      radius: ['50%', '70%'],
-      avoidLabelOverlap: false,
-      label: {
-        show: false,
-        position: 'center',
-      },
-      labelLine: {
-        show: false,
-      },
-      data: [
-        {value: 2000, name: '计划触达'},
-      ],
-    },
-  ],
-  color: '#3f5ff4',
-}
-
-const handred = 100
-const point = 42
-
-export const circleTwoOption = {
-  title: {
-    text: `${point}%\n目标完成率`,
-    x: 'center',
-    y: 'center',
-    textStyle: {
-      rich: {
-        name: {
-          fontSize: 14,
-          fontWeight: 'normal',
-          color: fontColor,
-          padding: [10, 0],
-        },
-        val: {
-          fontSize: 32,
-          fontWeight: 'bold',
-          color: titleColor,
-        },
-      },
-    },
-  },
-  tooltip: {
-    formatter(params) {
-      return `${params.name}：${params.percent} %`
-    },
-  },
-  legend: {
-    show: false,
-    itemGap: 12,
-    data: ['占比', '剩余'],
-  },
-
-  series: [{
-    name: 'circle',
-    type: 'pie',
-    clockWise: true,
-    radius: ['50%', '70%'],
-    itemStyle: {
-      normal: {
-        label: {
-          show: false,
-        },
-        labelLine: {
-          show: false,
-        },
-      },
-    },
-    hoverAnimation: false,
-    data: [{
-      value: point,
-      name: '占比',
-      itemStyle: {
-        normal: {
-          color: { // 颜色渐变
-            colorStops: [{
-              offset: 0,
-              color: '#FF9254', // 0% 处的颜色
-            }, {
-              offset: 1,
-              color: '#FFE800', // 100% 处的颜色1
-            }],
+      title: {
+        text: `${data}人\n计划触达`,
+        top: 'center',
+        left: 'center',
+        textStyle: {
+          rich: {
+            name: {
+              fontSize: 14,
+              fontWeight: 'normal',
+              color: fontColor,
+              padding: [10, 0],
+            },
+            val: {
+              fontSize: 32,
+              fontWeight: 'bold',
+              color: titleColor,
+            },
           },
+        },
+      },
+      series: [
+        {
+          name: '计划触达',
+          type: 'pie',
+          radius: ['50%', '70%'],
+          avoidLabelOverlap: false,
           label: {
             show: false,
+            position: 'center',
           },
           labelLine: {
             show: false,
           },
+          data: [
+            {value: data, name: '计划触达'},
+          ],
         },
-      },
-    }, {
-      name: '剩余',
-      value: handred - point,
-      itemStyle: {
-        normal: {
-          color: '#E1E8EE',
-        },
-      },
-    }],
-  }],
+      ],
+      color: '#3f5ff4',
+    }
+  )
 }
 
-export const lineOption = {
-  title: {
-    text: '目标完成人数',
-  },
-  xAxis: {
-    type: 'category',
-    data: ['5-1', '5-2', '5-3', '5-4', '5-5', '5-6', '5-7'],
-  },
-  yAxis: {
-    type: 'value',
-  },
-  tooltip: {
-    trigger: 'axis',
-  },
-  series: [{
-    data: [820, 932, 901, 934, 1290, 1330, 1320],
-    type: 'line',
-    name: '目标完成人数',
-    smooth: true,
-  }],
-  color: '#3f5ff4',
+export function circleTwoOption(data) {
+  return (
+    {
+      title: {
+        text: `${data}%\n目标完成率`,
+        x: 'center',
+        y: 'center',
+        textStyle: {
+          rich: {
+            name: {
+              fontSize: 14,
+              fontWeight: 'normal',
+              color: fontColor,
+              padding: [10, 0],
+            },
+            val: {
+              fontSize: 32,
+              fontWeight: 'bold',
+              color: titleColor,
+            },
+          },
+        },
+      },
+      tooltip: {
+        formatter(params) {
+          return `${params.name}：${params.percent} %`
+        },
+      },
+      legend: {
+        show: false,
+        itemGap: 12,
+        data: ['占比', '剩余'],
+      },
+
+      series: [{
+        name: 'circle',
+        type: 'pie',
+        clockWise: true,
+        radius: ['50%', '70%'],
+        itemStyle: {
+          normal: {
+            label: {
+              show: false,
+            },
+            labelLine: {
+              show: false,
+            },
+          },
+        },
+        hoverAnimation: false,
+        data: [{
+          value: data,
+          name: '占比',
+          itemStyle: {
+            normal: {
+              color: { // 颜色渐变
+                colorStops: [{
+                  offset: 0,
+                  color: '#FF9254', // 0% 处的颜色
+                }, {
+                  offset: 1,
+                  color: '#FFE800', // 100% 处的颜色1
+                }],
+              },
+              label: {
+                show: false,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
+          },
+        }, {
+          name: '剩余',
+          value: 100 - data,
+          itemStyle: {
+            normal: {
+              color: '#E1E8EE',
+            },
+          },
+        }],
+      }],
+    }
+  )
+}
+
+export function lineOption(data) {
+  if (!data.length) {
+    return {
+      title: [{
+        text: '暂无数据',
+        top: '50%',
+        left: '40%',
+        textStyle: {
+          fontSize: 32,
+          color: titleColor,
+          fontWeight: 400,
+        },
+      }],
+    } 
+  }
+
+  return ({
+    title: {
+      text: '目标完成人数',
+    },
+    xAxis: {
+      type: 'category',
+      data: _.map(data, 'dateStr'),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    series: [{
+      data: _.map(data, 'targetCount'),
+      type: 'line',
+      name: '目标完成人数',
+      smooth: true,
+    }],
+    color: '#3f5ff4',
+  })
 }
 
 const COLOR = ['#6c9ff6', '#5cd9f7', '#ffe381', '#ffa8b4', '#c5a8f9']
@@ -173,6 +194,8 @@ const data = [{
 
 
 export function barOption(barData) {
+  const maxValue = _.max(_.map(barData, 'targetCount'))
+
   if (!barData.length) {
     return {
       title: [{
@@ -192,7 +215,7 @@ export function barOption(barData) {
     grid: {
       top: 70,
       left: 33,
-      right: 150,
+      right: 100,
       bottom: 15,
       containLabel: true,
     },
@@ -225,7 +248,7 @@ export function barOption(barData) {
           show: false,
           inside: false,
         },
-        data: _.map(barData, 'label'),
+        data: _.map(barData, 'name'),
       }, {
         type: 'category',
         inverse: true,
@@ -255,7 +278,7 @@ export function barOption(barData) {
           value,
         }, index) => {
           return {
-            value: 2000,
+            value: maxValue,
             label: {
               color: '#e2e3ef',
             },
@@ -287,7 +310,7 @@ export function barOption(barData) {
               fontSize: 16,
             },
             formatter(a, b) {
-              return a.label
+              return a.name
             },
           },
         },
@@ -367,7 +390,7 @@ export function funnelOption(funnelData) {
           color: '#333',
           position: 'right',
           formatter(d) {
-            const ins = `${d.data.label}\n${d.data.per}`
+            const ins = `{aa|${d.data.name}}\n{bb|${d.data.rate}%}`
             return ins
           },
           rich: {
