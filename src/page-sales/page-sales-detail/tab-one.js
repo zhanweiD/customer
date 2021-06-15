@@ -1,5 +1,7 @@
 import {useEffect, useRef, useState} from 'react'
 import {Divider, Button} from 'antd'
+import {inject} from 'mobx-react'
+import {useObserver} from 'mobx-react-lite'
 import {circleOneOption, circleTwoOption, lineOption, barOption, funnelOption} from './chart-options'
 import AnalysisModal from './analysis-modal'
 
@@ -28,51 +30,6 @@ const SalesDetail = () => {
       <Button type="primary" onClick={() => changeVisible(true)}>分析配置</Button>
       <AnalysisModal visible={visible} setVisible={changeVisible} />
     </div>
-  )
-}
-
-const CircleOne = () => {
-  const circleOne = useRef(null)
-
-  useEffect(() => {
-    const circleOneChart = echarts.init(circleOne.current)
-    circleOneChart.setOption(circleOneOption)
-
-    window.addEventListener('resize', () => circleOneChart.resize())
-  }, [])
-
-  return (
-    <div className="h400" ref={circleOne} />
-  )
-}
-
-const CircleTwo = () => {
-  const circleTwo = useRef(null)
-
-  useEffect(() => {
-    const circleTwoChart = echarts.init(circleTwo.current)
-    circleTwoChart.setOption(circleTwoOption)
-
-    window.addEventListener('resize', () => circleTwoChart.resize())
-  }, [])
-
-  return (
-    <div className="h400" ref={circleTwo} />
-  )
-}
-
-const LineChart = () => {
-  const lineRef = useRef(null)
-
-  useEffect(() => {
-    const lineChart = echarts.init(lineRef.current)
-    lineChart.setOption(lineOption)
-
-    window.addEventListener('resize', () => lineChart.resize())
-  }, [])
-
-  return (
-    <div className="h400" ref={lineRef} />
   )
 }
 
@@ -115,34 +72,79 @@ const FunnelChart = () => {
 }
 
 
-export default () => {
+export default inject('store')(({store}) => {
+  const circleOne = useRef(null)
+  const circleTwo = useRef(null)
+  const lineRef = useRef(null)
+  const barRef = useRef(null)
+  const funnelRef = useRef(null)
+
   useEffect(() => {
-    console.log('tab one mount')
+    store.getStatistics(8436565125512, () => {
+      // 画两个饼图
+      const circleOneChart = echarts.init(circleOne.current)
+      circleOneChart.setOption(circleOneOption(store.touchCount))
+
+      window.addEventListener('resize', () => circleOneChart.resize())
+
+      const circleTwoChart = echarts.init(circleTwo.current)
+      circleTwoChart.setOption(circleTwoOption(store.targetRate))
+
+      window.addEventListener('resize', () => circleTwoChart.resize())
+    })
+
+    // 画折线图
+    store.getTargetCount({
+      id: 8380506835856,
+      chartBeginDate: '2021-06-15',
+      chartEndDate: '2021-06-17',
+    }, () => {
+      const lineChart = echarts.init(lineRef.current)
+      lineChart.setOption(lineOption(store.lineChartData))
+
+      window.addEventListener('resize', () => lineChart.resize())
+    })
+
+    // 分析配置的图
+    store.getEventStatistics(8436565125512, () => {
+      // 柱状图
+      const barChart = echarts.init(barRef.current)
+      barChart.setOption(barOption(store.eventStatistics))
+
+      window.addEventListener('resize', () => barChart.resize())
+
+      // funnel
+      const funnelChart = echarts.init(funnelRef.current)
+      funnelChart.setOption(funnelOption(store.eventStatistics))
+
+      window.addEventListener('resize', () => funnelChart.resize())
+    })
   }, [])
 
-  return (
+
+  return useObserver(() => (
     <div className="detail-chart oa">
       <div className="FBH">
         <div className="FB1">
-          <CircleOne />
+          <div className="h400" ref={circleOne} />
         </div>
         <div className="FB1">
-          <CircleTwo />
+          <div className="h400" ref={circleTwo} />
         </div>
         <div style={{flex: 2}}>
-          <LineChart />
+          <div className="h400" ref={lineRef} />
         </div>
       </div>
       <Divider />
       <SalesDetail />
       <div className="FBH">
         <div className="FB1">
-          <BarChart />
+          <div className="h400" ref={barRef} />
         </div>
         <div className="FB1">
-          <FunnelChart />
+          <div className="h400" ref={funnelRef} />
         </div>
       </div>
     </div>
-  )
-}
+  ))
+})
