@@ -7,6 +7,12 @@ const api = {
   copyPlan: post(`${marketingApi}/plan/copy`), // 复制计划
   getUserList: post(`${marketingApi}/plan/getUserList`), // 创建人列表
   getChannelList: post(`${marketingApi}/plan/getChannelList`), // 渠道列表
+
+  getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
+  getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
+  getStrChannelList: post(`${marketingApi}/planStrategy/getChannelList`), // 触达渠道列表
+  getChannelActions: post(`${marketingApi}/planStrategy/getChannelActions`), // 营销动作列表
+  getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
 } 
 
 ioContext.create('salesDetail', api) 

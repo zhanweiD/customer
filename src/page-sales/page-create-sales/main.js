@@ -6,9 +6,21 @@ import {errorTip} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
 import StepThree from './step-three'
+import Strategy from '../page-sales-detail/strategy'
 import io from './io'
 
 const {Step} = Steps
+
+const listToTree = data => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === -1)
+}
 
 export default props => {
   const [strategyList, setStrategyList] = useState([]) // 策略列表
@@ -16,6 +28,13 @@ export default props => {
   const [planId, setPlanId] = useState(null) // 计划id
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [conditionList, setConditionList] = useState([]) // 触发条件事件
+  const [tagList, setTagList] = useState([]) // 标签列表
+  const [groupList, setGroupList] = useState([]) // 人群列表
+  const [treeStrChannelList, setTreeStrChannelList] = useState([]) // 触达渠道列表
+  const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
+  const [channelActions, setChannelActions] = useState([]) // 营销动作列表
+  const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
+  const [templateList, setTemplateList] = useState([]) // 内容模版列表
   const baseInfo = [
     {
       title: '分组',
@@ -42,13 +61,44 @@ export default props => {
     3: <Tag status="blue" text="已结束" />,
   }
 
+  // 营销动作列表
+  const getChannelActions = async channelId => {
+    try {
+      const res = await io.getChannelActions({channelId})
+      setAllChannelActions([...allChannelActions, ...res])
+      setChannelActions(res)
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
   // 列表/详情
   const getList = async params => {
     try {
       const res = await io.getList(params)
       setStrategyList(res)
+      res.forEach(item => {
+        const {channel} = item.sendOutContent
+        getChannelActions(channel.channelId)
+      })
     } catch (error) {
       errorTip(error.message)
+    }
+  }
+  // 标签列表
+  const getTagList = async objId => {
+    try {
+      const res = await io.getTagList({objId: String(objId)})
+      
+      if (res && res.length > 0) {
+        res.forEach(item => {
+          // item.objIdTagId = item.objIdTagId.split('.')[1]
+          item.objNameTagName = item.objNameTagName.split('.')[1]
+        })
+        setTagList(res)
+      } 
+    } catch (error) {
+      console.log(error)
     }
   }
   // 计划详情
@@ -57,7 +107,16 @@ export default props => {
       const res = await io.detailPlan({
         id,
       })
-      setPlanInfo(res)
+      setPlanInfo(res) 
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  // 获取人群
+  const getGroupList = async () => {
+    try {
+      const res = await io.getGroupList()
+      setGroupList(res)
     } catch (error) {
       errorTip(error.message)
     }
@@ -69,6 +128,29 @@ export default props => {
       setConditionList(res)
     } catch (error) {
       errorTip(error.message)
+    }
+  }
+  // 触达渠道
+  const getStrChannelList = async () => {
+    try {
+      const res = await io.getStrChannelList()
+      setTreeStrChannelList(listToTree(res || []))
+      setStrChannelList(res)
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  const getTemplate = async () => {
+    try {
+      const res = await io.getTemplate({
+        accountId: 'wxe2b3f176ba1a4f33',
+      })
+
+      if (res && res.template_list) {
+        setTemplateList(res.template_list)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -93,7 +175,7 @@ export default props => {
 
   // 设置策略dom
   const setLeftItem = () => {
-    if (!conditionList.length) return ''
+    if (!conditionList.length || !strChannelList.length || !allChannelActions.length || !templateList.length) return ''
     const matchTime = v => {
       if (v === 'MINUTES') {
         return '分钟'
@@ -108,6 +190,15 @@ export default props => {
       const accountName = conditionList.filter(item => item.id === event.accountId)[0].name
       const eventName = conditionList.filter(item => item.id === event.eventId)[0].name
       return `${channelName}-${accountName}-${eventName}`
+    }
+    const setChannelDom = sendOutContent => {
+      const {channel, actionId, templateId} = sendOutContent
+      const channelName = strChannelList.filter(item => channel.channelId === item.id)[0].name
+      const accountName = strChannelList.filter(item => channel.accountId === item.id)[0].name
+      const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0]
+      // const templateName = templateList.filter(item => templateId === item.template_id)[0].title
+      // return `${channelName}-${accountName} ${actionName}(${templateName})`
+      return `${channelName}-${accountName} ${actionName}`
     }
     const itemList = strategyList.map((item, i) => {
       const {
@@ -164,8 +255,7 @@ export default props => {
                     {isDelay ? `延迟 ${sendOutContent.timeGap} ${matchTime(sendOutContent.timeUnit)} 触达` : '立即 触达'}
                   </div>
                   <div>
-                    微信公众号 - 数澜地产业务部a
-                    发送模版消息(活动报名成功通知)
+                    {setChannelDom(sendOutContent)}
                   </div>
                 </div>
               </div>
@@ -195,9 +285,18 @@ export default props => {
     const {params = {}} = props.match
     setPlanId(params.planId)
     getList({planId: params.planId})
-    detailPlan(params.planId)
+    getGroupList()
     getConditionChannelList()
+    detailPlan(params.planId)
+    getStrChannelList()
+    getTemplate()
   }, [])
+  useEffect(() => {
+    const obj = groupList.filter(item => item.id === planInfo.clientGroupId)
+    if (obj.length) {
+      getTagList(obj[0].objId)
+    }
+  }, [groupList, planInfo])
 
   return (
     <div className="create-sales">
@@ -238,6 +337,7 @@ export default props => {
           <StepOne 
             nextStep={nextStep} 
             current={current} 
+            tagList={tagList}
           />
           <StepTwo 
             nextStep={nextStep} 
@@ -249,6 +349,11 @@ export default props => {
             prevStep={prevStep}
             current={current}
             nextStep={nextStep}
+            groupList={groupList}
+            strChannelList={strChannelList}
+            treeStrChannelList={treeStrChannelList}
+            channelActions={channelActions}
+            getChannelActions={getChannelActions}
           />
         </div>
       </div>

@@ -62,13 +62,16 @@ const listToTree = data => {
   return newData.filter(item => item.parentId === -1)
 }
 
-const CreateSales = ({nextStep, current}) => {
+const CreateSales = ({
+  nextStep, current, tagList,
+}) => {
   const [oneForm] = Form.useForm()
   const [condCount, setCondCount] = useState(0)
   const [radioType, setRadioType] = useState(0)
   const [condList, setCondList] = useState([true])
   const [filterChannelList, setFilterChannelList] = useState([]) // 行为筛选事件
   const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
+  const [promptTags, setPromptTags] = useState([]) // 标签预提示
 
   // 获取目标事件
   const getFilterChannelList = async () => {
@@ -78,6 +81,18 @@ const CreateSales = ({nextStep, current}) => {
       setFilterChannelList(listToTree(res || []))
     } catch (error) {
       errorTip(error.message)
+    }
+  }
+  // 标签值预提示
+  async function getPromptTag(objIdAndTagId) {
+    try {
+      const res = await io.getPromptTag({
+        objIdAndTagId,
+      })
+      // console.log(res)
+      setPromptTags(res)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -117,7 +132,6 @@ const CreateSales = ({nextStep, current}) => {
   useEffect(() => {
     getFilterChannelList()
   }, [])
-  console.log(filterChannelList)
   return (
     <div 
       style={{display: current === 0 ? 'block' : 'none'}} 
@@ -209,9 +223,10 @@ const CreateSales = ({nextStep, current}) => {
                               fieldKey={[fieldKey, 'one']}
                               rules={[{required: true, message: '请选择标签'}]}
                             >
-                              <Select style={{width: 160}} placeholder="请选择标签">
-                                <Option value="0">全部</Option>
-                                <Option value="1">测试</Option>
+                              <Select style={{width: 160}} placeholder="请选择标签" onChange={getPromptTag}>
+                                {
+                                  tagList.map(item => <Option value={item.objIdTagId}>{item.objNameTagName}</Option>)
+                                }
                               </Select>
                             </Item>
                             <Item
@@ -221,8 +236,8 @@ const CreateSales = ({nextStep, current}) => {
                               rules={[{required: true, message: '请选择条件'}]}
                             >
                               <Select style={{width: 128}} placeholder="请选择条件">
-                                <Option value="0">全部</Option>
-                                <Option value="1">测试</Option>
+                                <Option value="not in">不等于</Option>
+                                <Option value="in">等于</Option>
                               </Select>
                             </Item>
                             <Item
@@ -232,8 +247,9 @@ const CreateSales = ({nextStep, current}) => {
                               rules={[{required: true, message: '请输入或选择'}]}
                             >
                               <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
-                                <Option value="0">全部</Option>
-                                <Option value="1">测试</Option>
+                                {
+                                  promptTags.map(item => <Option value={item}>{item}</Option>)
+                                }
                               </Select>
                             </Item>
                             {
