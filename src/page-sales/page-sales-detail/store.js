@@ -4,11 +4,12 @@ import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
 import io from './io'
 
 export default class Store {
-  @observable id = 8380506835856
+  @observable id
 
+  @observable planDetail
   @observable planName
-
   @observable planTime
+  @observable planTarget
 
   @observable touchCount = 0 // 计划触达
   @observable targetRate = 0 // 目标完成率
@@ -27,17 +28,30 @@ export default class Store {
   @observable analysisedEventList = [] // 已配置的分析渠道事件
   @observable initAnalisysValue = []
 
+  @observable strategyList = [] // 策略列表
+
+  circleOneChart
+  circleTwoChart
+  lineChart
+  barChart
+  funnelChart
+
   // 计划详情
-  @action async getDetail(id) {
+  @action async getDetail() {
     try {
-      const res = await io.detailPlan({id})
+      const res = await io.detailPlan({
+        id: this.id,
+      })
 
       if (res) {
+        this.planDetail = res
         this.planName = res.planName
-
+        this.planStatus = res.planStatus
         if (res.startTime) {
           this.planTime = `${res.startTime} ~ ${res.endTime}`
         }
+
+        this.getTargetChannelList()
       }
     } catch (e) {
       errorTip(e.message)
@@ -45,9 +59,11 @@ export default class Store {
   }
 
   // 计划触达，目标完成率
-  async getStatistics(id, cb = () => {}) {
+  async getStatistics(cb = () => {}) {
     try {
-      const res = await io.getStatistics({id})
+      const res = await io.getStatistics({
+        id: this.id,
+      })
 
       if (res) {
         this.touchCount = res.touchCount
@@ -66,7 +82,10 @@ export default class Store {
   // chartEndDate
   async getTargetCount(params, cb = () => {}) {
     try {
-      const res = await io.getTargetCount(params)
+      const res = await io.getTargetCount({
+        id: this.id,
+        ...params,
+      })
 
       this.lineChartData = res
       /* this.lineChartData = [
@@ -103,11 +122,14 @@ export default class Store {
   }
 
   // 事件人数统计
-  async getEventStatistics(id, cb = () => {}) {
+  async getEventStatistics(cb = () => {}) {
     try {
-      const res = await io.getEventStatistics({id})
+      const res = await io.getEventStatistics({
+        id: this.id,
+      })
 
-      // this.eventStatistics = res
+      this.eventStatistics = res
+      /*
       this.eventStatistics = [
         {
           targetCount: 4000,
@@ -134,6 +156,7 @@ export default class Store {
           rate: 43.65,
         },
       ]
+      */
 
       this.eventStatistics.forEach(item => {
         item.name = item.eventName
@@ -147,11 +170,14 @@ export default class Store {
   }
 
   // 可分析渠道事件下拉
-  async getAllAnalysisEvents(id, cb = () => {}) {
+  async getAllAnalysisEvents(cb = () => {}) {
     try {
-      const res = await io.getAllAnalysisEvents({id})
+      const res = await io.getAllAnalysisEvents({
+        id: this.id,
+      })
 
-      // this.eventList = res
+      this.eventList = res
+      /*
       this.eventList = [
         { // type :0 目标事件 1 完成事件 2 未完成事件 100 渠道 101 渠道账号
           id: 1,
@@ -194,6 +220,7 @@ export default class Store {
           descr: '渠道账号',
         },
       ]
+      */
 
       const result = []
       this.eventList.forEach(item => {
@@ -233,9 +260,11 @@ export default class Store {
   }
 
   // 已配置分析渠道事件
-  async getConfiguredAnalysisEvents(id, cb = () => {}) {
+  async getConfiguredAnalysisEvents(cb = () => {}) {
     try {
-      const res = await io.getConfiguredAnalysisEvents({id})
+      const res = await io.getConfiguredAnalysisEvents({
+        id: this.id,
+      })
 
       this.analysisedEventList = res
       /* this.analysisedEventList = [
@@ -266,12 +295,8 @@ export default class Store {
       ] */
 
       // 对配置过的数据进行处理
-      if (this.analysisedEventList.length > 2) {
+      if (this.analysisedEventList.length && this.analysisedEventList.length > 0) {
         const dataCopy = _.cloneDeep(this.analysisedEventList)
-
-        // 去掉头尾
-        dataCopy.shift()
-        dataCopy.pop()
 
         const datas = []
         dataCopy.forEach(item => {
@@ -298,6 +323,145 @@ export default class Store {
 
       // 获取分析详情。。。。
       cb()
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获取策略列表
+  async getStrategyList(planId) {
+    try {
+      const res = await io.getStrategyList({planId})
+
+      // 展示暂无数据
+      this.strategyList = res
+      /*
+      this.strategyList = [
+        {
+          id: 8369739904128,
+          planId: 8361565201672,
+          clientGroupFilterType: 0,
+          strategyName: '侧444首',
+          strategyConditionType: 1,
+          strategyEventConditionContent: {
+            startTime: '2021-06-08 20:52:16',
+            endTime: '2021-06-08 20:52:16',
+            doneLogic: 0,
+            doneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 1001,
+                eventCode: '',
+              },
+            ],
+            timeGap: 2.2,
+            timeUnit: 'DAYS',
+            notDoneLogic: 0,
+            notDoneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 1001,
+                eventCode: '',
+              },
+            ],
+          },
+          strategyStartTime: '2021-06-08 20:52:16',
+          strategyEndTime: '2021-06-08 20:52:16',
+          strategyRestrict: 0,
+          sendOutContent: {
+            isDelay: 1,
+            timeGap: 1.2,
+            timeUnit: 'DAYS',
+            channel: {
+              channelId: 0,
+              channelCode: '',
+              accountId: '',
+            },
+            actionId: 0,
+            templateId: '',
+            templateJson: '模版json',
+          },
+        },
+        {
+          id: 8370371328656,
+          planId: 8361565201672,
+          clientGroupId: 321312321312,
+          clientGroupFilterType: 0,
+          strategyName: '543534543',
+          strategyConditionType: 1,
+          strategyEventConditionContent: {
+            startTime: '2021-06-08 20:52:16',
+            endTime: '2021-06-08 20:52:16',
+            doneLogic: 0,
+            doneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 0,
+                eventCode: '',
+              },
+            ],
+            timeGap: 2.2,
+            timeUnit: 'DAYS',
+            notDoneLogic: 0,
+            notDoneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 0,
+                eventCode: '',
+              },
+            ],
+          },
+          strategyStartTime: '2021-06-08 20:52:16',
+          strategyEndTime: '2021-06-08 20:52:16',
+          strategyRestrict: 0,
+          sendOutContent: {
+            isDelay: 1,
+            timeGap: 1.2,
+            timeUnit: 'DAYS',
+            channel: {
+              channelId: 1,
+              channelCode: '',
+              accountId: '',
+            },
+            actionId: 0,
+            templateId: '',
+            templateJson: '模版json',
+          },
+        },
+      ]
+      */
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获得目标事件
+  async getTargetChannelList() {
+    try {
+      const res = await io.getTargetChannelList()
+
+      const {firstTargetContent} = this.planDetail
+      const {timeGap, timeUnit} = firstTargetContent
+      const {event: {accountCode, accountId, channelCode, channelId, eventCode, eventId}} = firstTargetContent
+      const timeMap = {
+        MINUTES: '分钟',
+        HOURS: '小时',
+        DAYS: '天',
+      }
+
+      const channelName = _.find(res, e => e.id === channelId).name
+      const accountName = _.find(res, e => e.id === accountId).name
+      const eventName = _.find(res, e => e.id === eventId).name
+
+      this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
     } catch (e) {
       errorTip(e.message)
     }

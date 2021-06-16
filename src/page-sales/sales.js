@@ -154,12 +154,18 @@ export default () => {
       render: (text, record) => (
         record.targetStatisticsStatus === 0 ? (
           <div>
-            <Link target="_blank" to="/sales/detail">
+            <Link target="_blank" to={`/sales/detail/${record.id}`}>
               <span className="mr4">{text}</span>
             </Link>
             <Tag text="结果统计中" status="process" />
           </div>
-        ) : text
+        ) : (
+          <div>
+            <Link target="_blank" to={`/sales/detail/${record.id}`}>
+              <span className="mr4">{text}</span>
+            </Link>
+          </div>
+        )
       ),
     },
     {

@@ -1,13 +1,17 @@
 import {useEffect} from 'react'
+import {toJS} from 'mobx'
+import {inject} from 'mobx-react'
+import {useObserver} from 'mobx-react-lite'
+import Strategy from './strategy'
 
-export default () => {
+export default inject('store')(({store}) => {
   useEffect(() => {
-    console.log('tab two mount')
+    store.getStrategyList(store.id)
   }, [])
 
-  return (
+  return useObserver(() => (
     <div>
-      This is two
+      <Strategy list={toJS(store.strategyList)} />
     </div>
-  )
-}
+  ))
+})

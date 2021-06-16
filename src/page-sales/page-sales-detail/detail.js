@@ -1,13 +1,42 @@
 import {useEffect, useState} from 'react'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import {Tag} from 'antd'
 import {AppstoreOutlined, TeamOutlined, ClockCircleOutlined, AimOutlined} from '@ant-design/icons'
 
 export default inject('store')(({store}) => {
+  const renderStatus = () => {
+    if (store.planStatus) {
+      let status = ''
+      let color = ''
+      switch (store.planStatus) {
+        case 0:
+          status = '未生效'
+          color = 'default'
+          break
+        case 1:
+          status = '已生效'
+          color = 'green'
+          break
+        case 2:
+          status = '暂停'
+          color = 'orange'
+          break
+        default:
+          status = '已结束'
+          color = 'blue'
+          break
+      }
+      return <Tag color={color}>{status}</Tag>
+    }
+    return null
+  }
+
   return useObserver(() => (
     <div className="sales-detail-header box-border">
-      <div className="fs18">
-        {store.planName}
+      <div className="fs18 FBH FBAC">
+        <div className="mr8">{store.planName}</div>
+        {renderStatus()}
       </div>
       <div className="mt8 FBH">
         <div className="FBH FBAC mr16 black85">
@@ -24,7 +53,7 @@ export default inject('store')(({store}) => {
         </div>
         <div className="FBH FBAC black85">
           <AimOutlined />
-          <div className="ml4">目标。。。</div>
+          <div className="ml4">{store.planTarget}</div>
         </div>
       </div>
     </div>

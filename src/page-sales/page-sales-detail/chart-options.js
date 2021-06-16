@@ -31,8 +31,9 @@ export function circleOneOption(data) {
         {
           name: '计划触达',
           type: 'pie',
-          radius: ['50%', '70%'],
+          radius: ['60%', '80%'],
           avoidLabelOverlap: false,
+          hoverAnimation: false,
           label: {
             show: false,
             position: 'center',
@@ -88,7 +89,7 @@ export function circleTwoOption(data) {
         name: 'circle',
         type: 'pie',
         clockWise: true,
-        radius: ['50%', '70%'],
+        radius: ['60%', '80%'],
         itemStyle: {
           normal: {
             label: {
@@ -125,6 +126,7 @@ export function circleTwoOption(data) {
         }, {
           name: '剩余',
           value: 100 - data,
+          hoverAnimation: false,
           itemStyle: {
             normal: {
               color: '#E1E8EE',

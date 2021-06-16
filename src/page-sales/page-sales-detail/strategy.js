@@ -3,7 +3,7 @@ import {errorTip} from '../../common/util'
 import io from './io'
 
 export default ({list}) => {
-  const [strategyList, setStrategyList] = useState() // 策略列表
+  const [strategyList, setStrategyList] = useState([]) // 策略列表
   const [conditionList, setConditionList] = useState([]) // 触发条件事件
   const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
   const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
@@ -102,46 +102,49 @@ export default ({list}) => {
       const {
         doneLogic, doneEvents, notDoneLogic, notDoneEvents, timeGap, timeUnit, startTime, endTime,
       } = strategyEventConditionContent // 触发条件
+      
       const {
         isDelay, channel, actionId, templateId,
       } = sendOutContent // 触发设置
       return (
-        <div className="left-item-select mb16" style={{minHeight: 72}}>
-          <div className="left-item-header-select pl16 pt8 pb8 fs14 FBH FBJB">
-            <span>{strategyName}</span>
-          </div>
-          <div className="mt8 mb8 ml16 mr16 c45">
-            <div>
-              <div className="c85">用户筛选</div>
-              <div className="c45">未添加筛选条件</div>
+        <div className="strategy-list">
+          <div className="left-item-select mb12 mr12" style={{minHeight: 72}}>
+            <div className="left-item-header-select pl16 pt8 pb8 fs14 FBH FBJB">
+              <span>{strategyName}</span>
             </div>
-            <div>
-              <div className="c85">触发条件</div>
-              <div className="c45">
-                <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>
-                <div>{`完成 ${doneLogic ? '全部' : '任意'} 事件`}</div>
-                {
-                  doneEvents.map(event => (
-                    <div>{setEventDom(event)}</div>
-                  ))
-                }
-                <div>{`且 ${timeGap}${matchTime(timeUnit)} 未完成 ${notDoneLogic ? '全部' : '任意'} 事件`}</div>
-                {
-                  notDoneEvents.map(event => (
-                    <div>{setEventDom(event)}</div>
-                  ))
-                }
-                <div>{`起止时间：${startTime}~${endTime}`}</div>
+            <div className="mt8 mb8 ml16 mr16 c45">
+              <div>
+                <div className="c85">用户筛选</div>
+                <div className="c45">未添加筛选条件</div>
               </div>
-            </div>
-            <div>
-              <div className="c85">触发设置</div>
-              <div className="c45">
-                <div>
-                  {isDelay ? `延迟 ${sendOutContent.timeGap} ${matchTime(sendOutContent.timeUnit)} 触达` : '立即 触达'}
+              <div>
+                <div className="c85">触发条件</div>
+                <div className="c45">
+                  <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>
+                  <div>{`完成 ${doneLogic ? '全部' : '任意'} 事件`}</div>
+                  {
+                    doneEvents && doneEvents.map(event => (
+                      <div>{setEventDom(event)}</div>
+                    ))
+                  }
+                  <div>{`且 ${timeGap}${matchTime(timeUnit)} 未完成 ${notDoneLogic ? '全部' : '任意'} 事件`}</div>
+                  {
+                    notDoneEvents && notDoneEvents.map(event => (
+                      <div>{setEventDom(event)}</div>
+                    ))
+                  }
+                  <div>{`起止时间：${startTime}~${endTime}`}</div>
                 </div>
-                <div>
-                  {setChannelDom(sendOutContent)}
+              </div>
+              <div>
+                <div className="c85">触发设置</div>
+                <div className="c45">
+                  <div>
+                    {isDelay ? `延迟 ${sendOutContent.timeGap} ${matchTime(sendOutContent.timeUnit)} 触达` : '立即 触达'}
+                  </div>
+                  <div>
+                    {setChannelDom(sendOutContent)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -151,5 +154,5 @@ export default ({list}) => {
     })
     return itemList
   }
-  return <div>{setLeftItem()}</div>
+  return <div className="sales-detail-two">{setLeftItem()}</div>
 }
