@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Drawer, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
+import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
 import Attr from '../icon/wechat-attr.svg'
@@ -33,8 +33,12 @@ export default ({
   current, 
   nextStep,
   prevStep,
-  runFormData = {}, 
-  eventList = [],
+  // twoFormData = {}, 
+  // setTwoFormData,
+  setStrategyDetail, 
+  strategyDetail,
+  treeConditionList,
+  conditionList,
 }) => {
   const [stepForm] = Form.useForm()
   const [planType, setPlanType] = useState(1) // 计划类型 0定时1事件
@@ -48,11 +52,24 @@ export default ({
     startTime,
     triggerTime,
     noRepeatTime,
-    triggerEventList = [{id: undefined}],
-  } = runFormData
+    triggerEventList = [undefined],
+  } = strategyDetail
   let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
 
   const onFinish = () => {
+    const matchEnent = data => {
+      const channel = conditionList.filter(item => item.id === data[0])[0] || {}
+      const account = conditionList.filter(item => item.id === data[1])[0] || {}
+      const event = conditionList.filter(item => item.id === data[2])[0] || {}
+      return {
+        eventId: event.id,
+        eventCode: event.code,
+        channelId: channel.id,
+        channelCode: channel.code,
+        accountId: account.id,
+        accountCode: account.code,
+      }
+    }
     stepForm.validateFields().then(value => {
       const {startEndDate, interval, time, way} = value
       if (planType === 0) {
@@ -78,17 +95,30 @@ export default ({
         )
         value.triggerTime = ctime
       }
-
       if (startEndDate) {
         value.startTime = `${startEndDate[0].format(dateTimeFormat)} 00:00:00`
         value.endTime = `${startEndDate[1].format(dateTimeFormat)} 23:59:59`
       }
-      
-      // runDrawer(false)
+      const {doneEvents, notDoneEvents} = value
+      const strategyEventConditionContent = {
+        doneLogic,
+        notDoneLogic,
+        timeGap: value.timeGap,
+        timeUnit: value.timeUnit,
+        doneEvents: doneEvents.map(item => matchEnent(item)),
+        notDoneEvents: notDoneEvents.map(item => matchEnent(item)),
+        startTime: value.startTime,
+        endTime: value.endTime,
+      }
+      const param = {
+        strategyConditionType: value.strategyConditionType,
+        strategyRestrict: value.strategyRestrict,
+        strategyEventConditionContent,
+      }
+      console.log(param)
+      setStrategyDetail({...strategyDetail, ...param})
+      nextStep()
     }).catch(err => console.log(err))
-  }
-
-  const closeDrawer = () => {
   }
   const changePlanType = v => {
     console.log(v)
@@ -114,8 +144,8 @@ export default ({
   }
  
   useEffect(() => {
-    // setPlanType(runFormData.type || 0)
-    // setPeriod(runFormData.period || 0)
+    // setPlanType(twoFormData.type || 0)
+    // setPeriod(twoFormData.period || 0)
     // setTouchWay(triggerGap ? 'delay' : 'now')
   }, [])
 
@@ -233,7 +263,7 @@ export default ({
         
         <Item
           label="触发类型"
-          name="type"
+          name="strategyConditionType"
           initialValue={planType}
           rules={[{required: true, message: '请选择计划类型'}]}
         >
@@ -272,22 +302,28 @@ export default ({
                   {(fields, {add, remove}, {errors}) => (
                     <div>
                       {fields.map((field, index) => (
-                        <div className="pr">
+                        <div style={{width: 360}} className="pr">
                           <Item
                             {...field}
                             {...layout1}
-                            name={[field.name, 'id']}
-                            fieldKey={[field.fieldKey, 'id']}
+                            // name={[field.name, 'id']}
+                            // fieldKey={[field.fieldKey, 'id']}
                             style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
                             className="position-icon"
                             // label={`事件${index + 1}`}
                             rules={[{required: true, message: '请选择事件'}]}
                           >
-                            <Select style={{width: 360}} placeholder="请选择事件">
-                              {
-                                eventList.map(item => <Option value={item.id}>{item.name}</Option>)
-                              }
-                            </Select>
+                            <Cascader
+                              placeholder="请选择事件"
+                              options={treeConditionList}
+                              expandTrigger="hover"
+                              style={{width: 360}}
+                              fieldNames={{
+                                label: 'name',
+                                value: 'id',
+                                children: 'children',
+                              }}
+                            />
                           </Item>
                           {fields.length > 1 ? (
                             <MinusCircleOutlined
@@ -317,21 +353,21 @@ export default ({
               <span>且在</span>
               <Item 
                 noStyle 
-                name="triggerGap" 
+                name="timeGap" 
                 rules={[{required: true, message: '请输入时间'}]}
               >
-                <Input style={{width: 56, marginLeft: 8}} type="number" />
+                <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
               </Item>
               <Item 
                 noStyle 
-                name="triggerUnit" 
-                initialValue="MINUTE"
+                name="timeUnit" 
+                initialValue="MINUTES"
                 rules={[{required: true, message: '请选择单位'}]}
               >
                 <Select style={{width: 72}}>
-                  <Option value="MINUTE">分钟</Option>
-                  <Option value="HOUR">小时</Option>
-                  <Option value="DAY">天</Option>
+                  <Option value="MINUTES">分钟</Option>
+                  <Option value="HOURS">小时</Option>
+                  <Option value="DAYS">天</Option>
                 </Select>
               </Item>
               <span className="ml8">内</span>
@@ -368,22 +404,28 @@ export default ({
                   {(fields, {add, remove}, {errors}) => (
                     <div>
                       {fields.map((field, index) => (
-                        <div className="pr">
+                        <div style={{width: 360}} className="pr">
                           <Item
                             {...field}
                             {...layout1}
-                            name={[field.name, 'id']}
-                            fieldKey={[field.fieldKey, 'id']}
+                            // name={[field.name, 'id']}
+                            // fieldKey={[field.fieldKey, 'id']}
                             style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
                             className="position-icon"
                             // label={`事件${index + 1}`}
                             rules={[{required: true, message: '请选择事件'}]}
                           >
-                            <Select style={{width: 360}} placeholder="请选择事件">
-                              {
-                                eventList.map(item => <Option value={item.id}>{item.name}</Option>)
-                              }
-                            </Select>
+                            <Cascader
+                              placeholder="请选择事件"
+                              options={treeConditionList}
+                              expandTrigger="hover"
+                              style={{width: 360}}
+                              fieldNames={{
+                                label: 'name',
+                                value: 'id',
+                                children: 'children',
+                              }}
+                            />
                           </Item>
                           {fields.length > 1 ? (
                             <MinusCircleOutlined
@@ -452,7 +494,7 @@ export default ({
         }
         <Item 
           label="参与限制" 
-          name="setRestrict" 
+          name="strategyRestrict" 
           initialValue={setRestrict || 0}
           rules={[{required: true, message: '请选择次数'}]}
         >
@@ -471,7 +513,7 @@ export default ({
         <Button className="mr8" onClick={prevStep}>
           上一步
         </Button>
-        <Button type="primary" onClick={nextStep}>
+        <Button type="primary" onClick={onFinish}>
           下一步
         </Button>
       </div>
