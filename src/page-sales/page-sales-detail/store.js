@@ -27,6 +27,8 @@ export default class Store {
   @observable analysisedEventList = [] // 已配置的分析渠道事件
   @observable initAnalisysValue = []
 
+  @observable strategyList = [] // 策略列表
+
   // 计划详情
   @action async getDetail(id) {
     try {
@@ -298,6 +300,121 @@ export default class Store {
 
       // 获取分析详情。。。。
       cb()
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获取策略列表
+  async getStrategyList(planId) {
+    try {
+      const res = await io.getStrategyList({planId})
+
+      // 展示暂无数据
+      this.strategyList = res
+      /*
+      this.strategyList = [
+        {
+          id: 8369739904128,
+          planId: 8361565201672,
+          clientGroupFilterType: 0,
+          strategyName: '侧444首',
+          strategyConditionType: 1,
+          strategyEventConditionContent: {
+            startTime: '2021-06-08 20:52:16',
+            endTime: '2021-06-08 20:52:16',
+            doneLogic: 0,
+            doneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 1001,
+                eventCode: '',
+              },
+            ],
+            timeGap: 2.2,
+            timeUnit: 'DAYS',
+            notDoneLogic: 0,
+            notDoneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 1001,
+                eventCode: '',
+              },
+            ],
+          },
+          strategyStartTime: '2021-06-08 20:52:16',
+          strategyEndTime: '2021-06-08 20:52:16',
+          strategyRestrict: 0,
+          sendOutContent: {
+            isDelay: 1,
+            timeGap: 1.2,
+            timeUnit: 'DAYS',
+            channel: {
+              channelId: 0,
+              channelCode: '',
+              accountId: '',
+            },
+            actionId: 0,
+            templateId: '',
+            templateJson: '模版json',
+          },
+        },
+        {
+          id: 8370371328656,
+          planId: 8361565201672,
+          clientGroupId: 321312321312,
+          clientGroupFilterType: 0,
+          strategyName: '543534543',
+          strategyConditionType: 1,
+          strategyEventConditionContent: {
+            startTime: '2021-06-08 20:52:16',
+            endTime: '2021-06-08 20:52:16',
+            doneLogic: 0,
+            doneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 0,
+                eventCode: '',
+              },
+            ],
+            timeGap: 2.2,
+            timeUnit: 'DAYS',
+            notDoneLogic: 0,
+            notDoneEvents: [
+              {
+                channelId: 1,
+                channelCode: '',
+                accountId: '',
+                eventId: 0,
+                eventCode: '',
+              },
+            ],
+          },
+          strategyStartTime: '2021-06-08 20:52:16',
+          strategyEndTime: '2021-06-08 20:52:16',
+          strategyRestrict: 0,
+          sendOutContent: {
+            isDelay: 1,
+            timeGap: 1.2,
+            timeUnit: 'DAYS',
+            channel: {
+              channelId: 1,
+              channelCode: '',
+              accountId: '',
+            },
+            actionId: 0,
+            templateId: '',
+            templateJson: '模版json',
+          },
+        },
+      ]
+      */
     } catch (e) {
       errorTip(e.message)
     }

@@ -9,6 +9,12 @@ const api = {
   getAllAnalysisEvents: post(`${marketingApi}/planAnalysis/getAllAnalysisEvents`), // 计划分析，可分析渠道事件下拉
   getConfiguredAnalysisEvents: post(`${marketingApi}/planAnalysis/getConfiguredAnalysisEvents`), // 已配置分析渠道事件
   editAnalysis: post(`${marketingApi}/planAnalysis/edit`), // 计划分析，编辑分析渠道事件
+  getStrategyList: post(`${marketingApi}/planStrategy/list`), // 策略列表
+  
+  getChannelActions: post(`${marketingApi}/planStrategy/getChannelActions`), // 营销动作列表
+  getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
+  getStrChannelList: post(`${marketingApi}/planStrategy/getChannelList`), // 触达渠道列表
+  getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
 } 
 
 ioContext.create('salesDetail', api) 
