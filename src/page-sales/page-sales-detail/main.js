@@ -10,9 +10,11 @@ const {TabPane} = Tabs
 
 const detailStore = new Store()
 
-export default () => {
+export default props => {
+  detailStore.id = props.match.params.id
+
   useEffect(() => {
-    detailStore.getDetail(8436565125512)
+    detailStore.getDetail()
   }, [])
 
   return (    

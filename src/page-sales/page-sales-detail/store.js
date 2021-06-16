@@ -4,7 +4,7 @@ import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
 import io from './io'
 
 export default class Store {
-  @observable id = 8380506835856
+  @observable id
 
   @observable planName
 
@@ -29,10 +29,18 @@ export default class Store {
 
   @observable strategyList = [] // 策略列表
 
+  circleOneChart
+  circleTwoChart
+  lineChart
+  barChart
+  funnelChart
+
   // 计划详情
-  @action async getDetail(id) {
+  @action async getDetail() {
     try {
-      const res = await io.detailPlan({id})
+      const res = await io.detailPlan({
+        id: this.id,
+      })
 
       if (res) {
         this.planName = res.planName
@@ -47,9 +55,11 @@ export default class Store {
   }
 
   // 计划触达，目标完成率
-  async getStatistics(id, cb = () => {}) {
+  async getStatistics(cb = () => {}) {
     try {
-      const res = await io.getStatistics({id})
+      const res = await io.getStatistics({
+        id: this.id,
+      })
 
       if (res) {
         this.touchCount = res.touchCount
@@ -68,7 +78,10 @@ export default class Store {
   // chartEndDate
   async getTargetCount(params, cb = () => {}) {
     try {
-      const res = await io.getTargetCount(params)
+      const res = await io.getTargetCount({
+        id: this.id,
+        ...params,
+      })
 
       this.lineChartData = res
       /* this.lineChartData = [
@@ -105,9 +118,11 @@ export default class Store {
   }
 
   // 事件人数统计
-  async getEventStatistics(id, cb = () => {}) {
+  async getEventStatistics(cb = () => {}) {
     try {
-      const res = await io.getEventStatistics({id})
+      const res = await io.getEventStatistics({
+        id: this.id,
+      })
 
       // this.eventStatistics = res
       this.eventStatistics = [
@@ -149,9 +164,11 @@ export default class Store {
   }
 
   // 可分析渠道事件下拉
-  async getAllAnalysisEvents(id, cb = () => {}) {
+  async getAllAnalysisEvents(cb = () => {}) {
     try {
-      const res = await io.getAllAnalysisEvents({id})
+      const res = await io.getAllAnalysisEvents({
+        id: this.id,
+      })
 
       // this.eventList = res
       this.eventList = [
@@ -235,9 +252,11 @@ export default class Store {
   }
 
   // 已配置分析渠道事件
-  async getConfiguredAnalysisEvents(id, cb = () => {}) {
+  async getConfiguredAnalysisEvents(cb = () => {}) {
     try {
-      const res = await io.getConfiguredAnalysisEvents({id})
+      const res = await io.getConfiguredAnalysisEvents({
+        id: this.id,
+      })
 
       this.analysisedEventList = res
       /* this.analysisedEventList = [

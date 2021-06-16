@@ -6,7 +6,7 @@ import Strategy from './strategy'
 
 export default inject('store')(({store}) => {
   useEffect(() => {
-    store.getStrategyList(8436565125512)
+    store.getStrategyList(store.id)
   }, [])
 
   return useObserver(() => (

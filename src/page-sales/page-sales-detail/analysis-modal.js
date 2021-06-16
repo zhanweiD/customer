@@ -100,8 +100,6 @@ const SalesDetail = ({visible, setVisible, store}) => {
 
       resultValues.push(store.analysisedEventList[store.analysisedEventList.length - 1])
 
-      console.log(resultValues)
-
       store.editAnalysis({
         events: resultValues,
         id: store.id,
@@ -120,8 +118,8 @@ const SalesDetail = ({visible, setVisible, store}) => {
   }, [dragItems])
 
   useEffect(() => {
-    store.getAllAnalysisEvents(8380506835856, () => {
-      store.getConfiguredAnalysisEvents(store.id, () => {
+    store.getAllAnalysisEvents(() => {
+      store.getConfiguredAnalysisEvents(() => {
         // 初始化过程配置的数据
         const initV = []
 

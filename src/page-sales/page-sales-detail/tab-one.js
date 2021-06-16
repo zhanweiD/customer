@@ -1,9 +1,10 @@
 import {useEffect, useRef, useState} from 'react'
-import {Divider, Button} from 'antd'
+import {Divider, Button, Select} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {circleOneOption, circleTwoOption, lineOption, barOption, funnelOption} from './chart-options'
 import AnalysisModal from './analysis-modal'
+import TimeRange from '../../component/time-range'
 
 const barMockData = [{
   value: 2000,
@@ -19,6 +20,8 @@ const barMockData = [{
   value: 100,
   label: '购房成交',
 }]
+
+const {Option} = Select
 
 const SalesDetail = () => {
   const [visible, setVisible] = useState(false)
@@ -80,50 +83,82 @@ export default inject('store')(({store}) => {
   const funnelRef = useRef(null)
 
   useEffect(() => {
-    store.getStatistics(8436565125512, () => {
+    store.getStatistics(() => {
       // 画两个饼图
-      const circleOneChart = echarts.init(circleOne.current)
-      circleOneChart.setOption(circleOneOption(store.touchCount))
+      store.circleOneChart = echarts.init(circleOne.current)
+      store.circleOneChart.setOption(circleOneOption(store.touchCount))
 
-      window.addEventListener('resize', () => circleOneChart.resize())
+      window.addEventListener('resize', () => store.circleOneChart.resize())
 
-      const circleTwoChart = echarts.init(circleTwo.current)
-      circleTwoChart.setOption(circleTwoOption(store.targetRate))
+      store.circleTwoChart = echarts.init(circleTwo.current)
+      store.circleTwoChart.setOption(circleTwoOption(store.targetRate))
 
-      window.addEventListener('resize', () => circleTwoChart.resize())
+      window.addEventListener('resize', () => store.circleTwoChart.resize())
     })
 
     // 画折线图
     store.getTargetCount({
-      id: 8380506835856,
-      chartBeginDate: '2021-06-15',
-      chartEndDate: '2021-06-17',
+      chartBeginDate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+      chartEndDate: moment().subtract(0, 'day').format('YYYY-MM-DD'),
     }, () => {
-      const lineChart = echarts.init(lineRef.current)
-      lineChart.setOption(lineOption(store.lineChartData))
+      store.lineChart = echarts.init(lineRef.current)
+      store.lineChart.setOption(lineOption(store.lineChartData))
 
-      window.addEventListener('resize', () => lineChart.resize())
+      window.addEventListener('resize', () => store.lineChart.resize())
     })
 
     // 分析配置的图
-    store.getEventStatistics(8436565125512, () => {
+    store.getEventStatistics(() => {
       // 柱状图
-      const barChart = echarts.init(barRef.current)
-      barChart.setOption(barOption(store.eventStatistics))
+      store.barChart = echarts.init(barRef.current)
+      store.barChart.setOption(barOption(store.eventStatistics))
 
-      window.addEventListener('resize', () => barChart.resize())
+      window.addEventListener('resize', () => store.barChart.resize())
 
       // funnel
-      const funnelChart = echarts.init(funnelRef.current)
-      funnelChart.setOption(funnelOption(store.eventStatistics))
+      store.funnelChart = echarts.init(funnelRef.current)
+      store.funnelChart.setOption(funnelOption(store.eventStatistics))
 
-      window.addEventListener('resize', () => funnelChart.resize())
+      window.addEventListener('resize', () => store.funnelChart.resize())
     })
   }, [])
 
+  const dateChange = e => {
+    if (e === '7') {
+      // 画折线图
+      store.getTargetCount({
+        chartBeginDate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
+        chartEndDate: moment().subtract(0, 'day').format('YYYY-MM-DD'),
+      }, () => {
+        store.lineChart.setOption(lineOption(store.lineChartData))
+      })
+    } else {
+      // 画折线图
+      store.getTargetCount({
+        chartBeginDate: moment().subtract(29, 'day').format('YYYY-MM-DD'),
+        chartEndDate: moment().subtract(0, 'day').format('YYYY-MM-DD'),
+      }, () => {
+        store.lineChart.setOption(lineOption(store.lineChartData))
+      })
+    }
+  }
 
   return useObserver(() => (
     <div className="detail-chart oa">
+      {
+        store.lineChartData.length > 0 && (
+          <div className="chart-filter">
+            <Select 
+              style={{width: '80px'}} 
+              defaultValue="7"
+              onChange={dateChange}
+            >
+              <Option value="7">近7天</Option>
+              <Option value="30">近30天</Option>
+            </Select>
+          </div>
+        )
+      }
       <div className="FBH">
         <div className="FB1">
           <div className="h400" ref={circleOne} />
