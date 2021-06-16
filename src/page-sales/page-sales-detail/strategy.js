@@ -3,7 +3,7 @@ import {errorTip} from '../../common/util'
 import io from './io'
 
 export default ({list}) => {
-  const [strategyList, setStrategyList] = useState() // 策略列表
+  const [strategyList, setStrategyList] = useState([]) // 策略列表
   const [conditionList, setConditionList] = useState([]) // 触发条件事件
   const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
   const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
@@ -102,6 +102,7 @@ export default ({list}) => {
       const {
         doneLogic, doneEvents, notDoneLogic, notDoneEvents, timeGap, timeUnit, startTime, endTime,
       } = strategyEventConditionContent // 触发条件
+      
       const {
         isDelay, channel, actionId, templateId,
       } = sendOutContent // 触发设置
@@ -122,13 +123,13 @@ export default ({list}) => {
                   <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>
                   <div>{`完成 ${doneLogic ? '全部' : '任意'} 事件`}</div>
                   {
-                    doneEvents.map(event => (
+                    doneEvents && doneEvents.map(event => (
                       <div>{setEventDom(event)}</div>
                     ))
                   }
                   <div>{`且 ${timeGap}${matchTime(timeUnit)} 未完成 ${notDoneLogic ? '全部' : '任意'} 事件`}</div>
                   {
-                    notDoneEvents.map(event => (
+                    notDoneEvents && notDoneEvents.map(event => (
                       <div>{setEventDom(event)}</div>
                     ))
                   }

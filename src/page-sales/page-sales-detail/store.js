@@ -6,9 +6,10 @@ import io from './io'
 export default class Store {
   @observable id
 
+  @observable planDetail
   @observable planName
-
   @observable planTime
+  @observable planTarget
 
   @observable touchCount = 0 // 计划触达
   @observable targetRate = 0 // 目标完成率
@@ -43,11 +44,14 @@ export default class Store {
       })
 
       if (res) {
+        this.planDetail = res
         this.planName = res.planName
-
+        this.planStatus = res.planStatus
         if (res.startTime) {
           this.planTime = `${res.startTime} ~ ${res.endTime}`
         }
+
+        this.getTargetChannelList()
       }
     } catch (e) {
       errorTip(e.message)
@@ -124,7 +128,8 @@ export default class Store {
         id: this.id,
       })
 
-      // this.eventStatistics = res
+      this.eventStatistics = res
+      /*
       this.eventStatistics = [
         {
           targetCount: 4000,
@@ -151,6 +156,7 @@ export default class Store {
           rate: 43.65,
         },
       ]
+      */
 
       this.eventStatistics.forEach(item => {
         item.name = item.eventName
@@ -170,7 +176,8 @@ export default class Store {
         id: this.id,
       })
 
-      // this.eventList = res
+      this.eventList = res
+      /*
       this.eventList = [
         { // type :0 目标事件 1 完成事件 2 未完成事件 100 渠道 101 渠道账号
           id: 1,
@@ -213,6 +220,7 @@ export default class Store {
           descr: '渠道账号',
         },
       ]
+      */
 
       const result = []
       this.eventList.forEach(item => {
@@ -287,12 +295,8 @@ export default class Store {
       ] */
 
       // 对配置过的数据进行处理
-      if (this.analysisedEventList.length > 2) {
+      if (this.analysisedEventList.length && this.analysisedEventList.length > 0) {
         const dataCopy = _.cloneDeep(this.analysisedEventList)
-
-        // 去掉头尾
-        dataCopy.shift()
-        dataCopy.pop()
 
         const datas = []
         dataCopy.forEach(item => {
@@ -434,6 +438,30 @@ export default class Store {
         },
       ]
       */
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获得目标事件
+  async getTargetChannelList() {
+    try {
+      const res = await io.getTargetChannelList()
+
+      const {firstTargetContent} = this.planDetail
+      const {timeGap, timeUnit} = firstTargetContent
+      const {event: {accountCode, accountId, channelCode, channelId, eventCode, eventId}} = firstTargetContent
+      const timeMap = {
+        MINUTES: '分钟',
+        HOURS: '小时',
+        DAYS: '天',
+      }
+
+      const channelName = _.find(res, e => e.id === channelId).name
+      const accountName = _.find(res, e => e.id === accountId).name
+      const eventName = _.find(res, e => e.id === eventId).name
+
+      this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
     } catch (e) {
       errorTip(e.message)
     }

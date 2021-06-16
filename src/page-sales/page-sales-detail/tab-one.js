@@ -36,44 +36,6 @@ const SalesDetail = () => {
   )
 }
 
-const BarChart = () => {
-  const barRef = useRef(null)
-
-  useEffect(() => {
-    const barChart = echarts.init(barRef.current)
-    barChart.setOption(barOption(barMockData))
-
-    window.addEventListener('resize', () => barChart.resize())
-  }, [])
-
-  return (
-    <div className="h400" ref={barRef} />
-  )
-}
-
-const FunnelChart = () => {
-  const funnelRef = useRef(null)
-
-  useEffect(() => {
-    const funnelChart = echarts.init(funnelRef.current)
-
-    const funnelMockData = barMockData
-    if (funnelMockData.length) {
-      funnelMockData.forEach(item => {
-        item.per = `${(item.value / funnelMockData[0].value * 100).toFixed(2)}%`
-      })
-    }
-
-    funnelChart.setOption(funnelOption(funnelMockData))
-
-    window.addEventListener('resize', () => funnelChart.resize())
-  }, [])
-
-  return (
-    <div className="h400" ref={funnelRef} />
-  )
-}
-
 
 export default inject('store')(({store}) => {
   const circleOne = useRef(null)

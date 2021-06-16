@@ -15,6 +15,7 @@ const api = {
   getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
   getStrChannelList: post(`${marketingApi}/planStrategy/getChannelList`), // 触达渠道列表
   getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
+  getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
 } 
 
 ioContext.create('salesDetail', api) 

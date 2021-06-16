@@ -5,6 +5,8 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
 import {autorun} from 'mobx'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
+import {barOption, funnelOption} from './chart-options'
+
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -38,8 +40,6 @@ const layout1 = {
 }
 
 const SalesDetail = ({visible, setVisible, store}) => {
-  // const [dragItems, setDragItems] = useState([Date.now().toString()]) // dragId
-  // const [dragItems, setDragItems] = useState(['aaa-bbb-ccc']) // dragId
   const [dragItems, setDragItems] = useState([]) // dragId
   const [configForm] = Form.useForm()
 
@@ -66,8 +66,6 @@ const SalesDetail = ({visible, setVisible, store}) => {
 
   const handleOk = () => {
     configForm.validateFields().then(value => {
-      console.log(value)
-
       const {start, end, ...rest} = value
       // 获取过程配置的数据
       const analysisValues = _.values(rest)
@@ -83,7 +81,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
         }
       */
       const resultValues = []
-      resultValues.push(store.analysisedEventList[0])
+
       analysisValues.forEach(item => {
         // 处理数据
         const splitValues = item.split('-')
@@ -98,21 +96,37 @@ const SalesDetail = ({visible, setVisible, store}) => {
         })
       })
 
-      resultValues.push(store.analysisedEventList[store.analysisedEventList.length - 1])
-
       store.editAnalysis({
         events: resultValues,
         id: store.id,
       }, () => {
         setVisible(false)
         // 要获取详情数据
+
+        store.getEventStatistics(() => {
+          store.barChart.setOption(barOption(store.eventStatistics))
+          store.funnelChart.setOption(funnelOption(store.eventStatistics))
+        })
       })
     })
   }
 
   const handleCancel = () => {
     setVisible(false)
+    initAnalysis()
   }
+
+  const initAnalysis = () => {
+    // 初始化过程配置的数据
+    const initV = []
+
+    store.initAnalisysValue.forEach(item => {
+      initV.push(Date.now().toString())
+    })
+
+    setDragItems(initV)
+  }
+
   useEffect(() => {
     console.log(dragItems)
   }, [dragItems])
@@ -120,14 +134,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
   useEffect(() => {
     store.getAllAnalysisEvents(() => {
       store.getConfiguredAnalysisEvents(() => {
-        // 初始化过程配置的数据
-        const initV = []
-
-        store.initAnalisysValue.forEach(item => {
-          initV.push(Date.now().toString())
-        })
-
-        setDragItems(initV)
+        initAnalysis()
       })
     })
   }, [])
@@ -137,9 +144,13 @@ const SalesDetail = ({visible, setVisible, store}) => {
       <Modal 
         title="分析配置" 
         visible={visible}
-        onOk={handleOk} 
+        // onOk={handleOk} 
         onCancel={handleCancel}
         maskClosable={false}
+        footer={[
+          <Button onClick={handleCancel}>取消</Button>,
+          <Button type="primary" onClick={handleOk} disabled={dragItems.length === 0}>确定</Button>,
+        ]}
       >
         <Form
           {...layout}
@@ -153,7 +164,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
           >
             <span>{store.analysisStart}</span>
           </Item>
-          <div className="FBH" style={{marginLeft: '21px'}}>
+          <div className="FBH" style={{marginLeft: '20px'}}>
             <div className="fs12" style={{color: 'rgba(0,0,0,0.65)'}}>过程配置</div>
             <Button
               type="primary"
@@ -189,6 +200,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
                             name={item}
                             initialValue={store.initAnalisysValue[index]}
                             {...layout1}
+                            rules={[{required: true, message: '不能为空'}]}
                           >
                             <Select placeholder="请选择" draggable="false">
                               {
