@@ -29,25 +29,23 @@ const listToTree = data => {
 }
 
 const CreateSales = ({
-  nextStep, current, objTagList, oneFormData, setOneFormData, setStrategyDetail, strategyDetail,
+  nextStep, 
+  current, 
+  objTagList, 
+  oneFormData, 
+  setOneFormData, 
+  setStrategyDetail, 
+  strategyDetail,
+  filterChannelList,
+  originEventList,
 }) => {
   const [oneForm] = Form.useForm()
   const [radioType, setRadioType] = useState(0)
   const [condList, setCondList] = useState([1])
-  const [filterChannelList, setFilterChannelList] = useState([]) // 行为筛选事件
-  const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
   const [promptTags, setPromptTags] = useState([]) // 标签预提示
-  const [userLogic, setUserLogic] = useState('or') // 用户筛选关系
-  // 获取目标事件
-  const getFilterChannelList = async () => {
-    try {
-      const res = await io.getFilterChannelList()
-      setOriginEventList(res || [])
-      setFilterChannelList(listToTree(res || []))
-    } catch (error) {
-      errorTip(error.message)
-    }
-  }
+  const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
+  const [clientGroup, setClientGroup] = useState([{tagId: undefined, comparision: undefined, rightParams: undefined}]) // 用户筛选详情
+  
   // 标签值预提示
   async function getPromptTag(objIdAndTagId) {
     try {
@@ -61,44 +59,75 @@ const CreateSales = ({
     }
   }
 
-  const complete = () => {
-    oneForm.validateFields().then(value => {
-      const param = value.clientGroupFilterContent.map(item => {
-        item.leftTagId = item.tagId.split('.')[1] || null
-        // item.logic = condList[index]
-        return item
-      })
-      value.clientGroupFilterContent = JSON.stringify({logic: userLogic, express: param})
-      console.log(value)
-      setStrategyDetail({
-        ...strategyDetail,
-        ...value,
-      })
-      nextStep()
-    })
+  const matchEnent = data => {
+    const channel = originEventList.filter(item => item.id === data[0])[0] || {}
+    const account = originEventList.filter(item => item.id === data[1])[0] || {}
+    const event = originEventList.filter(item => item.id === data[2])[0] || {}
+    return {
+      eventId: event.id,
+      eventCode: event.code,
+      channelId: channel.id,
+      channelCode: channel.code,
+      accountId: account.id,
+      accountCode: account.code,
+    }
   }
 
-  const changeConditions = index => {
-    const cDate = [...condList]
-    cDate[index] = cDate[index] ? 0 : 1
-    setCondList(cDate)
+  const complete = () => {
+    oneForm.validateFields().then(value => {
+      console.log(value)
+      if (value.clientGroupFilterType) {
+        const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
+        value.clientGroupUserActionFilterContent = {events}
+      } else if (value.clientGroupFilterContent[0].tagId) {
+        const param = value.clientGroupFilterContent.map(item => {
+          item.leftTagId = item.tagId ? item.tagId.split('.')[1] : null
+          return item
+        })
+        value.clientGroupTagFilterContent = JSON.stringify({logic: userLogic, express: param})
+      }
+      // const param = {
+      //   ...strategyDetail,
+      //   ...value,
+      // }
+      setOneFormData(value)
+      // delete param.clientGroupFilterContent
+      // setStrategyDetail(param)
+      nextStep()
+    })
   }
 
   const onChange = value => {
     console.log(value)
   }
 
-  const changeUserLogic = (e, v) => {
-    e.stopPropagation()
+  const changeUserLogic = v => {
     setUserLogic(v)
   }
   
   useEffect(() => {
-  }, [condList])
+    if (!strategyDetail.id) return
+    if (strategyDetail.clientGroupFilterType) {
+      const {clientGroupUserActionFilterContent, clientGroupFilterType} = strategyDetail
+      const list = clientGroupUserActionFilterContent.events.map(item => ({event: [item.channelId, item.accountId, item.eventId]}))
+      setClientGroup(list)
+      setRadioType(clientGroupFilterType)
+    } else {
+      const {clientGroupTagFilterContent, clientGroupFilterType} = strategyDetail
+      const item = JSON.parse(clientGroupTagFilterContent)
+      setUserLogic(item.logic)
+      setClientGroup(item.express)
+      setRadioType(clientGroupFilterType)
+    }
+    oneForm.resetFields()
+  }, [strategyDetail])
+  
   useEffect(() => {
-    getFilterChannelList()
-  }, [])
-
+    oneForm.setFieldsValue({clientGroupFilterType: radioType})
+  }, [radioType])
+  useEffect(() => {
+    oneForm.setFieldsValue({clientGroupFilterContent: clientGroup})
+  }, [clientGroup])
   return (
     <div 
       style={{display: current === 0 ? 'block' : 'none'}} 
@@ -112,7 +141,7 @@ const CreateSales = ({
         <Item
           name="clientGroupFilterType"
           label="筛选类型"
-          initialValue={0}
+          initialValue={radioType}
           style={{marginBottom: 12}}
         >
           <Radio.Group name="radiogroup" onChange={v => setRadioType(v.target.value)}>
@@ -121,7 +150,6 @@ const CreateSales = ({
           </Radio.Group>
         </Item>
         <Collapse 
-          // style={{width: 'calc(100% + 48px)', marginLeft: '-24px'}} 
           defaultActiveKey={['1']}
           style={{position: 'relative'}}
         >
@@ -130,12 +158,13 @@ const CreateSales = ({
               <div className="FBH header-select">
                 用户实体属性满足
                 <Select 
-                  defaultValue="or"
+                  value={userLogic}
                   style={{width: 72, margin: '8px'}} 
-                  onClick={(e, v) => changeUserLogic(e, v)}
+                  onClick={e => e.stopPropagation()}
+                  onChange={changeUserLogic}
                 >
-                  <Option value="or">任意</Option>
-                  <Option value="and">全部</Option>
+                  <Option value="OR">任意</Option>
+                  <Option value="AND">全部</Option>
                 </Select>
               </div>
               // '用户实体属性满足'
@@ -144,8 +173,7 @@ const CreateSales = ({
           >
             <List
               name="clientGroupFilterContent"
-              initialValue={[{tagId: undefined, comparision: undefined, rightParams: undefined}]}
-              // initialValue={data}
+              initialValue={clientGroup}
             >
               {(fields, {add, remove}) => {
                 return (
@@ -157,7 +185,7 @@ const CreateSales = ({
                             {...restField}
                             name={[name, 'event']}
                             fieldKey={[fieldKey, 'event']}
-                            rules={[{required: true, message: '请选择事件'}]}
+                            // rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Cascader
                               placeholder="请选择事件"
@@ -205,7 +233,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'tagId']}
                               fieldKey={[fieldKey, 'tagId']}
-                              rules={[{required: true, message: '请选择标签'}]}
+                              // rules={[{required: true, message: '请选择标签'}]}
                             >
                               <Select style={{width: 160}} placeholder="请选择标签" onChange={getPromptTag}>
                                 {
@@ -217,7 +245,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'comparision']}
                               fieldKey={[fieldKey, 'comparision']}
-                              rules={[{required: true, message: '请选择条件'}]}
+                              // rules={[{required: true, message: '请选择条件'}]}
                             >
                               <Select style={{width: 128}} placeholder="请选择条件">
                                 <Option value="not in">不等于</Option>
@@ -228,7 +256,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'rightParams']}
                               fieldKey={[fieldKey, 'rightParams']}
-                              rules={[{required: true, message: '请输入或选择'}]}
+                              // rules={[{required: true, message: '请输入或选择'}]}
                             >
                               <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
                                 {

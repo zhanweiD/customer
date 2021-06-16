@@ -33,8 +33,8 @@ export default ({
   current, 
   nextStep,
   prevStep,
-  // twoFormData = {}, 
-  // setTwoFormData,
+  twoFormData = {}, 
+  setTwoFormData,
   setStrategyDetail, 
   strategyDetail,
   treeConditionList,
@@ -43,80 +43,93 @@ export default ({
   const [stepForm] = Form.useForm()
   const [planType, setPlanType] = useState(1) // 计划类型 0定时1事件
   const [doneLogic, setDoneLogic] = useState(0) // 完成 0任意1全部 事件
-  const [notDoneLogic, setnotDoneLogic] = useState(0) // 未完成 0任意1全部 事件
-  const [period, setPeriod] = useState(0) // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
-  let cycle = null // corn
-  const {
-    setRestrict,
-    endTime,
-    startTime,
-    triggerTime,
-    noRepeatTime,
-    triggerEventList = [undefined],
-  } = strategyDetail
-  let cornTime = triggerTime ? CycleSelect.cronSrialize(triggerTime) : {}
+  const [notDoneLogic, setNotDoneLogic] = useState(0) // 未完成 0任意1全部 事件
+  const [period, setPeriod] = useState('0') // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
+  const [strategyEventCondition, setStrategyEventCondition] = useState({}) // 触发条件详情
+  const [doneEventList, setDoneEventList] = useState([undefined]) // 完成事件
+  const [notDoneEventList, setNotDoneEventList] = useState([undefined]) // 未完成事件
+  const [cornTime, setCornTime] = useState({}) // 触发时间
 
-  const onFinish = () => {
-    const matchEnent = data => {
-      const channel = conditionList.filter(item => item.id === data[0])[0] || {}
-      const account = conditionList.filter(item => item.id === data[1])[0] || {}
-      const event = conditionList.filter(item => item.id === data[2])[0] || {}
-      return {
-        eventId: event.id,
-        eventCode: event.code,
-        channelId: channel.id,
-        channelCode: channel.code,
-        accountId: account.id,
-        accountCode: account.code,
-      }
+  const matchEnent = data => {
+    const channel = conditionList.filter(item => item.id === data[0])[0] || {}
+    const account = conditionList.filter(item => item.id === data[1])[0] || {}
+    const event = conditionList.filter(item => item.id === data[2])[0] || {}
+    return {
+      eventId: event.id,
+      eventCode: event.code,
+      channelId: channel.id,
+      channelCode: channel.code,
+      accountId: account.id,
+      accountCode: account.code,
     }
+  }
+  const onFinish = () => {
     stepForm.validateFields().then(value => {
-      const {startEndDate, interval, time, way} = value
-      if (planType === 0) {
-        switch (period) {
-          case 1:
-            cycle = 'day'
-            break
-          case 2:
-            cycle = 'week'
-            break
-          case 3:
-            cycle = 'month'
-            break
-          default:
-            cycle = ''
-            value.noRepeatTime = `${interval.format(dateFormat)} ${time.format(timeFormat)}`
-            break
-        }
-      }
-      if (time && cycle) {
-        const ctime = CycleSelect.formatCron(
-          {cycle, time: time.format(timeFormat), interval}
-        )
-        value.triggerTime = ctime
-      }
+      console.log(value)
+      const {startEndDate, interval, time} = value
+      let params = {}
+
       if (startEndDate) {
         value.startTime = `${startEndDate[0].format(dateTimeFormat)} 00:00:00`
         value.endTime = `${startEndDate[1].format(dateTimeFormat)} 23:59:59`
       }
-      const {doneEvents, notDoneEvents} = value
-      const strategyEventConditionContent = {
-        doneLogic,
-        notDoneLogic,
-        timeGap: value.timeGap,
-        timeUnit: value.timeUnit,
-        doneEvents: doneEvents.map(item => matchEnent(item)),
-        notDoneEvents: notDoneEvents.map(item => matchEnent(item)),
-        startTime: value.startTime,
-        endTime: value.endTime,
+      if (value.strategyConditionType) {
+        const {doneEvents, notDoneEvents} = value
+        const strategyEventConditionContent = {
+          doneLogic,
+          notDoneLogic,
+          timeGap: value.timeGap,
+          timeUnit: value.timeUnit,
+          doneEvents: doneEvents.map(item => matchEnent(item)),
+          notDoneEvents: notDoneEvents.map(item => matchEnent(item)),
+          startTime: value.startTime,
+          endTime: value.endTime,
+        }
+        params = {
+          strategyConditionType: value.strategyConditionType,
+          strategyRestrict: value.strategyRestrict,
+          strategyEventConditionContent,
+        }
+        console.log(params)
+      } else {
+        value.strategyFixConditionContent = {}
+        let cycle = null // corn
+        let ctime = null
+        switch (period) {
+          case '1':
+            cycle = 'day'
+            break
+          case '2':
+            cycle = 'week'
+            break
+          case '3':
+            cycle = 'month'
+            break
+          default:
+            cycle = ''
+            ctime = `${interval.format(dateFormat)} ${time.format(timeFormat)}`
+            break
+        }
+        if (period !== '0') {
+          ctime = CycleSelect.formatCron(
+            {cycle, time: time.format(timeFormat), interval}
+          )
+        }
+        
+        const strategyFixConditionContent = {
+          frequency: value.frequency,
+          cron: ctime,
+          startTime: value.startTime,
+          endTime: value.endTime,
+        }
+        params = {
+          strategyConditionType: value.strategyConditionType,
+          strategyFixConditionContent,
+        }
+        console.log(params)
       }
-      const param = {
-        strategyConditionType: value.strategyConditionType,
-        strategyRestrict: value.strategyRestrict,
-        strategyEventConditionContent,
-      }
-      console.log(param)
-      setStrategyDetail({...strategyDetail, ...param})
+      setTwoFormData(params)
+      // setStrategyDetail({...strategyDetail, ...params})
       nextStep()
     }).catch(err => console.log(err))
   }
@@ -126,28 +139,61 @@ export default ({
   }
   const changePeriod = v => {
     setPeriod(v)
-    cornTime = {}
+    setCornTime({})
     stepForm.setFields([{
       time: '', 
       interval: '',
     }])
   }
-  const changeDoneLogic = (e, v) => {
-    e.stopPropagation()
+  const changeDoneLogic = v => {
     setDoneLogic(v)
   }
   const changeNotDoneLogic = v => {
-    setnotDoneLogic(v)
+    setNotDoneLogic(v)
   }
   const disabledDate = time => {
     return time && time < moment().endOf('day')
   }
  
   useEffect(() => {
-    // setPlanType(twoFormData.type || 0)
-    // setPeriod(twoFormData.period || 0)
-    // setTouchWay(triggerGap ? 'delay' : 'now')
-  }, [])
+    if (!strategyDetail.id) {
+      setStrategyEventCondition({})
+      setDoneEventList([undefined])
+      setNotDoneEventList([undefined])
+      setNotDoneLogic(0)
+      setDoneLogic(0)
+      setPlanType(1)
+      setCornTime({})
+      setPeriod('0')
+      setTimeout(() => {
+        stepForm.resetFields()
+      }, 0)
+      return
+    } 
+    if (strategyDetail.strategyConditionType) {
+      const {strategyEventConditionContent, strategyConditionType} = strategyDetail
+      const {doneEvents, notDoneEvents = []} = strategyEventConditionContent
+      const done = doneEvents.map(item => [item.channelId, item.accountId, item.eventId])
+      const notDone = notDoneEvents.map(item => [item.channelId, item.accountId, item.eventId])
+      setStrategyEventCondition(strategyEventConditionContent)
+      console.log(strategyEventConditionContent)
+      setDoneEventList(done)
+      setNotDoneEventList(notDone)
+      setNotDoneLogic(strategyEventConditionContent.notDoneLogic)
+      setDoneLogic(strategyEventConditionContent.doneLogic)
+      setPlanType(strategyConditionType)
+    } else {
+      const {strategyFixConditionContent, strategyConditionType} = strategyDetail
+      const {cron, frequency} = strategyFixConditionContent
+      setStrategyEventCondition(strategyFixConditionContent)
+      setCornTime(CycleSelect.cronSrialize(cron))
+      setPlanType(strategyConditionType)
+      setPeriod(frequency)
+    }
+    setTimeout(() => {
+      stepForm.resetFields()
+    }, 0)
+  }, [strategyDetail])
 
   // 根据重复方式生成触发时间组件
   const setTime = () => {
@@ -158,8 +204,7 @@ export default ({
       }
       return monthData
     }
-
-    if (period === 1) {
+    if (period === '1') {
       return (
         <Item
           noStyle 
@@ -171,7 +216,7 @@ export default ({
         </Item>
       )
     } 
-    if (period === 2) {
+    if (period === '2') {
       return (
         <Input.Group compact>
           <Item 
@@ -201,7 +246,7 @@ export default ({
         </Input.Group>
       )
     } 
-    if (period === 3) {
+    if (period === '3') {
       return (
         <Input.Group compact>
           <Item 
@@ -233,7 +278,7 @@ export default ({
           noStyle 
           name="interval" 
           rules={[{required: true, message: '请选择日期'}]}
-          initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[0], dateFormat) : undefined}
+          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[0], dateFormat) : undefined}
         >
           <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
@@ -241,7 +286,7 @@ export default ({
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
-          initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[1], timeFormat) : undefined}
+          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[1], timeFormat) : undefined}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -260,7 +305,6 @@ export default ({
         name="stepForm"
         form={stepForm}
       >
-        
         <Item
           label="触发类型"
           name="strategyConditionType"
@@ -283,8 +327,9 @@ export default ({
                   <div className="FBH header-select">
                     完成下列
                     <Select 
-                      onClick={(e, v) => changeDoneLogic(e, v)}
-                      defaultValue={0} 
+                      onClick={e => e.stopPropagation()}
+                      onChange={changeDoneLogic}
+                      value={doneLogic} 
                       style={{width: 72, margin: '8px'}}
                     >
                       <Option value={0}>任意</Option>
@@ -297,7 +342,7 @@ export default ({
               >
                 <Form.List
                   name="doneEvents"
-                  initialValue={triggerEventList}
+                  initialValue={doneEventList}
                 >
                   {(fields, {add, remove}, {errors}) => (
                     <div>
@@ -354,6 +399,7 @@ export default ({
               <Item 
                 noStyle 
                 name="timeGap" 
+                initialValue={strategyEventCondition.timeGap}
                 rules={[{required: true, message: '请输入时间'}]}
               >
                 <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
@@ -361,7 +407,7 @@ export default ({
               <Item 
                 noStyle 
                 name="timeUnit" 
-                initialValue="MINUTES"
+                initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
                 rules={[{required: true, message: '请选择单位'}]}
               >
                 <Select style={{width: 72}}>
@@ -385,8 +431,9 @@ export default ({
                   <div className="FBH header-select">
                     未完成下列
                     <Select 
-                      onClick={(e, v) => changeNotDoneLogic(e, v)}
-                      defaultValue={0} 
+                      onClick={e => e.stopPropagation()}
+                      onChange={changeNotDoneLogic}
+                      value={notDoneLogic} 
                       style={{width: 72, margin: '8px'}}
                     >
                       <Option value={0}>任意</Option>
@@ -399,7 +446,7 @@ export default ({
               >
                 <Form.List
                   name="notDoneEvents"
-                  initialValue={triggerEventList}
+                  initialValue={notDoneEventList}
                 >
                   {(fields, {add, remove}, {errors}) => (
                     <div>
@@ -454,15 +501,15 @@ export default ({
           planType === 0 && (
             <Item
               label="重复"
-              name="period"
+              name="frequency"
               rules={[{required: true, message: '请选择周期'}]}
               initialValue={period}
             >
               <Select onChange={changePeriod} placeholder="请选择周期">
-                <Option value={0}>单次</Option>
-                <Option value={1}>每天</Option>
-                <Option value={2}>每周</Option>
-                <Option value={3}>每月</Option>
+                <Option value="0">单次</Option>
+                <Option value="1">每天</Option>
+                <Option value="2">每周</Option>
+                <Option value="3">每月</Option>
               </Select>
             </Item>
           )
@@ -480,13 +527,13 @@ export default ({
         }
 
         {
-          (period !== 0 || planType === 1) && (
+          (period !== '0' || planType === '1') && (
             <Item 
               label="起止日期" 
               name="startEndDate"
               // style={{marginTop: 24}}
               rules={[{required: true, message: '请选择日期'}]}
-              initialValue={startTime ? [moment(startTime, dateTimeFormat), moment(endTime, dateTimeFormat)] : undefined}
+              initialValue={strategyEventCondition.startTime ? [moment(strategyEventCondition.startTime, dateTimeFormat), moment(strategyEventCondition.endTime, dateTimeFormat)] : undefined}
             >
               <RangePicker disabledDate={disabledDate} format={dateTimeFormat} />
             </Item>
@@ -495,16 +542,16 @@ export default ({
         <Item 
           label="参与限制" 
           name="strategyRestrict" 
-          initialValue={setRestrict || 0}
+          initialValue={strategyDetail.strategyRestrict || 0}
           rules={[{required: true, message: '请选择次数'}]}
         >
           <Radio.Group>
             <Radio value={0}>
               参与一次
             </Radio>
-            <Radio value={1} disabled>
+            {/* <Radio value={1} disabled>
               参与多次
-            </Radio>
+            </Radio> */}
           </Radio.Group>
         </Item>
           

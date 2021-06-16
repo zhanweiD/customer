@@ -52,21 +52,22 @@ export default ({
   strChannelList, // 触达渠道
   planInfo,
   channelActions, // 营销动作
-  groupList = [],
   current,
   prevStep,
   nextStep,
   tagList,
   addStrategy,
   editStrategy,
+  setThreeFormData,
+  oneFormData,
+  twoFormData,
+  threeFormData,
 }) => {
   const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [touchWay, setTouchWay] = useState(0)
   const [myForm] = Form.useForm()
-  const [formInitValue, setFormInitValue] = useState({
-    setRestrict: 1,
-  })
+  
   // const [tagList, setTagList] = useState([])
   const [previewData, setPreviewData] = useState('')
 
@@ -152,7 +153,7 @@ export default ({
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
 
     const keys = Object.keys(myForm.getFieldsValue())
-    const originKeys = ['isDelay', 'timeGap', 'timeUnit', 'channelCode', 'actionId', 'setRestrict', 'templateId']
+    const originKeys = ['isDelay', 'timeGap', 'timeUnit', 'channelCode', 'actionId', 'templateId']
     const oldObj = {}
 
     keys.forEach(item => {
@@ -210,6 +211,10 @@ export default ({
 
       const params = strategyDetail.id ? {
         ...strategyDetail,
+        ...oneFormData,
+        ...twoFormData,
+        planId: planInfo.id,
+        clientGroupId: planInfo.clientGroupId,
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
@@ -218,13 +223,18 @@ export default ({
         },
       } : {
         ...strategyDetail,
+        ...oneFormData,
+        ...twoFormData,
+        planId: planInfo.id,
+        clientGroupId: planInfo.clientGroupId,
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
           templateJson: JSON.stringify(templateJson),
         },
       }
-      setStrategyDetail({...strategyDetail, ...params})
+      setThreeFormData(params)
+      // setStrategyDetail({...strategyDetail, ...params})
       if (params.strategyName) {
         if (strategyDetail.id) {
           editStrategy(params, () => {
@@ -241,41 +251,6 @@ export default ({
         message.warning('请完善策略名称')
       }
     }).catch(err => console.log(err))
-  }
-
-  const cancelData = () => {    
-    // weServiceDrawer(false)
-    setVis(false)
-    const templateObj = {}
-
-    if (strategyDetail.action && strategyDetail.action.detail) {
-      // 说明有数据
-      strategyDetail.action.detail.forEach(e => {
-        let valueTemp = e.value
-        tagList.forEach(item => {
-          if (valueTemp.indexOf(item.objIdTagId) > -1) {
-            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
-          }
-        })
-
-        // 对 span 的处理
-        if (valueTemp.indexOf('${') > -1) {
-          valueTemp = valueTemp.replace(/}/g, '</span>')
-          let id = 0
-          while (valueTemp.indexOf('${') > -1) {
-            id += 1
-            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">`)
-          }
-        }
-
-        templateObj[e.name] = valueTemp
-      })
-      myForm.setFieldsValue(templateObj)
-    } else {
-      // 没数据
-      setTemplateKeyList([])
-      myForm.resetFields()
-    }
   }
 
   // TODO:
@@ -298,54 +273,66 @@ export default ({
   }, [])
 
   useEffect(() => {
-    if (strategyDetail.action && strategyDetail.action.detail && strategyDetail.action.detail.length > 0) {
-      // 有模板数据
-      const templateObj = {}
+    if (!tagList.length || !strategyDetail.id) return
+    const {
+      templateJson, actionId, isDelay, templateId, timeGap, timeUnit, channel,
+    } = strategyDetail.sendOutContent
 
-      // 要处理数据
-      strategyDetail.action.detail.forEach(e => {
-        let valueTemp = e.value
-        tagList.forEach(item => {
-          if (valueTemp.indexOf(item.objIdTagId) > -1) {
-            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
-          }
-        })
-
-        // 对 span 的处理
-        if (valueTemp.indexOf('${') > -1) {
-          valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
-          let id = 0
-          while (valueTemp.indexOf('${') > -1) {
-            id += 1
-            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
-          }
+    const channelCode = [channel.channelId, channel.accountId]
+    const templateData = JSON.parse(templateJson)
+    // 有模板数据
+    const templateObj = {}
+    // 要处理数据
+    templateData.forEach(e => {
+      let valueTemp = e.value
+      tagList.forEach(item => {
+        if (valueTemp.indexOf(item.objIdTagId) > -1) {
+          valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
         }
-
-        templateObj[e.name] = valueTemp
       })
-      
-      myForm.setFieldsValue({
-        ...formInitValue,
-        ...templateObj,
-        setRestrict: strategyDetail.action.setRestrict,
-        templateId: strategyDetail.action.templateId,
-        channelCode: strategyDetail.action.channelCode,
-      })
-    }
-  }, [tagList])
 
-  useEffect(() => {
-    if (strategyDetail.action && strategyDetail.action.templateId) {
-      const target = _.find(templateList, item => item.template_id === strategyDetail.action.templateId)
-
-      if (target && target.content) {
-        setPreviewData(target.content)
+      // 对 span 的处理
+      if (valueTemp.indexOf('${') > -1) {
+        valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
+        let id = 0
+        while (valueTemp.indexOf('${') > -1) {
+          id += 1
+          valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
+        }
       }
-      setVis(true)
 
-      setTemplateKeyList(_.map(strategyDetail.action.detail, 'name'))
+      templateObj[e.name] = valueTemp
+    })
+
+    const target = _.find(templateList, item => item.template_id === templateId)
+
+    if (target && target.content) {
+      setPreviewData(target.content)
     }
-  }, [planInfo])
+    setTouchWay(isDelay)
+    setTemplateKeyList(_.map(templateData, 'name'))
+    
+    myForm.setFieldsValue({
+      isDelay,
+      actionId,
+      templateId,
+      timeGap,
+      timeUnit,
+      channelCode,
+      ...templateObj,
+    })
+    setVis(true)
+  }, [tagList, strategyDetail])
+  useEffect(() => {
+    if (!strategyDetail.id) {
+      setTemplateKeyList([])
+      setTouchWay(0)
+      setPreviewData('')
+      setVis(false)
+      myForm.resetFields()
+      myForm.setFieldsValue({isDelay: 0})
+    }
+  }, [strategyDetail])
 
   return (
     <div 
@@ -354,9 +341,9 @@ export default ({
     >
       <Form
         {...layout}
+        style={{marginBottom: '192px'}}
         // name="wechatDrawer"
         form={myForm}
-        initialValues={formInitValue}
         onFieldsChange={(c, a) => fieldsChange(c, a)}
       >
         <Item

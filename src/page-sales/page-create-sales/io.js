@@ -12,12 +12,13 @@ const api = {
   copyPlan: post(`${marketingApi}/plan/copy`), // 复制计划
   getUserList: post(`${marketingApi}/plan/getUserList`), // 创建人列表
   getChannelList: post(`${marketingApi}/plan/getChannelList`), // 渠道列表
+  getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
 
   getStrChannelList: post(`${marketingApi}/planStrategy/getChannelList`), // 触达渠道列表
   getChannelActions: post(`${marketingApi}/planStrategy/getChannelActions`), // 营销动作列表
 
   detailPlan: post(`${marketingApi}/planInfo/details`), // 计划详情
-  getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
+  getGroupList: post(`${marketingApi}/planInfo/clientGroupList`), // 人群列表
   getPromptTag: post(`${groupApi}/obj_target_tag/values`), // 获取提示值
   getFilterChannelList: post(`${marketingApi}/planStrategy/getFilterChannelList`), // 行为筛选事件
   getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
