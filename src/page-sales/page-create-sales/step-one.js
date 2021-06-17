@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react'
-import {Form, Select, Button, Input, Radio, Collapse, Cascader} from 'antd'
+import {Form, Select, Button, Input, Radio, Collapse, Cascader, Popconfirm} from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
-import {errorTip} from '@util'
 import Attr from '../icon/wechat-attr.svg'
 import io from './io'
 
@@ -44,7 +43,8 @@ const CreateSales = ({
   const [condList, setCondList] = useState([1])
   const [promptTags, setPromptTags] = useState([]) // 标签预提示
   const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
-  const [clientGroup, setClientGroup] = useState([{tagId: undefined, comparision: undefined, rightParams: undefined}]) // 用户筛选详情
+  // const [clientGroup, setClientGroup] = useState([{tagId: undefined, comparision: undefined, rightParams: undefined}]) // 用户筛选详情
+  const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
   
   // 标签值预提示
   async function getPromptTag(objIdAndTagId) {
@@ -79,12 +79,12 @@ const CreateSales = ({
       if (value.clientGroupFilterType) {
         const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
         value.clientGroupUserActionFilterContent = {events}
-      } else if (value.clientGroupFilterContent[0].tagId) {
+      } else if (value.clientGroupFilterContent[0]) {
         const param = value.clientGroupFilterContent.map(item => {
           item.leftTagId = item.tagId ? item.tagId.split('.')[1] : null
           return item
         })
-        value.clientGroupTagFilterContent = JSON.stringify({logic: userLogic, express: param})
+        value.clientGroupTagFilterContent = JSON.stringify({logic: userLogic, express: param || []})
       }
       // const param = {
       //   ...strategyDetail,
@@ -114,9 +114,12 @@ const CreateSales = ({
       setRadioType(clientGroupFilterType)
     } else {
       const {clientGroupTagFilterContent, clientGroupFilterType} = strategyDetail
-      const item = JSON.parse(clientGroupTagFilterContent)
-      setUserLogic(item.logic)
-      setClientGroup(item.express)
+      if (clientGroupTagFilterContent) {
+        const item = JSON.parse(clientGroupTagFilterContent)
+        setUserLogic(item.logic)
+        setClientGroup(item.express)
+      }
+      
       setRadioType(clientGroupFilterType)
     }
     oneForm.resetFields()
@@ -185,7 +188,7 @@ const CreateSales = ({
                             {...restField}
                             name={[name, 'event']}
                             fieldKey={[fieldKey, 'event']}
-                            // rules={[{required: true, message: '请选择事件'}]}
+                            rules={[{required: true, message: '请选择事件'}]}
                           >
                             <Cascader
                               placeholder="请选择事件"
@@ -233,7 +236,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'tagId']}
                               fieldKey={[fieldKey, 'tagId']}
-                              // rules={[{required: true, message: '请选择标签'}]}
+                              rules={[{required: true, message: '请选择标签'}]}
                             >
                               <Select style={{width: 160}} placeholder="请选择标签" onChange={getPromptTag}>
                                 {
@@ -245,7 +248,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'comparision']}
                               fieldKey={[fieldKey, 'comparision']}
-                              // rules={[{required: true, message: '请选择条件'}]}
+                              rules={[{required: true, message: '请选择条件'}]}
                             >
                               <Select style={{width: 128}} placeholder="请选择条件">
                                 <Option value="not in">不等于</Option>
@@ -256,7 +259,7 @@ const CreateSales = ({
                               {...restField}
                               name={[name, 'rightParams']}
                               fieldKey={[fieldKey, 'rightParams']}
-                              // rules={[{required: true, message: '请输入或选择'}]}
+                              rules={[{required: true, message: '请输入或选择'}]}
                             >
                               <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
                                 {
@@ -299,9 +302,18 @@ const CreateSales = ({
         </Collapse>
       </Form>
       <div className="steps-action">
-        <Button className="mr8" onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`}>
-          取消
-        </Button>
+        <Popconfirm
+          title="取消后返回营销计划列表?"
+          onConfirm={() => window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`}
+          onCancel={() => {}}
+          okText="确认"
+          cancelText="取消"
+        >
+          <Button className="mr8">
+            取消
+          </Button>
+        </Popconfirm>
+       
         <Button type="primary" onClick={complete}>
           下一步
         </Button>

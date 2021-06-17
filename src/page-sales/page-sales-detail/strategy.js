@@ -226,10 +226,10 @@ export default ({list}) => {
   // }
 
   const setEventDom = event => {
-    const channelName = conditionList.filter(item => item.id === event.channelId)[0].name
-    const accountName = conditionList.filter(item => item.id === event.accountId)[0].name
-    const eventName = conditionList.filter(item => item.id === event.eventId)[0].name
-    return `${channelName}-${accountName}-${eventName}`
+    const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
+    const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
+    const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
+    return `${channel.name}-${account.name}-${even.name}`
   }
   const setCornDom = (cron, frequency) => {
     let cycle = null
@@ -258,27 +258,28 @@ export default ({list}) => {
   }
 
   const setUserDom = user => {
-    const tagName = tagList.filter(item => item.objIdTagId === user.leftTagId)[0].objNameTagName
-    const comparisionName = comparisionList.filter(item => item.value === user.comparision)[0].name
+    const tag = tagList.filter(item => item.objIdTagId === user.leftTagId)[0] || {}
+    const comparision = comparisionList.filter(item => item.value === user.comparision)[0] || {}
     const valueName = user.rightParams.reduce((prev, cur) => prev + cur, '')
-    return `${tagName} ${comparisionName} ${valueName}`
+    return `${tag.objNameTagName} ${comparision.name} ${valueName}`
   }
 
   const setActionUserDom = user => {
-    const channelName = originEventList.filter(item => item.id === user.channelId)[0].name
-    const accountName = originEventList.filter(item => item.id === user.accountId)[0].name
-    const eventName = originEventList.filter(item => item.id === user.eventId)[0].name
-    return `${channelName} ${accountName} ${eventName}`
+    const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
+    const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
+    const event = originEventList.filter(item => item.id === user.eventId)[0] || {}
+    return `${channel.name} ${account.name} ${event.name}`
   }
 
   const setChannelDom = sendOutContent => {
     const {channel, actionId, templateId} = sendOutContent
-    const channelName = strChannelList.filter(item => channel.channelId === item.id)[0].name
-    const accountName = strChannelList.filter(item => channel.accountId === item.id)[0].name
-    const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-    const templateName = templateList.filter(item => templateId === item.template_id)[0].title
-    return `${channelName}-${accountName} ${actionName}(${templateName})`
+    const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
+    const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
+    const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
+    const template = templateList.filter(item => templateId === item.template_id)[0] || {}
+    return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
   }
+
 
   // 设置策略dom
   const setLeftItem = () => {

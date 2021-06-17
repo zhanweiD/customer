@@ -38,6 +38,7 @@ export default ({
   planInfo,
   addPlan,
   editPlan,
+  addLoading,
 }) => {
   const [groupList, setGroupList] = useState([])
   const [eventList, setEventList] = useState([])
@@ -110,6 +111,21 @@ export default ({
       eventCode: eventItem.code,
     }
   }
+  const checkNumber = (rule, value, callback) => {
+    if (!value) return
+    if (value.slice(0, 1) === '0') {
+      callback('不支持0开头时间')
+    }
+    if (value - 0 > 0) {
+      if (value.indexOf('.') !== -1) {
+        callback('请输入有效时间')
+      } else {
+        callback()
+      }
+    } else {
+      callback('请输入有效时间')
+    }
+  }
   const onFinish = () => {
     addForm.validateFields().then(value => {
       const {startEndDate} = value
@@ -166,10 +182,10 @@ export default ({
           }}
         >
           <Button onClick={closeDrawer} style={{marginRight: 8}}>
-            {planInfo.planName}
+            取消
           </Button>
           <Tooltip title="保存之后，自动跳转至策略配置页面">
-            <Button onClick={onFinish} type="primary">
+            <Button loading={addLoading} onClick={onFinish} type="primary">
               保存
             </Button>
           </Tooltip>
@@ -254,7 +270,10 @@ export default ({
                   noStyle 
                   name="timeGap" 
                   initialValue={firstTargetContent.timeGap}
-                  rules={[{required: true, message: '请输入时间'}]}
+                  rules={[
+                    {required: true, message: '请输入时间'},
+                    {validator: checkNumber},
+                  ]}
                 >
                   <Input placeholder="请输入时间" style={{width: '70%'}} type="number" />
                 </Item>

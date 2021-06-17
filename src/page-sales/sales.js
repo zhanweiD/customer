@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import {Button, Table, Popconfirm, Badge} from 'antd'
+import {Button, Table, Popconfirm, Badge, Tooltip} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {Search, Tag} from '../component'
 import searchParams from './search'
@@ -12,6 +12,7 @@ export default () => {
   const [userList, setUserList] = useState([]) // 用户列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [detailLoading, setDetailLoading] = useState(false) // 计划详情loading
+  const [addLoading, setAddLoading] = useState(false) // 计划详情loading
   const [searchParam, setSearchParam] = useState({}) // 搜索
   const [tableLoading, setTableLoading] = useState(false) // 搜索
   const [showModal, setShowModal] = useState(false) // 创建计划
@@ -82,14 +83,19 @@ export default () => {
   }
   // 创建计划
   const addPlan = async params => {
+    setAddLoading(true)
     try {
-      await io.addPlan({
+      const res = await io.addPlan({
         ...params,
       })
-      successTip('创建成功')
-      getList()
+      if (res) {
+        successTip('创建成功')
+        window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${res}`
+      }
     } catch (error) {
       errorTip(error.message)
+    } finally {
+      setAddLoading(false)
     }
   }
   // 编辑计划
@@ -184,7 +190,7 @@ export default () => {
       title: '计划状态',
       dataIndex: 'planStatus',
       key: 'planStatus',
-      render: text => {
+      render: (text, record) => {
         let status = ''
         let color = ''
         switch (text) {
@@ -197,13 +203,23 @@ export default () => {
             color = 'green'
             break
           case 2:
-            status = '暂停'
+            status = '已暂停'
             color = 'orange'
             break
           default:
             status = '已结束'
             color = 'blue'
             break
+        }
+        if (record.remark && text === 2) {
+          return (
+            <div>
+              <Badge status="red" text={status} />
+              <Tooltip title={record.remark}>
+                ?
+              </Tooltip>
+            </div>
+          )
         }
         return <Badge status={color} text={status} />
       },
@@ -310,6 +326,7 @@ export default () => {
           editPlan={editPlan}
           planInfo={planInfo}
           detailLoading={detailLoading}
+          addLoading={addLoading}
         />
       </div>
     </div>

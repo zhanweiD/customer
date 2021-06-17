@@ -48,7 +48,7 @@ export default ({
   const [period, setPeriod] = useState('0') // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
   const [strategyEventCondition, setStrategyEventCondition] = useState({}) // 触发条件详情
   const [doneEventList, setDoneEventList] = useState([undefined]) // 完成事件
-  const [notDoneEventList, setNotDoneEventList] = useState([undefined]) // 未完成事件
+  const [notDoneEventList, setNotDoneEventList] = useState([]) // 未完成事件
   const [cornTime, setCornTime] = useState({}) // 触发时间
 
   const matchEnent = data => {
@@ -152,14 +152,14 @@ export default ({
     setNotDoneLogic(v)
   }
   const disabledDate = time => {
-    return time > moment(planInfo.endTime, dateFormat) || time < moment(planInfo.startTime, dateFormat)
+    return time >= moment(planInfo.endTime, dateFormat) || time <= moment(planInfo.startTime, dateFormat)
   }
  
   useEffect(() => {
     if (!strategyDetail.id) {
       setStrategyEventCondition({})
       setDoneEventList([undefined])
-      setNotDoneEventList([undefined])
+      setNotDoneEventList([])
       setNotDoneLogic(0)
       setDoneLogic(0)
       setPlanType(1)

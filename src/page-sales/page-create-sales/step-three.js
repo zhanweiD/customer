@@ -86,7 +86,6 @@ export default ({
 
   // 营销动作列表
   const getChannelActions = async channelId => {
-    console.log(channelId)
     try {
       const res = await io.getChannelActions({channelId})
       setChannelActionList(res || [])
