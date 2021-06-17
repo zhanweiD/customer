@@ -288,6 +288,11 @@ export default class Frame extends Component {
                     </SubMenu>
                   )
                 }
+                <SubMenu key="/sales" icon={<DeploymentUnitOutlined />} title="自动化营销">
+                  <Menu.Item key="/sales/list">营销计划</Menu.Item>
+                  <Menu.Item key="/channel-manage">渠道管理</Menu.Item>
+                  <Menu.Item key="/event-manage">事件管理</Menu.Item>
+                </SubMenu>
 
                 {
                   showSystem && (
