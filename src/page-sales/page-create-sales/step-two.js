@@ -558,14 +558,12 @@ export default ({
                               }}
                             />
                           </Item>
-                          {fields.length > 1 ? (
-                            <MinusCircleOutlined
-                              className="dynamic-delete-button"
-                              onClick={() => {
-                                remove(field.name)
-                              }}
-                            />
-                          ) : null}
+                          <MinusCircleOutlined
+                            className="dynamic-delete-button"
+                            onClick={() => {
+                              remove(field.name)
+                            }}
+                          />
                         </div>
                       ))}
                       <div

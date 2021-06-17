@@ -227,20 +227,18 @@ const CreateSales = ({
                               onChange={checkSelectEvent}
                             />
                           </Item>
-                          {
-                            fields.length > 1 ? (
-                              <MinusCircleOutlined 
-                                style={{
-                                  position: 'absolute', top: 5, right: 112, color: '#999'}} 
-                                onClick={() => { 
-                                  remove(name) 
-                                  const newData = [...condList]
-                                  newData.splice(index, 1)
-                                  setCondList(newData)
-                                }}
-                              />
-                            ) : null
-                          }
+                          
+                          <MinusCircleOutlined 
+                            style={{
+                              position: 'absolute', top: 5, right: 112, color: '#999'}} 
+                            onClick={() => { 
+                              remove(name) 
+                              const newData = [...condList]
+                              newData.splice(index, 1)
+                              setCondList(newData)
+                            }}
+                          />
+                           
                         </div>
                       ) : (  
                         <div className="pr">
@@ -292,19 +290,17 @@ const CreateSales = ({
                                 }
                               </Select>
                             </Item>
-                            {
-                              fields.length > 1 ? (
-                                <MinusCircleOutlined 
-                                  style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
-                                  onClick={() => { 
-                                    remove(name) 
-                                    const newData = [...condList]
-                                    newData.splice(index, 1)
-                                    setCondList(newData)
-                                  }}
-                                />
-                              ) : null
-                            }
+                            
+                            <MinusCircleOutlined 
+                              style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
+                              onClick={() => { 
+                                remove(name) 
+                                const newData = [...condList]
+                                newData.splice(index, 1)
+                                setCondList(newData)
+                              }}
+                            />
+                            
                           </Input.Group>
                         </div>
                       )

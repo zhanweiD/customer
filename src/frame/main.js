@@ -254,13 +254,13 @@ export default class Frame extends Component {
                       </Menu.Item>
                     )
                   }
-                  {
+                  {/* {
                     codeInProduct('/sales/list') && (
                       <Menu.Item key="/sales/list" icon={<DeploymentUnitOutlined />}>
                         自动化营销
                       </Menu.Item>
                     )
-                  }
+                  } */}
                   
                   {
                     showAnalyze && (
