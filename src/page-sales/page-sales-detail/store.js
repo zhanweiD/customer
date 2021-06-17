@@ -192,7 +192,9 @@ export default class Store {
           const targetAccount = _.find(this.eventList, e => e.code === item.accountCode && e.id === item.accountId)
           const targetEvent = _.find(this.eventList, e => e.code === item.eventCode && item.eventId)
 
-          datas.push(`${targetChannel && targetChannel.name}-${targetAccount && targetAccount.name}-${targetEvent && targetEvent.name}`)
+          if (targetChannel && targetAccount && targetEvent) {
+            datas.push(`${targetChannel.name}-${targetAccount.name}-${targetEvent.name}`)
+          }
         })
 
         this.initAnalisysValue = datas
