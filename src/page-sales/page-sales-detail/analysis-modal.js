@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react'
 import {Modal, Form, Select, Button, Input} from 'antd'
 import {PlusOutlined, MinusCircleOutlined, DragOutlined} from '@ant-design/icons'
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd'
-import {autorun} from 'mobx'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {barOption, funnelOption} from './chart-options'
@@ -120,8 +119,8 @@ const SalesDetail = ({visible, setVisible, store}) => {
     // 初始化过程配置的数据
     const initV = []
 
-    store.initAnalisysValue.forEach(item => {
-      initV.push(Date.now().toString())
+    store.initAnalisysValue.forEach((item, i) => {
+      initV.push(Date.now().toString() + i)
     })
 
     setDragItems(initV)
@@ -138,6 +137,26 @@ const SalesDetail = ({visible, setVisible, store}) => {
       })
     })
   }, [])
+
+  const getValueFromEvent = (e, f) => {
+    const allValues = _.values(configForm.getFieldsValue())
+
+    if (allValues.indexOf(e) > -1) {
+      setTimeout(() => {
+        configForm.setFields([
+          {
+            name: f,
+            value: '',
+            errors: ['不可重复选择'],
+          },
+        ])
+      }, 200)
+
+      return ''
+    } 
+
+    return e
+  }
 
   return useObserver(() => (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -201,6 +220,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
                             initialValue={store.initAnalisysValue[index]}
                             {...layout1}
                             rules={[{required: true, message: '不能为空'}]}
+                            getValueFromEvent={e => getValueFromEvent(e, item)}
                           >
                             <Select placeholder="请选择" draggable="false">
                               {

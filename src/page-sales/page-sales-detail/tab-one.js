@@ -4,22 +4,7 @@ import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {circleOneOption, circleTwoOption, lineOption, barOption, funnelOption} from './chart-options'
 import AnalysisModal from './analysis-modal'
-import TimeRange from '../../component/time-range'
 
-const barMockData = [{
-  value: 2000,
-  label: '计划触达',
-}, {
-  value: 1200,
-  label: '进入活动',
-}, {
-  value: 500,
-  label: '报名成功',
-},
-{
-  value: 100,
-  label: '购房成交',
-}]
 
 const {Option} = Select
 
