@@ -299,7 +299,7 @@ const CreateSales = ({
         </Collapse>
       </Form>
       <div className="steps-action">
-        <Button className="mr8" onClick={complete}>
+        <Button className="mr8" onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`}>
           取消
         </Button>
         <Button type="primary" onClick={complete}>

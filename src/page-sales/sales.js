@@ -239,18 +239,24 @@ export default () => {
         >
           {record.planStatus === 1 ? '暂停' : '启动'}
         </a>,
+        record.planStatus === 0 ? (
+          <a className="mr16" onClick={() => detailPlan(record.id)}>编辑</a>
+        ) : <a className="disabled mr16">编辑</a>,
         // <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
-        <a className="mr16" onClick={() => detailPlan(record.id)}>编辑</a>,
-        <a className="mr16" onClick={() => toStrategy(record)}>策略管理</a>,
-        <Popconfirm
-          title="确认删除计划吗?"
-          onConfirm={() => delPlan(record.id)}
-          onCancel={() => {}}
-          okText="确定"
-          cancelText="取消"
-        >
-          <a>删除</a>
-        </Popconfirm>,
+        record.planStatus === 0 ? (
+          <a className="mr16" onClick={() => toStrategy(record)}>策略管理</a>
+        ) : (<a className="disabled mr16">策略管理</a>),
+        record.planStatus === 1 ? (<a className="disabled">删除</a>) : (
+          <Popconfirm
+            title="确认删除计划吗?"
+            onConfirm={() => delPlan(record.id)}
+            onCancel={() => {}}
+            okText="确定"
+            cancelText="取消"
+          >
+            <a>删除</a>
+          </Popconfirm>
+        ),
       ]),
     },
   ]

@@ -77,7 +77,7 @@ export default ({
   // 计划名称查重
   const checkPlanName = async (name, callback) => {
     try {
-      const res = await io.checkName({planName: name})
+      const res = await io.checkName({planName: name, id})
       if (res.isExist) callback('计划名称重复')
       else callback()
     } catch (error) {

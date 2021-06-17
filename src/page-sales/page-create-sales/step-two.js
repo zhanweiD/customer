@@ -33,6 +33,7 @@ export default ({
   current, 
   nextStep,
   prevStep,
+  planInfo,
   twoFormData = {}, 
   setTwoFormData,
   setStrategyDetail, 
@@ -134,7 +135,6 @@ export default ({
     }).catch(err => console.log(err))
   }
   const changePlanType = v => {
-    console.log(v)
     setPlanType(v)
   }
   const changePeriod = v => {
@@ -152,7 +152,7 @@ export default ({
     setNotDoneLogic(v)
   }
   const disabledDate = time => {
-    return time && time < moment().endOf('day')
+    return time > moment(planInfo.endTime, dateFormat) || time < moment(planInfo.startTime, dateFormat)
   }
  
   useEffect(() => {
@@ -176,7 +176,6 @@ export default ({
       const done = doneEvents.map(item => [item.channelId, item.accountId, item.eventId])
       const notDone = notDoneEvents.map(item => [item.channelId, item.accountId, item.eventId])
       setStrategyEventCondition(strategyEventConditionContent)
-      console.log(strategyEventConditionContent)
       setDoneEventList(done)
       setNotDoneEventList(notDone)
       setNotDoneLogic(strategyEventConditionContent.notDoneLogic)
@@ -186,7 +185,12 @@ export default ({
       const {strategyFixConditionContent, strategyConditionType} = strategyDetail
       const {cron, frequency} = strategyFixConditionContent
       setStrategyEventCondition(strategyFixConditionContent)
-      setCornTime(CycleSelect.cronSrialize(cron))
+      if (frequency !== 0) {
+        setCornTime(CycleSelect.cronSrialize(cron))
+      } else {
+        const data = cron.split(' ')
+        setCornTime({date: data[0], time: data[1]})
+      }
       setPlanType(strategyConditionType)
       setPeriod(frequency)
     }
@@ -278,7 +282,7 @@ export default ({
           noStyle 
           name="interval" 
           rules={[{required: true, message: '请选择日期'}]}
-          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[0], dateFormat) : undefined}
+          initialValue={cornTime.date}
         >
           <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
@@ -286,7 +290,7 @@ export default ({
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
-          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[1], timeFormat) : undefined}
+          initialValue={cornTime.time}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -527,7 +531,7 @@ export default ({
         }
 
         {
-          (period !== '0' || planType === '1') && (
+          (period !== '0' || planType === 1) && (
             <Item 
               label="起止日期" 
               name="startEndDate"

@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import {Form, Button, Input, Select, Cascader, message} from 'antd'
 import _ from 'lodash'
 import cls from 'classnames'
+import {errorTip} from '../../common/util'
 import Wechat from './wechat/wechat'
 import Frame from '../icon/wechat-frame.svg'
 import io from './io'
@@ -62,9 +63,11 @@ export default ({
   oneFormData,
   twoFormData,
   threeFormData,
+  strName,
 }) => {
   const [templateList, setTemplateList] = useState(templateListMock)
   const [templateKeyList, setTemplateKeyList] = useState([])
+  const [channelActionList, setChannelActionList] = useState([])
   const [touchWay, setTouchWay] = useState(0)
   const [myForm] = Form.useForm()
   
@@ -78,6 +81,17 @@ export default ({
       setSwitchText('仅显示当前计划中使用的通道的限制，如需修改请前往渠道管理中设置')
     } else {
       setSwitchText('不使用触达限制，可能会对用户造成过度干扰')
+    }
+  }
+
+  // 营销动作列表
+  const getChannelActions = async channelId => {
+    console.log(channelId)
+    try {
+      const res = await io.getChannelActions({channelId})
+      setChannelActionList(res || [])
+    } catch (error) {
+      errorTip(error.message)
     }
   }
 
@@ -215,6 +229,7 @@ export default ({
         ...twoFormData,
         planId: planInfo.id,
         clientGroupId: planInfo.clientGroupId,
+        strategyName: strName,
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
@@ -227,6 +242,7 @@ export default ({
         ...twoFormData,
         planId: planInfo.id,
         clientGroupId: planInfo.clientGroupId,
+        strategyName: strName,
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
@@ -235,7 +251,7 @@ export default ({
       }
       setThreeFormData(params)
       // setStrategyDetail({...strategyDetail, ...params})
-      if (params.strategyName) {
+      if (strName) {
         if (strategyDetail.id) {
           editStrategy(params, () => {
             setVis(false)
@@ -277,6 +293,8 @@ export default ({
     const {
       templateJson, actionId, isDelay, templateId, timeGap, timeUnit, channel,
     } = strategyDetail.sendOutContent
+
+    getChannelActions(channel.channelId)
 
     const channelCode = [channel.channelId, channel.accountId]
     const templateData = JSON.parse(templateJson)
@@ -360,7 +378,7 @@ export default ({
             placeholder="请选择触达通道"
             options={treeStrChannelList}
             expandTrigger="hover"
-            onChange={v => console.log(v)}
+            onChange={v => getChannelActions(v[0])}
             fieldNames={{
               label: 'name',
               value: 'id',
@@ -374,7 +392,7 @@ export default ({
         >
           <Select placeholder="请选择动作">
             {
-              channelActions.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
+              channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
             }
           </Select>
         </Item>
