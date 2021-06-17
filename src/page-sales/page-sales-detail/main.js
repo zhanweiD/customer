@@ -14,7 +14,9 @@ export default props => {
   detailStore.id = props.match.params.id
 
   useEffect(() => {
-    detailStore.getDetail()
+    detailStore.getGroupList(() => {
+      detailStore.getDetail()
+    })
   }, [])
 
   return (    

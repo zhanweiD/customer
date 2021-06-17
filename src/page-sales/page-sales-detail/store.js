@@ -8,8 +8,11 @@ export default class Store {
 
   @observable planDetail
   @observable planName
+  @observable planGroup
   @observable planTime
   @observable planTarget
+
+  @observable groupList = [] // 受众用户列表
 
   @observable touchCount = 0 // 计划触达
   @observable targetRate = 0 // 目标完成率
@@ -23,7 +26,6 @@ export default class Store {
   @observable eventListFormatter = [] // 可分析渠道事件转化的，下拉框里的
   @observable analysisStart = '计划触达'
   @observable analysisEnd = ''
-
 
   @observable analysisedEventList = [] // 已配置的分析渠道事件
   @observable initAnalisysValue = []
@@ -43,12 +45,18 @@ export default class Store {
         id: this.id,
       })
 
-      if (res) {
+      if (!_.isEmpty(res)) {
         this.planDetail = res
         this.planName = res.planName
         this.planStatus = res.planStatus
         if (res.startTime) {
           this.planTime = `${res.startTime} ~ ${res.endTime}`
+        }
+
+        const groupTarget = _.find(this.groupList, e => e.id === res.clientGroupId)
+
+        if (groupTarget) {
+          this.planGroup = groupTarget.name
         }
 
         this.getTargetChannelList()
@@ -65,7 +73,7 @@ export default class Store {
         id: this.id,
       })
 
-      if (res) {
+      if (!_.isEmpty(res)) {
         this.touchCount = res.touchCount
         this.targetRate = res.targetRate
       }
@@ -462,6 +470,19 @@ export default class Store {
       const eventName = _.find(res, e => e.id === eventId).name
 
       this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 获得受众用户
+  async getGroupList(cb = () => {}) {
+    try {
+      const res = await io.getGroupList()
+
+      this.groupList = res
+
+      cb()
     } catch (e) {
       errorTip(e.message)
     }

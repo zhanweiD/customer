@@ -45,7 +45,7 @@ export default inject('store')(({store}) => {
         </div>
         <div className="FBH FBAC mr16 black85">
           <TeamOutlined />
-          <div className="ml4">高净值人群</div>
+          <div className="ml4">{store.planGroup}</div>
         </div>
         <div className="FBH FBAC mr16 black85">
           <ClockCircleOutlined />
