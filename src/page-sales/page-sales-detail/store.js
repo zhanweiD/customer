@@ -63,6 +63,7 @@ export default class Store {
       }
     } catch (e) {
       errorTip(e.message)
+      console.error('getDetail')
     }
   }
 
@@ -81,6 +82,7 @@ export default class Store {
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getStatistics')
     }
   }
 
@@ -96,36 +98,11 @@ export default class Store {
       })
 
       this.lineChartData = res
-      /* this.lineChartData = [
-        {
-          dateStr: '2021-06-15',
-          targetCount: 80,
-        },
-        {
-          dateStr: '2021-06-16',
-          targetCount: 50,
-        },
-        {
-          dateStr: '2021-06-17',
-          targetCount: 60,
-        },
-        {
-          dateStr: '2021-06-18',
-          targetCount: 90,
-        },
-        {
-          dateStr: '2021-06-19',
-          targetCount: 100,
-        },
-        {
-          dateStr: '2021-06-20',
-          targetCount: 110,
-        },
-      ] */
 
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getTargetCount')
     }
   }
 
@@ -137,34 +114,6 @@ export default class Store {
       })
 
       this.eventStatistics = res
-      /*
-      this.eventStatistics = [
-        {
-          targetCount: 4000,
-          eventName: '计划触达',
-          rate: 1,
-        },
-        {
-          targetCount: 2500,
-          channelName: '微信公众号',
-          accountName: 'dtwave自动化营销',
-          eventName: '接收用户文本消息',
-          rate: 0,
-        },
-        {
-          targetCount: 2000,
-          channelName: '微信公众号',
-          accountName: 'dtwave自动化营销',
-          eventName: '接收用户取消订阅',
-          rate: 0,
-        },
-        {
-          targetCount: 1000,
-          eventName: '接收用户扫描带参数的二维码',
-          rate: 43.65,
-        },
-      ]
-      */
 
       this.eventStatistics.forEach(item => {
         item.name = item.eventName
@@ -174,6 +123,7 @@ export default class Store {
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getEventStatistics')
     }
   }
 
@@ -185,50 +135,6 @@ export default class Store {
       })
 
       this.eventList = res
-      /*
-      this.eventList = [
-        { // type :0 目标事件 1 完成事件 2 未完成事件 100 渠道 101 渠道账号
-          id: 1,
-          name: '微信公众号',
-          code: 'wxe2b3f176ba1a4f33',
-          parentId: -1,
-          type: 100,
-          descr: '渠道',
-        },
-        {
-          id: 11,
-          name: '接收用户扫描带参数的二维码',
-          code: 'SCAN',
-          parentId: 8207207676424,
-          type: 0, 
-          descr: '目标事件',
-        },
-        {
-          id: 10,
-          name: '接收用户取消订阅',
-          code: 'UNSUBSCRIBE',
-          parentId: 8207207676424,
-          type: 2,
-          descr: '未完成条件事件',
-        },
-        {
-          id: 1,
-          name: '接收用户文本消息',
-          code: 'MSG_TEXT',
-          parentId: 8207207676424,
-          type: 1,
-          descr: '完成条件事件',
-        },
-        {
-          id: 8207207676424,
-          name: 'dtwave自动化营销',
-          code: 'wxe2b3f176ba1a4f33',
-          parentId: 1,
-          type: 101,
-          descr: '渠道账号',
-        },
-      ]
-      */
 
       const result = []
       this.eventList.forEach(item => {
@@ -260,10 +166,10 @@ export default class Store {
       })
 
       this.eventListFormatter = result
-
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getAllAnalysisEvents')
     }
   }
 
@@ -275,32 +181,6 @@ export default class Store {
       })
 
       this.analysisedEventList = res
-      /* this.analysisedEventList = [
-        {
-          channelId: 1,
-          channelCode: 'wxe2b3f176ba1a4f33',
-          accountId: 8207207676424,
-          accountCode: 'wxe2b3f176ba1a4f33',
-          eventId: 1,
-          eventCode: 'MSG_TEXT',
-        },
-        {
-          accountCode: 'wxe2b3f176ba1a4f33',
-          accountId: 8207207676424,
-          channelCode: 'wxe2b3f176ba1a4f33',
-          channelId: 1,
-          eventCode: 'UNSUBSCRIBE',
-          eventId: 10,
-        },
-        {
-          channelId: 1,
-          channelCode: 'wxe2b3f176ba1a4f33',
-          accountId: 8207207676424,
-          accountCode: 'wxe2b3f176ba1a4f33',
-          eventId: 10,
-          eventCode: 'UNSUBSCRIBE',
-        },
-      ] */
 
       // 对配置过的数据进行处理
       if (this.analysisedEventList.length && this.analysisedEventList.length > 0) {
@@ -312,7 +192,7 @@ export default class Store {
           const targetAccount = _.find(this.eventList, e => e.code === item.accountCode && e.id === item.accountId)
           const targetEvent = _.find(this.eventList, e => e.code === item.eventCode && item.eventId)
 
-          datas.push(`${targetChannel.name}-${targetAccount.name}-${targetEvent.name}`)
+          datas.push(`${targetChannel && targetChannel.name}-${targetAccount && targetAccount.name}-${targetEvent && targetEvent.name}`)
         })
 
         this.initAnalisysValue = datas
@@ -321,6 +201,7 @@ export default class Store {
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getConfiguredAnalysisEvents')
     }
   }
 
@@ -333,6 +214,7 @@ export default class Store {
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('editAnalysis')
     }
   }
 
@@ -343,111 +225,9 @@ export default class Store {
 
       // 展示暂无数据
       this.strategyList = res
-      /*
-      this.strategyList = [
-        {
-          id: 8369739904128,
-          planId: 8361565201672,
-          clientGroupFilterType: 0,
-          strategyName: '侧444首',
-          strategyConditionType: 1,
-          strategyEventConditionContent: {
-            startTime: '2021-06-08 20:52:16',
-            endTime: '2021-06-08 20:52:16',
-            doneLogic: 0,
-            doneEvents: [
-              {
-                channelId: 1,
-                channelCode: '',
-                accountId: '',
-                eventId: 1001,
-                eventCode: '',
-              },
-            ],
-            timeGap: 2.2,
-            timeUnit: 'DAYS',
-            notDoneLogic: 0,
-            notDoneEvents: [
-              {
-                channelId: 1,
-                channelCode: '',
-                accountId: '',
-                eventId: 1001,
-                eventCode: '',
-              },
-            ],
-          },
-          strategyStartTime: '2021-06-08 20:52:16',
-          strategyEndTime: '2021-06-08 20:52:16',
-          strategyRestrict: 0,
-          sendOutContent: {
-            isDelay: 1,
-            timeGap: 1.2,
-            timeUnit: 'DAYS',
-            channel: {
-              channelId: 0,
-              channelCode: '',
-              accountId: '',
-            },
-            actionId: 0,
-            templateId: '',
-            templateJson: '模版json',
-          },
-        },
-        {
-          id: 8370371328656,
-          planId: 8361565201672,
-          clientGroupId: 321312321312,
-          clientGroupFilterType: 0,
-          strategyName: '543534543',
-          strategyConditionType: 1,
-          strategyEventConditionContent: {
-            startTime: '2021-06-08 20:52:16',
-            endTime: '2021-06-08 20:52:16',
-            doneLogic: 0,
-            doneEvents: [
-              {
-                channelId: 1,
-                channelCode: '',
-                accountId: '',
-                eventId: 0,
-                eventCode: '',
-              },
-            ],
-            timeGap: 2.2,
-            timeUnit: 'DAYS',
-            notDoneLogic: 0,
-            notDoneEvents: [
-              {
-                channelId: 1,
-                channelCode: '',
-                accountId: '',
-                eventId: 0,
-                eventCode: '',
-              },
-            ],
-          },
-          strategyStartTime: '2021-06-08 20:52:16',
-          strategyEndTime: '2021-06-08 20:52:16',
-          strategyRestrict: 0,
-          sendOutContent: {
-            isDelay: 1,
-            timeGap: 1.2,
-            timeUnit: 'DAYS',
-            channel: {
-              channelId: 1,
-              channelCode: '',
-              accountId: '',
-            },
-            actionId: 0,
-            templateId: '',
-            templateJson: '模版json',
-          },
-        },
-      ]
-      */
     } catch (e) {
       errorTip(e.message)
+      console.error('getStrategyList')
     }
   }
 
@@ -472,6 +252,7 @@ export default class Store {
       this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
     } catch (e) {
       errorTip(e.message)
+      console.error('getTargetChannelList')
     }
   }
 
@@ -485,6 +266,7 @@ export default class Store {
       cb()
     } catch (e) {
       errorTip(e.message)
+      console.error('getGroupList')
     }
   }
 }
