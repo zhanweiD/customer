@@ -17,6 +17,8 @@ const api = {
   getStrChannelList: post(`${marketingApi}/planStrategy/getChannelList`), // 触达渠道列表
   getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
   getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
+  getFilterChannelList: post(`${marketingApi}/planStrategy/getFilterChannelList`), // 行为筛选事件
+  getTagList: post(`${baseApi}/group/obj_target_tag_list`), // 标签列表
 } 
 
 ioContext.create('salesDetail', api) 

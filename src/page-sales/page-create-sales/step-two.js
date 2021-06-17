@@ -33,6 +33,7 @@ export default ({
   current, 
   nextStep,
   prevStep,
+  planInfo,
   twoFormData = {}, 
   setTwoFormData,
   setStrategyDetail, 
@@ -47,7 +48,7 @@ export default ({
   const [period, setPeriod] = useState('0') // 重复, 计划触发周期，0 单次 1 每天 2 每周 3 每月
   const [strategyEventCondition, setStrategyEventCondition] = useState({}) // 触发条件详情
   const [doneEventList, setDoneEventList] = useState([undefined]) // 完成事件
-  const [notDoneEventList, setNotDoneEventList] = useState([undefined]) // 未完成事件
+  const [notDoneEventList, setNotDoneEventList] = useState([]) // 未完成事件
   const [cornTime, setCornTime] = useState({}) // 触发时间
 
   const matchEnent = data => {
@@ -134,7 +135,6 @@ export default ({
     }).catch(err => console.log(err))
   }
   const changePlanType = v => {
-    console.log(v)
     setPlanType(v)
   }
   const changePeriod = v => {
@@ -152,14 +152,14 @@ export default ({
     setNotDoneLogic(v)
   }
   const disabledDate = time => {
-    return time && time < moment().endOf('day')
+    return time >= moment(planInfo.endTime, dateFormat) || time <= moment(planInfo.startTime, dateFormat)
   }
  
   useEffect(() => {
     if (!strategyDetail.id) {
       setStrategyEventCondition({})
       setDoneEventList([undefined])
-      setNotDoneEventList([undefined])
+      setNotDoneEventList([])
       setNotDoneLogic(0)
       setDoneLogic(0)
       setPlanType(1)
@@ -176,7 +176,6 @@ export default ({
       const done = doneEvents.map(item => [item.channelId, item.accountId, item.eventId])
       const notDone = notDoneEvents.map(item => [item.channelId, item.accountId, item.eventId])
       setStrategyEventCondition(strategyEventConditionContent)
-      console.log(strategyEventConditionContent)
       setDoneEventList(done)
       setNotDoneEventList(notDone)
       setNotDoneLogic(strategyEventConditionContent.notDoneLogic)
@@ -186,7 +185,12 @@ export default ({
       const {strategyFixConditionContent, strategyConditionType} = strategyDetail
       const {cron, frequency} = strategyFixConditionContent
       setStrategyEventCondition(strategyFixConditionContent)
-      setCornTime(CycleSelect.cronSrialize(cron))
+      if (frequency !== 0) {
+        setCornTime(CycleSelect.cronSrialize(cron))
+      } else {
+        const data = cron.split(' ')
+        setCornTime({date: data[0], time: data[1]})
+      }
       setPlanType(strategyConditionType)
       setPeriod(frequency)
     }
@@ -278,7 +282,7 @@ export default ({
           noStyle 
           name="interval" 
           rules={[{required: true, message: '请选择日期'}]}
-          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[0], dateFormat) : undefined}
+          initialValue={cornTime.date}
         >
           <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
@@ -286,7 +290,7 @@ export default ({
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
-          // initialValue={noRepeatTime ? moment(noRepeatTime.split(' ')[1], timeFormat) : undefined}
+          initialValue={cornTime.time}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -527,7 +531,7 @@ export default ({
         }
 
         {
-          (period !== '0' || planType === '1') && (
+          (period !== '0' || planType === 1) && (
             <Item 
               label="起止日期" 
               name="startEndDate"

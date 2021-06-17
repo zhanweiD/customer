@@ -38,6 +38,7 @@ export default ({
   planInfo,
   addPlan,
   editPlan,
+  addLoading,
 }) => {
   const [groupList, setGroupList] = useState([])
   const [eventList, setEventList] = useState([])
@@ -77,7 +78,7 @@ export default ({
   // 计划名称查重
   const checkPlanName = async (name, callback) => {
     try {
-      const res = await io.checkName({planName: name})
+      const res = await io.checkName({planName: name, id})
       if (res.isExist) callback('计划名称重复')
       else callback()
     } catch (error) {
@@ -108,6 +109,21 @@ export default ({
       accountCode: account.code,
       eventId: eventItem.id,
       eventCode: eventItem.code,
+    }
+  }
+  const checkNumber = (rule, value, callback) => {
+    if (!value) return
+    if (value.slice(0, 1) === '0') {
+      callback('不支持0开头时间')
+    }
+    if (value - 0 > 0) {
+      if (value.indexOf('.') !== -1) {
+        callback('请输入有效时间')
+      } else {
+        callback()
+      }
+    } else {
+      callback('请输入有效时间')
     }
   }
   const onFinish = () => {
@@ -166,10 +182,10 @@ export default ({
           }}
         >
           <Button onClick={closeDrawer} style={{marginRight: 8}}>
-            {planInfo.planName}
+            取消
           </Button>
           <Tooltip title="保存之后，自动跳转至策略配置页面">
-            <Button onClick={onFinish} type="primary">
+            <Button loading={addLoading} onClick={onFinish} type="primary">
               保存
             </Button>
           </Tooltip>
@@ -254,7 +270,10 @@ export default ({
                   noStyle 
                   name="timeGap" 
                   initialValue={firstTargetContent.timeGap}
-                  rules={[{required: true, message: '请输入时间'}]}
+                  rules={[
+                    {required: true, message: '请输入时间'},
+                    {validator: checkNumber},
+                  ]}
                 >
                   <Input placeholder="请输入时间" style={{width: '70%'}} type="number" />
                 </Item>

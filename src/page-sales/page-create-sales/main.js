@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {Input, Steps, Button, message, Popconfirm, Spin} from 'antd'
 import {PlusOutlined, CheckCircleFilled, DeleteOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
-import {DetailHeader, Tag} from '../../component'
+import {DetailHeader, Loading, Tag} from '../../component'
 import {errorTip, successTip, debounce} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -51,7 +51,7 @@ const comparisionList = [
 ]
 
 export default props => {
-  const [strategyList, setStrategyList] = useState([]) // 策略列表
+  const [strategyList, setStrategyList] = useState([{}]) // 策略列表
   const [current, setCurrent] = useState(0)
   const [planId, setPlanId] = useState(null) // 计划id
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
@@ -68,8 +68,10 @@ export default props => {
   const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
   const [templateList, setTemplateList] = useState([]) // 内容模版列表
   const [checkNameTip, setCheckNameTip] = useState('') // 名称重复提示
+  const [strName, setStrName] = useState('') // 名称
   const [baseInfo, setBaseInfo] = useState([]) // 详情头
   const [loading, setLoading] = useState(false) // loading
+  const [listLoading, setListLoading] = useState(false) // loading
   const [filterChannelList, setFilterChannelList] = useState([]) // 行为筛选事件
   const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
   // formData
@@ -77,6 +79,17 @@ export default props => {
   const [oneFormData, setOneFormData] = useState({})
   const [twoFormData, setTwoFormData] = useState({})
   const [threeFormData, setThreeFormData] = useState({})
+
+  // 添加策略校验
+  const addStrategyCheck = () => {
+    const index = strategyList.findIndex(item => !item.id)
+    console.log(index)
+    if (index === -1) {
+      setStrategyList([...strategyList, {}])
+    } else {
+      message.warning(`请完善策略${index + 1}的配置`)
+    }
+  }
 
   // 获取行为事件
   const getFilterChannelList = async () => {
@@ -119,27 +132,37 @@ export default props => {
     }
     try {
       const res = await io.getStrategyDetail({id})
+      setStrName(res.strategyName)
       setStrategyDetail(res)
       setLoading(false)
+      // setListLoading(false)
     } catch (error) {
       errorTip(error.message)
     } 
   }
   // 列表
   const getList = async params => {
+    setListLoading(true)
     try {
       const res = await io.getList(params)
       setStrategyList(res)
-      res.forEach(item => {
-        const {channel} = item.sendOutContent
-        getChannelActions(channel.channelId)
-      })
-      if (!selectItemId) {
+      if (!res.length) {
+        setListLoading(false)
+        setStrategyList([{}])
+        setSelectItemId(undefined)
+      } else if (!selectItemId) {
         getStrategyDetail(res[0].id)
         setSelectItemId(res[0].id)
       } else {
         getStrategyDetail(selectItemId)
       }
+      res.forEach(item => {
+        const {channel} = item.sendOutContent
+        getChannelActions(channel.channelId)
+      })
+      setTimeout(() => {
+        setListLoading(false)
+      }, 200)
     } catch (error) {
       errorTip(error.message)
     }
@@ -286,23 +309,14 @@ export default props => {
     }
     debounce(() => {
       strCheckName(param)
-      setStrategyDetail({...strategyDetail, strategyName})
+      setStrName(strategyName)
+      // setStrategyDetail({...strategyDetail, strategyName})
     }, 500)
-  }
-
-  // 添加策略校验
-  const addStrategyCheck = () => {
-    const index = strategyList.findIndex(item => !item.id)
-    console.log(index)
-    if (index === -1) {
-      setStrategyList([...strategyList, {}])
-    } else {
-      message.warning(`请完善策略${index + 1}的配置`)
-    }
   }
 
   // 选中策略
   const selectItem = v => {
+    setStrName('')
     setStrategyDetail({})
     setCurrent(0)
     setSelectItemId(v)
@@ -310,10 +324,10 @@ export default props => {
   }
 
   const setEventDom = event => {
-    const channelName = conditionList.filter(item => item.id === event.channelId)[0].name
-    const accountName = conditionList.filter(item => item.id === event.accountId)[0].name
-    const eventName = conditionList.filter(item => item.id === event.eventId)[0].name
-    return `${channelName}-${accountName}-${eventName}`
+    const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
+    const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
+    const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
+    return `${channel.name}-${account.name}-${even.name}`
   }
   const setCornDom = (cron, frequency) => {
     let cycle = null
@@ -342,32 +356,31 @@ export default props => {
   }
 
   const setUserDom = user => {
-    const tagName = tagList.filter(item => item.objIdTagId === user.leftTagId)[0].objNameTagName
-    const comparisionName = comparisionList.filter(item => item.value === user.comparision)[0].name
+    const tag = tagList.filter(item => item.objIdTagId === user.leftTagId)[0] || {}
+    const comparision = comparisionList.filter(item => item.value === user.comparision)[0] || {}
     const valueName = user.rightParams.reduce((prev, cur) => prev + cur, '')
-    return `${tagName} ${comparisionName} ${valueName}`
+    return `${tag.objNameTagName} ${comparision.name} ${valueName}`
   }
 
   const setActionUserDom = user => {
-    const channelName = originEventList.filter(item => item.id === user.channelId)[0].name
-    const accountName = originEventList.filter(item => item.id === user.accountId)[0].name
-    const eventName = originEventList.filter(item => item.id === user.eventId)[0].name
-    return `${channelName} ${accountName} ${eventName}`
+    const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
+    const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
+    const event = originEventList.filter(item => item.id === user.eventId)[0] || {}
+    return `${channel.name} ${account.name} ${event.name}`
   }
 
   const setChannelDom = sendOutContent => {
     const {channel, actionId, templateId} = sendOutContent
-    const channelName = strChannelList.filter(item => channel.channelId === item.id)[0].name
-    const accountName = strChannelList.filter(item => channel.accountId === item.id)[0].name
-    const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-    const templateName = templateList.filter(item => templateId === item.template_id)[0].title
-    return `${channelName}-${accountName} ${actionName}(${templateName})`
+    const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
+    const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
+    const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
+    const template = templateList.filter(item => templateId === item.template_id)[0] || {}
+    return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
   }
 
   // 设置策略dom
   const setLeftItem = () => {
-    if (!conditionList.length || !strChannelList.length || !allChannelActions.length || !templateList.length || !tagList.length) return ''
-    
+    if (!conditionList.length || !strChannelList.length || !tagList.length || !templateList.length) return ''
     const itemList = strategyList.map((item, i) => {
       const {
         strategyName, 
@@ -442,7 +455,6 @@ export default props => {
                       </div>
                     )
                   }
-                  
                 </div>
               </div>
               <div>
@@ -500,12 +512,17 @@ export default props => {
             className={`${selectItemId === item.id ? 'left-item-header-select' : 'left-item-header'} pl16 pt8 pb8 fs14 FBH FBJB`} 
           >
             <span>{`策略${i + 1}`}</span>
-            <span 
-              onClick={() => deleteStrategy(item.id)}
-              className="hand mr12" 
-            >
-              <DeleteOutlined />
-            </span>
+            {
+              strategyList.length > 1 ? (
+                <span 
+                  onClick={() => deleteStrategy(item.id)}
+                  className="hand mr12" 
+                >
+                  <DeleteOutlined />
+                </span>
+              ) : null
+            }
+            
           </div>
           <div className="mt8 mb8 ml16 mr16 c45">配置受众用户、触达条件及触达渠道</div>
         </div>
@@ -558,6 +575,10 @@ export default props => {
     ]
     setBaseInfo(list)
   }, [groupList, targetChannelList])
+
+  if (listLoading) {
+    return <div style={{textAlign: 'center', marginTop: '35%'}}><Spin /></div>
+  }
 
   return (
     <div className="create-sales">
@@ -652,6 +673,7 @@ export default props => {
             oneFormData={oneFormData}
             twoFormData={twoFormData}
             threeFormData={threeFormData}
+            strName={strName}
           />
         </div>
       </div>
