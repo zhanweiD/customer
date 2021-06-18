@@ -77,8 +77,12 @@ export default class Store {
       })
 
       if (!_.isEmpty(res)) {
-        this.touchCount = res.touchCount
-        this.targetRate = res.targetRate
+        if (res.touchCount) {
+          this.touchCount = res.touchCount
+        }
+        if (res.targetRate) {
+          this.targetRate = res.targetRate
+        }
       }
 
       cb()
