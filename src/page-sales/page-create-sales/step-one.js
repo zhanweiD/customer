@@ -45,6 +45,8 @@ const CreateSales = ({
   const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
   // const [clientGroup, setClientGroup] = useState([{tagId: undefined, comparision: undefined, rightParams: undefined}]) // 用户筛选详情
   const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
+  const [selectKey, setSelectKey] = useState([]) // 已选事件id
+  const [channelList, setChannelList] = useState([]) // 带disable的事件
   
   // 标签值预提示
   async function getPromptTag(objIdAndTagId) {
@@ -97,13 +99,35 @@ const CreateSales = ({
     })
   }
 
-  const onChange = value => {
-    console.log(value)
-  }
-
   const changeUserLogic = v => {
     setUserLogic(v)
   }
+
+  const checkSelectEvent = () => {
+    const data = []
+    oneForm.validateFields(['clientGroupFilterContent']).then(value => {
+      value.clientGroupFilterContent.forEach(item => {
+        if (item) {
+          data.push(item.event[2])
+        }
+      })
+      setSelectKey(data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  useEffect(() => {
+    const data = originEventList.map(item => {
+      if (selectKey.find(jtem => jtem === item.id)) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
+      return item
+    })
+    setChannelList(listToTree(data) || [])
+  }, [selectKey, originEventList])
   
   useEffect(() => {
     if (!strategyDetail.id) return
@@ -192,30 +216,29 @@ const CreateSales = ({
                           >
                             <Cascader
                               placeholder="请选择事件"
-                              options={filterChannelList}
+                              // options={filterChannelList}
+                              options={channelList}
                               expandTrigger="hover"
                               fieldNames={{
                                 label: 'name',
                                 value: 'id',
                                 children: 'children',
                               }}
-                              onChange={onChange}
+                              onChange={checkSelectEvent}
                             />
                           </Item>
-                          {
-                            fields.length > 1 ? (
-                              <MinusCircleOutlined 
-                                style={{
-                                  position: 'absolute', top: 5, right: 112, color: '#999'}} 
-                                onClick={() => { 
-                                  remove(name) 
-                                  const newData = [...condList]
-                                  newData.splice(index, 1)
-                                  setCondList(newData)
-                                }}
-                              />
-                            ) : null
-                          }
+                          
+                          <MinusCircleOutlined 
+                            style={{
+                              position: 'absolute', top: 5, right: 112, color: '#999'}} 
+                            onClick={() => { 
+                              remove(name) 
+                              const newData = [...condList]
+                              newData.splice(index, 1)
+                              setCondList(newData)
+                            }}
+                          />
+                           
                         </div>
                       ) : (  
                         <div className="pr">
@@ -267,19 +290,17 @@ const CreateSales = ({
                                 }
                               </Select>
                             </Item>
-                            {
-                              fields.length > 1 ? (
-                                <MinusCircleOutlined 
-                                  style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
-                                  onClick={() => { 
-                                    remove(name) 
-                                    const newData = [...condList]
-                                    newData.splice(index, 1)
-                                    setCondList(newData)
-                                  }}
-                                />
-                              ) : null
-                            }
+                            
+                            <MinusCircleOutlined 
+                              style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
+                              onClick={() => { 
+                                remove(name) 
+                                const newData = [...condList]
+                                newData.splice(index, 1)
+                                setCondList(newData)
+                              }}
+                            />
+                            
                           </Input.Group>
                         </div>
                       )

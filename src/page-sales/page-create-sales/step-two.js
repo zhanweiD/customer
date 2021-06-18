@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
+import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse, message} from 'antd'
 import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
 import Attr from '../icon/wechat-attr.svg'
@@ -11,6 +11,17 @@ const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
 const dateTimeFormat = 'YYYY-MM-DD'
 const timeFormat = 'HH:mm:ss'
+
+const listToTree = data => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === -1)
+}
 
 const layout = {
   labelCol: {
@@ -50,6 +61,10 @@ export default ({
   const [doneEventList, setDoneEventList] = useState([undefined]) // 完成事件
   const [notDoneEventList, setNotDoneEventList] = useState([]) // 未完成事件
   const [cornTime, setCornTime] = useState({}) // 触发时间
+  const [doneSelectKey, setDoneSelectKey] = useState([]) // 完成已选事件key
+  const [selectKey, setSelectKey] = useState([]) // 未完成已选事件key
+  const [doneConditionList, setDoneConditionList] = useState([]) // 完成事件list带disabled
+  const [notConditionList, setNotConditionList] = useState([]) // 未完成事件带disabled
 
   const matchEnent = data => {
     const channel = conditionList.filter(item => item.id === data[0])[0] || {}
@@ -154,6 +169,60 @@ export default ({
   const disabledDate = time => {
     return time >= moment(planInfo.endTime, dateFormat) || time <= moment(planInfo.startTime, dateFormat)
   }
+
+  const checkSelectEvent = () => {
+    const data = []
+    stepForm.validateFields(['notDoneEvents']).then(value => {
+      console.log(value)
+      value.notDoneEvents.forEach(item => {
+        if (item) {
+          data.push(item[2])
+        }
+      })
+      setSelectKey(data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+  const checkDoneSelectEvent = cb => {
+    const data = []
+    stepForm.validateFields(['doneEvents']).then(value => {
+      console.log(value)
+      value.doneEvents.forEach(item => {
+        if (item) {
+          data.push(item[2])
+        }
+      })
+      setDoneSelectKey(data)
+      if (cb) cb()
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+
+  useEffect(() => {
+    const data = conditionList.map(item => {
+      if (doneSelectKey.find(jtem => jtem === item.id)) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
+      return item
+    })
+    setDoneConditionList(listToTree(data) || [])
+  }, [doneSelectKey, conditionList])
+
+  useEffect(() => {
+    const data = conditionList.map(item => {
+      if (selectKey.find(jtem => jtem === item.id)) {
+        item.disabled = true
+      } else {
+        item.disabled = false
+      }
+      return item
+    })
+    setNotConditionList(listToTree(data) || [])
+  }, [selectKey, conditionList])
  
   useEffect(() => {
     if (!strategyDetail.id) {
@@ -364,9 +433,11 @@ export default ({
                           >
                             <Cascader
                               placeholder="请选择事件"
-                              options={treeConditionList}
+                              // options={treeConditionList}
+                              options={doneConditionList}
                               expandTrigger="hover"
                               style={{width: 360}}
+                              onChange={checkDoneSelectEvent}
                               fieldNames={{
                                 label: 'name',
                                 value: 'id',
@@ -377,14 +448,18 @@ export default ({
                           {fields.length > 1 ? (
                             <MinusCircleOutlined
                               className="dynamic-delete-button"
-                              onClick={() => remove(field.name)}
+                              onClick={() => {
+                                remove(field.name)
+                              }}
                             />
                           ) : null}
                         </div>
                       ))}
                       <div
                         className="add-event-btn fs12 hand"
-                        onClick={() => { add() }}
+                        onClick={() => {
+                          add()
+                        }}
                       >
                         <img style={{marginBottom: 1}} src={Attr} alt="属性" />
                         <span className="ml4">添加事件</span>
@@ -398,32 +473,35 @@ export default ({
         }
         {
           planType === 1 && (
-            <Input.Group compact style={{marginBottom: 16}}>
-              <span>且在</span>
-              <Item 
-                noStyle 
-                name="timeGap" 
-                initialValue={strategyEventCondition.timeGap}
-                rules={[{required: true, message: '请输入时间'}]}
-              >
-                <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
-              </Item>
-              <Item 
-                noStyle 
-                name="timeUnit" 
-                initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
-                rules={[{required: true, message: '请选择单位'}]}
-              >
-                <Select style={{width: 72}}>
-                  <Option value="MINUTES">分钟</Option>
-                  <Option value="HOURS">小时</Option>
-                  <Option value="DAYS">天</Option>
-                </Select>
-              </Item>
-              <span className="ml8">内</span>
-            </Input.Group>
+            <Item>
+              <Input.Group compact>
+                <span>且在</span>
+                <Item 
+                  noStyle 
+                  name="timeGap" 
+                  initialValue={strategyEventCondition.timeGap}
+                  rules={[{required: true, message: '请输入时间'}]}
+                >
+                  <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
+                </Item>
+                <Item 
+                  noStyle 
+                  name="timeUnit" 
+                  initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
+                  rules={[{required: true, message: '请选择单位'}]}
+                >
+                  <Select style={{width: 72}}>
+                    <Option value="MINUTES">分钟</Option>
+                    <Option value="HOURS">小时</Option>
+                    <Option value="DAYS">天</Option>
+                  </Select>
+                </Item>
+                <span className="ml8">内</span>
+              </Input.Group>
+            </Item>
           )
         }
+
         {
           planType === 1 && (
             <Collapse 
@@ -468,9 +546,11 @@ export default ({
                           >
                             <Cascader
                               placeholder="请选择事件"
-                              options={treeConditionList}
+                              // options={treeConditionList}
+                              options={notConditionList}
                               expandTrigger="hover"
                               style={{width: 360}}
+                              onChange={checkSelectEvent}
                               fieldNames={{
                                 label: 'name',
                                 value: 'id',
@@ -478,17 +558,19 @@ export default ({
                               }}
                             />
                           </Item>
-                          {fields.length > 1 ? (
-                            <MinusCircleOutlined
-                              className="dynamic-delete-button"
-                              onClick={() => remove(field.name)}
-                            />
-                          ) : null}
+                          <MinusCircleOutlined
+                            className="dynamic-delete-button"
+                            onClick={() => {
+                              remove(field.name)
+                            }}
+                          />
                         </div>
                       ))}
                       <div
                         className="add-event-btn fs12 hand"
-                        onClick={() => { add() }}
+                        onClick={() => { 
+                          add() 
+                        }}
                       >
                         <img style={{marginBottom: 1}} src={Attr} alt="属性" />
                         <span className="ml4">添加事件</span>
