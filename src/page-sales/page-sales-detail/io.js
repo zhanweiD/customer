@@ -10,7 +10,7 @@ const api = {
   getConfiguredAnalysisEvents: post(`${marketingApi}/planAnalysis/getConfiguredAnalysisEvents`), // 已配置分析渠道事件
   editAnalysis: post(`${marketingApi}/planAnalysis/edit`), // 计划分析，编辑分析渠道事件
   getStrategyList: post(`${marketingApi}/planStrategy/list`), // 策略列表
-  getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
+  getGroupList: post(`${marketingApi}/planInfo/clientGroupList`), // 人群列表
   
   getChannelActions: post(`${marketingApi}/planStrategy/getChannelActions`), // 营销动作列表
   getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
