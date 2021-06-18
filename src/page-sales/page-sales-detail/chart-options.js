@@ -74,31 +74,16 @@ export function circleTwoOption(data) {
           },
         },
       },
-      tooltip: {
-        formatter(params) {
-          return `${params.name}：${params.percent} %`
-        },
-      },
-      legend: {
-        show: false,
-        itemGap: 12,
-        data: ['占比', '剩余'],
-      },
-
       series: [{
         name: 'circle',
         type: 'pie',
         clockWise: true,
         radius: ['60%', '80%'],
-        itemStyle: {
-          normal: {
-            label: {
-              show: false,
-            },
-            labelLine: {
-              show: false,
-            },
-          },
+        label: {
+          show: false,
+        },
+        labelLine: {
+          show: false,
         },
         hoverAnimation: false,
         data: [{
