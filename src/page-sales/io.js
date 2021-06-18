@@ -11,9 +11,9 @@ const api = {
   copyPlan: post(`${marketingApi}/plan/copy`), // 复制计划
   startPlan: post(`${marketingApi}/planInfo/start`), // 启动计划
   stopPlan: post(`${marketingApi}/planInfo/stop`), // 暂停计划
-  getUserList: post(`${marketingApi}/plan/getUserList`), // 创建人列表
-  getChannelList: post(`${marketingApi}/plan/getChannelList`), // 渠道列表
-  getGroupList: post(`${marketingApi}/plan/clientGroupList`), // 人群列表
+  getUserList: post(`${marketingApi}/planInfo/getUserList`), // 创建人列表
+  getChannelList: post(`${marketingApi}/planInfo/getChannelList`), // 渠道列表
+  getGroupList: post(`${marketingApi}/planInfo/clientGroupList`), // 人群列表
   getTargetChannelList: post(`${marketingApi}/planInfo/getTargetChannelList`), // 目标事件
 } 
 
