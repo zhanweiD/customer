@@ -38,6 +38,8 @@ export default class Store {
   barChart
   funnelChart
 
+  @observable isStrategyDone = false
+
   // 计划详情
   @action async getDetail() {
     try {
@@ -227,9 +229,12 @@ export default class Store {
 
       // 展示暂无数据
       this.strategyList = res
+      this.isStrategyDone = true
     } catch (e) {
       errorTip(e.message)
       console.error('getStrategyList')
+    } finally {
+      this.isStrategyDone = true
     }
   }
 
