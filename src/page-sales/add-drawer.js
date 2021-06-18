@@ -159,6 +159,10 @@ export default ({
   const closeDrawer = () => {
     setModal(false)
   }
+
+  const disabledDate = time => {
+    return time && time < moment().startOf('day')
+  }
   
   useEffect(() => {
     getTargetChannelList()
@@ -245,7 +249,7 @@ export default ({
               rules={[{required: true, message: '请选择日期'}]}
               initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
             >
-              <RangePicker format={dateFormat} />
+              <RangePicker disabledDate={disabledDate} format={dateFormat} />
             </Item>
             <Item
               label="描述"

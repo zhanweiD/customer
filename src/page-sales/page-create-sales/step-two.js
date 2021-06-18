@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
-import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse, message} from 'antd'
-import {PlusOutlined, MinusCircleOutlined} from '@ant-design/icons'
+import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
+import {MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
 import Attr from '../icon/wechat-attr.svg'
 
@@ -63,8 +63,32 @@ export default ({
   const [cornTime, setCornTime] = useState({}) // 触发时间
   const [doneSelectKey, setDoneSelectKey] = useState([]) // 完成已选事件key
   const [selectKey, setSelectKey] = useState([]) // 未完成已选事件key
+  const [notDoneCount, setNotDoneCount] = useState(0) // 未完成事件
   const [doneConditionList, setDoneConditionList] = useState([]) // 完成事件list带disabled
   const [notConditionList, setNotConditionList] = useState([]) // 未完成事件带disabled
+
+  const checkNumber = (rule, value, callback) => {
+    if (notDoneCount) {
+      if (!value) {
+        callback('请输入时间')
+        return
+      } 
+      if (`${value}`.slice(0, 1) === '0') {
+        callback('不支持0开头时间')
+      }
+      if (value - 0 > 0) {
+        if (`${value}`.indexOf('.') !== -1) {
+          callback('请输入有效时间')
+        } else {
+          callback()
+        }
+      } else {
+        callback('请输入有效时间')
+      }
+    } else {
+      callback()
+    }
+  }
 
   const matchEnent = data => {
     const channel = conditionList.filter(item => item.id === data[0])[0] || {}
@@ -184,7 +208,7 @@ export default ({
       console.log(err)
     })
   }
-  const checkDoneSelectEvent = cb => {
+  const checkDoneSelectEvent = () => {
     const data = []
     stepForm.validateFields(['doneEvents']).then(value => {
       console.log(value)
@@ -194,7 +218,6 @@ export default ({
         }
       })
       setDoneSelectKey(data)
-      if (cb) cb()
     }).catch(err => {
       console.log(err)
     })
@@ -353,7 +376,7 @@ export default ({
           rules={[{required: true, message: '请选择日期'}]}
           initialValue={cornTime.date ? moment(cornTime.date, dateFormat) : undefined}
         >
-          <DatePicker format={dateFormat} style={{width: '60%'}} />
+          <DatePicker disabledDate={disabledDate} format={dateFormat} style={{width: '60%'}} />
         </Item>
         <Item 
           noStyle 
@@ -450,6 +473,7 @@ export default ({
                               className="dynamic-delete-button"
                               onClick={() => {
                                 remove(field.name)
+                                checkDoneSelectEvent()
                               }}
                             />
                           ) : null}
@@ -479,8 +503,11 @@ export default ({
                 <Item 
                   noStyle 
                   name="timeGap" 
-                  initialValue={strategyEventCondition.timeGap}
-                  rules={[{required: true, message: '请输入时间'}]}
+                  initialValue={strategyEventCondition.timeGap ? strategyEventCondition.timeGap : undefined}
+                  rules={[
+                    // {required: true, message: '请输入时间'},
+                    {validator: checkNumber},
+                  ]}
                 >
                   <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
                 </Item>
@@ -562,6 +589,11 @@ export default ({
                             className="dynamic-delete-button"
                             onClick={() => {
                               remove(field.name)
+                              setNotDoneCount(notDoneCount - 1)
+                              checkSelectEvent()
+                              setTimeout(() => {
+                                stepForm.validateFields(['timeGap'])
+                              }, 0)
                             }}
                           />
                         </div>
@@ -570,6 +602,10 @@ export default ({
                         className="add-event-btn fs12 hand"
                         onClick={() => { 
                           add() 
+                          setNotDoneCount(notDoneCount + 1)
+                          setTimeout(() => {
+                            stepForm.validateFields(['timeGap'])
+                          }, 0)
                         }}
                       >
                         <img style={{marginBottom: 1}} src={Attr} alt="属性" />

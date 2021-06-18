@@ -8,6 +8,10 @@ import StepOne from './step-one'
 import StepTwo from './step-two'
 import StepThree from './step-three'
 import io from './io'
+import cate from '../icon/cate.svg'
+import userScreening from '../icon/user-screening.svg'
+import effTime from '../icon/time.svg'
+import clinch from '../icon/clinch.svg'
 
 const {Step} = Steps
 
@@ -26,7 +30,7 @@ const listToTree = data => {
 const tagMap = {
   0: <Tag status="default" text="未生效" />,
   1: <Tag status="green" text="已生效" />,
-  2: <Tag status="orange" text="暂停" />,
+  2: <Tag status="orange" text="已暂停" />,
   3: <Tag status="blue" text="已结束" />,
 }
 
@@ -430,6 +434,7 @@ export default props => {
                 cancelText="取消"
               >
                 <span 
+                  onClick={e => e.stopPropagation()}
                   className="hand mr12" 
                 >
                   <DeleteOutlined />
@@ -559,18 +564,23 @@ export default props => {
       {
         title: '分组',
         value: '默认分组',
+        icon: <img style={{marginBottom: 1}} src={cate} alt="分组" />,
+        // <img style={{marginBottom: 1}} src={Attr} alt="属性" />
       },
       {
         title: '用户',
         value: groupList.filter(item => item.id === clientGroupId)[0].name,
+        icon: <img style={{marginBottom: 1}} src={userScreening} alt="用户" />,
       },
       {
         title: '有效时间',
         value: `${startTime}-${endTime}`,
+        icon: <img style={{marginBottom: 1}} src={effTime} alt="有效时间" />,
       },
       {
         title: '主要目标',
         value: `${timeGap} ${matchTime(timeUnit)} 完成 ${setEvent(event)}`,
+        icon: <img style={{marginBottom: 1}} src={clinch} alt="主要目标" />,
       },
     ]
     setBaseInfo(list)
@@ -582,13 +592,28 @@ export default props => {
 
   return (
     <div className="create-sales">
-      <DetailHeader
+      {/* <DetailHeader
         name={planInfo.planName}
         descr={planInfo.descr}
-        // btnMinWidth={230}
         baseInfo={baseInfo}
         tag={tagMap[0]}
-      />
+      /> */}
+      <div className="m16">
+        <div className="pb8 FBH FBAC">
+          <span className="fs18 mr8">{planInfo.planName}</span>
+          <span>{tagMap[planInfo.planStatus]}</span>
+        </div>
+        <div className="FBH FBJB">
+          {
+            baseInfo.map(item => (
+              <span>
+                <span className="mr8">{item.icon}</span>
+                <span className="c85">{item.value}</span>
+              </span>
+            ))
+          }
+        </div>
+      </div>
       <div className="m16 create-content">
         <div className="content-left bgf mr16 p16">
           <div className="left-header mb12">策略配置</div>
@@ -606,7 +631,7 @@ export default props => {
         <div className="content-right bgf">
           <div className="pt12 pb12 pl16 right-header">
             {
-              strategyDetail.id ? (
+              strategyDetail.strategyName ? (
                 <span className="fs16">{strategyDetail.strategyName}</span>
               ) : (
                 <Input 
