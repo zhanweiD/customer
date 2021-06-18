@@ -8,7 +8,8 @@ import io from './io'
 export default () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
-  const [searchParam, setSearchParam] = useState({}) // 搜索
+  const [accountList, setAccountList] = useState([]) // 渠道名称列表
+  const [seaParams, setSeaParams] = useState({}) // 搜索
   const [tableLoading, setTableLoading] = useState(false) // 搜索loading
   const [pagination, setPagination] = useState({
     current: 1,
@@ -24,7 +25,7 @@ export default () => {
         currentPage: pagination.current,
         pageSize: pagination.pageSize,
         ...params,
-        ...searchParam,
+        ...seaParams,
       })
       const {data, currentPage, pageSize, totalCount} = res
       setListDate(data)
@@ -50,51 +51,88 @@ export default () => {
     }
   }
 
+  // 获取渠道名称
+  const getAccountlList = async () => {
+    try {
+      const res = await io.getAccountlList()
+      setAccountList(changeToOptions(res || [])('accountName', 'id'))
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
+  // 设为目标事件
+  const setTarget = async record => {
+    try {
+      await io.setTarget({
+        id: record.id,
+        isTarget: !record.isTarget,
+      })
+      getList()
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
+  // 设为触发事件
+  const setTrigger = async record => {
+    try {
+      await io.setTrigger({
+        id: record.id,
+        isTrigger: !record.isTrigger,
+      })
+      getList()
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+
   useEffect(() => {
+    getAccountlList()
     getChannelList()
   }, [])
   useEffect(() => {
     getList({currentPage: 1})
-  }, [searchParam])
+  }, [seaParams])
 
   const columns = [
     {
       title: '渠道类型',
-      dataIndex: 'touchCount',
-      key: 'touchCount',
+      dataIndex: 'channelName',
+      key: 'channelName',
     },
     {
       title: '渠道名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'accountName',
+      key: 'accountName',
     },
     
     {
       title: '事件名称',
-      dataIndex: 'targetRate',
-      key: 'targetRate',
+      dataIndex: 'eventName',
+      key: 'eventName',
     },
     {
       title: '事件描述',
-      dataIndex: 'status',
-      key: 'status',
+      dataIndex: 'eventDesc',
+      key: 'eventDesc',
     },
     {
       title: '更新时间',
-      dataIndex: 'endTime',
-      key: 'endTime',
+      dataIndex: 'mtime',
+      key: 'mtime',
     },
     {
       title: '设为触发事件',
-      dataIndex: 'touchEvent',
-      key: 'touchEvent',
-      render: (text, record) => <Switch defaultChecked onChange={() => console.log(record)} />,
+      dataIndex: 'isTrigger',
+      key: 'isTrigger',
+      render: (text, record) => <Switch defaultChecked={text} onChange={() => setTrigger(record)} />,
     },
     {
       title: '设为目标事件',
-      dataIndex: 'targetEvent',
-      key: 'targetEvent',
-      render: (text, record) => <Switch defaultChecked onChange={() => console.log(record)} />,
+      dataIndex: 'isTarget',
+      key: 'isTarget',
+      render: (text, record) => <Switch defaultChecked={text} onChange={() => setTarget(record)} />,
     },
   ]
 
@@ -104,14 +142,14 @@ export default () => {
       <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
-          onSearch={setSearchParam}
-          params={searchParams(channelList)}
+          onSearch={setSeaParams}
+          params={searchParams(channelList, accountList)}
         />
         <Table 
           columns={columns} 
           dataSource={listDate} 
           rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
-          scroll={{x: 1280}} 
+          scroll={{x: 960}} 
           loading={tableLoading}
           pagination={{
             ...pagination,

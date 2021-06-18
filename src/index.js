@@ -20,7 +20,8 @@ import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
 import Sales from './page-sales'
-import Weapp from './weapp'
+import WeappCode from './page-channel-manage/weappCode'
+import ToCustomer from './page-channel-manage/toCustomer'
 import Material from './page-material'
 import EventManage from './page-event-manage'
 import ChannelManage from './page-channel-manage'
@@ -38,7 +39,8 @@ function Entry() {
         {/* 登录 */}
         <Route path="/login" component={Login} />
         <Route path="/upload-tag" component={UploadTag} />
-        <Route path="/weapp" component={Weapp} />
+        <Route path="/weappCode/:host?" component={WeappCode} />
+        <Route path="/toCustomer/:authCode?/:expiresIn?" component={ToCustomer} />
 
         <Frame>
           {/* 客户中心 */}
