@@ -12,7 +12,7 @@ export default () => {
   const [userList, setUserList] = useState([]) // 用户列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [detailLoading, setDetailLoading] = useState(false) // 计划详情loading
-  const [addLoading, setAddLoading] = useState(false) // 计划详情loading
+  const [addLoading, setAddLoading] = useState(false) // addloading
   const [searchParam, setSearchParam] = useState({}) // 搜索
   const [tableLoading, setTableLoading] = useState(false) // 搜索
   const [showModal, setShowModal] = useState(false) // 创建计划
@@ -90,6 +90,7 @@ export default () => {
       })
       if (res) {
         successTip('创建成功')
+        setModal(false)
         window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${res}`
       }
     } catch (error) {
@@ -100,13 +101,17 @@ export default () => {
   }
   // 编辑计划
   const editPlan = async params => {
+    setAddLoading(true)
     try {
       await io.editPlan({
         ...params,
       })
       successTip('编辑成功')
+      setModal(false)
     } catch (error) {
       errorTip(error.message)
+    } finally {
+      setAddLoading(false)
     }
   }
   // 计划详情

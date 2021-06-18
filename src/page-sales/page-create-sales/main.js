@@ -484,7 +484,7 @@ export default props => {
                     }
                   </div>
                   
-                  <div>{`起止时间：${startTime}~${endTime}`}</div>
+                  {startTime ? <div>{`起止日期：${startTime}~${endTime}`}</div> : null}
                 </div>
               </div>
               <div>

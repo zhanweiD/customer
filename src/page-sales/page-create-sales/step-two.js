@@ -167,7 +167,7 @@ export default ({
     setNotDoneLogic(v)
   }
   const disabledDate = time => {
-    return time >= moment(planInfo.endTime, dateFormat) || time <= moment(planInfo.startTime, dateFormat)
+    return time > moment(planInfo.endTime, 'YYYY-MM-DD HH:mm:ss') || time < moment(planInfo.startTime, 'YYYY-MM-DD HH:mm:ss')
   }
 
   const checkSelectEvent = () => {
@@ -254,7 +254,7 @@ export default ({
       const {strategyFixConditionContent, strategyConditionType} = strategyDetail
       const {cron, frequency} = strategyFixConditionContent
       setStrategyEventCondition(strategyFixConditionContent)
-      if (frequency !== 0) {
+      if (frequency !== '0') {
         setCornTime(CycleSelect.cronSrialize(cron))
       } else {
         const data = cron.split(' ')
@@ -351,7 +351,7 @@ export default ({
           noStyle 
           name="interval" 
           rules={[{required: true, message: '请选择日期'}]}
-          initialValue={cornTime.date}
+          initialValue={cornTime.date ? moment(cornTime.date, dateFormat) : undefined}
         >
           <DatePicker format={dateFormat} style={{width: '60%'}} />
         </Item>
@@ -359,7 +359,7 @@ export default ({
           noStyle 
           name="time" 
           rules={[{required: true, message: '请选择时间'}]}
-          initialValue={cornTime.time}
+          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
         >
           <TimePicker format={timeFormat} style={{width: '40%'}} />
         </Item>
@@ -628,14 +628,14 @@ export default ({
         <Item 
           label="参与限制" 
           name="strategyRestrict" 
-          initialValue={strategyDetail.strategyRestrict || 0}
+          initialValue={strategyDetail.strategyRestrict || 1}
           rules={[{required: true, message: '请选择次数'}]}
         >
           <Radio.Group>
-            <Radio value={0}>
+            <Radio value={1}>
               参与一次
             </Radio>
-            {/* <Radio value={1} disabled>
+            {/* <Radio value={0} disabled>
               参与多次
             </Radio> */}
           </Radio.Group>

@@ -248,6 +248,16 @@ export default ({
           templateJson: JSON.stringify(templateJson),
         },
       }
+      if (params.strategyConditionType) {
+        delete params.strategyFixConditionContent
+      } else {
+        delete params.strategyEventConditionContent
+      }
+      if (params.clientGroupFilterType) {
+        delete params.clientGroupTagFilterContent
+      } else {
+        delete params.clientGroupUserActionFilterContent
+      }
       setThreeFormData(params)
       // setStrategyDetail({...strategyDetail, ...params})
       if (strName) {
