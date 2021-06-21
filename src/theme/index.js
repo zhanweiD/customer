@@ -44,6 +44,8 @@ module.exports = () => {
     'primary-color': '#3F5FF4',
     'link-color': '#3F5FF4',
     'font-size-base': '14px',
+    'text-color': 'rgba(22,50,78,0.85)',
+    'text-color-secondary': 'rgba(22,50,78,0.65)',
     'blue-6': '#0078ff',
     'purple-6': '#8A7FEA',
     'cyan-6': '#73B2FF',
