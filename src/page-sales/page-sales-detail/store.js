@@ -38,6 +38,8 @@ export default class Store {
   barChart
   funnelChart
 
+  @observable isStrategyDone = false
+
   // 计划详情
   @action async getDetail() {
     try {
@@ -75,8 +77,12 @@ export default class Store {
       })
 
       if (!_.isEmpty(res)) {
-        this.touchCount = res.touchCount
-        this.targetRate = res.targetRate
+        if (res.touchCount) {
+          this.touchCount = res.touchCount
+        }
+        if (res.targetRate) {
+          this.targetRate = res.targetRate
+        }
       }
 
       cb()
@@ -156,7 +162,7 @@ export default class Store {
                       name: `${item.name}-${e.name}-${t.name}`,
                     })
                   } else {
-                    this.analysisEnd = `${item.name}-${e.name}-${t.name}`
+                    // this.analysisEnd = `${item.name}-${e.name}-${t.name}`
                   }
                 })
               }
@@ -227,9 +233,12 @@ export default class Store {
 
       // 展示暂无数据
       this.strategyList = res
+      this.isStrategyDone = true
     } catch (e) {
       errorTip(e.message)
       console.error('getStrategyList')
+    } finally {
+      this.isStrategyDone = true
     }
   }
 
@@ -247,11 +256,14 @@ export default class Store {
         DAYS: '天',
       }
 
-      const channelName = _.find(res, e => e.id === channelId).name
-      const accountName = _.find(res, e => e.id === accountId).name
-      const eventName = _.find(res, e => e.id === eventId).name
+      if (res && res.length && res.length > 0) {
+        const channelName = _.find(res, e => e.id === channelId).name
+        const accountName = _.find(res, e => e.id === accountId).name
+        const eventName = _.find(res, e => e.id === eventId).name
 
-      this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
+        this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
+        this.analysisEnd = `${channelName}-${accountName}-${eventName}`
+      }
     } catch (e) {
       errorTip(e.message)
       console.error('getTargetChannelList')

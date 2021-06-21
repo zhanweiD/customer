@@ -80,7 +80,7 @@ const CreateSales = ({
       console.log(value)
       if (value.clientGroupFilterType) {
         const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
-        value.clientGroupUserActionFilterContent = {events}
+        value.clientGroupUserActionFilterContent = {events, logic: userLogic}
       } else if (value.clientGroupFilterContent[0]) {
         const param = value.clientGroupFilterContent.map(item => {
           item.leftTagId = item.tagId ? item.tagId.split('.')[1] : null
@@ -135,6 +135,8 @@ const CreateSales = ({
       const {clientGroupUserActionFilterContent, clientGroupFilterType} = strategyDetail
       const list = clientGroupUserActionFilterContent.events.map(item => ({event: [item.channelId, item.accountId, item.eventId]}))
       setClientGroup(list)
+      console.log(clientGroupUserActionFilterContent)
+      setUserLogic(clientGroupUserActionFilterContent.logic)
       setRadioType(clientGroupFilterType)
     } else {
       const {clientGroupTagFilterContent, clientGroupFilterType} = strategyDetail
@@ -143,7 +145,6 @@ const CreateSales = ({
         setUserLogic(item.logic)
         setClientGroup(item.express)
       }
-      
       setRadioType(clientGroupFilterType)
     }
     oneForm.resetFields()
@@ -181,9 +182,9 @@ const CreateSales = ({
           style={{position: 'relative'}}
         >
           <Panel 
-            header={radioType ? '用户行为属性满足' : (
+            header={(
               <div className="FBH header-select">
-                用户实体属性满足
+                {radioType ? '用户行为属性满足' : '用户实体属性满足'}
                 <Select 
                   value={userLogic}
                   style={{width: 72, margin: '8px'}} 
@@ -284,7 +285,7 @@ const CreateSales = ({
                               fieldKey={[fieldKey, 'rightParams']}
                               rules={[{required: true, message: '请输入或选择'}]}
                             >
-                              <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
+                              <Select mode="tags" style={{minWidth: 160}} placeholder="请输入或选择">
                                 {
                                   promptTags.map(item => <Option value={item}>{item}</Option>)
                                 }
@@ -298,6 +299,7 @@ const CreateSales = ({
                                 const newData = [...condList]
                                 newData.splice(index, 1)
                                 setCondList(newData)
+                                checkSelectEvent()
                               }}
                             />
                             
