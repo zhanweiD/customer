@@ -149,6 +149,8 @@ export default ({
   const [vis, setVis] = useState(false)
 
   const templateChange = e => {
+    console.log(templateList)
+    console.log(e)
     // 目标模板数据
     const target = _.find(templateList, item => item.template_id === e)
     const req = /{(\w+).DATA}/g
@@ -272,12 +274,11 @@ export default ({
   }
 
   // TODO:
-  const getTemplate = async v => {
+  const getTemplate = async (v, cb) => {
     try {
       const res = await io.getTemplate({
         accountId: v || accountId,
       })
-
       if (res && res.template_list) {
         setTemplateList(res.template_list)
       }
@@ -295,7 +296,7 @@ export default ({
   }
 
   useEffect(() => {
-    if (!tagList.length || !strategyDetail.id) return
+    if (!tagList.length || !strategyDetail.id || !templateList.length) return
     const {
       templateJson, actionId, isDelay, templateId, timeGap, timeUnit, channel,
     } = strategyDetail.sendOutContent
@@ -346,7 +347,7 @@ export default ({
       ...templateObj,
     })
     setVis(true)
-  }, [tagList, strategyDetail])
+  }, [tagList, strategyDetail, templateList])
   useEffect(() => {
     if (!strategyDetail.id) {
       setChannelActionList([])
