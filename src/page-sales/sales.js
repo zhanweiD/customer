@@ -229,11 +229,11 @@ export default () => {
         return <Badge status={color} text={status} />
       },
     },
-    {
-      title: '创建时间',
-      dataIndex: 'ctime',
-      key: 'ctime',
-    },
+    // {
+    //   title: '创建时间',
+    //   dataIndex: 'ctime',
+    //   key: 'ctime',
+    // },
     {
       title: '开始时间',
       dataIndex: 'startTime',
@@ -282,10 +282,6 @@ export default () => {
     },
   ]
 
-  const toCreate = () => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create`
-  }
-  
   useEffect(() => {
     getUserList()
   }, [])
@@ -295,7 +291,7 @@ export default () => {
 
   return (
     <div className="oa">
-      <div className="content-header">自动化营销</div>
+      <div className="content-header">营销计划</div>
       <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}

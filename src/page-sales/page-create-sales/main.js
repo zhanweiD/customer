@@ -127,6 +127,7 @@ export default props => {
   }
   // 配置详情
   const getStrategyDetail = async id => {
+    setStrategyDetail({})
     setLoading(true)
     if (!id) {
       setTimeout(() => {
@@ -321,7 +322,6 @@ export default props => {
   // 选中策略
   const selectItem = v => {
     setStrName('')
-    setStrategyDetail({})
     setCurrent(0)
     setSelectItemId(v)
     getStrategyDetail(v)
@@ -426,20 +426,29 @@ export default props => {
               className={`${selectItemId === item.id ? 'left-item-header-select' : 'left-item-header'} pl16 pt8 pb8 fs14 FBH FBJB`} 
             >
               <span>{`策略${i + 1}-${strategyName}`}</span>
-              <Popconfirm
-                title={`你确定删除策略${i + 1}-${strategyName}吗?`}
-                onConfirm={() => deleteStrategy(item.id)}
-                onCancel={() => console.log(11)}
-                okText="确定"
-                cancelText="取消"
-              >
-                <span 
-                  onClick={e => e.stopPropagation()}
-                  className="hand mr12" 
-                >
-                  <DeleteOutlined />
-                </span>
-              </Popconfirm>
+              {
+                strategyList.length > 1 ? (
+                  <Popconfirm
+                    title={`你确定删除策略${i + 1}-${strategyName}吗?`}
+                    onConfirm={() => {
+                      deleteStrategy(item.id)
+                      if (item.id === selectItemId) {
+                        setSelectItemId(undefined)
+                      }
+                    }}
+                    onCancel={() => {}}
+                    okText="确定"
+                    cancelText="取消"
+                  >
+                    <span 
+                      onClick={e => e.stopPropagation()}
+                      className="hand mr12" 
+                    >
+                      <DeleteOutlined />
+                    </span>
+                  </Popconfirm>
+                ) : null
+              }
             </div>
             <div className="mt8 mb8 ml16 mr16 c45">
               <div>
@@ -655,7 +664,6 @@ export default props => {
           {
             loading ? <div style={{textAlign: 'center', marginTop: '25%'}}><Spin /></div> : (
               <StepOne 
-                // key={Date.now()}
                 nextStep={nextStep} 
                 current={current} 
                 tagList={tagList}

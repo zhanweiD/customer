@@ -80,7 +80,7 @@ const CreateSales = ({
       console.log(value)
       if (value.clientGroupFilterType) {
         const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
-        value.clientGroupUserActionFilterContent = {events}
+        value.clientGroupUserActionFilterContent = {events, logic: userLogic}
       } else if (value.clientGroupFilterContent[0]) {
         const param = value.clientGroupFilterContent.map(item => {
           item.leftTagId = item.tagId ? item.tagId.split('.')[1] : null
@@ -285,7 +285,7 @@ const CreateSales = ({
                               fieldKey={[fieldKey, 'rightParams']}
                               rules={[{required: true, message: '请输入或选择'}]}
                             >
-                              <Select mode="tags" style={{width: 160}} placeholder="请输入或选择">
+                              <Select mode="tags" style={{minWidth: 160}} placeholder="请输入或选择">
                                 {
                                   promptTags.map(item => <Option value={item}>{item}</Option>)
                                 }
