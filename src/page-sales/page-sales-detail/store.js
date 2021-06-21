@@ -162,7 +162,7 @@ export default class Store {
                       name: `${item.name}-${e.name}-${t.name}`,
                     })
                   } else {
-                    this.analysisEnd = `${item.name}-${e.name}-${t.name}`
+                    // this.analysisEnd = `${item.name}-${e.name}-${t.name}`
                   }
                 })
               }
@@ -256,11 +256,14 @@ export default class Store {
         DAYS: '天',
       }
 
-      const channelName = _.find(res, e => e.id === channelId).name
-      const accountName = _.find(res, e => e.id === accountId).name
-      const eventName = _.find(res, e => e.id === eventId).name
+      if (res && res.length && res.length > 0) {
+        const channelName = _.find(res, e => e.id === channelId).name
+        const accountName = _.find(res, e => e.id === accountId).name
+        const eventName = _.find(res, e => e.id === eventId).name
 
-      this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
+        this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
+        this.analysisEnd = `${channelName}-${accountName}-${eventName}`
+      }
     } catch (e) {
       errorTip(e.message)
       console.error('getTargetChannelList')
