@@ -242,7 +242,7 @@ const CreateSales = ({
                            
                         </div>
                       ) : (  
-                        <div className="pr">
+                        <div className="pr user-config">
                           {/* {index ? (
                             <div className="conditions-div">
                               <span 
@@ -262,7 +262,7 @@ const CreateSales = ({
                               fieldKey={[fieldKey, 'tagId']}
                               rules={[{required: true, message: '请选择标签'}]}
                             >
-                              <Select style={{width: 160}} placeholder="请选择标签" onChange={getPromptTag}>
+                              <Select style={{width: 128}} placeholder="请选择标签" onChange={getPromptTag}>
                                 {
                                   objTagList.map(item => <Option value={item.id}>{item.name}</Option>)
                                 }
@@ -285,7 +285,12 @@ const CreateSales = ({
                               fieldKey={[fieldKey, 'rightParams']}
                               rules={[{required: true, message: '请输入或选择'}]}
                             >
-                              <Select mode="tags" style={{minWidth: 160}} placeholder="请输入或选择">
+                              <Select 
+                                mode="tags" 
+                                className="select-height"
+                                style={{width: 200}} 
+                                placeholder="请输入或选择"
+                              >
                                 {
                                   promptTags.map(item => <Option value={item}>{item}</Option>)
                                 }
