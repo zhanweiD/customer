@@ -112,12 +112,16 @@ export default ({
     }
   }
   const checkNumber = (rule, value, callback) => {
-    if (!value) return
-    if (value.slice(0, 1) === '0') {
+    console.log(value)
+    if (!value) {
+      callback('请输入时间')
+      return
+    } 
+    if (`${value}`.slice(0, 1) === '0') {
       callback('不支持0开头时间')
     }
     if (value - 0 > 0) {
-      if (value.indexOf('.') !== -1) {
+      if (`${value}`.indexOf('.') !== -1) {
         callback('请输入有效时间')
       } else {
         callback()
@@ -150,11 +154,14 @@ export default ({
       } else {
         addPlan(value)
       }
-      setModal(false)
     }).catch(err => console.log(err))
   }
   const closeDrawer = () => {
     setModal(false)
+  }
+
+  const disabledDate = time => {
+    return time && time < moment().startOf('day')
   }
   
   useEffect(() => {
@@ -242,7 +249,7 @@ export default ({
               rules={[{required: true, message: '请选择日期'}]}
               initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
             >
-              <RangePicker format={dateFormat} />
+              <RangePicker disabledDate={disabledDate} format={dateFormat} />
             </Item>
             <Item
               label="描述"
@@ -271,7 +278,7 @@ export default ({
                   name="timeGap" 
                   initialValue={firstTargetContent.timeGap}
                   rules={[
-                    {required: true, message: '请输入时间'},
+                    // {required: true, message: '请输入时间'},
                     {validator: checkNumber},
                   ]}
                 >

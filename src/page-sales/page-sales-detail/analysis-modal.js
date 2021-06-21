@@ -81,9 +81,8 @@ const SalesDetail = ({visible, setVisible, store}) => {
       */
       const resultValues = []
 
-      analysisValues.forEach(item => {
-        // 处理数据
-        const splitValues = item.split('-')
+      dragItems.forEach(item => {
+        const splitValues = rest[item].split('-')
 
         resultValues.push({
           channelCode: _.find(store.eventList, e => e.name === splitValues[0]).code,

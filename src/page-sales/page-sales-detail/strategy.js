@@ -229,7 +229,7 @@ export default ({list}) => {
     const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
     const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
     const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
-    return `${channel.name}-${account.name}-${even.name}`
+    return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
   const setCornDom = (cron, frequency) => {
     let cycle = null
@@ -268,7 +268,7 @@ export default ({list}) => {
     const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
     const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
     const event = originEventList.filter(item => item.id === user.eventId)[0] || {}
-    return `${channel.name} ${account.name} ${event.name}`
+    return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${event.name || '事件不可用'}`
   }
 
   const setChannelDom = sendOutContent => {
@@ -373,7 +373,7 @@ export default ({list}) => {
                     }
                   </div>
                   
-                  <div>{`起止时间：${startTime}~${endTime}`}</div>
+                  {startTime ? <div>{`起止日期：${startTime}~${endTime}`}</div> : null}
                 </div>
               </div>
               <div>

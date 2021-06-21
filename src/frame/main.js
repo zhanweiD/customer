@@ -285,7 +285,6 @@ export default class Frame extends Component {
                   <Menu.Item key="/channel-manage">渠道管理</Menu.Item>
                   <Menu.Item key="/event-manage">事件管理</Menu.Item>
                 </SubMenu>
-
                 {
                   showSystem && (
                     <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">
