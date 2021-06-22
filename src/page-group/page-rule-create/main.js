@@ -3,7 +3,7 @@ import {observer, Provider} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {Steps, message, Modal} from 'antd'
 
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 import store from './store'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -123,4 +123,4 @@ class RuleCreate extends Component {
     )
   }
 }
-export default authView(RuleCreate)
+export default AuthView(RuleCreate)

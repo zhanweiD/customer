@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {DatePicker, Input} from 'antd'
 import {SearchOutlined} from '@ant-design/icons'
 import {
-  ListContent, authView,
+  ListContent, AuthView,
 } from '../../component'
 // import search from './search'
 import {Time, debounce} from '../../common/util'
@@ -98,4 +98,4 @@ class SystemLog extends Component {
     )
   }
 }
-export default authView(SystemLog)
+export default AuthView(SystemLog)

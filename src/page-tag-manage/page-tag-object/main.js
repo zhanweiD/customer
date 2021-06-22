@@ -3,7 +3,7 @@ import {action} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {Spin, Skeleton, Modal} from 'antd'
 
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 import ObjectCard from './tag-object-card'
 import Store from './store'
 import DrawerObject from './tree-drawer-object'
@@ -75,4 +75,4 @@ class TagObject extends Component {
     )
   }
 }
-export default authView(TagObject)
+export default AuthView(TagObject)

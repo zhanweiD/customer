@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, authView} from '../../component'
+import {OverviewCardWrap, ListContent, AuthView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -269,4 +269,4 @@ class Satisfaction extends Component {
     )
   }
 }
-export default authView(Satisfaction)
+export default AuthView(Satisfaction)

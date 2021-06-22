@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, AuthView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -154,4 +154,4 @@ class Consultant extends Component {
     )
   }
 }
-export default authView(Consultant)
+export default AuthView(Consultant)

@@ -18,7 +18,7 @@ import Card from './dt-card'
 import DtGrid from './dt-grid'
 import {AuthBox, Authority} from './auth-box'
 import LegendItem from './legendItem'
-import authView from './auth-view'
+import AuthView from './auth-view'
 import Search from './search-header'
 
 export {
@@ -45,5 +45,5 @@ export {
   Card,
   DtGrid,
   LegendItem,
-  authView,
+  AuthView,
 }

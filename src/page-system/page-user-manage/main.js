@@ -11,7 +11,7 @@ import {
   ListContent,
   ModalForm,
   Authority,
-  authView,
+  AuthView,
 } from '../../component'
 
 import store from './store'
@@ -222,4 +222,4 @@ class UserManage extends Component {
   }
 }
 
-export default authView(UserManage)
+export default AuthView(UserManage)

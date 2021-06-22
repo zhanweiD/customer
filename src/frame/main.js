@@ -169,6 +169,7 @@ export default class Frame extends Component {
     const showAnalyze = codeInProduct('/analyze/clinch') || codeInProduct('/analyze/supply-demand') || codeInProduct('/analyze/purchase') || codeInProduct('/analyze/channel') || codeInProduct('/analyze/satisfaction')
     // eslint-disable-next-line max-len
     const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
+    const showSales = codeInProduct('/sales/list') || codeInProduct('/channel-manage') || codeInProduct('/event-manage')
  
     return (
       <ConfigProvider locale={zhCN} componentSize="small">
@@ -286,12 +287,27 @@ export default class Frame extends Component {
                       </SubMenu>
                     )
                   }
-                  <SubMenu key="/sales" icon={<DeploymentUnitOutlined />} title="自动化营销">
-                    <Menu.Item key="/sales/list">营销计划</Menu.Item>
-                    <Menu.Item key="/channel-manage">渠道管理</Menu.Item>
-                    <Menu.Item key="/event-manage">事件管理</Menu.Item>
-                  </SubMenu>
-
+                  {
+                    showSales && (
+                      <SubMenu key="/sales" icon={<DeploymentUnitOutlined />} title="自动化营销">
+                        {
+                          codeInProduct('/sales/list') && (
+                            <Menu.Item key="/sales/list">营销计划</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/channel-manage') && (
+                            <Menu.Item key="/channel-manage">渠道管理</Menu.Item>
+                          )
+                        }
+                        {
+                          codeInProduct('/event-manage') && (
+                            <Menu.Item key="/event-manage">事件管理</Menu.Item>
+                          )
+                        }
+                      </SubMenu>
+                    )
+                  }
                   {
                     showSystem && (
                       <SubMenu key="/system" icon={<SettingOutlined />} title="系统管理">

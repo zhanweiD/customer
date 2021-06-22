@@ -5,7 +5,7 @@ import {Fragment} from 'react'
 import {Tabs} from 'antd'
 
 import {codeInProduct} from '../../common/util'
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 
 import GroupList from './group-list'
 import PushList from './push-list'
@@ -35,4 +35,4 @@ const GroupManage = () => {
     </div>
   )
 }
-export default authView(GroupManage)
+export default AuthView(GroupManage)
