@@ -414,9 +414,9 @@ class SyncList extends Component {
 
     return (
       <Provider bigStore={store}>
-        <div className="oa">
+        <div className="oa FBV">
           <div className="content-header">标签同步</div>
-          <div className="header-page">
+          <div className="header-page FB1">
             <ListContent {...listConfig} />
           </div>
           {store.visible ? <DrawerAddSync projectId={projectId} /> : null}
