@@ -193,7 +193,6 @@ export default ({
     })
 
     myForm.validateFields().then(value => {
-      setLoading(true)
       // const channel = 
       // TODO:
       // 把数据存起来
@@ -254,6 +253,7 @@ export default ({
       setThreeFormData(params)
 
       if (strName) {
+        setLoading(true)
         if (strategyDetail.id) {
           editStrategy(params, () => {
             setVis(false)

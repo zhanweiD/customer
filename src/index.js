@@ -39,7 +39,7 @@ function Entry() {
         {/* 登录 */}
         <Route path="/login" component={Login} />
         <Route path="/upload-tag" component={UploadTag} />
-        <Route path="/weappCode/:host?" component={WeappCode} />
+        <Route path="/weappCode/:userAccount/:host?" component={WeappCode} />
         <Route path="/toCustomer/:authCode?/:expiresIn?" component={ToCustomer} />
 
         <Frame>

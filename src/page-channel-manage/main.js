@@ -68,12 +68,14 @@ export default props => {
 
   // 授权跳转
   const authoriza = async () => {
-    const host = window.location.href.split('#')
+    // const host = window.location.href.split('#')
+    const host = window.location.href.split('/')
     // console.log(host[0])
     // window.open(`${host[0]}customer/index.html#/weappCode/${host[0]}`)
     // window.history.go(-3)
     // window.location.reload()
-    window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${host[0]}`)
+    window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}`)
+    // window.open(`http://192.168.90.135:8173/customer_dev/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host}`)
   }
 
   const changeTabs = v => {
