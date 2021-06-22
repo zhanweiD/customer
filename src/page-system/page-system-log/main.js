@@ -62,7 +62,7 @@ class SystemLog extends Component {
         <div className="dfjf mr24">
           <Input 
             placeholder="请输入用户名或者账号"
-            style={{width: 200, marginRight: '8px'}}
+            style={{width: 210, marginRight: '8px'}}
             suffix={<SearchOutlined />}
             allowClear
             onChange={e => {
