@@ -713,4 +713,5 @@ const CreateSales = props => {
     </div>
   )
 }
-export default authView(CreateSales)
+// export default authView(CreateSales)
+export default CreateSales

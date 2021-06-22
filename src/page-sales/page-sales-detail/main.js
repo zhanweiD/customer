@@ -38,4 +38,5 @@ const SalesDetail = props => {
     </Provider>
   )
 }
-export default authView(SalesDetail)
+// export default authView(SalesDetail)
+export default SalesDetail
