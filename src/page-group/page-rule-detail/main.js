@@ -3,7 +3,7 @@ import {action, toJS, observable} from 'mobx'
 import {observer} from 'mobx-react'
 import {Button, Spin} from 'antd'
 
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 import {RuleContent} from '../component'
 import SetRule from './drawer'
 
@@ -120,4 +120,4 @@ class RuleDetail extends Component {
   }
 }
 
-export default authView(RuleDetail)
+export default AuthView(RuleDetail)

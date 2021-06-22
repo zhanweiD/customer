@@ -269,7 +269,8 @@ export default ({
             <div className="fs12 mb16">首要目标</div>
             <Item
               label="完成时间"
-              // name="firstTargetContents"
+              name="validation-time"
+              rules={[{required: true, message: '请输入事件'}]}
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
               <Input.Group compact>

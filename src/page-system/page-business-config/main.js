@@ -8,7 +8,7 @@ import Format from './format'
 import SceneStore from './scene-store'
 import DomainStore from './domain-store'
 import FormatStore from './format-store'
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 
 const sceneStore = new SceneStore()
 const domainStore = new DomainStore()
@@ -53,4 +53,4 @@ const Business = () => {
     </div>
   )
 }
-export default authView(Business)
+export default AuthView(Business)

@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {Tabs, Spin} from 'antd'
 import {Provider, inject} from 'mobx-react'
 
-import {authView} from '../../component'
+import {AuthView} from '../../component'
 import ManageDetail from './manage-detail'
 import TabOne from './tab-one'
 import TabTwo from './tab-two'
@@ -39,4 +39,4 @@ const Main = ({match}) => {
   )
 }
 
-export default authView(Main)
+export default AuthView(Main)

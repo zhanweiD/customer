@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {authView, ListContent} from '../../component'
+import {AuthView, ListContent} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -164,4 +164,4 @@ class SupplyDemand extends Component {
     )
   }
 }
-export default authView(SupplyDemand)
+export default AuthView(SupplyDemand)

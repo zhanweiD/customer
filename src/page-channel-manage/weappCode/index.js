@@ -6,9 +6,12 @@ import io from '../io'
 export default props => {
   // 授权跳转
   const authoriza = async () => {
-    // const url = `${params.host}customer/index.html#/channel-manage`
-    // console.log(params)
-    // localStorage.setItem('hostUrl', url)
+    const {params = {}} = props.match
+    console.log(params)
+    const url = `http://${params.host}/customer/index.html#/channel-manage`
+
+    localStorage.setItem('hostUrl', url)
+    localStorage.setItem('userAccount', params.userAccount)
     try {
       const res = await io.authoriza()
       if (res) window.location.href = `${res}http%3A%2F%2Fzdhyx.dc.dtwave.com%2Fcustomer%2Findex.html%23%2FtoCustomer`
