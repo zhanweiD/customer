@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData, AuthView} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -246,4 +246,4 @@ class Channel extends Component {
     )
   }
 }
-export default AuthView(Channel)
+export default authView(Channel)

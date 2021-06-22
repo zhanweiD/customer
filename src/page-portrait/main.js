@@ -3,7 +3,7 @@ import {action, toJS} from 'mobx'
 import {observer, inject} from 'mobx-react'
 import {Spin, Input, Select} from 'antd'
 
-import {NoData, AuthView} from '../component'
+import {NoData, authView} from '../component'
 
 import store from './store'
 import SearchResult from './search-result'
@@ -107,4 +107,4 @@ class Portrait extends Component {
     )
   }
 }
-export default AuthView(Portrait)
+export default authView(Portrait)

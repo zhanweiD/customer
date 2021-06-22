@@ -7,7 +7,7 @@ import {useState, useEffect} from 'react'
 import NoData from '../no-data'
 
 export default PageComponent => {
-  function AuthView(props) {
+  function authView(props) {
     const [auth, changeAuth] = useState(true)
     useEffect(() => {
       const data = window.frameInfo.perms || []
@@ -18,5 +18,5 @@ export default PageComponent => {
     }
     return <PageComponent {...props} />
   }
-  return AuthView
+  return authView
 }

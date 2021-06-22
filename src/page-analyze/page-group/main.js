@@ -6,7 +6,7 @@ import {observer} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Checkbox, Button} from 'antd'
 
-import {NoData, AuthView} from '../../component'
+import {NoData, authView} from '../../component'
 import Chart from './chart'
 import store from './store'
 import './main.styl'
@@ -88,4 +88,4 @@ class Group extends Component {
     )
   }
 }
-export default AuthView(Group)
+export default authView(Group)

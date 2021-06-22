@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {Popconfirm, Button} from 'antd'
 
 import {
-  ListContent, OmitTooltip, Authority, AuthView,
+  ListContent, OmitTooltip, Authority, authView,
 } from '../../component'
 import AddDrawer from './add-drawer'
 import store from './store'
@@ -122,4 +122,4 @@ class PortraitConfig extends Component {
     )
   }
 }
-export default AuthView(PortraitConfig)
+export default authView(PortraitConfig)
