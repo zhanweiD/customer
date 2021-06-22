@@ -18,7 +18,7 @@ export default class QuestionTooltip extends React.Component {
     const {placement, tip} = this.props
     return (
       <Tooltip placement={placement} title={tip}>
-        <QuestionCircleOutlined className="ml4 mt4" />
+        <QuestionCircleOutlined className="ml4 mt4" style={{color: 'rgba(22, 50, 78, 0.45)'}} />
       </Tooltip>
     )
   }

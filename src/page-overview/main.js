@@ -1,12 +1,17 @@
 import {useEffect, useState} from 'react'
 import {Select, Cascader, Spin} from 'antd'
 
-import {OverviewCardWrap, AuthView} from '../component'
+import {AuthView} from '../component'
+import OverviewCardWrap from './overview-card'
 import ConversionChart from './conversion-chart'
 import DistributionChart from './distribution-chart'
 import CustomerChart from './customer-chart'
 import io from './io'
 import {errorTip} from '../common/util'
+import addCustomer from '../icon/add-customer.svg'
+import customer from '../icon/customer.svg'
+import setOf from '../icon/set-of.svg'
+import amount from '../icon/amount.svg'
 
 
 const {Option} = Select
@@ -71,33 +76,55 @@ const Overview = () => {
   }
 
   // 对象指标信息卡
-  const cards = [
-    {
-      title: '累计签约金额',
-      tooltipText: '累计签约金额',
-      values: [card.signAmount || 0, `同比${card.signTotalAmountRise || 0}`],
-      valueTexts: [`累计认购金额： ${card.subscriptionAmount || 0}`],
-      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
-    }, {
-      title: '累计签约套数',
-      tooltipText: '累计签约套数',
-      values: [card.signHouseCount || 0],
-      valueTexts: [`去化率 ${card.removalRate || 0}`],
-      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
-    }, {
-      title: '客户总数',
-      tooltipText: '客户总数',
-      values: [card.allCustCount || 0],
-      valueTexts: [`新增客户数 ${card.newCustCount || 0}`],
-      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
-    }, {
-      title: '来访客户人数',
-      tooltipText: '来访客户人数',
-      values: [card.visitCustCount || 0],
-      valueTexts: [`来访率 ${card.visitCustRate || 0}`],
-      fontStyle: {active: {size: 26, viceSize: 12, color: '#fff'}, color: '#fff'},
-    },
-  ]
+  const cards = () => {
+    if (!card.signAmount) return []
+    const signAmount = card.signAmount.match(/\d+\.\d+/g)
+    const signAmountUnit = card.signAmount.split(signAmount)
+    const subscriptionAmount = card.subscriptionAmount.match(/\d+\.\d+/g)
+    const subscriptionAmountUnit = card.subscriptionAmount.split(subscriptionAmount)
+
+    const signHouseCount = parseInt(card.signHouseCount, 10)
+    const signHouseCountUnit = card.signHouseCount.split(signHouseCount)
+
+    const allCustCount = parseInt(card.allCustCount, 10)
+    const allCustCountUnit = card.allCustCount.split(allCustCount)
+    const newCustCount = parseInt(card.newCustCount, 10)
+    const newCustCountUnit = card.newCustCount.split(newCustCount)
+
+    const visitCustCount = parseInt(card.visitCustCount, 10)
+    const visitCustCountUnit = card.visitCustCount.split(visitCustCount)
+    return [
+      {
+        title: `累计签约金额 (${signAmountUnit[1]})`,
+        tooltipText: '累计签约金额',
+        values: [signAmount || 0, `同比${card.signTotalAmountRise || 0}`],
+        valueTexts: [`累计认购金额 (${subscriptionAmountUnit[1]})`, subscriptionAmount || 0],
+        fontStyle: {active: {size: 26, viceSize: 12, color: '#16324e'}, color: 'rgba(22, 50, 78, 0.85)'},
+        icon: <img src={amount} alt="累计签约金额" />,
+      }, {
+        title: `累计签约套数 (${signHouseCountUnit[1]})`,
+        tooltipText: '累计签约套数',
+        values: [signHouseCount || 0],
+        valueTexts: ['去化率', card.removalRate || 0],
+        fontStyle: {active: {size: 26, viceSize: 12, color: '#16324e'}, color: 'rgba(22, 50, 78, 0.85)'},
+        icon: <img src={setOf} alt="累计签约套数" />,
+      }, {
+        title: `客户总数 (${allCustCountUnit[1]})`,
+        tooltipText: '客户总数',
+        values: [allCustCount || 0],
+        valueTexts: [`新增客户数 (${newCustCountUnit[1]})`, newCustCount || 0],
+        fontStyle: {active: {size: 26, viceSize: 12, color: '#16324e'}, color: 'rgba(22, 50, 78, 0.85)'},
+        icon: <img src={addCustomer} alt="客户总数" />,
+      }, {
+        title: `来访客户人数 (${visitCustCountUnit[1]})`,
+        tooltipText: '来访客户人数',
+        values: [visitCustCount || 0],
+        valueTexts: ['来访率', card.visitCustRate || 0],
+        fontStyle: {active: {size: 26, viceSize: 12, color: '#16324e'}, color: 'rgba(22, 50, 78, 0.85)'},
+        icon: <img src={customer} alt="来访客户人数" />,
+      },
+    ]
+  }
 
   const changeOrg = (v, item) => {
     let newOrg = null
@@ -115,10 +142,6 @@ const Overview = () => {
         else newOrg = v[i]
       }
     }
-    // for (let i = 0; i < v.length - 1; i++) {
-    //   if (newOrg) newOrg = `${newOrg},${v[i]}`
-    //   else newOrg = v[i]
-    // }
     setOrg(newOrg)
   }
 
@@ -136,37 +159,37 @@ const Overview = () => {
 
   return (
     <div className="overview oa">
-      <div className="content-header">
+      <div className="content-header FBH FBJB">
         <span>客户中心</span>
-        {
-          org ? (
-            <Cascader
-              defaultValue={[org]}
-              changeOnSelect
-              allowClear={false}
-              options={orgList}
-              fieldNames={{label: 'orgName', value: 'orgCode'}}
-              expandTrigger="hover"
-              style={{margin: '0px 8px'}} 
-              onChange={changeOrg}
-            />
-          ) : null
-        }
-        <Select 
-          style={{width: 128}} 
-          onChange={changeTime}
-          defaultValue={365}
-        >
-          {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
-        </Select>
+        <div style={{width: 504}}>
+          {
+            org ? (
+              <Cascader
+                defaultValue={[org]}
+                changeOnSelect
+                allowClear={false}
+                options={orgList}
+                fieldNames={{label: 'orgName', value: 'orgCode'}}
+                expandTrigger="hover"
+                style={{margin: '0px 8px'}} 
+                onChange={changeOrg}
+              />
+            ) : null
+          }
+          <Select 
+            style={{width: 128}} 
+            onChange={changeTime}
+            defaultValue={365}
+          >
+            {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
+          </Select>
+        </div>
       </div>
       <Spin spinning={orgLoading}>
-        <div className="bgf m16 mt72">
-          <div className="overview-header">总览</div>
-          <div className="p16">
-            <OverviewCardWrap cards={cards} />
-          </div>
+        <div className="p16 pb0 mt48">
+          <OverviewCardWrap cards={cards()} />
         </div>
+        {/* </div> */}
         {
           org ? (
             <div className="d-flex m16">
