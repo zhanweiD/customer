@@ -2,10 +2,11 @@ import {useEffect, useState} from 'react'
 import {Button, Table, Tabs, Badge, Select} from 'antd'
 import {successTip, errorTip} from '@util'
 import io from './io'
+import {authView} from '../component'
 
 const {TabPane} = Tabs
 
-export default props => {
+const ChannelManage = props => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [channelCode, setChannelCode] = useState() // channelCode
@@ -192,3 +193,4 @@ export default props => {
     </div>
   )
 }
+export default authView(ChannelManage)

@@ -5,12 +5,13 @@ import Detail from './detail'
 import TabOne from './tab-one'
 import TabTwo from './tab-two'
 import Store from './store'
+import {authView} from '../../component'
 
 const {TabPane} = Tabs
 
 const detailStore = new Store()
 
-export default props => {
+const SalesDetail = props => {
   detailStore.id = props.match.params.id
 
   useEffect(() => {
@@ -37,3 +38,5 @@ export default props => {
     </Provider>
   )
 }
+export default authView(SalesDetail)
+// export default SalesDetail

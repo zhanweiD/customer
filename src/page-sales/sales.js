@@ -2,12 +2,12 @@ import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Button, Table, Popconfirm, Badge, Tooltip} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
-import {Search, Tag} from '../component'
+import {authView, Search, Tag} from '../component'
 import searchParams from './search'
 import AddDrawer from './add-drawer'
 import io from './io'
 
-export default () => {
+const Sales = () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [userList, setUserList] = useState([]) // 用户列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
@@ -189,7 +189,7 @@ export default () => {
       title: '目标完成率',
       dataIndex: 'targetRate',
       key: 'targetRate',
-      render: text => text || '-',
+      render: text => (text ? `${text}%` : '-'),
     },
     {
       title: '计划状态',
@@ -335,3 +335,4 @@ export default () => {
     </div>
   )
 }
+export default authView(Sales)

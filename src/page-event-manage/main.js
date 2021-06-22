@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react'
 import {Button, Table, Switch, Spin, Modal} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
-import {Search} from '../component'
+import {authView, Search} from '../component'
 import searchParams from './search'
 import io from './io'
 
-export default () => {
+const EventManage = () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [accountList, setAccountList] = useState([]) // 渠道名称列表
@@ -161,3 +161,4 @@ export default () => {
     </div>
   )
 }
+export default authView(EventManage)
