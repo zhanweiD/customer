@@ -131,7 +131,6 @@ class Clinch extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               defaultValue=""
               style={{width: 160, marginRight: '8px'}} 
               onChange={v => {
@@ -170,7 +169,6 @@ class Clinch extends Component {
             style={{marginRight: '8px'}}
           />
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             // format={dateFormat}
             // disabledDate={this.disabledDate}

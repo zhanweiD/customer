@@ -164,7 +164,6 @@ class Channel extends Component {
               style={{marginRight: '8px'}}
             />
             <Select 
-              size="small"
               defaultValue=""
               style={{width: 160, marginRight: '8px'}} 
               onChange={v => {
@@ -209,7 +208,6 @@ class Channel extends Component {
             style={{marginRight: '8px'}}
           />
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             // format={dateFormat}
             allowClear={false}

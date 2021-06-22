@@ -74,7 +74,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.groupId)}
               >
                 <Select
-                  size="small"
+                  
                   placeholder="请选择客群"
                   onChange={v => this.store.groupId = v}
                 >
@@ -91,7 +91,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.toStorageId)}
               >
                 <Select
-                  size="small"
+                  
                   placeholder="请选择目的源"
                   onChange={this.changeStorage}
                 >
@@ -108,7 +108,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.toTableName)}
               >
                 <Select
-                  size="small"
+                  
                   placeholder="请选择数据表"
                   onChange={v => this.store.tableName = v}
                 >

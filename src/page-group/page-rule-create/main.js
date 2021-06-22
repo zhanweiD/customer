@@ -91,7 +91,7 @@ class RuleCreate extends Component {
         <div className="oa">
           <div className="content-header">{headerTitle}</div>
           <div className="rule-create m16 mt72">
-            <Steps size="small" current={current} style={{width: '80%', margin: '0 auto'}}>
+            <Steps  current={current} style={{width: '80%', margin: '0 auto'}}>
               <Step title="信息配置" />
               <Step title="圈选规则" />
               <Step title="完成" />

@@ -93,7 +93,6 @@ export default class StepOne extends Component {
             }]}
           >
             <Select
-              size="small"
               disabled={groupId}
               placeholder="请选择对象"
               onChange={this.changeObj}
@@ -137,7 +136,6 @@ export default class StepOne extends Component {
           >
             <Select
               mode="multiple"
-              size="small"
               showSearch
               // optionFilterProp="children"
               placeholder="请选择标签"

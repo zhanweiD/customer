@@ -98,7 +98,6 @@ class SupplyDemand extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               allowClear
               placeholder="请选择指标"
               style={{width: 160, marginRight: '8px'}} 
@@ -133,7 +132,6 @@ class SupplyDemand extends Component {
             showSearch={this.filter}
           />
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             onChange={value => {
               store.reqData = {

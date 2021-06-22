@@ -166,7 +166,7 @@ export default class StepOne extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入计划名称" />
+              <Input autoComplete="off" placeholder="请输入计划名称" />
             )}
           </FormItem>
           

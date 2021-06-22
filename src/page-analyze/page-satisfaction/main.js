@@ -150,7 +150,6 @@ class Satisfaction extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               allowClear
               placeholder="评价结果"
               style={{width: 160, marginRight: '8px'}} 
@@ -186,9 +185,8 @@ class Satisfaction extends Component {
             showSearch={this.filter}
           />
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="产品业态"
             onChange={v => {
               store.reqData.format = v
@@ -202,9 +200,8 @@ class Satisfaction extends Component {
             }
           </Select>
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="业务场景"
             onChange={v => {
               store.reqData.evaluateType = v
@@ -218,9 +215,8 @@ class Satisfaction extends Component {
             }
           </Select>
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="客户类型"
             onChange={v => {
               store.reqData.customerType = v
@@ -234,7 +230,6 @@ class Satisfaction extends Component {
             }
           </Select>
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             onChange={value => {
               store.reqData = {

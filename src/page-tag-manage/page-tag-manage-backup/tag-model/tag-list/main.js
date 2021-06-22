@@ -399,7 +399,7 @@ class TagList extends Component {
               disabled={!publishRowKeys.length}
               onConfirm={() => this.remove(store.publishRowKeys)}
             >
-              <Button size="small" className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
+              <Button className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
             </Popconfirm> */}
             <Dropdown overlay={() => this.menu(publishRowKeys)} placement="bottomCenter">
               <Button>更多操作</Button>

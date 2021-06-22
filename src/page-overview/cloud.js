@@ -129,7 +129,7 @@ const Cloud = ({
           !cloudData.length
             ? (
               <div className="no-Data" style={{height: '300px'}}>
-                <NoData text="暂无数据" size="small" />
+                <NoData text="暂无数据" />
               </div>
             )
             : null

@@ -175,7 +175,6 @@ class UserManage extends Component {
           </div>
           <div>
             <Input 
-              size="small"
               style={{width: 160, marginRight: '24px'}} 
               placeholder="请输入用户名称" 
               onChange={this.searchUser}

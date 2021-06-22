@@ -133,8 +133,7 @@ class GroupConfig extends Component {
           </div>
           <div>
             <Input 
-              size="small"
-              style={{width: 160, marginRight: '24px'}} 
+              style={{width: 160, marginRight: '8px'}} 
               placeholder="请输入角色名称" 
               // onChange={v => store.getList({searchKey: v.target.value})}
               onChange={this.searchRole}

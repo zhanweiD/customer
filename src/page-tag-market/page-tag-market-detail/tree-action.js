@@ -24,7 +24,7 @@ export default class Action extends Component {
 
   render() {
     return (
-      <ConfigProvider size="small">
+      <ConfigProvider>
         <div className="object-tree-action pt16">
           <Authority
             authCode="tag-manage:add-object"

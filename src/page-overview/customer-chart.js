@@ -93,7 +93,7 @@ const CustomerChart = ({
               !sunData.length
                 ? (
                   <div className="no-Data d-flex" style={{height: '600px', width: '100%'}}>
-                    <NoData text="暂无数据" size="small" />
+                    <NoData text="暂无数据" />
                   </div>
                 )
                 : null

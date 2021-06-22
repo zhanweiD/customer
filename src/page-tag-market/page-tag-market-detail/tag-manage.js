@@ -42,7 +42,7 @@ export default class ObjectModel extends Component {
     }
 
     return (
-      <ConfigProvider componentSize="small">
+      <ConfigProvider>
         <Provider store={store}>
           <Spin spinning={store.isSpinning}>
             <div className="page-tag-market-detail">

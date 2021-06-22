@@ -373,7 +373,7 @@ export default ({
             <Option value="WECHAT_OFFICIAL_ACCOUNTS">微信公众号</Option>
           </Select>
         </Item>
-        <Collapse className="collapse-whole" size="small" defaultActiveKey={['1', '2']}>
+        <Collapse className="collapse-whole" defaultActiveKey={['1', '2']}>
           <Panel header="触达内容" key="1">
             <Item
               label="内容模板"

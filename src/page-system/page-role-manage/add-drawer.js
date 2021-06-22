@@ -101,7 +101,7 @@ class AddDrawer extends Component {
               {validator: this.checkName},
             ]}
           >
-            <Input placeHolder="请输入用户名" size="small" />
+            <Input placeHolder="请输入用户名" />
           </Form.Item>
           <Form.Item
             label="描述"
@@ -111,11 +111,11 @@ class AddDrawer extends Component {
               {max: 128, message: '描述不能超过128个字符'},
             ]}
           >
-            <Input.TextArea placeHolder="请输入描述" size="small" autoSize={{minRows: 3}} />
+            <Input.TextArea placeHolder="请输入描述" autoSize={{minRows: 3}} />
           </Form.Item>
         </Form>
         <div className="ml32 mb24">
-          <div className="mb16 fs12">功能权限</div>
+          <div className="mb16">功能权限</div>
           {menuTree.length ? (
             <Tree
               checkable
@@ -127,7 +127,7 @@ class AddDrawer extends Component {
               checkedKeys={menuCheckedKeys}
               // defaultExpandAll
               // treeData={menuTree}
-              style={{fontSize: '12px'}}
+              style={{fontSize: '14px'}}
               className="roleTree"
             >
               {this.renderTreeNodes(menuTree)}

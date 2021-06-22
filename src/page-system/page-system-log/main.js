@@ -75,7 +75,6 @@ class SystemLog extends Component {
             }}
           />
           <RangePicker
-            size="small"
             onChange={value => {
               store.reqData = {
                 ...store.reqData,

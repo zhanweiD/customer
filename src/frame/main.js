@@ -367,7 +367,7 @@ export default class Frame extends Component {
                     label="密码"
                     name="password"
                   >
-                    <Input.Password size="small" placeHolder="请输入密码" />
+                    <Input.Password placeHolder="请输入密码" />
                   </Form.Item>
                 </Form>
               </Modal>

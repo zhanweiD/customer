@@ -41,7 +41,7 @@ class TagManage extends Component {
      }
  
      return (
-       <ConfigProvider componentSize="small">
+       <ConfigProvider>
          <Provider store={store}>
            <Spin spinning={store.isSpinning}>
              <div className="page-object-modal">

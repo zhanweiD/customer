@@ -142,7 +142,7 @@ export default class DrawerTagConfig extends Component {
         >
           {
             type === 'more' ? (
-              <Tabs onChange={null} type="card" size="small">  
+              <Tabs onChange={null} type="card">  
                 <TabPane tab="基础标签绑定" key="1" />
                 <TabPane tab="衍生标签绑定" key="2" />
               </Tabs>

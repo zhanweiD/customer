@@ -27,10 +27,9 @@ const SelectTypes = ({
   return (
     <antd.Select 
       showSearch
-      size="small"
       placeholder={placeholder || createSelectPlaceholder(label)} 
       getPopupContainer={triggerNode => triggerNode.parentElement}
-      // notFoundContent={rest.selectLoading ? <antd.Spin size="small" /> : <div>暂无数据源</div>}
+      // notFoundContent={rest.selectLoading ? <antd.Spin  /> : <div>暂无数据源</div>}
       optionFilterProp="children"
       {...rest}
     >
@@ -51,7 +50,6 @@ const createTreeNode = (data = [], valueName, titleName, selectCon) => {
       value={valueName ? node[valueName] : node.aId}
       title={titleName ? node[titleName] : node.name}
       key={node.aId}
-      size="small"
       selectable={selectCon ? (node[selectCon[0]] === selectCon[1]) : node.isLeaf === 2}
     >
       {
@@ -69,12 +67,12 @@ export default ({
 }) => {
   const map = {
     text: <span>{options}</span>,
-    input: <antd.Input size="small" placeholder={placeholder || createInputPlaceholder(label)} {...rest} />,
-    textArea: <antd.Input.TextArea size="small" rows={4} placeholder={placeholder || createInputPlaceholder(label)} {...rest} />,
-    select: <SelectTypes size="small" label={label} placeholder={placeholder || createSelectPlaceholder(label)} options={options} {...rest} />,
-    radioGroup: <antd.Radio.Group size="small" {...rest}>{radios}</antd.Radio.Group>, // 单选按钮
-    rangePicker: <antd.DatePicker.RangePicker size="small" {...rest} />,
-    timePicker: <antd.TimePicker size="small" {...rest} />,
+    input: <antd.Input  placeholder={placeholder || createInputPlaceholder(label)} {...rest} />,
+    textArea: <antd.Input.TextArea  rows={4} placeholder={placeholder || createInputPlaceholder(label)} {...rest} />,
+    select: <SelectTypes  label={label} placeholder={placeholder || createSelectPlaceholder(label)} options={options} {...rest} />,
+    radioGroup: <antd.Radio.Group  {...rest}>{radios}</antd.Radio.Group>, // 单选按钮
+    rangePicker: <antd.DatePicker.RangePicker  {...rest} />,
+    timePicker: <antd.TimePicker  {...rest} />,
     selectTree: () => (
       options.length 
         ? (
@@ -82,7 +80,6 @@ export default ({
             placeholder={placeholder || createSelectPlaceholder(label)}
             dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
             allowClear
-            size="small"
             // multiple
             treeDefaultExpandAll
             treeNodeFilterProp="title"
@@ -94,21 +91,18 @@ export default ({
           </antd.TreeSelect>
         ) : (
           <antd.TreeSelect
-            size="small"
             placeholder={placeholder || createSelectPlaceholder(label)}
             dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
           />
         )
     ), 
     switch: <antd.Switch 
-      size="small"
       checkedChildren={rest.checkedText || '是'} 
       unCheckedChildren={rest.unCheckedText || '否'} 
       {...rest}
     />,
     cascader: <antd.Cascader
       options={options}
-      size="small"
       placeholder={placeholder || createSelectPlaceholder(label)}
       {...rest}
     />,

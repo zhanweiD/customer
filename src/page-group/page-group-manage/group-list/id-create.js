@@ -235,7 +235,7 @@ export default class IdCreate extends Component {
                 {validator: this.checkName},
               ]}
             >
-              <Input size="small" disabled={!isAdd || !objId} placeholder="请输入名称" />
+              <Input  disabled={!isAdd || !objId} placeholder="请输入名称" />
             </Item>
             
             <Item
@@ -283,7 +283,7 @@ export default class IdCreate extends Component {
                 {required: true, message: '请选择标签'},
               ]}
             >
-              <Select size="small" placeholder="请选择标签" mode="multiple" showSearch optionFilterProp="children">
+              <Select  placeholder="请选择标签" mode="multiple" showSearch optionFilterProp="children">
                 {tagOptions}
               </Select>
             </Item>

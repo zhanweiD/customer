@@ -172,7 +172,6 @@ class Purchase extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               allowClear
               style={{width: 160, marginRight: '8px'}} 
               placeholder="请选择纬度"
@@ -210,7 +209,6 @@ class Purchase extends Component {
             showSearch={this.filter}
           />
           <Select 
-            size="small"
             allowClear
             style={{width: 160}} 
             placeholder="产品业态"
