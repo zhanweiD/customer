@@ -189,7 +189,7 @@ export default () => {
       title: '目标完成率',
       dataIndex: 'targetRate',
       key: 'targetRate',
-      render: text => text || '-',
+      render: text => (text ? `${text}%` : '-'),
     },
     {
       title: '计划状态',
