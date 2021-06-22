@@ -9,7 +9,7 @@ import StepTwo from './step-two'
 import StepThree from './step-three'
 import io from './io'
 import cate from '../icon/cate.svg'
-import userScreening from '../icon/user-screening.svg'
+import group from '../icon/group.svg'
 import effTime from '../icon/time.svg'
 import clinch from '../icon/clinch.svg'
 
@@ -579,7 +579,7 @@ export default props => {
       {
         title: '用户',
         value: groupList.filter(item => item.id === clientGroupId)[0].name,
-        icon: <img style={{marginBottom: 1}} src={userScreening} alt="用户" />,
+        icon: <img style={{marginBottom: 1}} src={group} alt="用户" />,
       },
       {
         title: '有效时间',
