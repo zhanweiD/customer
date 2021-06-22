@@ -1,6 +1,6 @@
 /* eslint-disable guard-for-in */
 // const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff', '#8C8D8']
-const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#0099cc']
+const color = ['#61BA46', '#2592FF', '#355FF9', '#6C41FA', '#FD5071', '#0099cc']
 
 const fontColor = 'rgba(0,0,0,0.65)'
 const titleColor = 'rgba(0,0,0,0.85)'
@@ -11,6 +11,7 @@ export function cbarOption(barData) {
     color,
     title: {
       text: '转化对比',
+      top: 12,
       textStyle: {
         fontSize: 14,
         color: titleColor,
@@ -24,15 +25,15 @@ export function cbarOption(barData) {
       },
     },
     grid: {
-      top: 96,
+      top: 72,
       bottom: 64,
       left: 32,
       // right: 0,
     },
-    legend: {
-      top: 32,
-      data: type,
-    },
+    // legend: {
+    //   top: 42,
+    //   data: type,
+    // },
     xAxis: [
       {
         type: 'category',
@@ -106,7 +107,7 @@ export function cbarOption(barData) {
       data: data.map(sitem => {
         return sitem[item]
       }),
-      barWidth: '30%',
+      barWidth: 32,
       type: 'bar',
       stack: 'total',
       // yAxisIndex: 1,
@@ -136,6 +137,7 @@ export function lineOption(lineData) {
     grid: {
       top: 96,
       bottom: 64,
+      right: 24,
     },
     legend: {
       top: 32,
@@ -406,13 +408,13 @@ export function funnelOption(funnelData) {
       },
     },
     color,
-    legend: {
-      top: 42,
-      left: 'center',
-      data: type,
-    },
+    // legend: {
+    //   top: 42,
+    //   left: 'center',
+    //   data: type,
+    // },
     series: [{
-      top: 84,
+      top: 56,
       type: 'funnel',
       sort: 'none',
       height: '250',

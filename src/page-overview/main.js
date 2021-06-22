@@ -6,6 +6,9 @@ import {authView} from '../component'
 import ConversionChart from './conversion-chart'
 import DistributionChart from './distribution-chart'
 import CustomerChart from './customer-chart'
+import TransformationTrend from './transformation-trend'
+import ChannelDistribution from './channel-distribution'
+import Cloud from './cloud'
 import io from './io'
 import {errorTip} from '../common/util'
 import addCustomer from '../icon/add-customer.svg'
@@ -189,14 +192,25 @@ const Overview = () => {
         <div className="p16 pb0 mt48">
           <OverviewCardWrap cards={cards()} />
         </div>
-        {/* </div> */}
         {
           org ? (
-            <div className="d-flex m16">
-              {/* <div className="m16"> */}
-              <div className="mr16" style={{width: '70%'}}>
-                {/* <div className="mr16 mb16" style={{width: '100%'}}> */}
-                <ConversionChart 
+            <div className="m16">
+              <div>
+                <div className="FBH bgf mb16">
+                  <CustomerChart 
+                    orgCodes={org} 
+                    timeStart={timeStart}
+                    timeEnd={timeEnd}
+                    projectCode={projectCode}
+                  />
+                  <ConversionChart 
+                    orgCodes={org} 
+                    timeStart={timeStart}
+                    timeEnd={timeEnd}
+                    projectCode={projectCode}
+                  />
+                </div>
+                <TransformationTrend 
                   orgCodes={org} 
                   timeStart={timeStart}
                   timeEnd={timeEnd}
@@ -209,14 +223,25 @@ const Overview = () => {
                   projectCode={projectCode}
                 />
               </div>
-              <div style={{width: '30%'}}>
-                {/* <div style={{width: '100%'}}> */}
-                <CustomerChart 
+              <div>
+                
+                <ChannelDistribution 
                   orgCodes={org} 
                   timeStart={timeStart}
                   timeEnd={timeEnd}
                   projectCode={projectCode}
                 />
+                <div className="bgf" style={{height: '350px', width: '100%'}}>
+                  <div className="pt16 pl16 fs14 c85">
+                    客户心声
+                  </div>
+                  <Cloud
+                    orgCodes={org} 
+                    timeStart={timeStart}
+                    timeEnd={timeEnd}
+                    projectCode={projectCode}
+                  />
+                </div>
               </div>
             </div>
           ) : null
