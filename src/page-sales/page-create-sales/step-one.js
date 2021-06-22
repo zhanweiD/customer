@@ -187,7 +187,7 @@ const CreateSales = ({
                 {radioType ? '用户行为属性满足' : '用户实体属性满足'}
                 <Select 
                   value={userLogic}
-                  style={{width: 72, margin: '8px'}} 
+                  style={{width: 72, margin: '4px'}} 
                   onClick={e => e.stopPropagation()}
                   onChange={changeUserLogic}
                 >
@@ -231,7 +231,7 @@ const CreateSales = ({
                           
                           <MinusCircleOutlined 
                             style={{
-                              position: 'absolute', top: 5, right: 112, color: '#999'}} 
+                              position: 'absolute', fontSize: 16, top: 10, right: 112, color: '#999'}} 
                             onClick={() => { 
                               remove(name) 
                               const newData = [...condList]
@@ -298,7 +298,7 @@ const CreateSales = ({
                             </Item>
                             
                             <MinusCircleOutlined 
-                              style={{marginLeft: 8, marginTop: 5, color: '#999'}} 
+                              style={{marginLeft: 8, marginTop: 10, fontSize: 16, color: '#999'}} 
                               onClick={() => { 
                                 remove(name) 
                                 const newData = [...condList]

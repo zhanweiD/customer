@@ -181,7 +181,7 @@ export default class Frame extends Component {
     const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
  
     return (
-      <ConfigProvider locale={zhCN} componentSize="small">
+      <ConfigProvider locale={zhCN}>
         <div className="FBH h100 frame-main">
           <div className={cls({'frame-sider': true, FBV: true, 'frame-sider-fold': this.collapsed})}>
             <div
