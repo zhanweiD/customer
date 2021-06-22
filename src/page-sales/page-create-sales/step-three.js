@@ -63,11 +63,13 @@ export default ({
   threeFormData,
   strName,
 }) => {
-  const [templateList, setTemplateList] = useState(templateListMock)
+  // const [templateList, setTemplateList] = useState(templateListMock)
+  const [templateList, setTemplateList] = useState([])
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [channelActionList, setChannelActionList] = useState([])
   const [touchWay, setTouchWay] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [accountId, setAccountId] = useState(null)
   const [myForm] = Form.useForm()
   
   const [previewData, setPreviewData] = useState('')
@@ -147,6 +149,8 @@ export default ({
   const [vis, setVis] = useState(false)
 
   const templateChange = e => {
+    console.log(templateList)
+    console.log(e)
     // 目标模板数据
     const target = _.find(templateList, item => item.template_id === e)
     const req = /{(\w+).DATA}/g
@@ -270,12 +274,11 @@ export default ({
   }
 
   // TODO:
-  const getTemplate = async () => {
+  const getTemplate = async (v, cb) => {
     try {
       const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
+        accountId: v || accountId,
       })
-
       if (res && res.template_list) {
         setTemplateList(res.template_list)
       }
@@ -284,12 +287,16 @@ export default ({
     }
   }
 
-  useEffect(() => {
+  const changeAction = v => {
     getTemplate()
-  }, [])
+  }
+  const changeCode = (v, item) => {
+    getChannelActions(v[0])
+    setAccountId(item[1].code)
+  }
 
   useEffect(() => {
-    if (!tagList.length || !strategyDetail.id) return
+    if (!tagList.length || !strategyDetail.id || !templateList.length) return
     const {
       templateJson, actionId, isDelay, templateId, timeGap, timeUnit, channel,
     } = strategyDetail.sendOutContent
@@ -340,15 +347,20 @@ export default ({
       ...templateObj,
     })
     setVis(true)
-  }, [tagList, strategyDetail])
+  }, [tagList, strategyDetail, templateList])
   useEffect(() => {
     if (!strategyDetail.id) {
+      setChannelActionList([])
+      setTemplateList([])
       setTemplateKeyList([])
       setTouchWay(0)
       setPreviewData('')
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
+    } else {
+      const {channel = {}} = strategyDetail.sendOutContent
+      getTemplate(channel.accountCode)
     }
   }, [strategyDetail])
 
@@ -373,12 +385,14 @@ export default ({
         <Item
           label="触达通道"
           name="channelCode"
+          rules={[{required: true, message: '请选择触达渠道'}]}
         >
           <Cascader
             placeholder="请选择触达通道"
             options={treeStrChannelList}
             expandTrigger="hover"
-            onChange={v => getChannelActions(v[0])}
+            onChange={changeCode}
+            // onChange={v => getChannelActions(v[0])}
             fieldNames={{
               label: 'name',
               value: 'id',
@@ -389,8 +403,9 @@ export default ({
         <Item
           label="营销动作"
           name="actionId"
+          rules={[{required: true, message: '请选择营销动作'}]}
         >
-          <Select placeholder="请选择动作">
+          <Select placeholder="请选择动作" onChange={changeAction}>
             {
               channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
             }

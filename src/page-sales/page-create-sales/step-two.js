@@ -426,7 +426,7 @@ export default ({
                       onClick={e => e.stopPropagation()}
                       onChange={changeDoneLogic}
                       value={doneLogic} 
-                      style={{width: 72, margin: '8px'}}
+                      style={{width: 72, margin: '4px'}}
                     >
                       <Option value={0}>任意</Option>
                       <Option value={1}>全部</Option>
@@ -543,7 +543,7 @@ export default ({
                       onClick={e => e.stopPropagation()}
                       onChange={changeNotDoneLogic}
                       value={notDoneLogic} 
-                      style={{width: 72, margin: '8px'}}
+                      style={{width: 72, margin: '4px'}}
                     >
                       <Option value={0}>任意</Option>
                       <Option value={1}>全部</Option>
