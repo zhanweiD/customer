@@ -308,28 +308,30 @@ export default () => {
         >
           创建计划
         </Button>
-        <Table 
-          columns={columns} 
-          dataSource={listDate} 
-          rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
-          scroll={{x: 1280}} 
-          loading={tableLoading}
-          pagination={{
-            ...pagination,
-            showTotal: () => `合计${pagination.total}条记录`,
-            onChange: v => getList({currentPage: v}),
-          }}
-        />
-        <AddDrawer 
-          showModal={showModal}
-          setModal={setModal}
-          addPlan={addPlan}
-          editPlan={editPlan}
-          planInfo={planInfo}
-          detailLoading={detailLoading}
-          addLoading={addLoading}
-        />
-      </div>
+        <div className="ant-table-custom-wrapper">
+          <Table 
+            columns={columns} 
+            dataSource={listDate} 
+            rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
+            scroll={{x: 1280}} 
+            loading={tableLoading}
+            pagination={{
+              ...pagination,
+              showTotal: () => `合计${pagination.total}条记录`,
+              onChange: v => getList({currentPage: v}),
+            }}
+          />
+          <AddDrawer 
+            showModal={showModal}
+            setModal={setModal}
+            addPlan={addPlan}
+            editPlan={editPlan}
+            planInfo={planInfo}
+            detailLoading={detailLoading}
+            addLoading={addLoading}
+          />
+        </div>
+      </div>        
     </div>
   )
 }

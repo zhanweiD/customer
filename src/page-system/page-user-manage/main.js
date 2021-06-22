@@ -210,7 +210,9 @@ class UserManage extends Component {
         <div className="content-header">用户管理</div> 
         <div className="d-flex user-manage">
           <Tree store={store} />
-          <ListContent {...listConfig} />
+          <div className="oa">
+            <ListContent {...listConfig} />
+          </div>
         </div>
         <Modal {...modalConfig}>
           <ModalForm {...formConfig} />

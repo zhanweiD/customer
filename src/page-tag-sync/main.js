@@ -409,6 +409,7 @@ class SyncList extends Component {
         </Authority>,
       ],
       store, // 必填属性
+      scroll: {x: 1200},
     }
 
     return (
