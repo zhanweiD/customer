@@ -157,6 +157,7 @@ class Satisfaction extends Component {
                 store.satisfaction = v
                 store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
             >
               {
                 list4.map(item => <Option value={item}>{item}</Option>)

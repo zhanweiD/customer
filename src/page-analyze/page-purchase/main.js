@@ -180,6 +180,7 @@ class Purchase extends Component {
                 store.merit = v
                 store.getList({...store.reqData, tag: v, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
             >
               {
                 tgiMerit.map(item => <Option key={item}>{item}</Option>)

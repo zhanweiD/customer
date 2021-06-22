@@ -101,6 +101,7 @@ class SupplyDemand extends Component {
               allowClear
               placeholder="请选择指标"
               style={{width: 160, marginRight: '8px'}} 
+              getPopupContainer={triggerNode => triggerNode.parentElement}
               onChange={v => {
                 store.indicators = v
                 store.getList({...store.reqData, index: v, currentPage: 1})

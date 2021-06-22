@@ -162,6 +162,7 @@ class Channel extends Component {
               onChange={this.selectChannel}
               showSearch={this.filter}
               style={{marginRight: '8px'}}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
             />
             <Select 
               defaultValue=""
@@ -170,6 +171,7 @@ class Channel extends Component {
                 store.reqChaData.customerType = v
                 store.getList({...store.reqChaData, ...store.reqData, ...store.reqProData, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
             >
               <Option style={{fontSize: '12px'}} key="">全部</Option>
               <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>

@@ -62,7 +62,7 @@ class SystemLog extends Component {
         <div className="dfjf mr24">
           <Input 
             placeholder="请输入用户名或者账号"
-            style={{width: 180, marginRight: '8px'}}
+            style={{width: 200, marginRight: '8px'}}
             suffix={<SearchOutlined />}
             allowClear
             onChange={e => {
@@ -83,6 +83,7 @@ class SystemLog extends Component {
               }
               store.getList({...store.reqData, startTime: store.reqData.startTime, endTime: store.reqData.endTime})
             }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
           />
         </div>,
       ],

@@ -135,6 +135,7 @@ export default inject('store')(({store}) => {
             options={store.domainFormatOption} 
             placeholder="请选择" 
             onChange={e => cascaderChange(e)}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
           />
           {/* <Search placeholder="请输入场景名称" className="ml8" /> */}
         </div>
