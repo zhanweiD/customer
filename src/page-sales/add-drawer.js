@@ -163,7 +163,7 @@ export default ({
   const disabledDate = time => {
     return time && time < moment().startOf('day')
   }
-  
+
   useEffect(() => {
     getTargetChannelList()
     getGroupList()
@@ -270,7 +270,8 @@ export default ({
             <Item
               label="完成时间"
               name="validation-time"
-              rules={[{required: true, message: '请输入事件'}]}
+              initialValue="validation-time"
+              rules={[{required: true, message: '请输入时间'}]}
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
               <Input.Group compact>
@@ -289,7 +290,6 @@ export default ({
                   noStyle 
                   name="timeUnit" 
                   initialValue={firstTargetContent.timeUnit || 'MINUTES'}
-                  rules={[{required: true, message: '请选择单位'}]}
                 >
                   <Select style={{width: '30%'}}>
                     <Option value="MINUTES">分钟</Option>
