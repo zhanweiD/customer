@@ -11,7 +11,7 @@ import {NoData} from '../component'
 import {errorTip} from '../common/util'
 import io from './io'
 
-const color = ['#1b486b', '#28a352', '#b2db34', '#f2ac34', '#fc7634']
+const color = ['#2592FF', '#FFA44A', '#A88EFF', '#FF81A5', '#fc7634']
 
 const Cloud = ({
   orgCodes, projectCode, timeStart, timeEnd,

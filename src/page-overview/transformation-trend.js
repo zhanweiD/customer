@@ -54,9 +54,9 @@ const TransformationTrend = ({
   }, [timeStart, orgCodes, projectCode])
  
   return (
-    <div className="p16 bgf mb16">
+    <div className="p16 bgf mb16 customer-chart">
       <Spin spinning={loading}>
-        <div ref={chartLine} style={{height: '356px', width: '100%'}} />
+        <div ref={chartLine} style={{height: '300px', width: '100%'}} />
       </Spin>
     </div> 
   )

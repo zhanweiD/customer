@@ -46,6 +46,7 @@ const Overview = () => {
   const [orgList, setOrgList] = useState([]) // 组织架构
   const [card, setCard] = useState({}) // 指标卡
   const [orgLoading, setOrgLoading] = useState(false)
+  const [isScroll, setIsScroll] = useState(false)
   const [timeStart, setTimeStart] = useState(pastDate(365))
   const [timeEnd, setTimeEnd] = useState(moment(+date.getTime()).format(dateFormat))
 
@@ -161,8 +162,18 @@ const Overview = () => {
   }, [])
 
   return (
-    <div className="overview oa">
-      <div className="content-header FBH FBJB">
+    <div 
+      id="overview" 
+      className="overview oa" 
+      onScroll={() => {
+        if (document.getElementById('overview').scrollTop === 0) {
+          setIsScroll(false)
+        } else {
+          setIsScroll(true)
+        }
+      }}
+    >
+      <div className={`content-header FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
         <span>客户中心</span>
         <div style={{width: 504}}>
           {
@@ -195,8 +206,9 @@ const Overview = () => {
         {
           org ? (
             <div className="m16">
-              <div>
-                <div className="FBH bgf mb16">
+              <div className="mb16">
+                <div className="period-header">客户转化率</div>
+                <div className="FBH bgf customer-chart">
                   <CustomerChart 
                     orgCodes={org} 
                     timeStart={timeStart}
@@ -210,37 +222,52 @@ const Overview = () => {
                     projectCode={projectCode}
                   />
                 </div>
+              </div>
+
+              <div>
+                <div className="period-header">转化趋势</div>
                 <TransformationTrend 
                   orgCodes={org} 
                   timeStart={timeStart}
                   timeEnd={timeEnd}
                   projectCode={projectCode}
                 />
-                <DistributionChart 
-                  orgCodes={org} 
-                  timeStart={timeStart}
-                  timeEnd={timeEnd}
-                  projectCode={projectCode}
-                />
               </div>
-              <div>
-                
-                <ChannelDistribution 
-                  orgCodes={org} 
-                  timeStart={timeStart}
-                  timeEnd={timeEnd}
-                  projectCode={projectCode}
-                />
-                <div className="bgf" style={{height: '350px', width: '100%'}}>
-                  <div className="pt16 pl16 fs14 c85">
-                    客户心声
-                  </div>
-                  <Cloud
+              
+              <div className="FBH">
+                <div style={{width: '50%'}} className="mr16">
+                  <div className="period-header">客户分布</div>
+                  <DistributionChart 
                     orgCodes={org} 
                     timeStart={timeStart}
                     timeEnd={timeEnd}
                     projectCode={projectCode}
                   />
+                </div>
+                <div style={{width: '50%'}}>
+                  <div className="period-header">
+                    客户渠道分布
+                  </div>
+                  <ChannelDistribution 
+                    orgCodes={org} 
+                    timeStart={timeStart}
+                    timeEnd={timeEnd}
+                    projectCode={projectCode}
+                  />
+                  
+                  <div className="bgf" style={{height: '350px', width: '100%'}}>
+                    <div className="period-header">
+                      客户心声
+                    </div>
+                    <div className="customer-chart">
+                      <Cloud
+                        orgCodes={org} 
+                        timeStart={timeStart}
+                        timeEnd={timeEnd}
+                        projectCode={projectCode}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

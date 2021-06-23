@@ -60,12 +60,9 @@ const ChannelDistribution = ({
   }, [sunData])
   
   return (
-    <div>
+    <div className="customer-chart mb16">
       <Spin spinning={loading}>
-        <div className="bgf p16 mb16">
-          <div className="fs14 c85">
-            客户渠道分布
-          </div>
+        <div className="bgf p16">
           <div style={{height: '483px'}}>
             {
               !sunData.length
@@ -77,7 +74,7 @@ const ChannelDistribution = ({
                 : null
             }
             <div ref={chartSun} style={{height: '340px', width: '100%'}} />
-            <div style={{height: '150px', marginLeft: '20%'}} className="FBV FBJC categroy-legend-box">
+            <div style={{height: '150px', marginLeft: '25%'}} className="FBV FBJC categroy-legend-box">
               {
                 sunData.map((item, i) => (
                   <LegendItem 
