@@ -88,10 +88,10 @@ class RuleCreate extends Component {
     } = store
     return (
       <Provider store={store}>
-        <div className="oa">
+        <div className="oa FBV">
           <div className="content-header">{headerTitle}</div>
-          <div className="rule-create m16 mt72">
-            <Steps  current={current} style={{width: '80%', margin: '0 auto'}}>
+          <div className="rule-create custom-border FB1 m12">
+            <Steps current={current} style={{width: '80%', margin: '0 auto'}}>
               <Step title="信息配置" />
               <Step title="圈选规则" />
               <Step title="完成" />
