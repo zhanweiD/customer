@@ -201,10 +201,45 @@ export default class GroupList extends Component {
       store, // 必填属性
     }
 
-    return (
-      <div style={{minHeight: 'calc(100vh - 198px)'}}>
-        <ListContent {...listConfig} />
+  /*   return (
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <div>
+          1111111
+        </div>
+        <div>
+          2222222
+        </div>
+        <div>
+          3333333
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            left: 0,
+            right: 0,
+          }}
+        >
+          66666
+        </div>
       </div>
+    ) */
+
+    return (
+      <ListContent {...listConfig} />
     )
+
+    // return (
+    //   <div style={{minHeight: 'calc(100vh - 198px)'}}>
+    //     <ListContent {...listConfig} />
+    //   </div>
+    // )
   }
 }
