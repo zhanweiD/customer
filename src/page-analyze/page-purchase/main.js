@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, AuthView} from '../../component'
+import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -240,4 +240,4 @@ class Purchase extends Component {
     )
   }
 }
-export default AuthView(Purchase)
+export default authView(Purchase)

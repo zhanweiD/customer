@@ -5,7 +5,7 @@ import {Component} from 'react'
 import {action} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {ConfigProvider, Spin} from 'antd'
-import {NoData, AuthView} from '../../component'
+import {NoData, authView} from '../../component'
 import Tree from './tree'
 import ObjectDetail from './detail'
  
@@ -58,4 +58,4 @@ class TagManage extends Component {
      )
    }
 }
-export default AuthView(TagManage)
+export default authView(TagManage)

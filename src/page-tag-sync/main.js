@@ -5,7 +5,7 @@ import {Component, Fragment} from 'react'
 import {action, toJS} from 'mobx'
 import {observer, Provider} from 'mobx-react'
 import {Button, Popconfirm} from 'antd'
-import {ListContent, Authority, AuthView} from '../component'
+import {ListContent, Authority, authView} from '../component'
 import {Time} from '../common/util'
 import seach from './search'
 import DrawerAddSync from './drawer'
@@ -428,4 +428,4 @@ class SyncList extends Component {
     )
   }
 }
-export default AuthView(SyncList)
+export default authView(SyncList)

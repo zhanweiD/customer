@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {Input, Steps, Button, message, Popconfirm, Spin} from 'antd'
 import {PlusOutlined, CheckCircleFilled, DeleteOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
-import {DetailHeader, Loading, Tag} from '../../component'
+import {authView, DetailHeader, Loading, Tag} from '../../component'
 import {errorTip, successTip, debounce} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -54,7 +54,7 @@ const comparisionList = [
   },
 ]
 
-export default props => {
+const CreateSales = props => {
   const [strategyList, setStrategyList] = useState([{}]) // 策略列表
   const [current, setCurrent] = useState(0)
   const [planId, setPlanId] = useState(null) // 计划id
@@ -713,3 +713,5 @@ export default props => {
     </div>
   )
 }
+export default authView(CreateSales)
+// export default CreateSales

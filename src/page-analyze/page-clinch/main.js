@@ -7,7 +7,7 @@ import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
 
-import {OverviewCardWrap, ListContent, NoData, AuthView} from '../../component'
+import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
@@ -206,4 +206,4 @@ class Clinch extends Component {
     )
   }
 }
-export default AuthView(Clinch)
+export default authView(Clinch)
