@@ -2,7 +2,7 @@ import {Form, Select, Input, Button} from 'antd'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {debounce, getNamePattern} from '../../common/util'
-
+import dropdown from '../../icon/dropdown.svg'
 
 const formItemLayout = {
   labelCol: {span: 6},
@@ -129,7 +129,10 @@ export default inject('store')(({store}) => {
           name="parentCode"
           rules={[{required: true, message: '请选择所属业态'}]}
         >
-          <Select placeHolder="请选择所属业态">
+          <Select 
+            placeHolder="请选择所属业态"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             {
               store.formatList.map(item => {
                 return <Select.Option value={item.code}>{item.name}</Select.Option>

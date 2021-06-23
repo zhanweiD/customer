@@ -8,6 +8,8 @@ import CustomerChart from './customer-chart'
 import io from './io'
 import {errorTip} from '../common/util'
 
+import dropdown from '../icon/dropdown.svg'
+
 
 const {Option} = Select
 
@@ -149,6 +151,7 @@ const Overview = () => {
               expandTrigger="hover"
               style={{margin: '0px 8px'}} 
               onChange={changeOrg}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             />
           ) : null
         }
@@ -156,6 +159,7 @@ const Overview = () => {
           style={{width: 128}} 
           onChange={changeTime}
           defaultValue={365}
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
         >
           {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
         </Select>

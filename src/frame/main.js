@@ -25,6 +25,7 @@ import ico from '../icon/dtwave.ico'
 import store from './store'
 import {errorTip, codeInProduct} from '../common/util'
 import defaultLightLogo from '../icon/default-light-logo.svg'
+import dropdown from '../icon/dropdown.svg'
 
 const {Header, Content, Sider} = Layout
 const {SubMenu} = Menu
@@ -347,8 +348,8 @@ export default class Frame extends Component {
                 <Dropdown overlay={userMenu}>
                   <div className="hand fcf">
                     <UserOutlined />
-                    <span className="nickName">{userInfo.userName}</span>
-                    <DownOutlined />
+                    <span className="nickName ml12 mr12">{userInfo.userName}</span>
+                    <img src={dropdown} alt="dropdown" />
                   </div>
                 </Dropdown>
               </div>

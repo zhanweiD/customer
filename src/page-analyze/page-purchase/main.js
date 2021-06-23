@@ -6,6 +6,7 @@ import {observer} from 'mobx-react'
 import {Link} from 'react-router-dom'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -181,6 +182,7 @@ class Purchase extends Component {
                 store.getList({...store.reqData, tag: v, currentPage: 1})
               }}
               getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
               {
                 tgiMerit.map(item => <Option key={item}>{item}</Option>)
@@ -208,12 +210,14 @@ class Purchase extends Component {
             onChange={this.selectPro}
             style={{width: 160, marginRight: '8px'}}
             showSearch={this.filter}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           <Select 
             allowClear
             style={{width: 160}} 
             placeholder="产品业态"
             onChange={this.selectFormat}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
             {
               formatList.map(item => <Option key={item}>{item}</Option>)

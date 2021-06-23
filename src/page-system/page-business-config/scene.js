@@ -5,6 +5,7 @@ import {useObserver} from 'mobx-react-lite'
 import _ from 'lodash'
 import {codeInProduct} from '@util'
 import MyForm from './scene-form'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Search} = Input
 
@@ -136,6 +137,7 @@ export default inject('store')(({store}) => {
             placeholder="请选择" 
             onChange={e => cascaderChange(e)}
             getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           {/* <Search placeholder="请输入场景名称" className="ml8" /> */}
         </div>

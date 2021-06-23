@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -133,6 +134,7 @@ class Clinch extends Component {
             <Select 
               defaultValue=""
               style={{width: 160, marginRight: '8px'}} 
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={v => {
                 store.reqCliData.customerType = v
                 store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
@@ -167,6 +169,7 @@ class Clinch extends Component {
             options={window.__keeper.projectTree}
             onChange={this.selectPro}
             style={{marginRight: '8px'}}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           <RangePicker
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}

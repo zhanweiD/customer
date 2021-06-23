@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="6px" viewBox="0 0 10 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>下拉icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Asset-Components" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="地产/组件/数据录入/下拉框" transform="translate(-275.000000, -13.000000)">
+            <g id="地产/icon/下拉icon" transform="translate(273.000000, 9.000000)">
+                <g id="下拉icon">
+                    <rect id="矩形" x="0" y="0" width="14" height="14"></rect>
+                    <polygon id="路径5" fill="#D4DCE9" transform="translate(7.000000, 7.291667) scale(-1, 1) rotate(-360.000000) translate(-7.000000, -7.291667) " points="2.33333333 4.66666667 11.6666667 4.66666667 7 9.91666667"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
