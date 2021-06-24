@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="10px" viewBox="0 0 10 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>编组</title>
+    <desc>Created with Sketch.</desc>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4-客户画像-标签描摹-列表" transform="translate(-514.000000, -140.000000)">
+            <g id="编组-8" transform="translate(384.000000, 120.000000)">
+                <g id="DataDisplay/Tabs/Light/Icon" transform="translate(16.000000, 12.000000)">
+                    <g id="导航/Tabs标签页/亮色/2" transform="translate(0.000000, 0.000000)">
+                        <g id="导航/Tabs标签页/亮色/带图标-可选" transform="translate(110.000000, 0.000000)">
+                            <g id="编组" transform="translate(3.000000, 7.000000)">
+                                <polygon id="路径" points="0 0 12 0 12 12 0 12"></polygon>
+                                <path d="M2.5,1.5 L2.5,9.5 L10.5,9.5 L10.5,10.5 L1.5,10.5 L1.5,1.5 L2.5,1.5 Z M9.97,2.97 L11.03,4.03 L8,7.061 L6.5,5.561 L4.53,7.531 L3.47,6.47 L6.5,3.44 L8,4.94 L9.97,2.97 L9.97,2.97 Z" id="形状" fill-opacity="0.45" fill="#16324E"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

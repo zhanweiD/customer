@@ -2,12 +2,14 @@ import {Component, Fragment} from 'react'
 import {action, toJS} from 'mobx'
 import {observer, inject} from 'mobx-react'
 import {Spin, Input, Select} from 'antd'
+import {SearchOutlined} from '@ant-design/icons'
 
 import {NoData, authView} from '../component'
 
 import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
+import bgBanner from './icon/bg-banner.png'
 
 const {Search} = Input
 
@@ -70,17 +72,29 @@ class Portrait extends Component {
         <div className="content-header">客户画像</div>
         {
           portraitId ? (
-            <div className="search m16 mr0 mt72">
+            <div className="search m16 mr0 mt0">
               {
                 isJump ? null : (
                   <div>
-                    <div className="search_content mr16">
-                      <Search 
+                    <div 
+                      className="search_content mr16"
+                      // style={{backgroundImage: "url('./icon/bg-banner.png')"}}
+                    >
+                      <div>
+                        <Input 
+                          size="large" 
+                          onPressEnter={v => this.onSearch(v.target.value)}
+                          placeholder={placeholder} 
+                          style={{width: 300, borderRadius: 24}} 
+                          prefix={<SearchOutlined style={{fontSize: 18}} />}
+                        />
+                        {/* <SearchOutlined style={{fontSize: 18, left: -284, position: 'relative'}} /> */}
+                      </div>
+                      {/* <Search 
                         size="large"
                         placeholder={placeholder} 
                         onSearch={this.onSearch} 
-                        style={{width: '25%', borderLeft: 'none'}} 
-                      />
+                      /> */}
                     </div>
                     {
                       !unitList.length ? (
@@ -88,8 +102,8 @@ class Portrait extends Component {
                           <div className="d-flex">
                             {/* <SearchList data={data} title="相关客户推荐" color="#339999" />
                             <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
-                            <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
-                            <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
+                            <SearchList data={followList} title="已关注客户" id={portraitId} />
+                            <SearchList data={scanList} title="最近浏览客户" id={portraitId} />
                           </div>
                         </Spin>
                       ) : null

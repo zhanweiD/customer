@@ -96,7 +96,7 @@ export default class SearchResult extends Component {
   render() {
     const {tabLoading, unitList, ident, loading, changeLoading, isJump} = this.store
     return (
-      <div className="mr16">
+      <div className="mr16 mt16">
         <Spin spinning={tabLoading || changeLoading}>
           {
             isJump ? (

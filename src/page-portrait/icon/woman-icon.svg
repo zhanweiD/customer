@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>编组 9</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="1.74989443%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFA1BC" offset="0%"></stop>
+            <stop stop-color="#FD5071" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1-客户画像-搜索页" transform="translate(-99.000000, -363.000000)">
+            <g id="编组-4" transform="translate(64.000000, 296.000000)">
+                <g id="编组-5" transform="translate(16.000000, 56.000000)">
+                    <g id="编组-9" transform="translate(19.000000, 11.000000)">
+                        <circle id="椭圆形" fill="#FFF1F5" cx="9" cy="9" r="9"></circle>
+                        <g id="编组" transform="translate(3.375000, 3.375000)">
+                            <rect id="矩形" fill-opacity="0.01" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="11.25" height="11.25"></rect>
+                            <path d="M9.84375,10.3125 C9.84375,10.3125 9.84375,6.94903125 9.84375,5.15625 C9.84375,2.82630469 7.95494531,0.9375 5.625,0.9375 C3.29505469,0.9375 1.40625,2.82630469 1.40625,5.15625 C1.40625,6.71777344 1.40625,10.3125 1.40625,10.3125" id="路径" fill="url(#linearGradient-1)" fill-rule="nonzero"></path>
+                            <path d="M5.625,10.078125 C6.91940625,10.078125 7.96875,7.97946094 7.96875,5.390625 L3.28125,5.390625 C3.28125,7.97946094 4.33059375,10.078125 5.625,10.078125 Z" id="路径" fill="#FFFFFF"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

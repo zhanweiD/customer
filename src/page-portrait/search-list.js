@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import {NoData} from '../component'
+import manIcon from './icon/man-icon.svg'
+import womanIcon from './icon/woman-icon.svg'
 
 const SearchList = ({data = [], title, color, id}) => {
   const [domList, setDomList] = useState(data)
@@ -21,13 +23,17 @@ const SearchList = ({data = [], title, color, id}) => {
       }
 
       valueList.forEach((sitem, index) => {
+        console.log(item)
         if (index > 0) {
           domItem.push(
-            <div className="c65 w33">{sitem}</div>
+            <div className="c85 w33">{sitem}</div>
           )
         } else {
           domItem.push(
-            <Link className="w33" target="_blank" to={`/portrait/${item.ident}/${id}`}>{`${sitem}`}</Link>
+            <Link className="w33" target="_blank" to={`/portrait/${item.ident}/${id}`}>
+              <img className="mr8" src={item.性别 === '男' ? manIcon : womanIcon} alt="" />
+              {sitem}
+            </Link>
           )
         }
       })
@@ -43,8 +49,8 @@ const SearchList = ({data = [], title, color, id}) => {
   }, [data])
   console.log(domList)
   return (
-    <div className="bgf mr16 mt16 search-list">
-      <div style={{backgroundColor: color}} className="list-height">{title}</div>
+    <div className="bgf mr16 search-list">
+      <div style={{backgroundColor: '#e6ebf3'}} className="list-height">{title}</div>
       {
         domList.length ? null : (
           <NoData 

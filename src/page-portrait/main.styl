@@ -1,7 +1,6 @@
 .portrait-wrap
   height 100%
   box-sizing border-box
-  overflow hidden
   position relative
 
   .noData-box
@@ -18,7 +17,7 @@
     color rgba(0,0,0,0.85)
     line-height 46px
   .bbc 
-    border-bottom 1px solid #E6EDF8
+    border-bottom 1px solid #E6EBF3
     .lh24
       height 24px
       line-height 24px
@@ -29,12 +28,12 @@
       min-height calc(100vh - 233px)
       .list-height
         height 48px
+        padding-left 16px
         line-height 48px
-        color #fff
-        text-align center
-        font-size 16px
+        color #16324e
+        font-size 14px
       .item-content
-        border-bottom 1px solid #f3f4f9
+        border-bottom 1px solid #E6EBF3
         margin 8px
         padding-bottom 8px
         line-height 32px
@@ -52,15 +51,18 @@
     .search_content
       padding-top 24px
       padding-bottom 24px
-      background-color #fff
+      height 240px
+      line-height 192px
+      background-image: url('./icon/bg-banner.png')
+      background-size: 100% 100%
+      // background-color #fff
       font-size 12px 
       color rgba(0,0,0,0.65)
       display flex
       justify-content center
-      background-color #1890ff
+      // background-color #1890ff
   // 用户信息  
   .user-info
-    background-color #f3f4f9
     // height calc(100vh - 328px)
     height calc(100vh - 137px)
     
@@ -102,14 +104,14 @@
           .info-tag
             padding 4px 8px
             background-color rgba(0,0,0,0.05)
-            border 1px solid #e6edf8
+            border 1px solid #E6EBF3
             border-radius 6px
             display inline-block
         .tag-tree
           width 25%
 
       .ant-tabs
-        border 1px solid #e6edf8
+        border 1px solid #E6EBF3
         height 100%
       .ant-tabs-nav
         background-color #fff
@@ -151,7 +153,7 @@
           padding-left 16px
           font-size 14px
           color rgba(0, 0, 0, .85)
-          border-bottom 1px solid #E6EDF8
+          border-bottom 1px solid #E6EBF3
 
         &-count
           font-size 12px
@@ -184,22 +186,22 @@
       border 1px solid #E6EDF8
       padding 16px
     
-    .ant-menu-submenu-title
-      padding-left 0 !important
-      line-height 24px
-      height 24px
-      font-size 12px
-      margin 0
-      margin-top -2px
-    .ant-timeline-item
-      padding-bottom 0
-    .ant-timeline.ant-timeline-label .ant-timeline-item-label, .ant-timeline-item-content
-      top -4px
+    // .ant-menu-submenu-title
+    //   padding-left 0 !important
+    //   line-height 24px
+    //   height 24px
+    //   font-size 12px
+    //   margin 0
+    //   margin-top -2px
+    // .ant-timeline-item
+    //   padding-bottom 0
+    // .ant-timeline.ant-timeline-label .ant-timeline-item-label, .ant-timeline-item-content
+    //   top -4px
 
-  .ant-input-search-large .ant-input-search-button
-    height 33px
-  .ant-btn > .anticon
-    line-height 38px
-  .ant-select-multiple
-    .ant-select-selection-item
-      margin-bottom 4px
+  // .ant-input-search-large .ant-input-search-button
+  //   height 33px
+  // .ant-btn > .anticon
+  //   line-height 38px
+  // .ant-select-multiple
+  //   .ant-select-selection-item
+  //     margin-bottom 4px
