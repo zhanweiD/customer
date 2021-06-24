@@ -41,6 +41,7 @@ export default class Frame extends Component {
     
     store.pathName = props.location.pathname
     store.menuName = store.pathName.split('/')[1]
+    store.openKeys = [`/${store.pathName.split('/')[1]}`]
   }
 
   componentDidMount() {
@@ -181,7 +182,21 @@ export default class Frame extends Component {
     // eslint-disable-next-line max-len
     const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
     const showSales = codeInProduct('/sales/list') || codeInProduct('/channel-manage') || codeInProduct('/event-manage')
- 
+    
+    let myProps = {}
+    if (this.collapsed) {
+      // 折叠起来的情况
+      myProps = {}
+    } else {
+      // 展开的情况
+      // eslint-disable-next-line no-lonely-if
+      if (store.openKeys.length === 0) {
+        myProps = {openKeys: []}
+      } else {
+        myProps = {openKeys: store.openKeys}
+      }
+    }
+
     return (
       <ConfigProvider locale={zhCN}>
         <div className="FBH h100 frame-main">
@@ -201,7 +216,8 @@ export default class Frame extends Component {
                 theme="dark" 
                 defaultOpenKeys={[`/${menuName}`]} 
                 defaultSelectedKeys={[pathName]} 
-                openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
+                // openKeys={store.openKeys.length ? store.openKeys : [`/${menuName}`]}
+                {...myProps}
                 onOpenChange={this.onOpenChange}
                 mode="inline"
                 onClick={this.changeMenu}
