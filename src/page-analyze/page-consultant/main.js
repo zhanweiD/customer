@@ -88,7 +88,9 @@ class Consultant extends Component {
   }
 
   render() {
-    const {consultantData, tableLoading, loading, reqProData, projectList} = store
+    const {
+      consultantData, tableLoading, loading, reqProData, projectList, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -123,20 +125,32 @@ class Consultant extends Component {
       text: '暂无数据',
     }
     return (
-      <div className="consultant oa">
-        <div className="content-header">
-          <span className="mr24">顾问分析</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            showSearch={this.filter}
-            options={projectList}
-            // options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{marginRight: '8px'}}
-          />
+      <div 
+        id="consultantId"
+        className="consultant oa"
+        onScroll={() => {
+          if (document.getElementById('consultantId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr24">顾问分析</div>
+          <div>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              showSearch={this.filter}
+              options={projectList}
+              // options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{marginRight: '8px'}}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>

@@ -8,6 +8,7 @@ import {ListContentStore} from '../../component/list-content'
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false 
   @observable loading = true 
+  @observable isScroll = false 
   @observable projectList = []
   @observable reqProData = { // 区域筛选
     projectArea: null,

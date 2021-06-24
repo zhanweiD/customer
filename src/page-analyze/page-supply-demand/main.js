@@ -84,7 +84,9 @@ class SupplyDemand extends Component {
   }
 
   render() {
-    const {indicators, tableLoading, loading, unFitList, reqData} = store
+    const {
+      indicators, tableLoading, loading, unFitList, reqData, isScroll,
+    } = store
     const listConfig = {
       key: 'id',
       rowKey: 'id',
@@ -121,31 +123,43 @@ class SupplyDemand extends Component {
       store, // 必填属性
     }
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">供需分析</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 160, marginRight: '8px'}}
-            showSearch={this.filter}
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-          />
-          <RangePicker
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            onChange={value => {
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
-              }
-              store.getFitList(this.getDraw, this.getDraw1)
-              store.getList({...store.reqData, currentPage: 1})
-            }}
-          />
+      <div 
+        id="supDemId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('supDemId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr24">供需分析</div>
+          <div style={{width: 600}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 160, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              onChange={value => {
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                store.getFitList(this.getDraw, this.getDraw1)
+                store.getList({...store.reqData, currentPage: 1})
+              }}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           {/* <Spin spinning={loading}> */}

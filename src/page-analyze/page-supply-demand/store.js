@@ -13,6 +13,7 @@ const pastDate = moment(+date.getTime() - 1000 * 60 * 60 * 24 * 365).format(date
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false 
   @observable loading = true 
+  @observable isScroll = false 
   @observable lineLoading = true
   @observable unFitList = [] 
   

@@ -12,6 +12,7 @@ const pastDate = moment(+date.getTime() - 1000 * 60 * 60 * 24 * 365).format(date
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false 
   @observable loading = true 
+  @observable isScroll = false 
   @observable reqCliData = { // 列表筛选
     customerType: null,
   } 
