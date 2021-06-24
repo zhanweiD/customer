@@ -29,7 +29,7 @@ const Business = () => {
   return (
     <div className="business-config oa FBV">
       <div className="content-header">业务配置</div>
-      <div className="custom-border m12 FB1">
+      <div className="custom-border m16 FB1">
         <Tabs 
           defaultActiveKey="1" 
           onChange={key => tabsChange(key)}

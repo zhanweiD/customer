@@ -114,7 +114,7 @@ class PortraitConfig extends Component {
     return (
       <div className="oa FBV">
         <div className="content-header">画像配置</div>
-        <div className="config-content custom-border m12 pt12 FB1">
+        <div className="config-content custom-border m16 pt16 FB1">
           <ListContent {...listContentConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

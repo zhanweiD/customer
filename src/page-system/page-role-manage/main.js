@@ -147,7 +147,7 @@ class GroupConfig extends Component {
     return (
       <div className="oa FBV">
         <div className="content-header">角色管理</div> 
-        <div className="user-manage FB1 custom-border m12 pt12">
+        <div className="user-manage FB1 custom-border m16 pt16">
           <ListContent {...listConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

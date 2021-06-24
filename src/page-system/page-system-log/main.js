@@ -91,7 +91,7 @@ class SystemLog extends Component {
     return (
       <div className="system-log oa FBV">
         <div className="content-header">系统日志</div> 
-        <div className="user-manage custom-border m12 pt12 FB1">
+        <div className="user-manage custom-border m16 pt16 FB1">
           <ListContent {...listConfig} />
         </div>
       </div>
