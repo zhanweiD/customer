@@ -169,8 +169,8 @@ class Purchase extends Component {
       columns: this.columns,
       tabLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             潜在复购客户推荐
           </div>
           <div>

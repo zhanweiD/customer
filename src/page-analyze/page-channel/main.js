@@ -11,6 +11,7 @@ import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -151,8 +152,8 @@ class Channel extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             未转化客户
           </div>
           <div>

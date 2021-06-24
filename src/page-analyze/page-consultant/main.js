@@ -11,6 +11,7 @@ import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 @observer
 class Consultant extends Component {
@@ -111,7 +112,7 @@ class Consultant extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
+        <div className="dfjs mt16 fs14 c85 pt16">
           <div>置业顾问名单</div>
           <div>
             <Button onClick={() => downloadResult(reqProData, 'salesman/export')} style={{marginRight: '24px'}} type="primary">导出</Button>

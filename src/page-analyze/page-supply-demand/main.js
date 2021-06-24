@@ -12,6 +12,7 @@ import {authView, ListContent} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const {Option} = Select
@@ -95,8 +96,8 @@ class SupplyDemand extends Component {
       tableLoading,
       scroll: {x: 960},
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             供需不匹配客户
           </div>
           <div>
