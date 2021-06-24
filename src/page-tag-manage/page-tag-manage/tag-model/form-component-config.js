@@ -1,6 +1,7 @@
 /* type和相应antd组件映射 */
 import React from 'react'
 import * as antd from 'antd'
+import dropdown from '../../../icon/dropdown.svg'
 
 const createInputPlaceholder = label => (label ? `请输入${label}` : undefined) // 生成input默认的Placeholder值
 
@@ -31,6 +32,7 @@ const SelectTypes = ({
       getPopupContainer={triggerNode => triggerNode.parentElement}
       // notFoundContent={rest.selectLoading ? <antd.Spin  /> : <div>暂无数据源</div>}
       optionFilterProp="children"
+      suffixIcon={<img src={dropdown} alt="dropdown" />}
       {...rest}
     >
       {
@@ -104,6 +106,7 @@ export default ({
     cascader: <antd.Cascader
       options={options}
       placeholder={placeholder || createSelectPlaceholder(label)}
+      suffixIcon={<img src={dropdown} alt="dropdown" />}
       {...rest}
     />,
   }

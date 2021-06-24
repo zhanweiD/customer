@@ -251,7 +251,7 @@ class TagList extends Component {
               <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
             </Select> */}
             <Search
-              style={{width: 150, marginRight: '24px'}} 
+              style={{width: 180, marginRight: '24px'}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.searchParams.searchKey = v.target.value
@@ -273,10 +273,17 @@ class TagList extends Component {
 
     return (
       <Provider bigStore={store}>
-        <div className="h-100">
-          <div className="d-flex h-100 tag-model pt16" style={{minHeight: 'calc(100vh - 303px)'}}>
+        <Fragment>
+          <div className="FBH h-100">
             <TagCateTree bigStore={store} store={treeStore} />
-            <ListContent {...listConfig} />
+            <div 
+              className="FB1 custom-border pt16"
+              style={{
+                margin: '0 12px 12px 0',
+              }}
+            >
+              <ListContent {...listConfig} />
+            </div>
           </div>
           <TagDetailModal store={store} />
           <ModalTagMove store={store} treeStore={treeStore} />
@@ -290,7 +297,7 @@ class TagList extends Component {
             onUpdate={updateTagConfig}
             type={drawerTagConfigType}
           />
-        </div>
+        </Fragment>
       </Provider>
     )
   }

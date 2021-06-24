@@ -1,7 +1,7 @@
 /**
  * @description 对象管理 - 对象详情信息
  */
-import {Component} from 'react'
+import {Component, Fragment} from 'react'
 import {observer, Provider} from 'mobx-react'
 import {Spin, Tabs} from 'antd'
 import {action} from 'mobx'
@@ -48,33 +48,40 @@ export default class ObjectDetail extends Component {
     ]
 
     return (
-      <div className="object-detail">
+      <Fragment>
         <Spin spinning={loading}>
-          <div className="mb16 box-border">
-            <DetailHeader 
-              name={`对象名称：${objDetail.name}`}
-              descr={objDetail.descr}
-              btnMinWidth={160}
-            />
-            <div className="ml16 mr16">
+          <div>
+            <div className="FBV">
+              <div className="content-header">{`对象名称：${objDetail.name}`}</div>
+              <div className="ml12">
+                <span>描述：</span>
+                <span>{objDetail.descr || '-'}</span>
+              </div>
+            </div>
+            <div className="ml12 mr12">
               <OverviewCardWrap cards={cards} />
             </div>
           </div>
         </Spin>
-        <div className="bgf box-border h-436">
+        <div 
+          className="FB1 custom-border"
+          style={{
+            margin: '0 12px 12px 12px',
+          }}
+        >
           <Provider bigStore={this.store}>
-            <Tabs className="h-428" defaultActiveKey="1" onChange={this.changeTab}>
-              <TabPane className="h-428" tab="标签维护" key="1">
+            <Tabs className="h-100" defaultActiveKey="1" onChange={this.changeTab}>
+              <TabPane tab="标签维护" key="1" style={{height: '100%'}}>
                 {
                   this.store.tabId === '1' ? <TagModel objId={objId} bigStore={this.store} /> : null
                 }
               </TabPane>
-              <TabPane className="h-428" tab="数据表管理" key="2">
+              <TabPane tab="数据表管理" key="2">
                 {
                   this.store.tabId === '2' ? <DateSheet objId={objId} bigStore={this.store} /> : null
                 }
               </TabPane>
-              {/* <TabPane className="h-428" tab="关系表管理" key="3">
+              {/* <TabPane tab="关系表管理" key="3">
                 {
                   this.store.tabId === '3' ? <RelationSheet objId={objId} bigStore={this.store} /> : null
                 }
@@ -82,7 +89,7 @@ export default class ObjectDetail extends Component {
             </Tabs>
           </Provider>
         </div>
-      </div>
+      </Fragment>
     )
   }
 }

@@ -5,6 +5,7 @@ import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import {Button, Drawer, Input, Select} from 'antd'
 import {getNamePattern, getEnNamePattern, nameTypeMap} from '../../common/util'
+import dropdown from '../../icon/dropdown.svg'
 
 const FormItem = Form.Item
 const Option = {Select}
@@ -216,7 +217,12 @@ class ModalObject extends Component {
               initialValue: data.tagValueType || 4,
               rules: [{required: true, message: '请选择数据类型'}],
             })(
-              <Select placeholder="请选择数据类型" showSearch optionFilterProp="children">
+              <Select 
+                placeholder="请选择数据类型" 
+                showSearch 
+                optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 {
                   window.njkData.dict.dataType.map(item => (
                     <Option style={{fontSize: '12px'}} key={item.key} value={item.key}>{item.value}</Option>

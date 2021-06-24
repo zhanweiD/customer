@@ -40,20 +40,32 @@ class TagMarketDetail extends Component {
      const noDataConfig = {
        text: '没有任何对象，请在当前页面新建对象！',
      }
- 
+
+     //  return (
+     //    <div className="oa FBV">
+     //       {/* <Tree store={store} /> */}
+     //       <Spin spinning={store.isSpinning}>
+     //         <ObjectDetail 
+     //           updateDetailKey={updateDetailKey} 
+     //           objId={objId} 
+     //           store={store}
+     //         /> 
+     //       </Spin>
+                       
+     //     </div>
+     //  )
+
      return (
        <ConfigProvider>
          <Provider store={store}>
-           <Spin spinning={store.isSpinning}>
-             <div className="page-tag-market-detail">
-               {/* <Tree store={store} /> */}
-               <ObjectDetail 
-                 updateDetailKey={updateDetailKey} 
-                 objId={objId} 
-                 store={store}
-               />              
-             </div>
-           </Spin>
+           <div className="oa FBV">
+             {/* <Tree store={store} /> */}
+             <ObjectDetail 
+               updateDetailKey={updateDetailKey} 
+               objId={objId} 
+               store={store}
+             />              
+           </div>
          </Provider>
        </ConfigProvider>
      )

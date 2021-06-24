@@ -1,7 +1,7 @@
 /**
  * @description 对象管理 - 对象详情信息
  */
-import {Component} from 'react'
+import {Component, Fragment} from 'react'
 import {observer, Provider} from 'mobx-react'
 import {Spin, Tabs} from 'antd'
 import {action} from 'mobx'
@@ -51,25 +51,27 @@ export default class ObjectDetail extends Component {
     ]
 
     return (
-      <div className="object-detail">
+      <Fragment>
         <Spin spinning={loading}>
-          <div className="mb16 box-border">
-            <DetailHeader 
-              name={`对象名称：${objDetail.name}`}
-              descr={objDetail.descr}
-              btnMinWidth={160}
-            />
-            <div className="ml16 mr16">
+          <div>
+            <div className="FBV">
+              <div className="content-header">{`对象名称：${objDetail.name}`}</div>
+              <div className="ml12">
+                <span>描述：</span>
+                <span>{objDetail.descr || '-'}</span>
+              </div>
+            </div>
+            <div className="ml12 mr12">
               <OverviewCardWrap cards={cards} />
             </div>
           </div>
         </Spin>
-        <div className="bgf box-border">
+        <div className="FB1">
           <Provider bigStore={this.store}>
             <TagModel objId={objId} bigStore={this.store} />
           </Provider>
         </div>
-      </div>
+      </Fragment>
     )
   }
 }
