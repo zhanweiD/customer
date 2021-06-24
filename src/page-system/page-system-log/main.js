@@ -62,7 +62,7 @@ class SystemLog extends Component {
         <div className="dfjf mr24">
           <Input 
             placeholder="请输入用户名或者账号"
-            style={{width: 180, marginRight: '8px'}}
+            style={{width: 210, marginRight: '8px'}}
             suffix={<SearchOutlined />}
             allowClear
             onChange={e => {
@@ -75,7 +75,6 @@ class SystemLog extends Component {
             }}
           />
           <RangePicker
-            size="small"
             onChange={value => {
               store.reqData = {
                 ...store.reqData,
@@ -84,14 +83,15 @@ class SystemLog extends Component {
               }
               store.getList({...store.reqData, startTime: store.reqData.startTime, endTime: store.reqData.endTime})
             }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
           />
         </div>,
       ],
     }
     return (
-      <div className="system-log oa" style={{minHeight: 'calc(100vh - 198px)'}}>
+      <div className="system-log oa FBV">
         <div className="content-header">系统日志</div> 
-        <div className="user-manage mt72">
+        <div className="user-manage custom-border m16 pt16 FB1">
           <ListContent {...listConfig} />
         </div>
       </div>

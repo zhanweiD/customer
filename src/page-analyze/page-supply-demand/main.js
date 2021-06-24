@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {authView, ListContent} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -98,10 +99,11 @@ class SupplyDemand extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               allowClear
               placeholder="请选择指标"
               style={{width: 160, marginRight: '8px'}} 
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={v => {
                 store.indicators = v
                 store.getList({...store.reqData, index: v, currentPage: 1})
@@ -131,9 +133,9 @@ class SupplyDemand extends Component {
             onChange={this.selectPro}
             style={{width: 160, marginRight: '8px'}}
             showSearch={this.filter}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             onChange={value => {
               store.reqData = {

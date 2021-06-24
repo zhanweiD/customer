@@ -5,6 +5,7 @@ import {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -162,15 +163,18 @@ class Channel extends Component {
               onChange={this.selectChannel}
               showSearch={this.filter}
               style={{marginRight: '8px'}}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             />
             <Select 
-              size="small"
               defaultValue=""
               style={{width: 160, marginRight: '8px'}} 
               onChange={v => {
                 store.reqChaData.customerType = v
                 store.getList({...store.reqChaData, ...store.reqData, ...store.reqProData, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
               <Option style={{fontSize: '12px'}} key="">全部</Option>
               <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>
@@ -207,9 +211,9 @@ class Channel extends Component {
             options={window.__keeper.projectTree}
             onChange={this.selectPro}
             style={{marginRight: '8px'}}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             // format={dateFormat}
             allowClear={false}

@@ -49,7 +49,6 @@ const SearchList = ({data = [], title, color, id}) => {
         domList.length ? null : (
           <NoData 
             text="暂无数据" 
-            size="small"
           />
         )
       }

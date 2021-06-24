@@ -74,7 +74,7 @@ const EditableCell = ({
           {validator: (rule, value, callback) => checkFieldName(record, value, callback)},
         ]}
       >
-        <Input size="small" onChange={save} />
+        <Input onChange={save} />
       </Form.Item>
     )
   }

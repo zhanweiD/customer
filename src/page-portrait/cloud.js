@@ -113,7 +113,7 @@ export default class Cloud extends Component {
               !cloudData.length
                 ? (
                   <div className="no-Data" style={{height: '442px'}}>
-                    <NoData text="请选择业务域查询" size="small" />
+                    <NoData text="请选择业务域查询" />
                   </div>
                 )
                 : null

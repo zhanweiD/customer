@@ -50,7 +50,7 @@ export default inject('store')(({store}) => {
       <Spin spinning={store.chartSpinning}>
         <div className="FBH FBAC FBJC" style={{height: '500px'}}>
           <NoData 
-            size="small" 
+             
             style={{
               visibility: store.chartVis ? 'hidden' : 'visible',
               position: 'absolute',

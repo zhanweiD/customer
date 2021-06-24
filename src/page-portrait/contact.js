@@ -99,7 +99,7 @@ export default class Contact extends Component {
           </Timeline>
     
           {
-            unitEvents.length ? null : (<NoData style={{marginTop: '60%'}} text="暂无数据" size="small" />)
+            unitEvents.length ? null : (<NoData style={{marginTop: '60%'}} text="暂无数据" />)
           }
         </Spin>
       </div>

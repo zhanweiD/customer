@@ -71,7 +71,6 @@ export default class ChartPie extends Component {
           {/* <NoData 
             style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
             text="暂无数据" 
-            size="small" 
           /> */}
           <div 
             ref="chartBar" 

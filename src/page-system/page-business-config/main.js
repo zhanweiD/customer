@@ -27,29 +27,30 @@ const Business = () => {
   }
 
   return (
-    <div className="business-config oa">
+    <div className="business-config oa FBV">
       <div className="content-header">业务配置</div>
-      <Tabs 
-        defaultActiveKey="1" 
-        style={{backgroundColor: '#fff', margin: '72px 16px 16px'}}
-        onChange={key => tabsChange(key)}
-      >
-        <TabPane tab="场景管理" key="1">
-          <Provider store={sceneStore}>
-            <Scene />
-          </Provider>
-        </TabPane>
-        <TabPane tab="业务域管理" key="2">
-          <Provider store={domainStore}>
-            <Domain />
-          </Provider>
-        </TabPane>
-        <TabPane tab="业态管理" key="3">
-          <Provider store={formatStore}>
-            <Format />
-          </Provider>
-        </TabPane>
-      </Tabs>
+      <div className="custom-border m16 FB1">
+        <Tabs 
+          defaultActiveKey="1" 
+          onChange={key => tabsChange(key)}
+        >
+          <TabPane tab="场景管理" key="1">
+            <Provider store={sceneStore}>
+              <Scene />
+            </Provider>
+          </TabPane>
+          <TabPane tab="业务域管理" key="2">
+            <Provider store={domainStore}>
+              <Domain />
+            </Provider>
+          </TabPane>
+          <TabPane tab="业态管理" key="3">
+            <Provider store={formatStore}>
+              <Format />
+            </Provider>
+          </TabPane>
+        </Tabs>
+      </div>
     </div>
   )
 }

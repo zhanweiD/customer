@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -150,7 +151,6 @@ class Satisfaction extends Component {
           </div>
           <div>
             <Select 
-              size="small"
               allowClear
               placeholder="评价结果"
               style={{width: 160, marginRight: '8px'}} 
@@ -158,6 +158,8 @@ class Satisfaction extends Component {
                 store.satisfaction = v
                 store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
               {
                 list4.map(item => <Option value={item}>{item}</Option>)
@@ -184,12 +186,13 @@ class Satisfaction extends Component {
             onChange={this.selectPro}
             style={{width: 108, marginRight: '8px'}}
             showSearch={this.filter}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="产品业态"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
             onChange={v => {
               store.reqData.format = v
               store.getAllData(this.getDraw, this.getDraw1)
@@ -202,10 +205,10 @@ class Satisfaction extends Component {
             }
           </Select>
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="业务场景"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
             onChange={v => {
               store.reqData.evaluateType = v
               store.getAllData(this.getDraw, this.getDraw1)
@@ -218,10 +221,10 @@ class Satisfaction extends Component {
             }
           </Select>
           <Select 
-            size="small"
             allowClear
-            style={{width: 90, marginRight: '8px'}} 
+            style={{width: 100, marginRight: '8px'}} 
             placeholder="客户类型"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
             onChange={v => {
               store.reqData.customerType = v
               store.getAllData(this.getDraw, this.getDraw1)
@@ -234,7 +237,6 @@ class Satisfaction extends Component {
             }
           </Select>
           <RangePicker
-            size="small"
             defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
             onChange={value => {
               store.reqData = {

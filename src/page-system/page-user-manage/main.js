@@ -175,7 +175,6 @@ class UserManage extends Component {
           </div>
           <div>
             <Input 
-              size="small"
               style={{width: 160, marginRight: '24px'}} 
               placeholder="请输入用户名称" 
               onChange={this.searchUser}
@@ -206,11 +205,11 @@ class UserManage extends Component {
     }
 
     return (
-      <div className="system-user oa">
+      <div className="system-user oa FBV">
         <div className="content-header">用户管理</div> 
-        <div className="d-flex user-manage">
+        <div className="d-flex user-manage FB1">
           <Tree store={store} />
-          <div className="oa">
+          <div className="custom-border FB1 manage-right">
             <ListContent {...listConfig} />
           </div>
         </div>

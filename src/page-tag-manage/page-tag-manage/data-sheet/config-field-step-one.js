@@ -73,7 +73,7 @@ export default class StepOne extends React.Component {
         </div> */}
         <div className="fs12 mb8 ml2">
           <span className="mr8">仅展示未发布</span> 
-          <Switch size="small" defaultChecked checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
+          <Switch defaultChecked checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
         </div>
         <Table
           loading={store.loadings.firstTable}

@@ -290,9 +290,15 @@ const Sales = () => {
   }, [searchParam])
 
   return (
-    <div className="oa">
+    <div className="oa FBV">
       <div className="content-header">营销计划</div>
-      <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
+      <div 
+        className="m16 bgf p16 pt0 custom-border FB1" 
+        style={{
+          position: 'relative',
+          overflowY: 'auto',
+        }}
+      >
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSearchParam}

@@ -16,6 +16,8 @@ import customer from '../icon/customer.svg'
 import setOf from '../icon/set-of.svg'
 import amount from '../icon/amount.svg'
 
+import dropdown from '../icon/dropdown.svg'
+
 
 const {Option} = Select
 
@@ -173,7 +175,7 @@ const Overview = () => {
         }
       }}
     >
-      <div className={`content-header FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+      <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
         <span>客户中心</span>
         <div style={{width: 504}}>
           {
@@ -198,6 +200,32 @@ const Overview = () => {
             {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
           </Select>
         </div>
+        {/* <div className="overview oa">
+      <div className="content-header">
+        <span>客户中心</span>
+        {
+          org ? (
+            <Cascader
+              defaultValue={[org]}
+              changeOnSelect
+              allowClear={false}
+              options={orgList}
+              fieldNames={{label: 'orgName', value: 'orgCode'}}
+              expandTrigger="hover"
+              style={{margin: '0px 8px'}} 
+              onChange={changeOrg}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+          ) : null
+        }
+        <Select 
+          style={{width: 128}} 
+          onChange={changeTime}
+          defaultValue={365}
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
+        >
+          {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
+        </Select> */}
       </div>
       <Spin spinning={orgLoading}>
         <div className="p16 pb0 mt48">

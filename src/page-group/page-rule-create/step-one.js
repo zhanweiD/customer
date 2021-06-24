@@ -4,6 +4,7 @@ import {action, toJS} from 'mobx'
 import {Form, Select, Input, Button, Spin} from 'antd'
 
 import {debounce} from '../../common/util'
+import dropdown from '../../icon/dropdown.svg'
 
 
 const formItemLayout = {
@@ -93,10 +94,10 @@ export default class StepOne extends Component {
             }]}
           >
             <Select
-              size="small"
               disabled={groupId}
               placeholder="请选择对象"
               onChange={this.changeObj}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
               {
                 entityList.map(d => <Option value={d.value}>{d.name}</Option>)
@@ -137,7 +138,6 @@ export default class StepOne extends Component {
           >
             <Select
               mode="multiple"
-              size="small"
               showSearch
               // optionFilterProp="children"
               placeholder="请选择标签"

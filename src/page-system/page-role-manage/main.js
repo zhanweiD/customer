@@ -133,8 +133,7 @@ class GroupConfig extends Component {
           </div>
           <div>
             <Input 
-              size="small"
-              style={{width: 160, marginRight: '24px'}} 
+              style={{width: 160, marginRight: '8px'}} 
               placeholder="请输入角色名称" 
               // onChange={v => store.getList({searchKey: v.target.value})}
               onChange={this.searchRole}
@@ -146,9 +145,9 @@ class GroupConfig extends Component {
     }
 
     return (
-      <div className="oa">
+      <div className="oa FBV">
         <div className="content-header">角色管理</div> 
-        <div className="user-manage mt72">
+        <div className="user-manage FB1 custom-border m16 pt16">
           <ListContent {...listConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

@@ -61,7 +61,7 @@ class EditableCell extends Component {
               ],
               validateFirst: true,
               initialValue: text,
-            })(<Input size="small" ref={node => (this.input = node)} />)}
+            })(<Input ref={node => (this.input = node)} />)}
           </Form.Item>
         ) : (
           <span> 
@@ -272,7 +272,7 @@ export default class SyncTagList extends Component {
           <Input
             onChange={this.onChange}
             style={{width: 300}}
-            size="small"
+           
             // className="select-tag-search"
             placeholder="请输入标签名称关键字"
             suffix={<SearchOutlined />}
