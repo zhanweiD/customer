@@ -12,6 +12,7 @@ import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -102,7 +103,9 @@ class Clinch extends Component {
   //   }
   // }
   render() {
-    const {clinchData, tableLoading, loading, reqData, reqProData, reqCliData} = store
+    const {
+      clinchData, tableLoading, loading, reqData, reqProData, reqCliData, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -126,8 +129,8 @@ class Clinch extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             未转化客户
           </div>
           <div>
@@ -157,41 +160,53 @@ class Clinch extends Component {
       text: '暂无数据',
     }
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">成交分析</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            showSearch={this.filter}
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{marginRight: '8px'}}
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-          />
-          <RangePicker
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            // format={dateFormat}
-            // disabledDate={this.disabledDate}
-            allowClear={false}
-            onChange={value => {
+      <div 
+        id="chinchId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('chinchId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr24">成交分析</div>
+          <div style={{width: 624}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              showSearch={this.filter}
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{marginRight: '8px'}}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              // format={dateFormat}
+              // disabledDate={this.disabledDate}
+              allowClear={false}
+              onChange={value => {
               // store.limitTime = {
               //   startTime: value ? value[0] : '',
               //   endTime: value ? value[1] : '',
               // }
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
-              }
-              // store.endTime = value ? value[1].format('YYYY-MM-DD') : ''
-              store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
-              store.getClinch(data => {
-                this.getDraw(data)
-              })
-            }}
-          />
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                // store.endTime = value ? value[1].format('YYYY-MM-DD') : ''
+                store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
+                store.getClinch(data => {
+                  this.getDraw(data)
+                })
+              }}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>

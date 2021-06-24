@@ -10,6 +10,7 @@ class Store extends ListContentStore(io.getList) {
   @observable tabLoading = true 
   @observable chartLoading = true 
   @observable loading = true 
+  @observable isScroll = false 
 
   @observable getDrawSaveTrend // 绘制饼图
   

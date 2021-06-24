@@ -12,6 +12,7 @@ import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -124,7 +125,9 @@ class Satisfaction extends Component {
   }
 
   render() {
-    const {evaluationPeo, evaluationNum, satisfactionPer, tableLoading, loading, reqData, satisfaction} = store
+    const {
+      evaluationPeo, evaluationNum, satisfactionPer, tableLoading, loading, reqData, satisfaction, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -145,8 +148,8 @@ class Satisfaction extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             评价详情
           </div>
           <div>
@@ -174,79 +177,91 @@ class Satisfaction extends Component {
     }
     
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">满意度提升</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 108, marginRight: '8px'}}
-            showSearch={this.filter}
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-          />
-          <Select 
-            allowClear
-            style={{width: 100, marginRight: '8px'}} 
-            placeholder="产品业态"
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-            onChange={v => {
-              store.reqData.format = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+      <div 
+        id="satisfactionId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('satisfactionId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr24">满意度提升</div>
+          <div style={{width: 872}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 108, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="产品业态"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.format = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
               // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list2.map(item => <Option value={item}>{item}</Option>)
-            }
-          </Select>
-          <Select 
-            allowClear
-            style={{width: 100, marginRight: '8px'}} 
-            placeholder="业务场景"
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-            onChange={v => {
-              store.reqData.evaluateType = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list1.map(item => <Option value={item}>{item}</Option>)
-            }
-          </Select>
-          <Select 
-            allowClear
-            style={{width: 100, marginRight: '8px'}} 
-            placeholder="客户类型"
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-            onChange={v => {
-              store.reqData.customerType = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list3.map((item, index) => <Option value={index}>{item}</Option>)
-            }
-          </Select>
-          <RangePicker
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            onChange={value => {
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+              }}
+            >
+              {
+                list2.map(item => <Option value={item}>{item}</Option>)
               }
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-            }}
-          />
+            </Select>
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="业务场景"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.evaluateType = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
+              }}
+            >
+              {
+                list1.map(item => <Option value={item}>{item}</Option>)
+              }
+            </Select>
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="客户类型"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.customerType = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
+              }}
+            >
+              {
+                list3.map((item, index) => <Option value={index}>{item}</Option>)
+              }
+            </Select>
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              onChange={value => {
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              }}
+            />
+          </div>
           {/* <Button style={{marginLeft: '8px'}} type="primary" onClick={this.resetData}>重置</Button> */}
         </div> 
         <div className="ml16 mr16 mb16 mt72">

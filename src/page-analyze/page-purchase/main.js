@@ -145,7 +145,9 @@ class Purchase extends Component {
   }
 
   render() {
-    const {cardData, tabLoading, loading, merit, tgiMerit, formatList, defaultNames} = store
+    const {
+      cardData, tabLoading, loading, merit, tgiMerit, formatList, defaultNames, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -167,8 +169,8 @@ class Purchase extends Component {
       columns: this.columns,
       tabLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
+        <div className="dfjs mt16 fs14 c85 pt16">
+          <div className="mt6">
             潜在复购客户推荐
           </div>
           <div>
@@ -197,32 +199,44 @@ class Purchase extends Component {
     }
     
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">复购挖掘</span>
-          <Cascader
-            placeholder="请选择区域"
-            value={defaultNames}
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 160, marginRight: '8px'}}
-            showSearch={this.filter}
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-          />
-          <Select 
-            allowClear
-            style={{width: 160}} 
-            placeholder="产品业态"
-            onChange={this.selectFormat}
-            suffixIcon={<img src={dropdown} alt="dropdown" />}
-          >
-            {
-              formatList.map(item => <Option key={item}>{item}</Option>)
-            }
-          </Select> 
+      <div 
+        id="purchaseId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('purchaseId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr24">复购挖掘</div>
+          <div style={{width: 504}}>
+            <Cascader
+              placeholder="请选择区域"
+              value={defaultNames}
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 160, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <Select 
+              allowClear
+              style={{width: 160}} 
+              placeholder="产品业态"
+              onChange={this.selectFormat}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            >
+              {
+                formatList.map(item => <Option key={item}>{item}</Option>)
+              }
+            </Select> 
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>

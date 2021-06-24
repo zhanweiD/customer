@@ -180,7 +180,7 @@ const ChannelManage = props => {
             授权账号
           </Button>
         </div>
-        <Tabs onChange={changeTabs} type="card">
+        <Tabs onChange={changeTabs}>
           {
             channelList.map(item => (
               <TabPane tab={`${item.name}(${item.cnt})`} key={item.code}>
