@@ -12,12 +12,6 @@ import {errorTip} from '../common/util'
 import io from './io'
 
 const color = ['#2592FF', '#FFA44A', '#A88EFF', '#FF81A5', '#fc7634']
-const linearColor = [
-  'linear-gradient(bottom ,#86D4FF, #2592FF)',
-  'linear-gradient(bottom ,#FD5071, #FF81A5)',
-  'linear-gradient(bottom ,#7F59FB, #A88EFF)',
-  'linear-gradient(bottom ,#FFE800, #FFA44A)',
-]
 
 const Cloud = ({
   orgCodes, projectCode, timeStart, timeEnd,
@@ -54,16 +48,16 @@ const Cloud = ({
           item.size = 14
         } else if (value < calibration * 2) {
           item.color = color[1]
-          item.size = 18
+          item.size = 20
         } else if (value < calibration * 3) {
           item.color = color[2]
-          item.size = 22
+          item.size = 26
         } else if (value < calibration * 4) {
           item.color = color[3]
-          item.size = 26
+          item.size = 32
         } else {
           item.color = color[4]
-          item.size = 30
+          item.size = 38
         }
         return item
       })
@@ -78,15 +72,6 @@ const Cloud = ({
       .append('svg')
       .attr('width', layout.size()[0] || 0)
       .attr('height', layout.size()[1] || 0)
-      // .append('defs')
-      // .append('linearGradient')
-      // .attr('id', 'SVG_ID1')
-      // .attr('gradientUnits', 'userSpaceOnUse')
-      // .attr('x1', '0')
-      // .attr('y1', '10')
-      // .attr('x2', '0')
-      // .attr('y2', '50')
-      
       .append('g')
       .attr('transform', `translate(${layout.size()[0] / 2 || 0},${layout.size()[1] / 2 || 0})`)
       .selectAll('text')
@@ -96,8 +81,8 @@ const Cloud = ({
       .style('font-size', d => `${d.size}px`)
       .style('font-family', 'Impact')
       // .style('fill', (d, i) => fill(i))
-      .style('fill', d => d.color)
-      // .style('fill', "url('#SVG_ID1')")
+      // .style('fill', d => d.color)
+      .style('fill', (d, i) => `url(#SVG_ID${i % 4})`)
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
@@ -138,18 +123,8 @@ const Cloud = ({
   }, [cloudData])
 
   return (
-    <div className="object-cloud">
+    <div className="object-cloud pt16 bgf">
       {/* <Spin spinning={loading}> */}
-      {/* <svg viewBoxs="0 0 500 300" className="svgBox">
-        <defs>
-          <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="0" y1="10" x2="0" y2="50">
-            <stop offset="0" style={{stopColor: 'yellow'}} />
-            <stop offset="0.5" style={{stopColor: '#fd8403'}} />
-            <stop offset="1" style={{stopColor: 'red'}} />
-          </linearGradient>
-        </defs>
-        <text textAnchor="middle" className="gradient-text-three" x="110px" y="30%">花信年华</text>
-      </svg> */}
       <div>
         {
           !cloudData.length
@@ -163,6 +138,26 @@ const Cloud = ({
         <div id="box" style={{display: cloudData.length ? 'block' : 'none'}} />
       </div>
       {/* </Spin> */}
+      <svg width="100" height="30" viewBoxs="0 0 100 30">
+        <defs>
+          <linearGradient id="SVG_ID0" gradientTransform="rotate(90)">
+            <stop offset="0" stopColor="#86D4FF" />
+            <stop offset="1" stopColor="#2592FF" />
+          </linearGradient>
+          <linearGradient id="SVG_ID1" gradientTransform="rotate(90)">
+            <stop offset="0" stopColor="#FF81A5" />
+            <stop offset="1" stopColor="#FD5071" />
+          </linearGradient>
+          <linearGradient id="SVG_ID2" gradientTransform="rotate(90)">
+            <stop offset="0" stopColor="#A88EFF" />
+            <stop offset="1" stopColor="#7F59FB" />
+          </linearGradient>
+          <linearGradient id="SVG_ID3" gradientTransform="rotate(90)">
+            <stop offset="0" stopColor="#FFE800" />
+            <stop offset="1" stopColor="#FFA44A" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   )
 }
