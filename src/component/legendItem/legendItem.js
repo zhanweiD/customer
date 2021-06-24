@@ -8,8 +8,8 @@ const LegendItem = ({title, percent, counts, color}) => {
       <div className="legend-bar ml8">
         <div className="legend-bar-inner" style={{width: percent}} />
       </div>
-      <span className="c45 ml8 mr8">{percent}</span>
-      <span className="c45">|</span>
+      <span className="c45 ml8 mr8 legend-pro">{percent}</span>
+      <span className="c45 legend-line">|</span>
       <span className="ml8 c45">{counts}</span>
     </div>
   )
