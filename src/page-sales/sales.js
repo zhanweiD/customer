@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Button, Table, Popconfirm, Badge, Tooltip} from 'antd'
+import {QuestionCircleFilled} from '@ant-design/icons'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {authView, Search, Tag} from '../component'
 import searchParams from './search'
@@ -221,7 +222,7 @@ const Sales = () => {
             <div>
               <Badge status="red" text={status} />
               <Tooltip title={record.remark}>
-                ?
+                <QuestionCircleFilled style={{color: 'red', marginLeft: 4, fontSize: 14}} />
               </Tooltip>
             </div>
           )
