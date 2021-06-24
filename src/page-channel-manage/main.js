@@ -168,9 +168,9 @@ const ChannelManage = props => {
   }, [channelCode])
 
   return (
-    <div className="oa">
+    <div className="oa FBV">
       <div className="content-header">渠道管理</div>
-      <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
+      <div className="m16 bgf p16 pt0 custom-border FB1">
         <div className="pt16 pr">
           <Button
             type="primary"

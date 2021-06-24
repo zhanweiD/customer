@@ -3,6 +3,7 @@ import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {UploadOutlined} from '@ant-design/icons'
 import {Drawer, Form, Select, Input, Upload, Button, Modal, Alert} from 'antd'
+import dropdown from '../../../icon/dropdown.svg'
 
 import {errorTip, baseApi, debounce, failureTip, getNamePattern} from '../../../common/util'
 
@@ -215,6 +216,7 @@ export default class IdCreate extends Component {
                 onChange={value => this.selectEntity(value)} 
                 showSearch
                 optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
               >
                 {entityOptions}
               </Select>

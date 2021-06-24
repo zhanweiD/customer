@@ -5,6 +5,7 @@ import {Form, Button, Select, Input, DatePicker, TimePicker} from 'antd'
 
 import {CycleSelect} from '@dtwave/uikit'
 import {Loading} from '../../../component'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Option} = Select
 const {RangePicker} = DatePicker
@@ -74,7 +75,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.groupId)}
               >
                 <Select
-                  
+                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                   placeholder="请选择客群"
                   onChange={v => this.store.groupId = v}
                 >
@@ -91,7 +92,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.toStorageId)}
               >
                 <Select
-                  
+                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                   placeholder="请选择目的源"
                   onChange={this.changeStorage}
                 >
@@ -108,7 +109,7 @@ export default class StepOne extends Component {
                 initialValue={toJS(detail.toTableName)}
               >
                 <Select
-                  
+                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                   placeholder="请选择数据表"
                   onChange={v => this.store.tableName = v}
                 >

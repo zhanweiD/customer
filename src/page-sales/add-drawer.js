@@ -4,6 +4,7 @@ import {
 } from 'antd'
 import {errorTip, debounce} from '@util'
 import io from './io'
+import dropdown from '../icon/dropdown.svg'
 
 const {Option} = Select
 const {Item} = Form
@@ -227,7 +228,10 @@ export default ({
               initialValue={1}
               rules={[{required: true, message: '请选择分组'}]}
             >
-              <Select placeholder="请选择分组">
+              <Select 
+                placeholder="请选择分组"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 <Option value={1}>默认分组</Option>
               </Select>
             </Item>
@@ -237,7 +241,10 @@ export default ({
               initialValue={clientGroupId}
               rules={[{required: true, message: '请选择人群'}]}
             >
-              <Select placeholder="请选择人群">
+              <Select 
+                placeholder="请选择人群"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 {
                   groupList.map(item => <Option value={item.id}>{item.name}</Option>)
                 }
@@ -291,7 +298,10 @@ export default ({
                   name="timeUnit" 
                   initialValue={firstTargetContent.timeUnit || 'MINUTES'}
                 >
-                  <Select style={{width: '30%'}}>
+                  <Select 
+                    style={{width: '30%'}}
+                    suffixIcon={<img src={dropdown} alt="dropdown" />}
+                  >
                     <Option value="MINUTES">分钟</Option>
                     <Option value="HOURS">小时</Option>
                     <Option value="DAYS">天</Option>
@@ -309,6 +319,7 @@ export default ({
                 placeholder="请选择事件"
                 options={eventList}
                 expandTrigger="hover"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
                 fieldNames={{
                   label: 'name',
                   value: 'id',
