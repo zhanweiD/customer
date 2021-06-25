@@ -59,7 +59,7 @@ export default class BusinessContact extends Component {
   render() {
     const {businessList} = this.store
     return (
-      <div style={{height: 'calc(100vh - 392px)'}}>
+      <div>
         <div className="dfjf mt16 mr16">
           <RangePicker onChange={this.changePicker} />
           <Cascader

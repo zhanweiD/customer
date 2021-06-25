@@ -50,10 +50,10 @@ export default class ChartPie extends Component {
   render() {
     const {pieData, pieTotal, chartLoading, color, barData} = this.store
     return (
-      <div className="chart m16 mt8 p16 box-border">
+      <div className="contact-chart m16 mb0">
         <Spin spinning={chartLoading}>
           {/* <div className="d-flex" style={{display: pieData.length ? 'flex' : 'none'}}> */}
-          <div className="d-flex">
+          <div className="d-flex type-distribution p16">
             <div ref="chartPie" style={{height: '300px', width: '50%'}} />
             <div className="w50 fs12 FBV FBJC FBAC categroy-legend-box">
               {
@@ -72,10 +72,12 @@ export default class ChartPie extends Component {
             style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
             text="暂无数据" 
           /> */}
-          <div 
-            ref="chartBar" 
-            style={{height: '180px', width: '100%'}} 
-          />
+          <div className="mt16 type-distribution p16">
+            <div 
+              ref="chartBar" 
+              style={{height: '180px', width: '100%'}} 
+            />
+          </div>
         </Spin>
       </div> 
     )

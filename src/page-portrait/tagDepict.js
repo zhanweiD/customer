@@ -76,20 +76,39 @@ export default class TagDepict extends Component {
     const {toAllTag, businessList, searchKey} = store
     return (
       <div className="tag-depict"> 
-        <div className="search-condition dfjf">
-          {
-            toAllTag ? (
-              <Tooltip title="切换云图模式">
-                <span className="hand mr8" onClick={this.changeModel}><TagOutlined /></span>
-              </Tooltip>
-            ) : (
-              <Tooltip title="切换列表模式">
-                <span className="hand mr8" onClick={this.changeModel}><UnorderedListOutlined /></span>
-              </Tooltip>
-            )
-          }
-          {
-            toAllTag ? null : (
+        <div className="search-condition FBH FBJB">
+          <div className="condition-radio">
+            <span 
+              onClick={this.changeModel}
+              className={`radio-item hand ${toAllTag ? '' : 'radio-item-check'}`}
+            >
+              云图
+            </span>
+            <span 
+              onClick={this.changeModel}
+              className={`radio-item hand ${toAllTag ? 'radio-item-check' : ''}`}
+            >
+              列表
+            </span>
+            {/* {
+              toAllTag ? (
+                <Tooltip title="切换云图模式">
+                  <span className="hand pt8" onClick={this.changeModel}>
+                    <TagOutlined style={{fontSize: 18}} />
+                  </span>
+                </Tooltip>
+              ) : (
+                <Tooltip title="切换列表模式">
+                  <span className="hand mr8" onClick={this.changeModel}>
+                    <UnorderedListOutlined />
+                  </span>
+                </Tooltip>
+              )
+            } */}
+          </div>
+          <div>
+            {
+              toAllTag ? null : (
               // <Cascader
               //   placeholder="请选择业务域"
               //   options={businessList}
@@ -98,23 +117,24 @@ export default class TagDepict extends Component {
               //   style={{margin: '0px 8px'}} 
               //   onChange={this.changeBizCode}
               // />
-              <MultiCascader
-                data={businessList}
-                style={{width: 156}}
-                placeholder="请选择业务域"
-                onChange={this.changeBizCode}
-                okText="确认"
-                cancelText="取消"
-              />
-            )
-          }
-          <Search 
-            placeholder="请输入标签名称" 
-            allowClear 
-            key={toAllTag}
-            style={{width: 156, marginLeft: '8px'}} 
-            onSearch={this.changeKey}
-          />
+                <MultiCascader
+                  data={businessList}
+                  style={{width: 156}}
+                  placeholder="请选择业务域"
+                  onChange={this.changeBizCode}
+                  okText="确认"
+                  cancelText="取消"
+                />
+              )
+            }
+            <Search 
+              placeholder="请输入标签名称" 
+              allowClear 
+              key={toAllTag}
+              style={{width: 200, marginLeft: '8px'}} 
+              onSearch={this.changeKey}
+            />
+          </div>
         </div>
         {
           toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />

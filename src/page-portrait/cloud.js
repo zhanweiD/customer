@@ -54,6 +54,7 @@ export default class Cloud extends Component {
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
       .size([parseFloat(this.box.style('width')), 480])
+      // .size([parseFloat(this.box.style('height')), 480])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
         return {text: `${d.tag}: ${d.val ? d.val : '-'}`, color: d.color, size: scaleSize(scaleFont)}
@@ -72,17 +73,13 @@ export default class Cloud extends Component {
   draw(data) {
     d3.select(`#box${this.props.index}`) 
       .append('svg')
-      .attr('width', this.layout.size()[0])
+      .attr('width', () => {
+        console.log(this.layout.size())
+        return this.layout.size()[0]
+      })
       .attr('height', this.layout.size()[1])
       .append('g')
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
-      .append('text')
-      .style('font-size', '16px')
-      .style('font-family', 'Impact')
-      // .style('fill', (d, i) => d.color)
-      .attr('text-anchor', 'middle')
-      // .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
-      .text(1234)
       .selectAll('text')
       .data(data)
       .enter()
@@ -93,10 +90,6 @@ export default class Cloud extends Component {
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
-      // .insert('rect', 'text')
-      // .attr('width', d => d.width)
-      // .attr('height', d => d.height)
-      // .style('fill', (d, i) => d.color)
   }
 
   render() {

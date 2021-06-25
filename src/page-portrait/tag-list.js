@@ -28,18 +28,18 @@ export default class TagList extends Component {
               return (
                 <div className="tag-list">
                   <div className="mb12">
-                    <TagFilled rotate={270} style={{color: 'rgba(0,0,0,.65)', marginRight: '8px'}} />
-                    <span>{item.cat}</span>
+                    {/* <TagFilled rotate={270} style={{color: 'rgba(0,0,0,.65)', marginRight: '8px'}} /> */}
+                    <span style={{color: '#16324E'}}>{item.cat}</span>
                   </div>
                   {
                     item.list.map(sitem => {
                       if (searchKey) {
                         if (sitem.tag === searchKey) {
-                          return <span className="mr8 mb8 fs12 c65 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
+                          return <span className="mr8 mb8 fs14 c85 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
                         } 
                         return <span />
                       }
-                      return <span className="mr8 mb8 fs12 c65 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
+                      return <span className="mr8 mb8 fs14 c85 info-tag">{`${sitem.tag}: ${sitem.val}`}</span>
                     })
                   }
                 </div>

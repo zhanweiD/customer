@@ -1,6 +1,6 @@
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78, 1)'
 const bgColor = '#fff'
 const title = '触点总数'
 
@@ -30,7 +30,38 @@ export function pieOption(data, total) {
   }
  
   return ({
-    color,
+    color: [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#61BA46',
+    }, {
+      offset: 1,
+      color: '#BFEEA9',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#2592FF',
+    }, {
+      offset: 1,
+      color: '#86D4FF',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#8D9FFF',
+    }, {
+      offset: 1,
+      color: '#355FF9',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#AE95FF',
+    }, {
+      offset: 1,
+      color: '#6C41FA',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#FFA1BC ',
+    }, {
+      offset: 1,
+      color: '#FD5071',
+    }])],
+    // color,
     tooltip: {
       trigger: 'item',
     },
@@ -48,7 +79,6 @@ export function pieOption(data, total) {
           },
           val: {
             fontSize: 32,
-            fontWeight: 'bold',
             color: titleColor,
           },
         },
@@ -119,6 +149,12 @@ export function barOption(data) {
       left: 8,
       right: 0,
     },
+    label: {
+      color: '#fff',
+    },
+    // itemStyle: {
+    //   barBorderRadius: 12,
+    // },
     xAxis: {
       type: 'value',
       show: false,
@@ -136,21 +172,32 @@ export function barOption(data) {
         label: {
           show: true,
         },
-        barWidth: '100%',
+        barWidth: 24,
         data: [data[0] ? data[0].value : null],
-        color: color[3],
-
+        color: [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+          offset: 0,
+          color: '#86D4FF',
+        }, {
+          offset: 1,
+          color: '#2592FF',
+        }])],
       },
       {
         name: '线上触点',
         type: 'bar',
         stack: 'total',
-        color: color[2],
         label: {
           show: true,
         },
-        barWidth: '100%',
+        barWidth: 24,
         data: [data[1] ? data[1].value : null],
+        color: [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+          offset: 0,
+          color: '#FFA1BC',
+        }, {
+          offset: 1,
+          color: '#FD5071',
+        }])],
       },
     ],
   }

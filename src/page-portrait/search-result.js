@@ -9,6 +9,8 @@ import Cloud from './cloud'
 import TagDepict from './tagDepict'
 import User from './user-information'
 import BusinessContact from './business-contact'
+import tagDepictIcon from './icon/tag-depict-icon.svg'
+import businessIcon from './icon/business-icon.svg'
 
 const {TabPane} = Tabs
 
@@ -107,10 +109,26 @@ export default class SearchResult extends Component {
                 </div>
                 <div className="user-portrait ml16 bgf">
                   <Tabs defaultActiveKey="1">
-                    <TabPane tab="标签描摹" key="1">
+                    <TabPane
+                      tab={(
+                        <span>
+                          {/* <img className="mr4" src={tagDepictIcon} alt="" /> */}
+                          标签描摹
+                        </span>
+                      )}
+                      key="1"
+                    >
                       <TagDepict store={this.store} />
                     </TabPane>
-                    <TabPane tab="业务触点" key="2">
+                    <TabPane 
+                      tab={(
+                        <span>
+                          {/* <img className="mr4" src={businessIcon} alt="" /> */}
+                          业务触点
+                        </span>
+                      )} 
+                      key="2"
+                    >
                       <BusinessContact store={this.store} />
                     </TabPane>
                   </Tabs>

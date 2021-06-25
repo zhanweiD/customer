@@ -34,7 +34,7 @@ export default class Contact extends Component {
   @action setContact = v => {
     return (
       v.detailContent.map(item => (
-        <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '12px', marginRight: '8px'}}>
+        <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '14px', marginRight: '8px'}}>
           {item}
         </div>
       ))
@@ -57,7 +57,7 @@ export default class Contact extends Component {
   render() {
     const {unitEvents, contactLoading, openKeys, getUnitEvent} = this.store
     return (
-      <div className="m16 mt8 time-list">
+      <div className="m16 mb0 time-list">
         <div className="dfjc">
           <div className="mb16">业务触点</div>
           <div className="far mr16">
@@ -68,7 +68,7 @@ export default class Contact extends Component {
         </div>
         
         <Spin spinning={contactLoading}>
-          <Timeline mode="left" style={{marginLeft: '-44%'}}>
+          <Timeline mode="left" style={{marginLeft: '-20%'}}>
             {
               unitEvents.map(items => {
                 return items.detailsList.map(item => {
