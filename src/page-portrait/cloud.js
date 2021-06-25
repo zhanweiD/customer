@@ -46,10 +46,10 @@ export default class Cloud extends Component {
     return max
   }
 
-  @action.bound couldLayout(data = [], max = 2) {
-    this.box = d3.select(`#box${this.props.index}`)
+  @action.bound couldLayout(data = [], location, max = 4) {
+    this.box = d3.select(`#${location}-box${this.props.index}`)
     if (!this.box) return
-    this.box.style('transform', 'scale(0.3, 0.3)').style('transition', 'all .3s linear')
+    this.box.style('transform', 'scale(1, 1)').style('transition', 'all .3s linear')
     this.box.selectAll('*').remove()
 
     const scaleSize = d3.scaleLinear().domain([0, max]).range([14, 28])
@@ -57,7 +57,8 @@ export default class Cloud extends Component {
 
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
-      .size([parseFloat(this.box.style('width')), 480])
+      .size([parseFloat(this.box.style('width')), parseFloat(this.box.style('height'))])
+      // .size([parseFloat(this.box.style('width')), (location === 'header' || location === 'bottom') ? 160 : 500])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
         return {text: `${d.tag}: ${d.val ? d.val : '-'}`, color: d.color, size: scaleSize(scaleFont)}
@@ -67,36 +68,53 @@ export default class Cloud extends Component {
       .rotate(0)
       .font('Impact')
       .fontSize(d => d.size)
-      .on('end', d => this.draw(d))
+      .on('end', d => this.draw(d, location))
 
     this.layout.start()
     this.box.style('transform', 'scale(1, 1)') 
   }
 
-  draw(data) {
-    d3.select(`#box${this.props.index}`) 
+  draw(data, location) {
+    d3.select(`#${location}-box${this.props.index}`) 
       .append('svg')
       .attr('width', () => this.layout.size()[0])
       .attr('height', this.layout.size()[1])
       .append('g')
+      .attr('width', () => this.layout.size()[0])
+      .attr('height', this.layout.size()[1])
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
+      // .selectAll('rect')
+      // .data(data)
+      // .enter()
+      // .append('rect')
+      // // .style('font-size', d => d.size)
+      // .style('fill', '#86D4FF')
+      // .attr('width', 100)
+      // .attr('height', 32)
+      // .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .selectAll('text')
       .data(data)
       .enter()
       .append('text')
-      .style('font-size', '14px')
-      // .style('font-size', d => `${d.size}px`)
-      // .style('fill', d => d.color)
+      // .style('font-size', d => d.size)
+      .style('font-size', '16px')
       .style('font-family', 'Impact')
-      .style('fill', (d, i) => colors[i % 3])
+      .style('fill', d => d.color)
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
+    // d3.select('g') 
+    //   .append('image')
+    //   .attr('xlink:href', manCloud)
+    //   .attr('width', 240)
+    //   .attr('height', 240)
+    //   .attr('x', -112)
+    //   .attr('y', -120)
   }
 
   render() {
     const {
-      cloudData = [], loading, unitName, toAllTag, cateTitle,
+      cloudData = [], loading, defaultInfo, toAllTag, cateTitle,
     } = this.store
     const {index} = this.props
 
@@ -113,8 +131,17 @@ export default class Cloud extends Component {
                 )
                 : null
             }
-            <div id={`box${index}`} />
-            <div className="d-flex FBJC">
+            <div>
+              <div style={{height: 100}} id={`left-box${index}`} />
+              <div className="FBH">
+                <div className="w33" style={{height: 240}} id={`header-box${index}`} />
+                <div className="w33"><img style={{width: 240}} src={defaultInfo.性别 === '男' ? manCloud : womanCloud} alt="" /></div>
+                <div className="w33" style={{height: 240}} id={`bottom-box${index}`} />
+              </div>
+              <div style={{height: 100}} id={`right-box${index}`} />
+            </div>
+            {/* <div id={`box${index}`} /> */}
+            <div className="d-flex FBJC mt16">
               {
                 cateTitle.map(item => (
                   <div className="mr8" style={{color: item.color}}>

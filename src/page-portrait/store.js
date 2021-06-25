@@ -86,7 +86,7 @@ class Store {
 
   // 标签云图
   @observable cateTitle = [] // 搜索同类目标签标题
-  color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
+  color = ['#2592FF', '#6C41FA', '#61BA46']
 
   // @action pastDate(v) {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
@@ -228,17 +228,32 @@ class Store {
         this.cloudData = []
         const list = res || []
         list.forEach((item, i) => {
-          this.cateTitle.push({text: item.biz, color: this.color[i]})
+          this.cateTitle.push({text: item.biz, color: this.color[i % 3]})
           if (item.list) {
             // 同类标签颜色生成
             const newList = item.list.map(text => {
-              text.color = this.color[i]
+              text.color = this.color[i % 3]
               return text
             })
             this.cloudData = [...this.cloudData, ...newList]
           }
         })
-        cb(this.cloudData)
+        const leftData = []
+        const rightData = []
+        const headerData = []
+        const bottomData = []
+        this.cloudData.forEach((item, index) => {
+          if (index % 4 === 0) leftData.push(item)
+          if (index % 4 === 1) rightData.push(item)
+          if (index % 4 === 2) headerData.push(item)
+          if (index % 4 === 3) bottomData.push(item)
+        })
+        if (cb) {
+          cb(leftData, 'left')
+          cb(rightData, 'right')
+          cb(headerData, 'header')
+          cb(bottomData, 'bottom')
+        }
       })
     } catch (e) {
       errorTip(e.message)

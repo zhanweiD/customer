@@ -18,7 +18,7 @@ export default class TagDepict extends Component {
   }
   componentDidMount() {
     this.store.showDrawer()
-    this.store.getBizType(res => this.getDrawCloud(res))
+    this.store.getBizType((data, location) => this.getDrawCloud(data, location))
   }
 
   @action changeModel = () => {
@@ -27,8 +27,8 @@ export default class TagDepict extends Component {
     if (this.store.toAllTag) this.store.cloudData = []
     else this.store.tagList = []
     if (!this.store.toAllTag) {
-      this.store.getObjCloud(res => {
-        this.getDrawCloud(res)
+      this.store.getObjCloud((data, location) => {
+        this.getDrawCloud(data, location)
       })
     }
   }
