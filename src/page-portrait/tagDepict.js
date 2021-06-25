@@ -18,7 +18,7 @@ export default class TagDepict extends Component {
   }
   componentDidMount() {
     this.store.showDrawer()
-    this.store.getBizType()
+    this.store.getBizType(res => this.getDrawCloud(res))
   }
 
   @action changeModel = () => {
@@ -26,6 +26,11 @@ export default class TagDepict extends Component {
     this.store.toAllTag = !this.store.toAllTag
     if (this.store.toAllTag) this.store.cloudData = []
     else this.store.tagList = []
+    if (!this.store.toAllTag) {
+      this.store.getObjCloud(res => {
+        this.getDrawCloud(res)
+      })
+    }
   }
 
   // 选择业务类型

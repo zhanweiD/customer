@@ -3,6 +3,9 @@ import {Timeline, Button, Select, Menu, Spin} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/icons'
+import dropDownIcon from './icon/drop-down-icon.svg'
+import openIcon from './icon/open-icon.svg'
+import packupIcon from './icon/packup-icon.svg'
 
 import {NoData} from '../component'
 
@@ -43,10 +46,12 @@ export default class Contact extends Component {
 
   // 全部展开menu
   @action openMenu = () => {
+    this.store.isOpen = true
     this.store.openKeys = this.store.cateList
   }
   // 关闭menu
   @action closeMenu = () => {
+    this.store.isOpen = false
     this.store.openKeys = []
   }
   // 点击展开
@@ -55,15 +60,26 @@ export default class Contact extends Component {
   }
 
   render() {
-    const {unitEvents, contactLoading, openKeys, getUnitEvent} = this.store
+    const {unitEvents, contactLoading, openKeys, getUnitEvent, isOpen} = this.store
     return (
       <div className="m16 mb0 time-list">
         <div className="dfjc">
           <div className="mb16">业务触点</div>
-          <div className="far mr16">
-            <RetweetOutlined onClick={getUnitEvent} />
+          <div className="far hand">
+            {
+              isOpen ? (
+                <span onClick={this.closeMenu}>
+                  <img src={packupIcon} alt="" />
+                </span>
+              ) : (
+                <span onClick={this.openMenu}>
+                  <img src={openIcon} alt="" />
+                </span>
+              )
+            }
+            {/* <RetweetOutlined onClick={getUnitEvent} />
             <ArrowsAltOutlined style={{margin: '0px 8px'}} onClick={this.openMenu} />
-            <ShrinkOutlined onClick={this.closeMenu} />
+            <ShrinkOutlined onClick={this.closeMenu} /> */}
           </div>
         </div>
         
@@ -82,6 +98,8 @@ export default class Contact extends Component {
                           openKeys={openKeys} 
                           onOpenChange={v => this.clickMenu(v)}
                           mode="inline"
+                          expandIcon={<img src={dropDownIcon} alt="" />}
+                          // overflowedIndicator={<img style={{transform: 'rotate(180deg)'}} src={dropDownIcon} alt="" />}
                         >
                           <SubMenu key={item.monthDay} title={item.tableZhName}>
                             {this.setContact(item)}

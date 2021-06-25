@@ -59,7 +59,7 @@ class Store {
 
   // 标签描摹
   @observable cloudData = [] // 标签
-  @observable toAllTag = true // 切换标签描摹模式 默认全量
+  @observable toAllTag = false // 切换标签描摹模式 默认云图
   @observable treeData = [] // 切换标签描摹模式 默认全量
   @observable businessType = null // 业务类型
   @observable defPortraitList = [] // 已配置标签
@@ -71,6 +71,7 @@ class Store {
   @observable chartLoading = false // 类型分布加载
   @observable cateList = [] // 全部触点key
   @observable openKeys = [] // 触点展开列表
+  @observable isOpen = false // 是否展开
   @observable unitTableList = [] // 画像个体触点
   @observable unitEvents = [] // 画像个体触点信息
   @observable businessList = [] // 业务类型
@@ -342,7 +343,7 @@ class Store {
   }
 
   // 获取业务类型下拉
-  @action async getBizType() {
+  @action async getBizType(cb) {
     try {
       const res = await io.getBizType({
         id: this.portraitId,
@@ -357,6 +358,9 @@ class Store {
         this.businessList = busListToTree(this.bizList)
         this.businessType = this.businessList.map(item => [item.bizCode])
       })
+      if (cb) {
+        this.getObjCloud(cb)
+      }
     } catch (e) {
       errorTip(e.message)
     }

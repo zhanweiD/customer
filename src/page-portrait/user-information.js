@@ -64,7 +64,7 @@ export default class User extends Component {
         <Spin spinning={basicLoading}>
           <div>
             {/* <div className="herder">客户档案</div> */}
-            <div className="fs12 c85 pb8">
+            <div className="fs14 c85 pb8">
               <div className="dfjc lh32 pt16">
                 <div>
                   <img width={32} height={32} src={defaultInfo.性别 === '男' ? manIcon : womanIcon} alt="" />

@@ -7,8 +7,12 @@ import {Component} from 'react'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {Spin} from 'antd'
+import manCloud from './icon/man-cloud.svg'
+import womanCloud from './icon/woman-cloud.svg'
 
 import {NoData} from '../component'
+
+const colors = ['#2592FF', '#6C41FA', '#61BA46', '']
 
 @observer
 export default class Cloud extends Component {
@@ -21,9 +25,9 @@ export default class Cloud extends Component {
     const {props} = this
     props.getDrawCloud(this.couldLayout)
     // 默认显示
-    this.store.getObjCloud(res => {
-      this.couldLayout(res)
-    })
+    // this.store.getObjCloud(res => {
+    //   this.couldLayout(res)
+    // })
   }
   // componentUpdate() {
   //   const {toAllTag} = this.store
@@ -54,7 +58,6 @@ export default class Cloud extends Component {
     this.fill = d3.scaleOrdinal(d3.schemeCategory10)
     this.layout = cloud()
       .size([parseFloat(this.box.style('width')), 480])
-      // .size([parseFloat(this.box.style('height')), 480])
       .words(data.map(d => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
         return {text: `${d.tag}: ${d.val ? d.val : '-'}`, color: d.color, size: scaleSize(scaleFont)}
@@ -73,10 +76,7 @@ export default class Cloud extends Component {
   draw(data) {
     d3.select(`#box${this.props.index}`) 
       .append('svg')
-      .attr('width', () => {
-        console.log(this.layout.size())
-        return this.layout.size()[0]
-      })
+      .attr('width', () => this.layout.size()[0])
       .attr('height', this.layout.size()[1])
       .append('g')
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
@@ -84,9 +84,11 @@ export default class Cloud extends Component {
       .data(data)
       .enter()
       .append('text')
-      .style('font-size', d => `${d.size}px`)
+      .style('font-size', '14px')
+      // .style('font-size', d => `${d.size}px`)
+      // .style('fill', d => d.color)
       .style('font-family', 'Impact')
-      .style('fill', (d, i) => d.color)
+      .style('fill', (d, i) => colors[i % 3])
       .attr('text-anchor', 'middle')
       .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .text(d => d.text)
