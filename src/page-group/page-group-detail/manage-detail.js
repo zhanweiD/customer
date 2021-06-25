@@ -36,25 +36,25 @@ export default inject('store')(({store, id}) => {
             <ReloadOutlined className="header-icon ml16" /> */}
             </div>
             <div className="FBH">
-              <div className="black45">
+              <div className="c45">
                 客群描述：
               </div>
-              <div className="black65">
+              <div className="c65">
                 {store.groupDetail.descr}
               </div>
             </div>
             <div className="FBH" style={{wordBreak: 'keep-all'}}>
-              <div className="black45">
+              <div className="c45">
                 圈选规则：
               </div>
-              <div className="black65" style={{marginRight: '50px'}}>
+              <div className="c65" style={{marginRight: '50px'}}>
                 {store.groupDetail.logicExper}
               </div>
             </div>
           </div>
           <div className="FBH" style={{wordBreak: 'keep-all'}}>
             <div className="FBV">
-              <div className="black45">
+              <div className="c45">
                 覆盖客户数
               </div>
               <div className="a-href-color fs16">
@@ -62,7 +62,7 @@ export default inject('store')(({store, id}) => {
               </div>
             </div>
             <div className="FBV ml24">
-              <div className="black45">
+              <div className="c45">
                 客户覆盖率
               </div>
               <div className="a-href-color fs16">

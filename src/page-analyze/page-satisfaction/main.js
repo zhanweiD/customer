@@ -148,7 +148,7 @@ class Satisfaction extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85 pt16">
+        <div className="dfjs mt16 fs14 c85">
           <div className="mt6">
             评价详情
           </div>
@@ -267,7 +267,7 @@ class Satisfaction extends Component {
         <div className="ml16 mr16 mb16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 p24 pt16">
+            <div className="bgf mb16 p24 pt16 custom-border">
               {/* {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               } */}
@@ -280,7 +280,9 @@ class Satisfaction extends Component {
               />
             </div>
           </Spin>
-          <ListContent {...listConfig} />
+          <div className="custom-border mb16">
+            <ListContent {...listConfig} />
+          </div>
         </div>
       </div>
     )

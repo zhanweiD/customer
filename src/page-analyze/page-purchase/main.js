@@ -169,7 +169,7 @@ class Purchase extends Component {
       columns: this.columns,
       tabLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85 pt16">
+        <div className="dfjs mt16 fs14 c85">
           <div className="mt6">
             潜在复购客户推荐
           </div>
@@ -241,7 +241,7 @@ class Purchase extends Component {
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 pt16">
+            <div className="bgf mb16 pt16 custom-border">
               <div className="ml24 fs14 c85">复购人群特征分布</div>
               <div className="p24 pt8 dfjs">
                 <List store={store} />
@@ -252,7 +252,9 @@ class Purchase extends Component {
           {/* {
             tgiMerit[0] ? <ListContent {...listConfig} /> : null
           } */}
-          <ListContent {...listConfig} />
+          <div className="custom-border mb16">
+            <ListContent {...listConfig} />
+          </div>
         </div>
       </div>
     )

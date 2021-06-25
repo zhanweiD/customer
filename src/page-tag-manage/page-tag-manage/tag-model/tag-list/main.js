@@ -11,6 +11,7 @@ import {
 import {
   tagStatusBadgeMap,
 } from '../util'
+import dropdown from '../../../../icon/dropdown.svg'
 
 import ModalTagMove from './modal-tag-move'
 import ModalUpdateBiz from './modal-update-biz'
@@ -336,7 +337,6 @@ class TagList extends Component {
     <Menu style={{textAlign: 'center'}}>
       <Menu.Item disabled={!keys.length}>
         <a
-          className="fs12"
           disabled={!keys.length}
           onClick={() => {
             store.updateBizVisible = true
@@ -350,7 +350,6 @@ class TagList extends Component {
           authCode="tag-manage:release-tag"
         >
           <a 
-            className="fs12" 
             disabled={!keys.length} 
             onClick={() => store.updateTagStatus({
               status: 1,
@@ -365,7 +364,7 @@ class TagList extends Component {
         <Authority
           authCode="tag-manage:add-tag"
         >
-          <a className="fs12" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
+          <a disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
         </Authority>
       </Menu.Item>
     </Menu>
@@ -454,15 +453,16 @@ class TagList extends Component {
               style={{width: 128, marginRight: '8px'}} 
               placeholder="请选择标签状态"
               defaultValue=""
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={v => {
                 treeStore.status = v
                 treeStore.getList({currentPage: 1, objId, cateId: treeStore.currentSelectKeys, keyword: treeStore.keyword, status: treeStore.status})
               }}
             >
-              <Option style={{fontSize: '12px'}} value="">全部</Option>
-              <Option style={{fontSize: '12px'}} value={0}>待配置</Option>
-              <Option style={{fontSize: '12px'}} value={1}>待发布</Option>
-              <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
+              <Option value="">全部</Option>
+              <Option value={0}>待配置</Option>
+              <Option value={1}>待发布</Option>
+              <Option value={2}>已发布</Option>
             </Select>
             <Input 
               style={{width: 128, marginRight: '24px'}} 
@@ -485,7 +485,9 @@ class TagList extends Component {
         <div className="h-100">
           <div className="d-flex h-100 tag-model">
             <TagCateTree bigStore={store} store={treeStore} />
-            <ListContent {...listConfig} />
+            <div className="FB1" style={{overflowY: 'auto'}}>
+              <ListContent {...listConfig} />
+            </div>
           </div>
           <TagDetailModal store={store} />
           <ModalTagMove store={store} treeStore={treeStore} />

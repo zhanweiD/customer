@@ -64,6 +64,7 @@ export default class DrawerMapping extends Component {
                 style={{
                   display: 'inline-block',
                   width: '100%',
+                  fontSize: '14px',
                 }}
                 source={source}
                 target={target}
