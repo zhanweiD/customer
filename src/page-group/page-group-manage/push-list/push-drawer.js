@@ -37,7 +37,7 @@ export default class PushDrawer extends Component {
 
     return (
       <Drawer {...drawerConfig}>
-        <Steps  current={current} style={{width: '80%', margin: '0 auto'}}>
+        <Steps current={current} style={{width: '80%', margin: '0 auto'}}>
           <Step title="推送配置" />
           <Step title="字段映射" />
         </Steps>
