@@ -13,6 +13,7 @@ import {
 import {
   tagStatusBadgeMap,
 } from '../util'
+import dropdown from '../../../../icon/dropdown.svg'
 
 import ModalTagMove from './modal-tag-move'
 import DrawerCreate from './drawer-create'
@@ -220,6 +221,7 @@ class TagList extends Component {
               placeholder="业务类型" 
               expandTrigger="hover"
               changeOnSelect
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={e => {
                 if (e.length !== 0) {
                   treeStore.searchParams.biz = e[e.length - 1]
@@ -274,7 +276,7 @@ class TagList extends Component {
     return (
       <Provider bigStore={store}>
         <Fragment>
-          <div className="FBH h-100">
+          <div className="FBH h-100" id="tag-market-detail">
             <TagCateTree bigStore={store} store={treeStore} />
             <div 
               className="FB1 custom-border pt16"
