@@ -129,7 +129,7 @@ class Clinch extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85 pt16">
+        <div className="dfjs mt16 fs14 c85">
           <div className="mt6">
             未转化客户
           </div>
@@ -211,14 +211,16 @@ class Clinch extends Component {
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16">
+            <div className="bgf mb16 custom-border">
               {
                 clinchData.pieChart && clinchData.pieChart.length ? null : <NoData style={{paddingTop: '128px', marginBottom: '-376px'}} {...noDataConfig} />
               }
               <Chart getDraw={draw => this.getDraw = draw} store={store} />
             </div>
           </Spin>
-          <ListContent {...listConfig} />
+          <div className="custom-border mb16">
+            <ListContent {...listConfig} />
+          </div>
         </div>
       </div>
     )

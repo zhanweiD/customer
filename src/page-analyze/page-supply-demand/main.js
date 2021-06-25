@@ -96,7 +96,7 @@ class SupplyDemand extends Component {
       tableLoading,
       scroll: {x: 960},
       buttons: [
-        <div className="dfjs mt16 fs14 c85 pt16">
+        <div className="dfjs mt16 fs14 c85">
           <div className="mt6">
             供需不匹配客户
           </div>
@@ -165,7 +165,7 @@ class SupplyDemand extends Component {
         <div className="ml16 mr16 mt72">
           {/* <Spin spinning={loading}> */}
           {/* <OverviewCardWrap cards={cards} /> */}
-          <div className="bgf mb16 mt16">
+          <div className="bgf mb16 mt16 custom-border">
             <Chart
               getDraw={(cb1, cb2) => {
                 this.getDraw = cb1
@@ -175,7 +175,9 @@ class SupplyDemand extends Component {
             />
           </div>
           {/* </Spin> */}
-          <ListContent {...listConfig} />
+          <div className="custom-border mb16">
+            <ListContent {...listConfig} />
+          </div>
         </div>
       </div>
     )

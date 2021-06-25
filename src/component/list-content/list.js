@@ -161,20 +161,23 @@ export default class ListContent extends Component {
         
           {
             hasPaging && list.length ? (
-              <div className="pagination">
-                <Pagination 
-                // @see {@link antd/Pagination}
-                // showQuickJumper, 
-                // showSizeChanger
-                  showSizeChanger
-                  {...paginationConfig}
-                  pageSize={pagination.pageSize}
-                  current={pagination.currentPage}
-                  total={pagination.totalCount}
-                  onChange={handlePageChange}
-                  // onChange={() => console.log(111)}
-                  showTotal={() => `合计${pagination.totalCount}条记录`}
-                />
+              <div>
+                <div className="pagination">
+                  <Pagination 
+                  // @see {@link antd/Pagination}
+                  // showQuickJumper, 
+                  // showSizeChanger
+                    showSizeChanger
+                    {...paginationConfig}
+                    pageSize={pagination.pageSize}
+                    current={pagination.currentPage}
+                    total={pagination.totalCount}
+                    onChange={handlePageChange}
+                    // onChange={() => console.log(111)}
+                    showTotal={() => `合计${pagination.totalCount}条记录`}
+                  />
+                </div>
+                <div style={{clear: 'both'}} /> 
               </div>
             ) : null
           }
