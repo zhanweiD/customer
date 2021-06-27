@@ -23,7 +23,6 @@ const SearchList = ({data = [], title, color, id}) => {
       }
 
       valueList.forEach((sitem, index) => {
-        console.log(item)
         if (index > 0) {
           domItem.push(
             <div className="c85 w33">{sitem}</div>
@@ -47,7 +46,6 @@ const SearchList = ({data = [], title, color, id}) => {
   useEffect(() => {
     setList()
   }, [data])
-  console.log(domList)
   return (
     <div className="bgf mr16 search-list">
       <div style={{backgroundColor: '#e6ebf3'}} className="list-height">{title}</div>

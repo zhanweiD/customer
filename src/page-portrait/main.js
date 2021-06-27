@@ -9,7 +9,7 @@ import {NoData, authView} from '../component'
 import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
-import bgBanner from './icon/bg-banner.png'
+import WorldCloud from './world-cloud'
 
 const {Search} = Input
 
@@ -70,6 +70,7 @@ class Portrait extends Component {
     return (
       <div className="portrait-wrap oa">
         <div className="content-header">客户画像</div>
+        <WorldCloud />
         {
           portraitId ? (
             <div className="search m16 mr0 mt0">
