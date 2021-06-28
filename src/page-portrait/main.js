@@ -10,6 +10,7 @@ import {NoData, authView} from '../component'
 import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
+import bgBanner from './icon/bg-banner.png'
 
 const {Option} = Select
 
@@ -75,6 +76,7 @@ class Portrait extends Component {
                   <div>
                     <div 
                       className="search_content mr16"
+                      style={{backgroundImage: `url(${bgBanner})`}}
                     >
                       <div>
                         <Select
