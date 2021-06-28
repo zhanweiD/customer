@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Timeline, Button, Select, Menu, Spin} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
-import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/icons'
 import dropDownIcon from './icon/drop-down-icon.svg'
 import openIcon from './icon/open-icon.svg'
 import packupIcon from './icon/packup-icon.svg'
@@ -77,9 +76,7 @@ export default class Contact extends Component {
                 </span>
               )
             }
-            {/* <RetweetOutlined onClick={getUnitEvent} />
-            <ArrowsAltOutlined style={{margin: '0px 8px'}} onClick={this.openMenu} />
-            <ShrinkOutlined onClick={this.closeMenu} /> */}
+            
           </div>
         </div>
         

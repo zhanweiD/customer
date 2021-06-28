@@ -36,7 +36,6 @@ const SearchList = ({data = [], title, color, id}) => {
           )
         }
       })
-
       return domItem
     })
 

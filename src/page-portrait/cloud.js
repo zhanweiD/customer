@@ -85,15 +85,6 @@ export default class Cloud extends Component {
       .attr('width', () => this.layout.size()[0])
       .attr('height', this.layout.size()[1])
       .attr('transform', `translate(${this.layout.size()[0] / 2},${this.layout.size()[1] / 2})`)
-      // .selectAll('rect')
-      // .data(data)
-      // .enter()
-      // .append('rect')
-      // // .style('font-size', d => d.size)
-      // .style('fill', '#86D4FF')
-      // .attr('width', 100)
-      // .attr('height', 32)
-      // .attr('transform', d => `translate(${[d.x, d.y]})rotate(${d.rotate})`)
       .selectAll('text')
       .data(data)
       .enter()
@@ -116,7 +107,7 @@ export default class Cloud extends Component {
 
   render() {
     const {
-      cloudData = [], loading, defaultInfo, toAllTag, cateTitle,
+      cloudData = [], loading, defaultInfo, unitKeys, cateTitle,
     } = this.store
     const {index} = this.props
 

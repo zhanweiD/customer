@@ -69,10 +69,6 @@ export default class ChartPie extends Component {
               }
             </div>
           </div>
-          {/* <NoData 
-            style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
-            text="暂无数据" 
-          /> */}
           <div className="mt16 type-distribution p16">
             <div 
               ref="chartBar" 

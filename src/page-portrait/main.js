@@ -3,15 +3,15 @@ import {action, toJS} from 'mobx'
 import {observer, inject} from 'mobx-react'
 import {Spin, Input, Select} from 'antd'
 import {SearchOutlined} from '@ant-design/icons'
+import {debounce} from '@util'
 
 import {NoData, authView} from '../component'
 
 import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
-import WorldCloud from './world-cloud'
 
-const {Search} = Input
+const {Option} = Select
 
 @observer
 class Portrait extends Component {
@@ -30,16 +30,11 @@ class Portrait extends Component {
 
   componentDidMount() {
     if (store.isJump) return
-
     store.getPortrait()
   }
 
   onSearch = v => {
-    store.searchKey = v
-    store.isFirst = true
-    store.isLast = false
-    store.currentPage = 1
-    store.getUnitList()
+    debounce(() => store.getUnitList(v), 500)
   }
 
   @action onChange = (v, item) => {
@@ -53,11 +48,13 @@ class Portrait extends Component {
     const {
       placeholder, 
       unitList,
+      unitKeys,
       followList,
       followLoading,
       scanList,
       portraitId,
-      isJump,
+      selectLoading,
+      ident,
     } = store
     const noDataText = (
       <span>
@@ -74,40 +71,35 @@ class Portrait extends Component {
           portraitId ? (
             <div className="search m16 mr0 mt0">
               {
-                isJump ? null : (
+                ident ? null : (
                   <div>
                     <div 
                       className="search_content mr16"
-                      // style={{backgroundImage: "url('./icon/bg-banner.png')"}}
                     >
                       <div>
-                        <Input 
+                        <Select
+                          mode="multiple"
                           size="large" 
-                          onPressEnter={v => this.onSearch(v.target.value)}
+                          filterOption={false}
+                          notFoundContent={selectLoading ? <Spin size="small" /> : null}
+                          onSearch={this.onSearch}
+                          onChange={v => store.ident = v[0]}
                           placeholder={placeholder} 
                           style={{width: 300, borderRadius: 24}} 
-                          prefix={<SearchOutlined style={{fontSize: 18}} />}
-                        />
-                        {/* <SearchOutlined style={{fontSize: 18, left: -284, position: 'relative'}} /> */}
+                        >
+                          {
+                            unitList.map(item => <Option value={item.ident}>{item.姓名}</Option>)
+                          }
+                        </Select>
                       </div>
-                      {/* <Search 
-                        size="large"
-                        placeholder={placeholder} 
-                        onSearch={this.onSearch} 
-                      /> */}
                     </div>
-                    {
-                      !unitList.length ? (
-                        <Spin spinning={followLoading}>
-                          <div className="d-flex">
-                            {/* <SearchList data={data} title="相关客户推荐" color="#339999" />
-                            <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
-                            <SearchList data={followList} title="已关注客户" id={portraitId} />
-                            <SearchList data={scanList} title="最近浏览客户" id={portraitId} />
-                          </div>
-                        </Spin>
-                      ) : null
-                    }
+                   
+                    <Spin spinning={followLoading}>
+                      <div className="d-flex">
+                        <SearchList data={followList} title="已关注客户" id={portraitId} />
+                        <SearchList data={scanList} title="最近浏览客户" id={portraitId} />
+                      </div>
+                    </Spin>
                   </div>
                 )
               }

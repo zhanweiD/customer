@@ -35,16 +35,12 @@ class Store {
   @observable portraitId = null // 画像列表默认值
   @observable placeholder = '请输入' // 输入提示
   @observable porLoading = false // 画像列表加载
-  @observable changeLoading = false // 画像列表加载
+  @observable selectLoading = false // selectLoading
  
   @observable unitList = [] // 画像个体列表
-  @observable tabLoading = false // 切换loading
+  @observable unitKeys = [] // 存放个人对象key，key是可变的，直接obj.key有时会有问题
   @observable ident = null // 画像个体id
   @observable isCustomer = true // 客户对象 顾问对象 ？
-  @observable currentPage = 1 // 页数
-  @observable searchKey = '' // 
-  @observable isLast = false // 是否是最后一页
-  @observable isFirst = true // 是否是第一页
 
   @observable followList = [] // 关注客户列表
   @observable followLoading = false // 关注客户列表
@@ -176,9 +172,6 @@ class Store {
           this.getFollow()
           this.getScan()
         }
-
-        // 演示环境默认展示
-        // this.getUnitList()
       })
     } catch (e) {
       errorTip(e.message)
@@ -188,30 +181,24 @@ class Store {
   }
 
   // 获取个体列表
-  @action async getUnitList() {
-    this.tabLoading = true
+  @action async getUnitList(searchKey) {
+    this.selectLoading = true
     try {
       const res = await io.getUnitList({
         id: this.portraitId,
-        searchKey: this.searchKey,
-        currentPage: this.currentPage,
+        searchKey,
+        currentPage: 1,
       })
       runInAction(() => {
-        if (res.data.length === 0) {
-          this.isLast = true
-          message.warning('已经到底了！')
-          return
-        }
-        if (res.data.length < 10) this.isLast = true
-        if (res.data.length === 10) this.isLast = false
         this.unitList = res.data
-        this.ident = this.unitList[0].ident
-        // this.getUnitBasic()
+        if (res.data.length) {
+          this.unitKeys = Object.keys(res.data[0]) 
+        }
       })
     } catch (e) {
       errorTip(e.message)
     } finally {
-      this.tabLoading = false
+      this.selectLoading = false
     }
   }
 
@@ -247,24 +234,7 @@ class Store {
             this.cloudData = [...this.cloudData, ...newList]
           }
         })
-
-        // const leftData = []
-        // const rightData = []
-        // const headerData = []
-        // const bottomData = []
-        // this.cloudData.forEach((item, index) => {
-        //   if (index % 4 === 0) leftData.push(item)
-        //   if (index % 4 === 1) rightData.push(item)
-        //   if (index % 4 === 2) headerData.push(item)
-        //   if (index % 4 === 3) bottomData.push(item)
-        // })
-        if (cb) {
-          // cb(leftData, 'left')
-          // cb(rightData, 'right')
-          // cb(headerData, 'header')
-          // cb(bottomData, 'bottom')
-          cb(this.cloudData)
-        }
+        if (cb) cb(this.cloudData)
       })
     } catch (e) {
       errorTip(e.message)
@@ -400,11 +370,6 @@ class Store {
         id: this.portraitId,
         ident: this.ident,
         ...this.businessParams,
-        // ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
-        // startTime: '2021-01-01',
-        // endTime: '2021-05-01',
-        // eventType: 1,
-        // bizCode: 'DC',
       })
       runInAction(() => {
         this.unitEvents = res.map(item => {

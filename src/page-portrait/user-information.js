@@ -58,7 +58,7 @@ export default class User extends Component {
   }
 
   render() {
-    const {basicLoading, attention, defaultInfo} = this.store
+    const {basicLoading, attention, defaultInfo, unitKeys} = this.store
     return (
       <div className="basis-info-content ml16 mr16">
         <Spin spinning={basicLoading}>
@@ -70,7 +70,6 @@ export default class User extends Component {
                   <img width={32} height={32} src={defaultInfo.性别 === '男' ? manIcon : womanIcon} alt="" />
                   <span className="ml8">{defaultInfo.姓名}</span>
                 </div>
-                {/* <div>{`${this.infoName}: ${this.nameValue || '-'}`}</div> */}
                 <Button 
                   type="primary" 
                   onClick={this.focus} 
@@ -79,9 +78,7 @@ export default class User extends Component {
                   {attention ? '取关' : '关注'}
                 </Button>
               </div>
-              {/* {
-                this.setInfo()
-              } */}
+              
             </div>
             {
               this.store.unitBasic.map(item => {
@@ -94,10 +91,6 @@ export default class User extends Component {
                     <div>
                       {item.list && item.list.map(content => {
                         return (
-                        // <p className="info-content">
-                        //   <div className="p-tag">{`${content.tag}:`}</div>
-                        //   <div className="p-val"><OmitTooltip text={content.val} maxWidth={160} /></div>
-                        // </p>
                           <span className="mr8 mb8 fs14 c85 info-tag">{content.val}</span>
                         )
                       })}

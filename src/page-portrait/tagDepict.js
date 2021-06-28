@@ -3,9 +3,7 @@ import {action, toJS} from 'mobx'
 import React, {Component} from 'react'
 import {Tooltip, Select, Input, Cascader} from 'antd'
 import MultiCascader from 'antd-multi-cascader'
-import {TagOutlined, UnorderedListOutlined} from '@ant-design/icons'
 
-import Cloud from './cloud'
 import TagList from './tag-list'
 import WorldCloud from './world-cloud'
 
@@ -20,7 +18,6 @@ export default class TagDepict extends Component {
   componentDidMount() {
     this.store.showDrawer()
     this.store.getBizType(data => this.getDrawCloud(data))
-    // this.store.getBizType((data, location) => this.getDrawCloud(data, location))
   }
 
   @action changeModel = () => {
@@ -35,33 +32,9 @@ export default class TagDepict extends Component {
     }
   }
 
-  // 选择业务类型
-  // @action changeBizCode = v => {
-  //   this.store.businessType = v
-  //   this.store.getObjCloud((res, max) => {
-  //     this.getDrawCloud(res, max)
-  //   })
-  // }
-
   @action changeBizCode = data => {
     this.store.searchKey = null
-    const {bizList} = this.store
-    const bizValue = []
-    // data.forEach(item => {
-    //   const target = _.find(bizList, e => e.bizCode === item)
-    //   const parentNode = _.find(bizList, e => e.bizCode === target.parentCode)
-
-    //   if (!parentNode) {
-    //     // 没找到，说明是第一级
-    //     bizValue.push([target.bizCode])
-    //   } else if (target.parentCode === parentNode.bizCode && parentNode.parentCode === '-1') {
-    //     // 第二级
-    //     bizValue.push([target.parentCode, target.bizCode])
-    //   } else {
-    //     bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
-    //   }
-    // })
-    // this.store.businessType = bizValue
+    
     this.store.businessType = data.map(item => [item])
     this.store.getObjCloud(res => {
       this.getDrawCloud(res)
@@ -97,33 +70,10 @@ export default class TagDepict extends Component {
             >
               列表
             </span>
-            {/* {
-              toAllTag ? (
-                <Tooltip title="切换云图模式">
-                  <span className="hand pt8" onClick={this.changeModel}>
-                    <TagOutlined style={{fontSize: 18}} />
-                  </span>
-                </Tooltip>
-              ) : (
-                <Tooltip title="切换列表模式">
-                  <span className="hand mr8" onClick={this.changeModel}>
-                    <UnorderedListOutlined />
-                  </span>
-                </Tooltip>
-              )
-            } */}
           </div>
           <div>
             {
               toAllTag ? null : (
-              // <Cascader
-              //   placeholder="请选择业务域"
-              //   options={businessList}
-              //   fieldNames={{label: 'bizName', value: 'bizCode'}}
-              //   expandTrigger="hover"
-              //   style={{margin: '0px 8px'}} 
-              //   onChange={this.changeBizCode}
-              // />
                 <MultiCascader
                   data={businessList}
                   style={{width: 156}}
@@ -146,9 +96,6 @@ export default class TagDepict extends Component {
         {
           toAllTag ? <TagList store={store} /> : <WorldCloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
         }
-        {/* {
-          toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
-        } */}
       </div>
     )
   }

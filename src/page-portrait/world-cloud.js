@@ -56,7 +56,6 @@ export default class WorldCloud extends Component {
           <div className="FBH FBJC">
             <div style={{height: 600, width: 960}} id="world-cloud" />
           </div>
-          {/* <div style={{height: 600, width: 1200}} id="world-cloud" /> */}
         </Spin>
       </div>
     )
