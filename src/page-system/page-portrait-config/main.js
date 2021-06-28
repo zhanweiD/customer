@@ -48,7 +48,7 @@ class PortraitConfig extends Component {
   {
     key: 'action',
     title: '操作',
-    width: 160,
+    width: 200,
     render: (text, record) => (
       <div className="FBH FBAC">
         <Authority
@@ -107,7 +107,7 @@ class PortraitConfig extends Component {
       store,
       initParams: {},
       initGetDataByParent: false,
-      scroll: {x: 1000},
+      scroll: {x: 1120},
       buttons: [<Button type="primary" onClick={this.addButton}>添加画像</Button>],
     }
 

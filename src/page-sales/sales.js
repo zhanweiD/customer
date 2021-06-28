@@ -252,6 +252,7 @@ const Sales = () => {
     {
       title: '操作',
       key: 'action',
+      width: 240,
       render: (text, record) => ([
         <a 
           className="mr16" 

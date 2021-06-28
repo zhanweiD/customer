@@ -149,6 +149,7 @@ class Channel extends Component {
       key: 'id',
       rowKey: 'id',
       initParams: {...reqChaData, ...reqData, ...reqProData},
+      scroll: {x: 1120},
       columns: this.columns,
       tableLoading,
       buttons: [
@@ -248,11 +249,6 @@ class Channel extends Component {
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
             <div className="bgf mb16 custom-border">
-              {/* {
-                channelData.pieChart && channelData.pieChart.length ? (
-                  <Chart getDraw={draw => this.getDraw = draw} store={store} />
-                ) : <NoData {...noDataConfig} />
-              } */}
               {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               }

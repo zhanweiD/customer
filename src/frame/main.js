@@ -354,7 +354,7 @@ export default class Frame extends Component {
             </div>
             
           </div>
-          <div className="FBV FB1">
+          <div className="FBV FB1" style={{overflowX: 'hidden'}}>
             <div className="frame-header FBH FBJB FBAC">
               <div className="FBH FBAC ml24">
                 <img src={defaultLightLogo} alt="logo" width="36" height="28" />

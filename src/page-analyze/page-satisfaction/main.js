@@ -146,6 +146,7 @@ class Satisfaction extends Component {
       rowKey: 'id',
       initParams: {...reqData, satisfaction},
       columns: this.columns,
+      scroll: {x: 1120},
       tableLoading,
       buttons: [
         <div className="dfjs mt16 fs14 c85">

@@ -164,7 +164,7 @@ class Purchase extends Component {
     const listConfig = {
       key: 'id',
       rowKey: 'id',
-      scroll: {x: 1000},
+      scroll: {x: 1120},
       initParams: {...store.reqData, tag: merit},
       columns: this.columns,
       tabLoading,

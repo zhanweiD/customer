@@ -94,7 +94,7 @@ class SupplyDemand extends Component {
       initParams: {...store.reqData, index: indicators},
       columns: this.columns,
       tableLoading,
-      scroll: {x: 960},
+      scroll: {x: 1120},
       buttons: [
         <div className="dfjs mt16 fs14 c85">
           <div className="mt6">

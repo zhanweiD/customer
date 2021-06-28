@@ -40,7 +40,7 @@ export default class ChartPie extends Component {
   render() {
     const {chartLoading} = this.store
     return (
-      <div className="chartPie-ad" style={{width: '70%'}}>
+      <div className="chartPie-ad" style={{width: '60%'}}>
         <Spin spinning={chartLoading}>
           <div ref="chartsPie" style={{height: '480px', width: '100%', display: 'inline-block'}} />
         </Spin>

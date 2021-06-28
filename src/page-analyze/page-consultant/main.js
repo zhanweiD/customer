@@ -110,6 +110,7 @@ class Consultant extends Component {
       rowKey: 'userName',
       initParams: reqProData,
       columns: this.columns,
+      scroll: {x: 1120},
       tableLoading,
       buttons: [
         <div className="dfjs mt16 fs14 c85 pt16">

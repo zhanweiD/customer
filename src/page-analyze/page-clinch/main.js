@@ -127,6 +127,7 @@ class Clinch extends Component {
       rowKey: 'id',
       initParams: {...reqData, ...reqProData, ...reqCliData},
       columns: this.columns,
+      scroll: {x: 1120},
       tableLoading,
       buttons: [
         <div className="dfjs mt16 fs14 c85">
