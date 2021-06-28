@@ -2,8 +2,39 @@
 const bgColor = '#fff'
 const title = '报备客户数'
 const color = ['#32c5f4', '#1cd389', '#ff6e73', '#8683e6', '#06d3c4']
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78,1)'
+const colors = [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
 
 export function barOption(data) {
   if (!data.length) {
@@ -49,7 +80,7 @@ export function barOption(data) {
         },
       },
     },
-    color,
+    color: colors,
     legend: {
       top: '12%',
       left: '50%',
@@ -89,15 +120,16 @@ export function barOption(data) {
       barWidth: 12,
       itemStyle: {
         shadowColor: 'rgba(0, 0, 0, .3)',
+        // borderRadius: 12,
         shadowBlur: 1,
         shadowOffsetY: 1,
         shadowOffsetX: 0,
         emphasis: {
           borderWidth: '10',
-          borderColor: color[0],
-          color: color[0],
+          borderColor: colors[0],
+          color: colors[0],
           opacity: 1,
-          shadowColor: color[0],
+          shadowColor: colors[0],
           shadowBlur: 0,
           shadowOffsetY: 0,
           shadowOffsetX: 0,
@@ -112,15 +144,16 @@ export function barOption(data) {
       barWidth: 12,
       itemStyle: {
         shadowColor: 'rgba(0, 0, 0, .3)',
+        // borderRadius: 12,
         shadowBlur: 1,
         shadowOffsetY: 1,
         shadowOffsetX: 0,
         emphasis: {
           borderWidth: '10',
-          borderColor: color[1],
-          color: color[1],
+          borderColor: colors[1],
+          color: colors[1],
           opacity: 1,
-          shadowColor: color[1],
+          shadowColor: colors[1],
           shadowBlur: 0,
           shadowOffsetY: 0,
           shadowOffsetX: 0,
@@ -184,7 +217,7 @@ export function lineOption(data) {
       type: 'value',
       name: '客户数/人',
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisTick: {

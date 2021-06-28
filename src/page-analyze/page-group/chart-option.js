@@ -2,15 +2,46 @@ import {toJS} from 'mobx'
 
 const bgColor = '#fff'
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4']
-const fontColor = 'rgba(0,0,0,0.65)'
-const iconColor = 'rgba(0,0,0,0.45)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const iconColor = 'rgba(22,50,78,0.45)'
+const titleColor = 'rgba(22,50,78,1)'
+const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
 
 export function pieOption(data, text) {
   if (data.length > 10) data.length = 10
   return ({
     backgroundColor: bgColor,
-    color,
+    color: colors,
     toolbox: {
       feature: {
         magicType: {
@@ -87,17 +118,17 @@ export function pieOption(data, text) {
           },
           rich: {
             name: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             percent: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             value: {
-              fontSize: 12,
+              fontSize: 14,
               color: fontColor,
             },
           },
@@ -159,12 +190,12 @@ export function barOption(dataList, type, text) {
         color: fontColor,
       },
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
       },
@@ -179,12 +210,12 @@ export function barOption(dataList, type, text) {
       type: 'value',
       name: '客户数/千人',
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
       },
@@ -201,14 +232,14 @@ export function barOption(dataList, type, text) {
       lineStyle: {
         normal: {
           width: 2,
-          color: color[0],
+          color: colors[0],
         },
       },
       data: dataList.map(item => {
         return {
           value: item.val,
           itemStyle: {
-            color: color[1],
+            color: colors[1],
           },
         }
       }),

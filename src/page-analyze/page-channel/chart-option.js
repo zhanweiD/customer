@@ -2,8 +2,40 @@
 const bgColor = '#fff'
 const title = '客户总数'
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4']
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78,1)'
+
+const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
 
 export function pieOption(data, total) {
   if (!data.length) {
@@ -31,7 +63,7 @@ export function pieOption(data, total) {
   }
   return ({
     backgroundColor: bgColor,
-    color,
+    color: colors,
     tooltip: {
       trigger: 'item',
       // formatter: params => {
@@ -96,17 +128,17 @@ export function pieOption(data, total) {
           },
           rich: {
             name: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             percent: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             value: {
-              fontSize: 12,
+              fontSize: 14,
               color: fontColor,
             },
           },
@@ -142,6 +174,7 @@ export function sanKeyOption(data, links) {
     } 
   }
   return ({
+    // color: colors,
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',

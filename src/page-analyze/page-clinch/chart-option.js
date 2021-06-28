@@ -2,8 +2,40 @@
 const bgColor = '#fff'
 const title = '客户总数'
 const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78,1)'
+
+const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
 
 export function pieOption(data, total) {
   if (!data.length) {
@@ -31,7 +63,7 @@ export function pieOption(data, total) {
   }
   return ({
     backgroundColor: bgColor,
-    color,
+    color: colors,
     tooltip: {
       trigger: 'item',
     },
@@ -121,6 +153,8 @@ export function funnelOption(data1, data2) {
     } 
   }
   return ({
+    color: colors,
+    opacity: 0.8,
     title: {
       text: '成交转化情况',
       top: 12,
@@ -131,10 +165,10 @@ export function funnelOption(data1, data2) {
         fontWeight: 400,
       },
     },
-    color,
+    // color,
     legend: {
       top: 32,
-      left: '17%',
+      // left: '10%',
       data: data1 && data1.map(item => item.name),
     },
     series: [{
@@ -150,6 +184,8 @@ export function funnelOption(data1, data2) {
         show: true,
         position: 'inside',
         fontSize: '14',
+        color: '#fff',
+        textBorderColor: '#fff',
         formatter(d) {
           const ins = `${d.name}{aa|}\n${d.data.num}`
           return ins
@@ -169,29 +205,27 @@ export function funnelOption(data1, data2) {
       height: '400',
       gap: -1,
       minSize: 150,
-      left: '10%',
+      left: '27%',
       width: '60%',
       z: 2,
       label: {
-        normal: {
-          color: '#333',
-          position: 'right',
-          formatter(d) {
-            const ins = `{bb|${d.data.goal}}\n{aa|${d.name}}`
-            return ins
+        color: '#000',
+        position: 'right',
+        formatter(d) {
+          const ins = `{bb|${d.data.goal}}\n{aa|${d.name}}`
+          return ins
+        },
+        rich: {
+          aa: {
+            align: 'center',
+            color: fontColor,
+            fontSize: '12',
+            lineHeight: '30',
           },
-          rich: {
-            aa: {
-              align: 'center',
-              color: fontColor,
-              fontSize: '12',
-              lineHeight: '30',
-            },
-            bb: {
-              align: 'center',
-              color: titleColor,
-              fontSize: '22',
-            },
+          bb: {
+            align: 'center',
+            color: titleColor,
+            fontSize: '22',
           },
         },
       },

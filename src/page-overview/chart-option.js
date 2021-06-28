@@ -64,6 +64,7 @@ export function funnelOption(funnelData) {
       height: '260',
       gap: 0,
       minSize: 150,
+
       // left: '5%',
       left: 'center',
       width: '60%',
@@ -72,6 +73,8 @@ export function funnelOption(funnelData) {
         position: 'inside',
         fontSize: '14',
         color: '#fff',
+        textBorderColor: '#fff',
+        // fontWeight: 400,
         formatter(d) {
           const ins = `${d.name}{aa|}\n${d.value}`
           return ins
@@ -131,11 +134,11 @@ export function funnelOption(funnelData) {
 }
 
 // 转化对比
-export function cbarOption(barData) {
-  const {data = [], type = [], x = [], y = []} = barData
+export function cbarOption(barData, type) {
+  const {data = [], x = [], y = []} = barData
   return {
     title: {
-      text: '各区域到访转化率',
+      text: `各区域${type}转化率`,
       top: 18,
       textStyle: {
         fontSize: 14,
@@ -198,9 +201,9 @@ export function cbarOption(barData) {
           position: 'right',
           // position: 'inside',
         },
-        name: '到访',
+        name: type,
         data: data.map(sitem => {
-          return sitem.到访
+          return sitem[type]
         }),
       }, 
     ],

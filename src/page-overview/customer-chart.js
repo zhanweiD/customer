@@ -6,18 +6,19 @@ import {Spin} from 'antd'
 
 import {errorTip} from '../common/util'
 
-import {funnelOption} from './chart-option'
+import {funnelOption, cbarOption} from './chart-option'
 import io from './io'
 
 const CustomerChart = ({
   orgCodes, projectCode, timeStart, timeEnd,
 }) => {
+  const chartBar = useRef(null)
+  const [barData, setBarData] = useState([])
   const chartFunnel = useRef(null)
   const [funnelData, setFunnelData] = useState({})
   const [loading, setLoading] = useState(false)
 
   async function getFunnel() {
-    setLoading(true)
     try {
       const res = await io.getFunnel({
         timeStart,
@@ -28,6 +29,20 @@ const CustomerChart = ({
       setFunnelData(res)
     } catch (error) {
       errorTip(error.message)
+    }
+  }
+  async function getContrast() {
+    setLoading(true)
+    try {
+      const res = await io.getContrast({
+        timeStart,
+        timeEnd,
+        orgCodes,
+        projectCode,
+      })
+      setBarData(res)
+    } catch (err) {
+      errorTip(err)
     } finally {
       setLoading(false)
     }
@@ -35,25 +50,39 @@ const CustomerChart = ({
 
   const drawSaveTrend = () => {
     const myChartFunnel = echarts.init(chartFunnel.current)
+    const myChartBar = echarts.init(chartBar.current)
 
     const resize = () => {
       myChartFunnel && myChartFunnel.resize()
     }
     myChartFunnel.clear()
     myChartFunnel.setOption(funnelOption(funnelData))
+    myChartFunnel.on('click', v => {
+      myChartBar.clear()
+      myChartBar.setOption(cbarOption(barData, v.name))
+    })
+    const {type = []} = barData
+    myChartBar.clear()
+    myChartBar.setOption(cbarOption(barData, type[0] || '留电'))
     window.addEventListener('resize', resize)
   }
 
   useEffect(() => {
     getFunnel()
+    getContrast()
   }, [timeStart, orgCodes, projectCode])
 
   useEffect(() => {
     drawSaveTrend()
-  }, [funnelData])
+  }, [funnelData, barData])
  
   return (
-    <div ref={chartFunnel} style={{height: '320px', width: '50%'}} />
+    <div>
+      <Spin spinning={loading}>
+        <div ref={chartFunnel} style={{height: '320px', width: '50%', display: 'inline-block'}} />
+        <div ref={chartBar} style={{height: '320px', width: '50%', display: 'inline-block'}} />
+      </Spin>
+    </div>
     // <div>
     //   <Spin spinning={loading}>
     //     <div className="bgf mb16" ref={chartFunnel} style={{height: '500px', width: '50%'}} />

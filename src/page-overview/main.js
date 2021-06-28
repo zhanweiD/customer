@@ -238,19 +238,19 @@ const Overview = () => {
             <div className="m16">
               <div className="mb16">
                 <div className="period-header">客户转化率</div>
-                <div className="FBH bgf customer-chart">
+                <div className="bgf customer-chart">
                   <CustomerChart 
                     orgCodes={org} 
                     timeStart={timeStart}
                     timeEnd={timeEnd}
                     projectCode={projectCode}
                   />
-                  <ConversionChart 
+                  {/* <ConversionChart 
                     orgCodes={org} 
                     timeStart={timeStart}
                     timeEnd={timeEnd}
                     projectCode={projectCode}
-                  />
+                  /> */}
                 </div>
               </div>
 
