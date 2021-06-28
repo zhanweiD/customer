@@ -47,6 +47,8 @@ export default class Cloud extends Component {
   }
 
   @action.bound couldLayout(data = [], location, max = 4) {
+    console.log(data)
+
     this.box = d3.select(`#${location}-box${this.props.index}`)
     if (!this.box) return
     this.box.style('transform', 'scale(1, 1)').style('transition', 'all .3s linear')

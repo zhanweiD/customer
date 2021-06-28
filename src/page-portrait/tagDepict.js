@@ -7,6 +7,7 @@ import {TagOutlined, UnorderedListOutlined} from '@ant-design/icons'
 
 import Cloud from './cloud'
 import TagList from './tag-list'
+import WorldCloud from './world-cloud'
 
 const {Search} = Input
 
@@ -18,7 +19,8 @@ export default class TagDepict extends Component {
   }
   componentDidMount() {
     this.store.showDrawer()
-    this.store.getBizType((data, location) => this.getDrawCloud(data, location))
+    this.store.getBizType(data => this.getDrawCloud(data))
+    // this.store.getBizType((data, location) => this.getDrawCloud(data, location))
   }
 
   @action changeModel = () => {
@@ -61,8 +63,8 @@ export default class TagDepict extends Component {
     // })
     // this.store.businessType = bizValue
     this.store.businessType = data.map(item => [item])
-    this.store.getObjCloud((res, max) => {
-      this.getDrawCloud(res, max)
+    this.store.getObjCloud(res => {
+      this.getDrawCloud(res)
     })
   }
 
@@ -142,8 +144,11 @@ export default class TagDepict extends Component {
           </div>
         </div>
         {
-          toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
+          toAllTag ? <TagList store={store} /> : <WorldCloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
         }
+        {/* {
+          toAllTag ? <TagList store={store} /> : <Cloud getDrawCloud={fun => this.getDrawCloud = fun} index={index} store={store} />
+        } */}
       </div>
     )
   }

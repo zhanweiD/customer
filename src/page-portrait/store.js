@@ -87,6 +87,7 @@ class Store {
   // 标签云图
   @observable cateTitle = [] // 搜索同类目标签标题
   color = ['#2592FF', '#6C41FA', '#61BA46']
+  bgColor = ['rgba(134, 212, 255, 0.1)', 'rgba(196, 179, 255, 0.1)', 'rgba(191, 238, 169, 0.1)']
 
   // @action pastDate(v) {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
@@ -232,27 +233,37 @@ class Store {
           if (item.list) {
             // 同类标签颜色生成
             const newList = item.list.map(text => {
-              text.color = this.color[i % 3]
+              text.name = `${text.tag}: ${text.val}`
+              text.value = 16
+              text.textStyle = {
+                color: this.color[i % 3],
+                backgroundColor: this.bgColor[i % 3],
+                padding: [8, 12],
+                margin: [12, 8],
+                borderRadius: 16,
+              }
               return text
             })
             this.cloudData = [...this.cloudData, ...newList]
           }
         })
-        const leftData = []
-        const rightData = []
-        const headerData = []
-        const bottomData = []
-        this.cloudData.forEach((item, index) => {
-          if (index % 4 === 0) leftData.push(item)
-          if (index % 4 === 1) rightData.push(item)
-          if (index % 4 === 2) headerData.push(item)
-          if (index % 4 === 3) bottomData.push(item)
-        })
+
+        // const leftData = []
+        // const rightData = []
+        // const headerData = []
+        // const bottomData = []
+        // this.cloudData.forEach((item, index) => {
+        //   if (index % 4 === 0) leftData.push(item)
+        //   if (index % 4 === 1) rightData.push(item)
+        //   if (index % 4 === 2) headerData.push(item)
+        //   if (index % 4 === 3) bottomData.push(item)
+        // })
         if (cb) {
-          cb(leftData, 'left')
-          cb(rightData, 'right')
-          cb(headerData, 'header')
-          cb(bottomData, 'bottom')
+          // cb(leftData, 'left')
+          // cb(rightData, 'right')
+          // cb(headerData, 'header')
+          // cb(bottomData, 'bottom')
+          cb(this.cloudData)
         }
       })
     } catch (e) {

@@ -1,10 +1,48 @@
+import {toJS} from 'mobx'
+
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
 const fontColor = 'rgba(22,50,78,0.85)'
 const titleColor = 'rgba(22,50,78, 1)'
 const bgColor = '#fff'
 const title = '触点总数'
 
+export function cloudOption(data, maskImage) {
+  return {
+    series: [{
+      type: 'wordCloud',
+      sizeRange: [10, 20],
+      rotationRange: [0, 0],
+      // gridSize: 24,
+      // rotationStep: 45,
+      gridSize: 24,
+      shape: 'circle',
+      maskImage,
+      drawOutOfBound: false,
+      maskGapWidth: 90,
+      rotateRatio: 0,
+      rotationSteps: 0,
+      
+      // textStyle: {
+      //   color() {
+      //     return `rgb(${[
+      //       Math.round(Math.random() * 160),
+      //       Math.round(Math.random() * 160),
+      //       Math.round(Math.random() * 160),
+      //     ].join(',')})`
+      //   },
+      // },
+      // emphasis: {
+      //   textStyle: {
+      //     color: 'red',
+      //   },
+      // },
+      data,
+    }],
+  }
+}
+
 export function pieOption(data, total) {
+  console.log(data)
   if (!data.length) {
     return {
       title: [{
@@ -61,7 +99,6 @@ export function pieOption(data, total) {
       offset: 1,
       color: '#FD5071',
     }])],
-    // color,
     tooltip: {
       trigger: 'item',
     },
@@ -86,22 +123,20 @@ export function pieOption(data, total) {
     }, {
       text: '业务类型分布',
       top: 0,
-      left: 0,
+      left: 24,
       textStyle: {
         fontSize: 14,
         color: titleColor,
         fontWeight: 400,
       },
     }],
-    grid: {
-      left: -48,
-      right: 0,
-    },
+    // grid: {
+    //   left: 0,
+    //   right: 0,
+    // },
     series: [{
       type: 'pie',
-      left: -48,
-      right: 8,
-      radius: ['58%', '78%'],
+      radius: ['65%', '85%'],
       center: ['50%', '50%'],
       data,
       // hoverAnimation: false,

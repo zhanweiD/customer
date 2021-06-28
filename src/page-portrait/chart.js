@@ -10,6 +10,7 @@ import {NoData, LegendItem} from '../component'
 
 import {pieOption, barOption} from './option'
 
+const colors = ['#61BA46 ', '#2592FF', '#355FF9', '#6C41FA', '#FD5071'] 
 
 @observer
 export default class ChartPie extends Component {
@@ -48,7 +49,7 @@ export default class ChartPie extends Component {
   }
 
   render() {
-    const {pieData, pieTotal, chartLoading, color, barData} = this.store
+    const {pieData, pieTotal, chartLoading, barData} = this.store
     return (
       <div className="contact-chart m16 mb0">
         <Spin spinning={chartLoading}>
@@ -62,7 +63,7 @@ export default class ChartPie extends Component {
                     title={item.name} 
                     percent={`${((item.value / pieTotal) * 100).toFixed(2)}%`}
                     counts={item.value}
-                    color={color[i]}
+                    color={colors[i]}
                   />
                 ))
               }
