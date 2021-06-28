@@ -117,17 +117,17 @@ export function pieOption(data, total) {
           },
           rich: {
             name: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             percent: {
-              fontSize: 12,
+              fontSize: 14,
               padding: [0, 4, 0, 4],
               color: fontColor,
             },
             value: {
-              fontSize: 12,
+              fontSize: 14,
               color: fontColor,
             },
           },

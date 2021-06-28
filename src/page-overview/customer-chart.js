@@ -17,6 +17,7 @@ const CustomerChart = ({
   const chartFunnel = useRef(null)
   const [funnelData, setFunnelData] = useState({})
   const [loading, setLoading] = useState(false)
+  const [selectIndex, setSelectIndex] = useState(0)
 
   async function getFunnel() {
     try {
@@ -56,14 +57,19 @@ const CustomerChart = ({
       myChartFunnel && myChartFunnel.resize()
     }
     myChartFunnel.clear()
-    myChartFunnel.setOption(funnelOption(funnelData))
-    myChartFunnel.on('click', v => {
-      myChartBar.clear()
-      myChartBar.setOption(cbarOption(barData, v.name))
-    })
+    myChartFunnel.setOption(funnelOption(funnelData, selectIndex))
     const {type = []} = barData
     myChartBar.clear()
     myChartBar.setOption(cbarOption(barData, type[0] || '留电'))
+
+    myChartFunnel.on('click', v => {
+      myChartBar.clear()
+      myChartBar.setOption(cbarOption(barData, v.name))
+      setSelectIndex(v.dataIndex)
+      // myChartFunnel.clear()
+      // myChartFunnel.setOption(funnelOption(funnelData, v.dataIndex))
+    })
+    
     window.addEventListener('resize', resize)
   }
 

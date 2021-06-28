@@ -6,7 +6,7 @@ const titleColor = '#16324E'
 
 
 // 客户转化率
-export function funnelOption(funnelData) {
+export function funnelOption(funnelData, dataIndex = 0) {
   const {data = [], type = []} = funnelData
   if (!data.length) {
     return {
@@ -64,10 +64,17 @@ export function funnelOption(funnelData) {
       height: '260',
       gap: 0,
       minSize: 150,
-
       // left: '5%',
       left: 'center',
       width: '60%',
+      selectedMode: 'single',
+      select: {
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 4,
+          // color: color[dataIndex],
+        },
+      },
       label: {
         show: true,
         position: 'inside',
