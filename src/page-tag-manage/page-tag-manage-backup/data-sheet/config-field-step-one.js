@@ -71,7 +71,7 @@ export default class StepOne extends React.Component {
         {/* <div className="fs16 mb8 ml2" style={{color: 'rgba(0,0,0,0.85)'}}>
           字段列表
         </div> */}
-        <div className="fs12 mb8 ml2">
+        <div className="fs14 mb8 ml2">
           <span className="mr8">仅展示未发布</span> 
           <Switch defaultChecked checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
         </div>

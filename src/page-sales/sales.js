@@ -183,18 +183,21 @@ const Sales = () => {
       title: '计划触达数',
       dataIndex: 'touchCount',
       key: 'touchCount',
+      width: 110,
       render: text => text || '-',
     },
     {
       title: '目标完成率',
       dataIndex: 'targetRate',
       key: 'targetRate',
+      width: 110,
       render: text => (text ? `${text}%` : '-'),
     },
     {
       title: '计划状态',
       dataIndex: 'planStatus',
       key: 'planStatus',
+      width: 100,
       render: (text, record) => {
         let status = ''
         let color = ''

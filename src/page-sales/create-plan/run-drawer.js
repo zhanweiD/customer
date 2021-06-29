@@ -325,7 +325,7 @@ export default ({
               </Select>
             </Item>
             {
-              planType === 1 && (<div className="fs12 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
+              planType === 1 && (<div className="fs14 ml24 mb16">满足一下任何事件都可以进入主流程</div>)
             }
             {
               planType === 1 && (
@@ -444,7 +444,7 @@ export default ({
           defaultActiveKey={['1']}
         >
           <Panel style={{width: '100%'}} header="目标设置" key="1">
-            <div className="fs12 mb16 ml24">首要目标</div>
+            <div className="fs14 mb16 ml24">首要目标</div>
             <Item
               label="完成时间"
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"

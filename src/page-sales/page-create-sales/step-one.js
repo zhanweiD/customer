@@ -313,7 +313,7 @@ const CreateSales = ({
                       )
                     })}
                     <div
-                      className="add-event-btn fs12 hand"
+                      className="add-event-btn fs14 hand"
                       onClick={() => {
                         add()
                         setCondList([...condList, 1])

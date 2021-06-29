@@ -183,7 +183,7 @@ const SalesDetail = ({visible, setVisible, store}) => {
             <span>{store.analysisStart}</span>
           </Item>
           <div className="FBH" style={{marginLeft: '20px'}}>
-            <div className="fs12" style={{color: 'rgba(0,0,0,0.65)'}}>过程配置</div>
+            <div className="fs14" style={{color: 'rgba(0,0,0,0.65)'}}>过程配置</div>
             <Button
               type="primary"
               onClick={addItems}

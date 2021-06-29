@@ -156,13 +156,13 @@ export default class Frame extends Component {
     const userMenu = (
       <Menu>
         <Menu.Item>
-          <a className="fs12" onClick={this.openModal}>
+          <a className="fs14" onClick={this.openModal}>
             修改密码
           </a>
         </Menu.Item>
         <Menu.Item>
           <a
-            className="fs12"
+            className="fs14"
             onClick={() => {
               store.goLogout(() => {
                 localStorage.removeItem('user')

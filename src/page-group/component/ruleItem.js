@@ -440,7 +440,7 @@ const RuleItem = ({
                     +ruleIfBoxKey.slice(-1) === 1 
                 && ruleType === 'config' 
                 && relId 
-                      ? <a href onClick={open} className="ml8 fs12">设置筛选</a> : null
+                      ? <a href onClick={open} className="ml8 fs14">设置筛选</a> : null
                   }
 
                   {
@@ -479,7 +479,7 @@ const RuleItem = ({
             rest.page === 'detail'  
             && +ruleIfBoxKey.slice(-1) === 1 
             && ruleType === 'config' 
-            && relId ? <a href onClick={open} className="ml8 fs12 mt8">查看筛选</a> : null
+            && relId ? <a href onClick={open} className="ml8 fs14 mt8">查看筛选</a> : null
           }
      
         </Input.Group>

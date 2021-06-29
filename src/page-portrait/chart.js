@@ -56,7 +56,7 @@ export default class ChartPie extends Component {
           {/* <div className="d-flex" style={{display: pieData.length ? 'flex' : 'none'}}> */}
           <div className="d-flex type-distribution p16">
             <div ref="chartPie" style={{height: '300px', width: '50%'}} />
-            <div className="w50 fs12 FBV FBJC FBAC categroy-legend-box">
+            <div className="w50 fs14 FBV FBJC FBAC categroy-legend-box">
               {
                 pieData.map((item, i) => (
                   <LegendItem 

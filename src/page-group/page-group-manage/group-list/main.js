@@ -35,14 +35,14 @@ export default class GroupList extends Component {
     return (
       <Menu>
         <Menu.Item>
-          <a className="fs12" href>复制</a>
+          <a className="fs14" href>复制</a>
         </Menu.Item>
         <Menu.Item>
           <Authority
             authCode="group-manage:export-group"
           >
             <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
-              <a className="fs12 c85" href>个体列表</a>
+              <a className="fs14 c85" href>个体列表</a>
             </Link>
           </Authority>
         </Menu.Item>

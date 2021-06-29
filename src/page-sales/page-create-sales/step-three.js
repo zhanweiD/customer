@@ -25,45 +25,24 @@ const layout = {
   },
 }
 
-const templateListMock = [
-  [
-    {
-      template_id: 'qdJWd_NP89dVXoZm16OnMbVpmHAKeEYJhiuXQI-u9wM',
-      title: '异地登录提醒',
-      primary_industry: 'IT科技',
-      deputy_industry: 'IT软件与服务',
-      content: '{{first.DATA}}\n\n您的企业邮帐号{{account.DATA}}于{{time.DATA}}在{{city.DATA}}登录。地址信息有误差，如有疑问请在电脑登录并查看“自助查询”。\n{{remark.DATA}}',
-      example: '你好，samueldeng\n\n你的企业邮帐号samueldeng@gzmailteam.com于今天11:22在北京登录。地址信息有误差，如有疑问请在电脑登录并查看自助查询。',
-    },
-    {
-      template_id: '5ZQaDUG6m_nzKlgrAJznbawATtN1XqHzJ6Bbrn_FDaI',
-      title: '服务器恢复通知',
-      primary_industry: 'IT科技',
-      deputy_industry: 'IT软件与服务',
-      content: '{{first.DATA}}\n\n故障停止时间：{{time.DATA}}\n故障持续时间：{{last.DATA}}\n{{reason.DATA}}',
-      example: '您好，您的网站 abc.com 恢复访问\n\n故障停止时间：2013-11-21 11:11:11\n故障持续时间：3小时\n故障原因：无法连接服务器',
-    },
-  ],
-]
-
 export default ({
   strategyDetail = {}, // 用于编辑回显
   treeStrChannelList, // 触达渠道列表
   strChannelList, // 触达渠道
-  planInfo,
-  current,
+  planInfo, // 计划信息
+  current, 
   prevStep,
   nextStep,
   tagList,
-  addStrategy,
+  addStrategy, // 添加策略
   editStrategy,
-  setThreeFormData,
+
+  setThreeFormData, // 表单数据
   oneFormData,
   twoFormData,
   threeFormData,
-  strName,
+  strName, // 策略名称
 }) => {
-  // const [templateList, setTemplateList] = useState(templateListMock)
   const [templateList, setTemplateList] = useState([])
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [channelActionList, setChannelActionList] = useState([])
@@ -149,8 +128,6 @@ export default ({
   const [vis, setVis] = useState(false)
 
   const templateChange = e => {
-    console.log(templateList)
-    console.log(e)
     // 目标模板数据
     const target = _.find(templateList, item => item.template_id === e)
     const req = /{(\w+).DATA}/g
@@ -175,6 +152,7 @@ export default ({
     setVis(true)
   }
 
+  // 返回渠道信息（code id）
   const matchChannel = ids => {
     const channel = strChannelList.filter(item => item.id === ids[0])[0] || {}
     const account = strChannelList.filter(item => item.id === ids[1])[0] || {}
@@ -193,7 +171,6 @@ export default ({
     })
 
     myForm.validateFields().then(value => {
-      // const channel = 
       // TODO:
       // 把数据存起来
       const templateJson = []
@@ -214,7 +191,7 @@ export default ({
         })
       })
 
-      const params = strategyDetail.id ? {
+      const params = {
         ...strategyDetail,
         ...oneFormData,
         ...twoFormData,
@@ -224,22 +201,38 @@ export default ({
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
-          id: strategyDetail.id,
-          templateJson: JSON.stringify(templateJson),
-        },
-      } : {
-        ...strategyDetail,
-        ...oneFormData,
-        ...twoFormData,
-        planId: planInfo.id,
-        clientGroupId: planInfo.clientGroupId,
-        strategyName: strName,
-        sendOutContent: {
-          ...value,
-          channel: matchChannel(value.channelCode),
+          id: strategyDetail.id || null,
           templateJson: JSON.stringify(templateJson),
         },
       }
+      // const params = strategyDetail.id ? {
+      //   ...strategyDetail,
+      //   ...oneFormData,
+      //   ...twoFormData,
+      //   planId: planInfo.id,
+      //   clientGroupId: planInfo.clientGroupId,
+      //   strategyName: strName,
+      //   sendOutContent: {
+      //     ...value,
+      //     channel: matchChannel(value.channelCode),
+      //     id: strategyDetail.id,
+      //     templateJson: JSON.stringify(templateJson),
+      //   },
+      // } : {
+      //   ...strategyDetail,
+      //   ...oneFormData,
+      //   ...twoFormData,
+      //   planId: planInfo.id,
+      //   clientGroupId: planInfo.clientGroupId,
+      //   strategyName: strName,
+      //   sendOutContent: {
+      //     ...value,
+      //     channel: matchChannel(value.channelCode),
+      //     templateJson: JSON.stringify(templateJson),
+      //   },
+      // }
+      
+      // 删除编辑前部分无用属性
       if (params.strategyConditionType) {
         delete params.strategyFixConditionContent
       } else {
@@ -287,9 +280,6 @@ export default ({
     }
   }
 
-  const changeAction = v => {
-    getTemplate()
-  }
   const changeCode = (v, item) => {
     getChannelActions(v[0])
     setAccountId(item[1].code)
@@ -348,6 +338,7 @@ export default ({
     })
     setVis(true)
   }, [tagList, strategyDetail, templateList])
+
   useEffect(() => {
     if (!strategyDetail.id) {
       setChannelActionList([])
@@ -405,7 +396,7 @@ export default ({
           name="actionId"
           rules={[{required: true, message: '请选择营销动作'}]}
         >
-          <Select placeholder="请选择动作" onChange={changeAction}>
+          <Select placeholder="请选择动作" onChange={() => getTemplate()}>
             {
               channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
             }

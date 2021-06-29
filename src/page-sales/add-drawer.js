@@ -273,7 +273,7 @@ export default ({
           defaultActiveKey={['1']}
         >
           <Panel style={{width: '100%'}} header="目标设置" key="1">
-            <div className="fs12 mb16">首要目标</div>
+            <div className="fs14 mb16">首要目标</div>
             <Item
               label="完成时间"
               name="validation-time"

@@ -165,7 +165,7 @@ class TagList extends Component {
           authCode="tag-manage:release-tag"
         >
           <a 
-            className="fs12" 
+            className="fs14" 
             disabled={!keys.length} 
             onClick={() => store.updateTagStatus({
               status: 1,
@@ -180,7 +180,7 @@ class TagList extends Component {
         <Authority
           authCode="tag-manage:add-tag"
         >
-          <a className="fs12" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
+          <a className="fs14" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
         </Authority>
       </Menu.Item>
     </Menu>

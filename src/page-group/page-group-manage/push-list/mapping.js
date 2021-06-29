@@ -209,7 +209,7 @@ export default class DrawerMapping extends Component {
                     const mappingItemFieldName = mappingItem.fieldName
                     message.error({
                       content: `${mappingItemTagName}(标签)与${mappingItemFieldName}(字段)数据类型不匹配， 绑定失败`,
-                      className: 'fs12',
+                      className: 'fs14',
                     })
                     return new Promise(function (resolve, reject) {
                       reject([])
@@ -224,7 +224,7 @@ export default class DrawerMapping extends Component {
                   const mappingItemFieldName = mappingItem.fieldName
                   message.error({
                     content: `${mappingItemTagName}(标签)与${mappingItemFieldName}(字段)数据类型不匹配， 绑定失败`,
-                    className: 'fs12',
+                    className: 'fs14',
                   })
                   return new Promise(function (resolve, reject) {
                     reject([])

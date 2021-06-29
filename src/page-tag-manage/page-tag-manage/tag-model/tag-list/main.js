@@ -409,7 +409,7 @@ class TagList extends Component {
               authCode="tag-manage:release-tag"
             >
               <Button 
-                className="fs12 mr8" 
+                className="fs14 mr8" 
                 disabled={!publishRowKeys.length} 
                 onClick={() => store.batchPublish(treeStore.getList)}
               >
@@ -419,7 +419,7 @@ class TagList extends Component {
             <Authority
               authCode="tag-manage:add-tag"
             >
-              <Button className="fs12 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
+              <Button className="fs14 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
             </Authority>
             {/* <Popconfirm
               placement="topRight"

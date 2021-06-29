@@ -480,7 +480,7 @@ export default ({
                         </div>
                       ))}
                       <div
-                        className="add-event-btn fs12 hand"
+                        className="add-event-btn fs14 hand"
                         onClick={() => {
                           add()
                         }}
@@ -499,7 +499,7 @@ export default ({
           planType === 1 && (
             <Item>
               <Input.Group compact>
-                <span>且在</span>
+                <span className="mt4">且在</span>
                 <Item 
                   noStyle 
                   name="timeGap" 
@@ -509,7 +509,7 @@ export default ({
                     {validator: checkNumber},
                   ]}
                 >
-                  <Input placeholder="请输入" style={{width: 72, marginLeft: 8}} type="number" />
+                  <Input placeholder="请输入" style={{width: 96, marginLeft: 8}} type="number" />
                 </Item>
                 <Item 
                   noStyle 
@@ -523,7 +523,7 @@ export default ({
                     <Option value="DAYS">天</Option>
                   </Select>
                 </Item>
-                <span className="ml8">内</span>
+                <span className="ml8 mt4">内</span>
               </Input.Group>
             </Item>
           )
@@ -599,7 +599,7 @@ export default ({
                         </div>
                       ))}
                       <div
-                        className="add-event-btn fs12 hand"
+                        className="add-event-btn fs14 hand"
                         onClick={() => { 
                           add() 
                           setNotDoneCount(notDoneCount + 1)
