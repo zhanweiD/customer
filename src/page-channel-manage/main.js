@@ -1,16 +1,20 @@
 import {useEffect, useState} from 'react'
-import {Button, Table, Tabs, Badge, Select} from 'antd'
+import {Button, Table, Tabs, Badge} from 'antd'
 import {successTip, errorTip} from '@util'
 import io from './io'
 import {authView} from '../component'
+import {setColumns} from './util'
+import AddDrawer from './add-drawer'
 
 const {TabPane} = Tabs
 
-const ChannelManage = props => {
+const ChannelManage = () => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [channelList, setChannelList] = useState([]) // 渠道列表
   const [channelCode, setChannelCode] = useState() // channelCode
   const [tableLoading, setTableLoading] = useState(false) // 搜索loading
+  const [drawerVisible, setDrawerVisible] = useState(false) // 搜索loading
+  const [nowRecord, setNowRecord] = useState({}) // 搜索loading
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -67,72 +71,31 @@ const ChannelManage = props => {
     }
   }
 
+  const setDrawer = v => {
+    setDrawerVisible(v)
+  }
+
+  const editPermissions = record => {
+    setDrawerVisible(true)
+    setNowRecord(record)
+  }
+
   // 授权跳转
-  const authoriza = async () => {
-    // const host = window.location.href.split('#')
-    const host = window.location.href.split('/')
-    // console.log(host[0])
-    // window.open(`${host[0]}customer/index.html#/weappCode/${host[0]}`)
-    // window.history.go(-3)
-    // window.location.reload()
-    window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}`)
-    // window.open(`http://192.168.90.135:8173/customer_dev/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host}`)
+  const authoriza = async name => {
+    setNowRecord({})
+    if (name === '微信公众号') {
+      const host = window.location.href.split('/')
+      window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}`)
+    }
+    if (name === '阿里云短信') {
+      setDrawer(true)
+    }
   }
 
   const changeTabs = v => {
     setChannelCode(v)
   }
-  const columns = (name, type) => {
-    return (
-      [
-        {
-          title: name,
-          dataIndex: 'accountName',
-          key: 'accountName',
-        },
-        {
-          title: type,
-          dataIndex: 'accountType',
-          key: 'accountType',
-        },
-        {
-          title: '创建人',
-          dataIndex: 'cuserName',
-          key: 'cuserName',
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'mtime',
-          key: 'mtime',
-        },
-        {
-          title: '账号状态',
-          dataIndex: 'accountStatus',
-          key: 'accountStatus',
-          render: text => {
-            if (text) {
-              return <Badge color="green" text="授权成功" />
-            }
-            return <Badge color="default" text="授权失败" />
-          },
-        },
-        {
-          title: '是否启用',
-          dataIndex: 'enable',
-          key: 'enable',
-          render: text => (text ? '启用' : '暂停'),
-        },
-        {
-          title: '操作',
-          key: 'action',
-          render: (text, record) => ([
-            <a onClick={() => setEnable(record)}>{record.enable ? '暂停' : '启用'}</a>,
-            // <a onClick={() => authorization(record)}>重新授权</a>,
-          ]),
-        },
-      ]
-    )
-  }
+
   const setTab = item => {
     const {name} = item
     let type = ''
@@ -145,19 +108,26 @@ const ChannelManage = props => {
         break
     }
     return (
-      <Table 
-        columns={columns(name, type)} 
-        dataSource={listDate} 
-        rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
-        scroll={{x: 720}} 
-        style={{margin: '0px 24px'}}
-        loading={tableLoading}
-        pagination={{
-          ...pagination,
-          showTotal: () => `合计${pagination.total}条记录`,
-          onChange: v => getList({currentPage: v}),
-        }}
-      />
+      <div>
+        <div className="far pr24 mb8">
+          <Button type="primary" onClick={() => authoriza(name)}>
+            授权账号
+          </Button>
+        </div>
+        <Table 
+          columns={setColumns(editPermissions, setEnable, name, type)} 
+          dataSource={listDate} 
+          rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
+          scroll={{x: 720}} 
+          style={{margin: '0px 24px'}}
+          loading={tableLoading}
+          pagination={{
+            ...pagination,
+            showTotal: () => `合计${pagination.total}条记录`,
+            onChange: v => getList({currentPage: v}),
+          }}
+        />
+      </div>
     )
   }
 
@@ -169,20 +139,9 @@ const ChannelManage = props => {
   }, [channelCode])
 
   return (
-    <div className="oa FBV">
+    <div className="oa FBV channel-manage">
       <div className="content-header">渠道管理</div>
       <div className="m16 bgf pt0 custom-border FB1">
-        <div className="pr">
-          <Button
-            type="primary"
-            style={{
-              position: 'absolute', right: 0, zIndex: 1, marginTop: 6, marginRight: 16,
-            }}
-            onClick={authoriza}
-          >
-            授权账号
-          </Button>
-        </div>
         <Tabs onChange={changeTabs}>
           {
             channelList.map(item => (
@@ -192,6 +151,12 @@ const ChannelManage = props => {
             ))
           }
         </Tabs>
+        <AddDrawer
+          drawerVisible={drawerVisible}
+          closeDrawer={() => setDrawer(false)}
+          getList={getList}
+          record={nowRecord}
+        />
       </div>
     </div>
   )
