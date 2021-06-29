@@ -150,6 +150,7 @@ const ChannelManage = props => {
         dataSource={listDate} 
         rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
         scroll={{x: 720}} 
+        style={{margin: '0px 24px'}}
         loading={tableLoading}
         pagination={{
           ...pagination,
@@ -170,11 +171,13 @@ const ChannelManage = props => {
   return (
     <div className="oa FBV">
       <div className="content-header">渠道管理</div>
-      <div className="m16 bgf p16 pt0 custom-border FB1">
-        <div className="pt16 pr">
+      <div className="m16 bgf pt0 custom-border FB1">
+        <div className="pr">
           <Button
             type="primary"
-            style={{position: 'absolute', right: 0, zIndex: 1}}
+            style={{
+              position: 'absolute', right: 0, zIndex: 1, marginTop: 6, marginRight: 16,
+            }}
             onClick={authoriza}
           >
             授权账号

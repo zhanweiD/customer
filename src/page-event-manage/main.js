@@ -139,7 +139,7 @@ const EventManage = () => {
   return (
     <div className="oa FBV">
       <div className="content-header">事件管理</div>
-      <div className="m16 bgf p16 pt0 custom-border FB1">
+      <div className="m16 bgf p24 pt0 custom-border FB1">
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSeaParams}

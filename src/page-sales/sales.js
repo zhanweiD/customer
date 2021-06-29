@@ -294,7 +294,7 @@ const Sales = () => {
     <div className="oa FBV">
       <div className="content-header">营销计划</div>
       <div 
-        className="m16 bgf p16 pt0 custom-border FB1" 
+        className="m16 bgf p24 pt0 custom-border FB1" 
         style={{
           position: 'relative',
           overflowY: 'auto',
