@@ -7,6 +7,7 @@ import Wechat from './wechat/wechat'
 import Frame from '../icon/wechat-frame.svg'
 import io from './io'
 import data from './wechat/data'
+import ContentTemplate from './content-template'
 
 const {Option} = Select
 const {Item} = Form
@@ -46,8 +47,10 @@ export default ({
   const [templateList, setTemplateList] = useState([])
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [channelActionList, setChannelActionList] = useState([])
+  const [thumbMediaList, setThumbMediaList] = useState([]) // 图文列表
   const [touchWay, setTouchWay] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [isMass, setIsMass] = useState(false) // 是否群发
   const [accountId, setAccountId] = useState(null)
   const [myForm] = Form.useForm()
   
@@ -63,10 +66,20 @@ export default ({
     }
   }
 
-  const fieldsChange = (c, a) => {
-    // console.log(c)
-    // console.log(a)
+  // 图文消息列表
+  const getThumbMediaList = async v => {
+    try {
+      const res = await io.getThumbMediaList({accountCode: v || accountId})
+      setThumbMediaList(res || [])
+    } catch (error) {
+      errorTip(error.message)
+    }
   }
+
+  // const fieldsChange = (c, a) => {
+  //   // console.log(c)
+  //   // console.log(a)
+  // }
 
   const changTouchWay = v => {
     setTouchWay(v)
@@ -127,6 +140,7 @@ export default ({
 
   const [vis, setVis] = useState(false)
 
+  // 选择模版
   const templateChange = e => {
     // 目标模板数据
     const target = _.find(templateList, item => item.template_id === e)
@@ -164,6 +178,7 @@ export default ({
     }
   }
 
+  // 保存策略
   const saveData = () => {
     const tagMap = {}
     tagList.forEach(item => {
@@ -205,32 +220,6 @@ export default ({
           templateJson: JSON.stringify(templateJson),
         },
       }
-      // const params = strategyDetail.id ? {
-      //   ...strategyDetail,
-      //   ...oneFormData,
-      //   ...twoFormData,
-      //   planId: planInfo.id,
-      //   clientGroupId: planInfo.clientGroupId,
-      //   strategyName: strName,
-      //   sendOutContent: {
-      //     ...value,
-      //     channel: matchChannel(value.channelCode),
-      //     id: strategyDetail.id,
-      //     templateJson: JSON.stringify(templateJson),
-      //   },
-      // } : {
-      //   ...strategyDetail,
-      //   ...oneFormData,
-      //   ...twoFormData,
-      //   planId: planInfo.id,
-      //   clientGroupId: planInfo.clientGroupId,
-      //   strategyName: strName,
-      //   sendOutContent: {
-      //     ...value,
-      //     channel: matchChannel(value.channelCode),
-      //     templateJson: JSON.stringify(templateJson),
-      //   },
-      // }
       
       // 删除编辑前部分无用属性
       if (params.strategyConditionType) {
@@ -267,7 +256,7 @@ export default ({
   }
 
   // TODO:
-  const getTemplate = async (v, cb) => {
+  const getTemplate = async v => {
     try {
       const res = await io.getTemplate({
         accountId: v || accountId,
@@ -280,9 +269,21 @@ export default ({
     }
   }
 
+  // 触达通道
   const changeCode = (v, item) => {
     getChannelActions(v[0])
     setAccountId(item[1].code)
+  }
+
+  // 
+  const changeAction = v => {
+    if (v === 2002) {
+      setIsMass(true)
+      getThumbMediaList()
+    } else {
+      getTemplate()
+      setIsMass(false)
+    }
   }
 
   useEffect(() => {
@@ -351,7 +352,11 @@ export default ({
       myForm.setFieldsValue({isDelay: 0})
     } else {
       const {channel = {}} = strategyDetail.sendOutContent
-      getTemplate(channel.accountCode)
+      if (channel.actionId === 2002) {
+        getThumbMediaList(channel.accountCode)
+      } else {
+        getTemplate(channel.accountCode)
+      }
     }
   }, [strategyDetail])
 
@@ -363,14 +368,10 @@ export default ({
       <Form
         {...layout}
         style={{marginBottom: '192px'}}
-        // name="wechatDrawer"
         form={myForm}
-        onFieldsChange={(c, a) => fieldsChange(c, a)}
+        // onFieldsChange={(c, a) => fieldsChange(c, a)}
       >
-        <Item
-          label="触达方式"
-          // name="touchType"
-        >
+        <Item label="触达方式">
           {setTouchType()}
         </Item>
         <Item
@@ -383,7 +384,6 @@ export default ({
             options={treeStrChannelList}
             expandTrigger="hover"
             onChange={changeCode}
-            // onChange={v => getChannelActions(v[0])}
             fieldNames={{
               label: 'name',
               value: 'id',
@@ -396,41 +396,20 @@ export default ({
           name="actionId"
           rules={[{required: true, message: '请选择营销动作'}]}
         >
-          <Select placeholder="请选择动作" onChange={() => getTemplate()}>
+          <Select placeholder="请选择动作" onChange={changeAction}>
             {
               channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
             }
           </Select>
         </Item>
-        <Item
-          label="内容模板"
-          name="templateId"
-          rules={[{required: true, message: '模板不能为空'}]}
-        >
-          <Select onChange={templateChange} placeholder="请选择模版">
-            {
-              templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
-            }
-          </Select>
-        </Item>
-        <Item
-          label="内容设置"
-          name="templateJson"
-        >
-          <span className="c-primary">样式预览</span>
-        </Item>
-        
-        {
-          templateKeyList.map(item => (
-            <Item
-              name={item}
-              label={item}
-              rules={[{required: true, message: '输入不能为空'}]}
-            >
-              <Wechat id={item} tagList={tagList} />
-            </Item>
-          ))
-        }
+        <ContentTemplate 
+          templateChange={templateChange}
+          templateList={templateList}
+          templateKeyList={templateKeyList}
+          tagList={tagList}
+          isMass={isMass}
+          thumbMediaList={thumbMediaList}
+        />
       </Form>
       {/* <Preview> */}
       <div 

@@ -196,6 +196,9 @@ const CreateSales = props => {
   }
   // 配置删除
   const deleteStrategy = async id => {
+    if (id === selectItemId) {
+      setSelectItemId(undefined)
+    }
     try {
       await io.deleteStrategy({id})
       successTip('删除成功')
@@ -315,7 +318,6 @@ const CreateSales = props => {
     debounce(() => {
       strCheckName(param)
       setStrName(strategyName)
-      // setStrategyDetail({...strategyDetail, strategyName})
     }, 500)
   }
 
@@ -406,9 +408,7 @@ const CreateSales = props => {
         endTime = strategyFixConditionContent.endTime,
       } = strategyEventConditionContent // 触发条件
       const {cron, frequency} = strategyFixConditionContent
-      const {
-        isDelay, channel, actionId, templateId,
-      } = sendOutContent // 触发设置
+      const {isDelay} = sendOutContent // 触发设置
       if (strategyName) {
         let clientGroup = {}
         if (clientGroupFilterType) {
@@ -432,9 +432,6 @@ const CreateSales = props => {
                     title={`你确定删除策略${i + 1}-${strategyName}吗?`}
                     onConfirm={() => {
                       deleteStrategy(item.id)
-                      if (item.id === selectItemId) {
-                        setSelectItemId(undefined)
-                      }
                     }}
                     onCancel={() => {}}
                     okText="确定"
@@ -601,12 +598,6 @@ const CreateSales = props => {
 
   return (
     <div className="create-sales">
-      {/* <DetailHeader
-        name={planInfo.planName}
-        descr={planInfo.descr}
-        baseInfo={baseInfo}
-        tag={tagMap[0]}
-      /> */}
       <div className="m16">
         <div className="pb8 FBH FBAC">
           <span className="fs18 mr8">{planInfo.planName}</span>
