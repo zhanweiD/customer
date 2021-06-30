@@ -3,11 +3,10 @@ import {Form, Button, Input, Select, Cascader, message} from 'antd'
 import _ from 'lodash'
 import cls from 'classnames'
 import {errorTip} from '../../common/util'
-import Wechat from './wechat/wechat'
 import Frame from '../icon/wechat-frame.svg'
 import io from './io'
 import data from './wechat/data'
-import ContentTemplate from './content-template'
+import {setTemplate} from './unit'
 
 const {Option} = Select
 const {Item} = Form
@@ -75,11 +74,6 @@ export default ({
       errorTip(error.message)
     }
   }
-
-  // const fieldsChange = (c, a) => {
-  //   // console.log(c)
-  //   // console.log(a)
-  // }
 
   const changTouchWay = v => {
     setTouchWay(v)
@@ -369,7 +363,6 @@ export default ({
         {...layout}
         style={{marginBottom: '192px'}}
         form={myForm}
-        // onFieldsChange={(c, a) => fieldsChange(c, a)}
       >
         <Item label="触达方式">
           {setTouchType()}
@@ -402,14 +395,16 @@ export default ({
             }
           </Select>
         </Item>
-        <ContentTemplate 
-          templateChange={templateChange}
-          templateList={templateList}
-          templateKeyList={templateKeyList}
-          tagList={tagList}
-          isMass={isMass}
-          thumbMediaList={thumbMediaList}
-        />
+        {
+          setTemplate({
+            templateChange,
+            templateList,
+            templateKeyList,
+            tagList,
+            isMass,
+            thumbMediaList,
+          })
+        }
       </Form>
       {/* <Preview> */}
       <div 

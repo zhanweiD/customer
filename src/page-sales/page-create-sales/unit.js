@@ -4,7 +4,8 @@ import Wechat from './wechat/wechat'
 const {Item} = Form
 const {Option} = Select
 
-const setTemplate = ({
+// step-three 设置模版
+export const setTemplate = ({
   templateChange,
   templateList,
   thumbMediaList,
@@ -73,4 +74,7 @@ const setTemplate = ({
   )
 }
 
-export default setTemplate
+// 
+export const setTimeDom = () => {
+
+}

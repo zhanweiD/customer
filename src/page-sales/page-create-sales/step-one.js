@@ -43,7 +43,6 @@ const CreateSales = ({
   const [condList, setCondList] = useState([1])
   const [promptTags, setPromptTags] = useState([]) // 标签预提示
   const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
-  // const [clientGroup, setClientGroup] = useState([{tagId: undefined, comparision: undefined, rightParams: undefined}]) // 用户筛选详情
   const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
   const [selectKey, setSelectKey] = useState([]) // 已选事件id
   const [channelList, setChannelList] = useState([]) // 带disable的事件
@@ -61,6 +60,7 @@ const CreateSales = ({
     }
   }
 
+  // 返回事件全部信息（code, id）
   const matchEnent = data => {
     const channel = originEventList.filter(item => item.id === data[0])[0] || {}
     const account = originEventList.filter(item => item.id === data[1])[0] || {}
@@ -75,9 +75,9 @@ const CreateSales = ({
     }
   }
 
+  // 保存表单值
   const complete = () => {
     oneForm.validateFields().then(value => {
-      console.log(value)
       if (value.clientGroupFilterType) {
         const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
         value.clientGroupUserActionFilterContent = {events, logic: userLogic}
@@ -88,13 +88,8 @@ const CreateSales = ({
         })
         value.clientGroupTagFilterContent = JSON.stringify({logic: userLogic, express: param || []})
       }
-      // const param = {
-      //   ...strategyDetail,
-      //   ...value,
-      // }
+
       setOneFormData(value)
-      // delete param.clientGroupFilterContent
-      // setStrategyDetail(param)
       nextStep()
     })
   }
@@ -135,7 +130,6 @@ const CreateSales = ({
       const {clientGroupUserActionFilterContent, clientGroupFilterType} = strategyDetail
       const list = clientGroupUserActionFilterContent.events.map(item => ({event: [item.channelId, item.accountId, item.eventId]}))
       setClientGroup(list)
-      console.log(clientGroupUserActionFilterContent)
       setUserLogic(clientGroupUserActionFilterContent.logic)
       setRadioType(clientGroupFilterType)
     } else {
