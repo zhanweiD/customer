@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {Input, Steps, Button, message, Popconfirm, Spin} from 'antd'
 import {PlusOutlined, CheckCircleFilled, DeleteOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
-import {authView, DetailHeader, Loading, Tag} from '../../component'
+import {authView, Tag} from '../../component'
 import {errorTip, successTip, debounce} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -87,7 +87,6 @@ const CreateSales = props => {
   // 添加策略校验
   const addStrategyCheck = () => {
     const index = strategyList.findIndex(item => !item.id)
-    console.log(index)
     if (index === -1) {
       setStrategyList([...strategyList, {}])
     } else {
@@ -281,6 +280,7 @@ const CreateSales = props => {
       errorTip(error.message)
     }
   }
+  // 微信模版
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
@@ -295,6 +295,7 @@ const CreateSales = props => {
     }
   }
 
+  // 编辑改变详情
   const changeStrategyDetail = v => {
     setStrategyDetail(v)
   }
@@ -329,12 +330,15 @@ const CreateSales = props => {
     getStrategyDetail(v)
   }
 
+  // 返回事件详情
   const setEventDom = event => {
     const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
     const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
     const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
+
+  // 返回时间详情
   const setCornDom = (cron, frequency) => {
     let cycle = null
     let time = {}
@@ -361,6 +365,7 @@ const CreateSales = props => {
     return `重复 ${cycle} ${time.time}`
   }
 
+  // 返回用户筛选详情
   const setUserDom = user => {
     const tag = tagList.filter(item => item.objIdTagId === user.leftTagId)[0] || {}
     const comparision = comparisionList.filter(item => item.value === user.comparision)[0] || {}
@@ -368,6 +373,7 @@ const CreateSales = props => {
     return `${tag.objNameTagName} ${comparision.name} ${valueName}`
   }
 
+  // 返回动作详情
   const setActionUserDom = user => {
     const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
     const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
@@ -375,6 +381,7 @@ const CreateSales = props => {
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
 
+  // 返回渠道详情
   const setChannelDom = sendOutContent => {
     const {channel, actionId, templateId} = sendOutContent
     const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
@@ -571,7 +578,6 @@ const CreateSales = props => {
         title: '分组',
         value: '默认分组',
         icon: <img style={{marginBottom: 1}} src={cate} alt="分组" />,
-        // <img style={{marginBottom: 1}} src={Attr} alt="属性" />
       },
       {
         title: '用户',
@@ -705,4 +711,3 @@ const CreateSales = props => {
   )
 }
 export default authView(CreateSales)
-// export default CreateSales

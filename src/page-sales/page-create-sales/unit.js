@@ -1,8 +1,13 @@
-import {Form, Select} from 'antd'
+import {
+  Form, DatePicker, TimePicker, Input, Select,
+} from 'antd'
+
 import Wechat from './wechat/wechat'
 
 const {Item} = Form
 const {Option} = Select
+const dateFormat = 'YYYY-MM-DD'
+const timeFormat = 'HH:mm:ss'
 
 // step-three 设置模版
 export const setTemplate = ({
@@ -74,7 +79,104 @@ export const setTemplate = ({
   )
 }
 
-// 
-export const setTimeDom = () => {
-
+// step-two 设置时间dom
+export const setTimeDom = ({
+  period, cornTime, disabledDate,
+}) => {
+  // 根据重复方式生成触发时间组件
+  const setMonth = () => {
+    const monthData = []
+    for (let i = 1; i <= 31; i++) {
+      monthData.push(<Option value={i}>{`${i}号`}</Option>)
+    }
+    return monthData
+  }
+  if (period === '1') {
+    return (
+      <Item
+        noStyle 
+        name="time"
+        rules={[{required: true, message: '请选择时间'}]}
+        initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
+      >
+        <TimePicker format={timeFormat} style={{width: '40%'}} />
+      </Item>
+    )
+  } 
+  if (period === '2') {
+    return (
+      <Input.Group compact>
+        <Item 
+          noStyle 
+          name="interval" 
+          rules={[{required: true, message: '请选择日期'}]}
+          initialValue={cornTime.interval}
+        >
+          <Select style={{width: '60%'}} placeholder="请选择日期">
+            <Option value={1}>星期一</Option>
+            <Option value={2}>星期二</Option>
+            <Option value={3}>星期三</Option>
+            <Option value={4}>星期四</Option>
+            <Option value={5}>星期五</Option>
+            <Option value={6}>星期六</Option>
+            <Option value={7}>星期日</Option>
+          </Select>
+        </Item>
+        <Item 
+          noStyle 
+          name="time" 
+          rules={[{required: true, message: '请选择时间'}]}
+          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
+        >
+          <TimePicker format={timeFormat} style={{width: '40%'}} />
+        </Item>
+      </Input.Group>
+    )
+  } 
+  if (period === '3') {
+    return (
+      <Input.Group compact>
+        <Item 
+          noStyle 
+          name="interval" 
+          rules={[{required: true, message: '请选择日期'}]}
+          initialValue={cornTime.interval}
+        >
+          <Select style={{width: '60%'}} placeholder="请选择日期">
+            {
+              setMonth()
+            }
+          </Select>
+        </Item>
+        <Item 
+          noStyle 
+          name="time" 
+          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
+          rules={[{required: true, message: '请选择时间'}]}
+        >
+          <TimePicker format={timeFormat} style={{width: '40%'}} />
+        </Item>
+      </Input.Group>
+    )
+  }
+  return (
+    <Input.Group compact>
+      <Item 
+        noStyle 
+        name="interval" 
+        rules={[{required: true, message: '请选择日期'}]}
+        initialValue={cornTime.date ? moment(cornTime.date, dateFormat) : undefined}
+      >
+        <DatePicker disabledDate={disabledDate} format={dateFormat} style={{width: '60%'}} />
+      </Item>
+      <Item 
+        noStyle 
+        name="time" 
+        rules={[{required: true, message: '请选择时间'}]}
+        initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
+      >
+        <TimePicker format={timeFormat} style={{width: '40%'}} />
+      </Item>
+    </Input.Group>
+  )
 }

@@ -1,7 +1,10 @@
 import {useState, useEffect} from 'react'
-import {Cascader, Form, Button, DatePicker, TimePicker, Radio, Input, Select, Collapse} from 'antd'
+import {
+  Cascader, Form, Button, DatePicker, Radio, Input, Select, Collapse,
+} from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
+import {setTimeDom} from './unit'
 import Attr from '../icon/wechat-attr.svg'
 
 const {Option} = Select
@@ -67,6 +70,7 @@ export default ({
   const [doneConditionList, setDoneConditionList] = useState([]) // 完成事件list带disabled
   const [notConditionList, setNotConditionList] = useState([]) // 未完成事件带disabled
 
+  // 输入时间格式校验
   const checkNumber = (rule, value, callback) => {
     if (notDoneCount) {
       if (!value) {
@@ -90,6 +94,7 @@ export default ({
     }
   }
 
+  // 匹配事件返回全量信息（code + id）
   const matchEnent = data => {
     const channel = conditionList.filter(item => item.id === data[0])[0] || {}
     const account = conditionList.filter(item => item.id === data[1])[0] || {}
@@ -103,9 +108,10 @@ export default ({
       accountCode: account.code,
     }
   }
+
+  // 保存表单数据
   const onFinish = () => {
     stepForm.validateFields().then(value => {
-      console.log(value)
       const {startEndDate, interval, time} = value
       let params = {}
 
@@ -130,7 +136,6 @@ export default ({
           strategyRestrict: value.strategyRestrict,
           strategyEventConditionContent,
         }
-        console.log(params)
       } else {
         value.strategyFixConditionContent = {}
         let cycle = null // corn
@@ -166,16 +171,19 @@ export default ({
           strategyConditionType: value.strategyConditionType,
           strategyFixConditionContent,
         }
-        console.log(params)
       }
+
       setTwoFormData(params)
-      // setStrategyDetail({...strategyDetail, ...params})
       nextStep()
     }).catch(err => console.log(err))
   }
+
+  // 改变触发类型
   const changePlanType = v => {
     setPlanType(v)
   }
+
+  // 改变重复类型
   const changePeriod = v => {
     setPeriod(v)
     setCornTime({})
@@ -184,16 +192,23 @@ export default ({
       interval: '',
     }])
   }
+
+  // 完成任意/全部事件
   const changeDoneLogic = v => {
     setDoneLogic(v)
   }
+
+  // 不完成任意/全部事件
   const changeNotDoneLogic = v => {
     setNotDoneLogic(v)
   }
+
+  // 禁用时间
   const disabledDate = time => {
     return time > moment(planInfo.endTime, 'YYYY-MM-DD HH:mm:ss') || time < moment(planInfo.startTime, 'YYYY-MM-DD HH:mm:ss')
   }
 
+  // 已选完成事件disabled
   const checkSelectEvent = () => {
     const data = []
     stepForm.validateFields(['notDoneEvents']).then(value => {
@@ -208,6 +223,8 @@ export default ({
       console.log(err)
     })
   }
+
+  // 已选未完成事件disabled
   const checkDoneSelectEvent = () => {
     const data = []
     stepForm.validateFields(['doneEvents']).then(value => {
@@ -223,6 +240,7 @@ export default ({
     })
   }
 
+  // 为已选择完成事件添加disabled
   useEffect(() => {
     const data = conditionList.map(item => {
       if (doneSelectKey.find(jtem => jtem === item.id)) {
@@ -235,6 +253,7 @@ export default ({
     setDoneConditionList(listToTree(data) || [])
   }, [doneSelectKey, conditionList])
 
+  // 为已选择未完成事件添加disabled
   useEffect(() => {
     const data = conditionList.map(item => {
       if (selectKey.find(jtem => jtem === item.id)) {
@@ -291,105 +310,6 @@ export default ({
     }, 0)
   }, [strategyDetail])
 
-  // 根据重复方式生成触发时间组件
-  const setTime = () => {
-    const setMonth = () => {
-      const monthData = []
-      for (let i = 1; i <= 31; i++) {
-        monthData.push(<Option value={i}>{`${i}号`}</Option>)
-      }
-      return monthData
-    }
-    if (period === '1') {
-      return (
-        <Item
-          noStyle 
-          name="time"
-          rules={[{required: true, message: '请选择时间'}]}
-          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
-        >
-          <TimePicker format={timeFormat} style={{width: '40%'}} />
-        </Item>
-      )
-    } 
-    if (period === '2') {
-      return (
-        <Input.Group compact>
-          <Item 
-            noStyle 
-            name="interval" 
-            rules={[{required: true, message: '请选择日期'}]}
-            initialValue={cornTime.interval}
-          >
-            <Select style={{width: '60%'}} placeholder="请选择日期">
-              <Option value={1}>星期一</Option>
-              <Option value={2}>星期二</Option>
-              <Option value={3}>星期三</Option>
-              <Option value={4}>星期四</Option>
-              <Option value={5}>星期五</Option>
-              <Option value={6}>星期六</Option>
-              <Option value={7}>星期日</Option>
-            </Select>
-          </Item>
-          <Item 
-            noStyle 
-            name="time" 
-            rules={[{required: true, message: '请选择时间'}]}
-            initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
-          >
-            <TimePicker format={timeFormat} style={{width: '40%'}} />
-          </Item>
-        </Input.Group>
-      )
-    } 
-    if (period === '3') {
-      return (
-        <Input.Group compact>
-          <Item 
-            noStyle 
-            name="interval" 
-            rules={[{required: true, message: '请选择日期'}]}
-            initialValue={cornTime.interval}
-          >
-            <Select style={{width: '60%'}} placeholder="请选择日期">
-              {
-                setMonth()
-              }
-            </Select>
-          </Item>
-          <Item 
-            noStyle 
-            name="time" 
-            initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
-            rules={[{required: true, message: '请选择时间'}]}
-          >
-            <TimePicker format={timeFormat} style={{width: '40%'}} />
-          </Item>
-        </Input.Group>
-      )
-    }
-    return (
-      <Input.Group compact>
-        <Item 
-          noStyle 
-          name="interval" 
-          rules={[{required: true, message: '请选择日期'}]}
-          initialValue={cornTime.date ? moment(cornTime.date, dateFormat) : undefined}
-        >
-          <DatePicker disabledDate={disabledDate} format={dateFormat} style={{width: '60%'}} />
-        </Item>
-        <Item 
-          noStyle 
-          name="time" 
-          rules={[{required: true, message: '请选择时间'}]}
-          initialValue={cornTime.time ? moment(cornTime.time, timeFormat) : undefined}
-        >
-          <TimePicker format={timeFormat} style={{width: '40%'}} />
-        </Item>
-      </Input.Group>
-    )
-  }
-
   return (
     <div 
       className="pl16 pr16 pr step-two step-content" 
@@ -414,237 +334,225 @@ export default ({
         </Item>
         {
           planType === 1 && (
-            <Collapse 
-              style={{marginBottom: 16, position: 'relative'}} 
-              defaultActiveKey={['1']}
-            >
-              <Panel 
-                header={(
-                  <div className="FBH header-select">
-                    完成下列
-                    <Select 
-                      onClick={e => e.stopPropagation()}
-                      onChange={changeDoneLogic}
-                      value={doneLogic} 
-                      style={{width: 72, margin: '4px'}}
-                    >
-                      <Option value={0}>任意</Option>
-                      <Option value={1}>全部</Option>
-                    </Select>
-                    事件
-                  </div>
-                )} 
-                key="1"
+            <div>
+
+              <Collapse 
+                style={{marginBottom: 16, position: 'relative'}} 
+                defaultActiveKey={['1']}
               >
-                <Form.List
-                  name="doneEvents"
-                  initialValue={doneEventList}
+                <Panel 
+                  header={(
+                    <div className="FBH header-select">
+                      完成下列
+                      <Select 
+                        onClick={e => e.stopPropagation()}
+                        onChange={changeDoneLogic}
+                        value={doneLogic} 
+                        style={{width: 72, margin: '4px'}}
+                      >
+                        <Option value={0}>任意</Option>
+                        <Option value={1}>全部</Option>
+                      </Select>
+                      事件
+                    </div>
+                  )} 
+                  key="1"
                 >
-                  {(fields, {add, remove}, {errors}) => (
-                    <div>
-                      {fields.map((field, index) => (
-                        <div style={{width: 360}} className="pr">
-                          <Item
-                            {...field}
-                            {...layout1}
-                            // name={[field.name, 'id']}
-                            // fieldKey={[field.fieldKey, 'id']}
-                            style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
-                            className="position-icon"
-                            // label={`事件${index + 1}`}
-                            rules={[{required: true, message: '请选择事件'}]}
-                          >
-                            <Cascader
-                              placeholder="请选择事件"
-                              // options={treeConditionList}
-                              options={doneConditionList}
-                              expandTrigger="hover"
-                              style={{width: 360}}
-                              onChange={checkDoneSelectEvent}
-                              fieldNames={{
-                                label: 'name',
-                                value: 'id',
-                                children: 'children',
-                              }}
-                            />
-                          </Item>
-                          {fields.length > 1 ? (
+                  <Form.List
+                    name="doneEvents"
+                    initialValue={doneEventList}
+                  >
+                    {(fields, {add, remove}, {errors}) => (
+                      <div>
+                        {fields.map((field, index) => (
+                          <div style={{width: 360}} className="pr">
+                            <Item
+                              {...field}
+                              {...layout1}
+                              // name={[field.name, 'id']}
+                              // fieldKey={[field.fieldKey, 'id']}
+                              style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
+                              className="position-icon"
+                              // label={`事件${index + 1}`}
+                              rules={[{required: true, message: '请选择事件'}]}
+                            >
+                              <Cascader
+                                placeholder="请选择事件"
+                                // options={treeConditionList}
+                                options={doneConditionList}
+                                expandTrigger="hover"
+                                style={{width: 360}}
+                                onChange={checkDoneSelectEvent}
+                                fieldNames={{
+                                  label: 'name',
+                                  value: 'id',
+                                  children: 'children',
+                                }}
+                              />
+                            </Item>
+                            {fields.length > 1 ? (
+                              <MinusCircleOutlined
+                                className="dynamic-delete-button"
+                                onClick={() => {
+                                  remove(field.name)
+                                  checkDoneSelectEvent()
+                                }}
+                              />
+                            ) : null}
+                          </div>
+                        ))}
+                        <div
+                          className="add-event-btn fs14 hand"
+                          onClick={add}
+                        >
+                          <img style={{marginBottom: 1}} src={Attr} alt="属性" />
+                          <span className="ml4">添加事件</span>
+                        </div>
+                      </div>
+                    )}
+                  </Form.List>
+                </Panel>
+              </Collapse>
+              <Item>
+                <Input.Group compact>
+                  <span className="mt4">且在</span>
+                  <Item 
+                    noStyle 
+                    name="timeGap" 
+                    initialValue={strategyEventCondition.timeGap ? strategyEventCondition.timeGap : undefined}
+                    rules={[
+                      {validator: checkNumber},
+                    ]}
+                  >
+                    <Input placeholder="请输入" style={{width: 96, marginLeft: 8}} type="number" />
+                  </Item>
+                  <Item 
+                    noStyle 
+                    name="timeUnit" 
+                    initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
+                    rules={[{required: true, message: '请选择单位'}]}
+                  >
+                    <Select style={{width: 72}}>
+                      <Option value="MINUTES">分钟</Option>
+                      <Option value="HOURS">小时</Option>
+                      <Option value="DAYS">天</Option>
+                    </Select>
+                  </Item>
+                  <span className="ml8 mt4">内</span>
+                </Input.Group>
+              </Item>
+              <Collapse 
+                style={{marginBottom: 16, position: 'relative'}} 
+                defaultActiveKey={['1']}
+              >
+                <Panel 
+                  header={(
+                    <div className="FBH header-select">
+                      未完成下列
+                      <Select 
+                        onClick={e => e.stopPropagation()}
+                        onChange={changeNotDoneLogic}
+                        value={notDoneLogic} 
+                        style={{width: 72, margin: '4px'}}
+                      >
+                        <Option value={0}>任意</Option>
+                        <Option value={1}>全部</Option>
+                      </Select>
+                      事件
+                    </div>
+                  )} 
+                  key="1"
+                >
+                  <Form.List
+                    name="notDoneEvents"
+                    initialValue={notDoneEventList}
+                  >
+                    {(fields, {add, remove}, {errors}) => (
+                      <div>
+                        {fields.map((field, index) => (
+                          <div style={{width: 360}} className="pr">
+                            <Item
+                              {...field}
+                              {...layout1}
+                              style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
+                              className="position-icon"
+                              rules={[{required: true, message: '请选择事件'}]}
+                            >
+                              <Cascader
+                                placeholder="请选择事件"
+                                options={notConditionList}
+                                expandTrigger="hover"
+                                style={{width: 360}}
+                                onChange={checkSelectEvent}
+                                fieldNames={{
+                                  label: 'name',
+                                  value: 'id',
+                                  children: 'children',
+                                }}
+                              />
+                            </Item>
                             <MinusCircleOutlined
                               className="dynamic-delete-button"
                               onClick={() => {
                                 remove(field.name)
-                                checkDoneSelectEvent()
+                                setNotDoneCount(notDoneCount - 1)
+                                checkSelectEvent()
+                                setTimeout(() => {
+                                  stepForm.validateFields(['timeGap'])
+                                }, 0)
                               }}
                             />
-                          ) : null}
+                          </div>
+                        ))}
+                        <div
+                          className="add-event-btn fs14 hand"
+                          onClick={() => { 
+                            add() 
+                            setNotDoneCount(notDoneCount + 1)
+                            setTimeout(() => {
+                              stepForm.validateFields(['timeGap'])
+                            }, 0)
+                          }}
+                        >
+                          <img style={{marginBottom: 1}} src={Attr} alt="属性" />
+                          <span className="ml4">添加事件</span>
                         </div>
-                      ))}
-                      <div
-                        className="add-event-btn fs14 hand"
-                        onClick={() => {
-                          add()
-                        }}
-                      >
-                        <img style={{marginBottom: 1}} src={Attr} alt="属性" />
-                        <span className="ml4">添加事件</span>
                       </div>
-                    </div>
-                  )}
-                </Form.List>
-              </Panel>
-            </Collapse>
-          )
-        }
-        {
-          planType === 1 && (
-            <Item>
-              <Input.Group compact>
-                <span className="mt4">且在</span>
-                <Item 
-                  noStyle 
-                  name="timeGap" 
-                  initialValue={strategyEventCondition.timeGap ? strategyEventCondition.timeGap : undefined}
-                  rules={[
-                    // {required: true, message: '请输入时间'},
-                    {validator: checkNumber},
-                  ]}
-                >
-                  <Input placeholder="请输入" style={{width: 96, marginLeft: 8}} type="number" />
-                </Item>
-                <Item 
-                  noStyle 
-                  name="timeUnit" 
-                  initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
-                  rules={[{required: true, message: '请选择单位'}]}
-                >
-                  <Select style={{width: 72}}>
-                    <Option value="MINUTES">分钟</Option>
-                    <Option value="HOURS">小时</Option>
-                    <Option value="DAYS">天</Option>
-                  </Select>
-                </Item>
-                <span className="ml8 mt4">内</span>
-              </Input.Group>
-            </Item>
+                    )}
+                  </Form.List>
+                </Panel>
+              </Collapse>
+            </div>
           )
         }
 
         {
-          planType === 1 && (
-            <Collapse 
-              style={{marginBottom: 16, position: 'relative'}} 
-              defaultActiveKey={['1']}
-            >
-              <Panel 
-                header={(
-                  <div className="FBH header-select">
-                    未完成下列
-                    <Select 
-                      onClick={e => e.stopPropagation()}
-                      onChange={changeNotDoneLogic}
-                      value={notDoneLogic} 
-                      style={{width: 72, margin: '4px'}}
-                    >
-                      <Option value={0}>任意</Option>
-                      <Option value={1}>全部</Option>
-                    </Select>
-                    事件
-                  </div>
-                )} 
-                key="1"
+          planType === 0 && (
+            <div>
+              <Item
+                label="重复"
+                name="frequency"
+                rules={[{required: true, message: '请选择周期'}]}
+                initialValue={period}
               >
-                <Form.List
-                  name="notDoneEvents"
-                  initialValue={notDoneEventList}
-                >
-                  {(fields, {add, remove}, {errors}) => (
-                    <div>
-                      {fields.map((field, index) => (
-                        <div style={{width: 360}} className="pr">
-                          <Item
-                            {...field}
-                            {...layout1}
-                            // name={[field.name, 'id']}
-                            // fieldKey={[field.fieldKey, 'id']}
-                            style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
-                            className="position-icon"
-                            // label={`事件${index + 1}`}
-                            rules={[{required: true, message: '请选择事件'}]}
-                          >
-                            <Cascader
-                              placeholder="请选择事件"
-                              // options={treeConditionList}
-                              options={notConditionList}
-                              expandTrigger="hover"
-                              style={{width: 360}}
-                              onChange={checkSelectEvent}
-                              fieldNames={{
-                                label: 'name',
-                                value: 'id',
-                                children: 'children',
-                              }}
-                            />
-                          </Item>
-                          <MinusCircleOutlined
-                            className="dynamic-delete-button"
-                            onClick={() => {
-                              remove(field.name)
-                              setNotDoneCount(notDoneCount - 1)
-                              checkSelectEvent()
-                              setTimeout(() => {
-                                stepForm.validateFields(['timeGap'])
-                              }, 0)
-                            }}
-                          />
-                        </div>
-                      ))}
-                      <div
-                        className="add-event-btn fs14 hand"
-                        onClick={() => { 
-                          add() 
-                          setNotDoneCount(notDoneCount + 1)
-                          setTimeout(() => {
-                            stepForm.validateFields(['timeGap'])
-                          }, 0)
-                        }}
-                      >
-                        <img style={{marginBottom: 1}} src={Attr} alt="属性" />
-                        <span className="ml4">添加事件</span>
-                      </div>
-                    </div>
-                  )}
-                </Form.List>
-              </Panel>
-            </Collapse>
-          )
-        }
-
-        {
-          planType === 0 && (
-            <Item
-              label="重复"
-              name="frequency"
-              rules={[{required: true, message: '请选择周期'}]}
-              initialValue={period}
-            >
-              <Select onChange={changePeriod} placeholder="请选择周期">
-                <Option value="0">单次</Option>
-                <Option value="1">每天</Option>
-                <Option value="2">每周</Option>
-                <Option value="3">每月</Option>
-              </Select>
-            </Item>
-          )
-        }
-
-        {
-          planType === 0 && (
-            <Item
-              label="触发时间"
-              extra="将在这个时间对受众用户进行触达"
-            >
-              {setTime()}
-            </Item>
+                <Select onChange={changePeriod} placeholder="请选择周期">
+                  <Option value="0">单次</Option>
+                  <Option value="1">每天</Option>
+                  <Option value="2">每周</Option>
+                  <Option value="3">每月</Option>
+                </Select>
+              </Item>
+              <Item
+                label="触发时间"
+                extra="将在这个时间对受众用户进行触达"
+              >
+                {setTimeDom({
+                  period,
+                  cornTime,
+                  disabledDate,
+                })}
+              </Item>
+            </div>
           )
         }
 
@@ -661,6 +569,7 @@ export default ({
             </Item>
           )
         }
+
         <Item 
           label="参与限制" 
           name="strategyRestrict" 

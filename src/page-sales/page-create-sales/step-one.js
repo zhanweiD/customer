@@ -94,10 +94,12 @@ const CreateSales = ({
     })
   }
 
+  // 用户筛选类型
   const changeUserLogic = v => {
     setUserLogic(v)
   }
 
+  // 选择事件
   const checkSelectEvent = () => {
     const data = []
     oneForm.validateFields(['clientGroupFilterContent']).then(value => {
@@ -112,6 +114,7 @@ const CreateSales = ({
     })
   }
 
+  // 为已选择事件添加disabled
   useEffect(() => {
     const data = originEventList.map(item => {
       if (selectKey.find(jtem => jtem === item.id)) {
@@ -150,6 +153,7 @@ const CreateSales = ({
   useEffect(() => {
     oneForm.setFieldsValue({clientGroupFilterContent: clientGroup})
   }, [clientGroup])
+
   return (
     <div 
       style={{display: current === 0 ? 'block' : 'none'}} 
@@ -323,6 +327,7 @@ const CreateSales = ({
           </Panel>
         </Collapse>
       </Form>
+
       <div className="steps-action">
         <Popconfirm
           title="取消后返回营销计划列表?"
@@ -335,7 +340,6 @@ const CreateSales = ({
             取消
           </Button>
         </Popconfirm>
-       
         <Button type="primary" onClick={complete}>
           下一步
         </Button>
