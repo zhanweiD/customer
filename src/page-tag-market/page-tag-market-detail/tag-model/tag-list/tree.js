@@ -189,7 +189,7 @@ export default class TagCateTree extends Component {
       <div 
         className="custom-border" 
         style={{
-          margin: '0 16px 12px 12px',
+          margin: '0 16px 16px 16px',
         }}
       >
         <DtTreeBox {...treeBoxConfig}>

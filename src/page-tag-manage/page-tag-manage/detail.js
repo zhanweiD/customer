@@ -11,6 +11,9 @@ import {
 import TagModel from './tag-model'
 import DateSheet from './data-sheet'
 import RelationSheet from './relation-sheet'
+import cardIcon1 from '../../icon/card-icon-1.svg'
+import cardIcon2 from '../../icon/card-icon-2.svg'
+import cardIcon3 from '../../icon/card-icon-3.svg'
 
 const {TabPane} = Tabs
 
@@ -36,14 +39,17 @@ export default class ObjectDetail extends Component {
         title: '标签总数',
         tooltipText: '该对象下的标签总数',
         values: [objDetailNew.tag],
+        icon: cardIcon1,
       }, {
         title: '已绑定字段数',
         tooltipText: '该对象绑定的字段总数',
         values: [objDetailNew.bindDbFieldCnt],
+        icon: cardIcon2,
       }, {
         title: '字段总数',
         tooltipText: '该对象下的字段总数',
         values: [objDetailNew.dbFieldCnt],
+        icon: cardIcon3,
       },
     ]
 
@@ -53,12 +59,12 @@ export default class ObjectDetail extends Component {
           <div>
             <div className="FBV">
               <div className="content-header">{`对象名称：${objDetail.name}`}</div>
-              <div className="ml12">
-                <span>描述：</span>
-                <span>{objDetail.descr || '-'}</span>
+              <div className="ml16">
+                <span className="c85">描述：</span>
+                <span className="c85">{objDetail.descr || '-'}</span>
               </div>
             </div>
-            <div className="ml12 mr12">
+            <div className="ml16 mr16">
               <OverviewCardWrap cards={cards} />
             </div>
           </div>
@@ -66,7 +72,7 @@ export default class ObjectDetail extends Component {
         <div 
           className="FB1 custom-border"
           style={{
-            margin: '0 12px 12px 12px',
+            margin: '0 16px 16px 16px',
           }}
         >
           <Provider bigStore={this.store}>

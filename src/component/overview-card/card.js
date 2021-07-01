@@ -38,11 +38,11 @@ export default class OverviewCard extends React.Component {
 
   render() {
     const {
-      title, tooltipText, values, valueTexts, fontStyle: {color, active},
+      title, tooltipText, values, valueTexts, icon, fontStyle: {color, active},
     } = this.props
     return (
       <div className={cls({'overview-card': true})} style={{color: color || 'inherit'}}>
-        <div className="df-js">
+        <div className="FBH">
           {/* ml4 mt1 对齐微调 */}
           {/* <span className="ml4 mt1"> */}
           <span>
@@ -55,7 +55,7 @@ export default class OverviewCard extends React.Component {
           </span>
           {
             tooltipText ? (
-              <QuestionTooltip tip={tooltipText} />
+              <QuestionTooltip tip={tooltipText} color="#fff" />
             ) : null
           }
         </div>
@@ -81,6 +81,11 @@ export default class OverviewCard extends React.Component {
             </div>
           )
         }
+        <div className="overview-icon">
+          {
+            icon ? <img src={icon} alt="icon" /> : null
+          }
+        </div>
       </div>
     )
   }

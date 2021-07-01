@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>位图</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="26.4114234%" y1="8.6802109%" x2="77.3710216%" y2="94.1966412%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.1" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="3.50435719%" x2="50%" y2="99.6422026%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.3848066" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="标签集市" transform="translate(-1311.000000, -168.000000)">
+            <g id="编组-5备份-2" transform="translate(63.000000, 152.000000)">
+                <g id="编组-4备份-2" transform="translate(918.000000, 0.000000)">
+                    <g id="位图" transform="translate(330.000000, 16.000000)">
+                        <circle id="蒙版" fill="url(#linearGradient-1)" opacity="0.12" cx="48" cy="48" r="48"></circle>
+                        <g id="编组" transform="translate(27.000000, 27.000000)" fill="url(#linearGradient-2)" fill-rule="nonzero">
+                            <g id="形状">
+                                <path d="M33,18.0000001 L24,18.0000001 L24,9.00000006 C24,4.02943727 28.0294373,6.15234335e-08 33,6.15234335e-08 C37.9705627,6.15234335e-08 42,4.0294373 42,9.00000006 C42,13.9705627 37.9705627,18.0000001 33,18.0000001 Z M9,42 C4.02943725,42 0,37.9705627 0,33 C0,28.0294372 4.02943725,24 9,24 L18,24 L18,33 C18,35.3869484 17.0517884,37.6761336 15.363961,39.363961 C13.6761336,41.0517884 11.3869484,42 9,42 Z M2.05078141e-08,9 C2.05078141e-08,4.02943725 4.02943727,0 9.00000002,0 C13.9705628,0 18,4.02943725 18,9 L18,18 L9.00000002,18 C6.61305159,18 4.32386637,17.0517884 2.63603897,15.363961 C0.948211565,13.6761336 2.05078141e-08,11.3869484 2.05078141e-08,9 Z M42,33 C42,37.9705628 37.9705627,42 33,42 C28.0294372,42 24,37.9705628 24,33 L24,24 L33,24 C35.3869484,24 37.6761336,24.9482116 39.363961,26.636039 C41.0517884,28.3238664 42,30.6130516 42,33 Z"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
