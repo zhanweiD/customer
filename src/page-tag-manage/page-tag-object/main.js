@@ -58,7 +58,7 @@ class TagObject extends Component {
                         this.store.visible = true
                       }}
                     >
-                      <div className="black65" style={{fontSize: '20px'}}>+ 新增对象</div>
+                      <div className="c85" style={{fontSize: '20px'}}>+ 新增对象</div>
                     </div>
                   </div>
                   {
