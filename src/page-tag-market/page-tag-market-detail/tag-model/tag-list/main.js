@@ -281,7 +281,7 @@ class TagList extends Component {
             <div 
               className="FB1 custom-border pt16"
               style={{
-                margin: '0 12px 12px 0',
+                margin: '0 16px 16px 0',
               }}
             >
               <ListContent {...listConfig} />

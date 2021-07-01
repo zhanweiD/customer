@@ -55,7 +55,7 @@ export default inject('store')(
               </Dropdown>
             </div>
             {
-              data.descr ? <div className="black65">{data.descr}</div> : <div className="black25">-</div>
+              data.descr ? <div className="c85">{data.descr}</div> : <div className="c25">-</div>
             }
           </div>
           <Divider style={{margin: '0'}} />
@@ -64,7 +64,7 @@ export default inject('store')(
               <div className="a-href-color fs16">
                 {data.tag}
               </div>
-              <div className="black65">
+              <div className="c85">
                 总标签数
               </div>
             </div>
@@ -73,7 +73,7 @@ export default inject('store')(
               <div className="a-href-color fs16">
                 {data.tagCatalog}
               </div>
-              <div className="black65">
+              <div className="c85">
                 一级类目数
               </div>
             </div>
@@ -82,7 +82,7 @@ export default inject('store')(
               <div className="a-href-color fs16">
                 {data.tagTable}
               </div>
-              <div className="black65">
+              <div className="c85">
                 数据表数
               </div>
             </div>
