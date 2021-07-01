@@ -1,5 +1,5 @@
 import {
-  Form, DatePicker, TimePicker, Input, Select,
+  Form, DatePicker, TimePicker, Input, Select, Button, Table,
 } from 'antd'
 
 import Wechat from './wechat/wechat'
@@ -8,6 +8,13 @@ const {Item} = Form
 const {Option} = Select
 const dateFormat = 'YYYY-MM-DD'
 const timeFormat = 'HH:mm:ss'
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    span: 9,
+    offset: 3,
+  },
+}
 
 // step-three 设置模版
 export const setTemplate = ({
@@ -47,9 +54,9 @@ export const setTemplate = ({
   return (
     <div>
       <Item
-        label="内容模板"
+        label="内容模版"
         name="templateId"
-        rules={[{required: true, message: '模板不能为空'}]}
+        rules={[{required: true, message: '模版不能为空'}]}
       >
         <Select onChange={templateChange} placeholder="请选择模版">
           {
@@ -178,5 +185,136 @@ export const setTimeDom = ({
         <TimePicker format={timeFormat} style={{width: '40%'}} />
       </Item>
     </Input.Group>
+  )
+}
+
+
+export const setSMS = ({
+  setIsSign,
+  setDrawerVis,
+}) => {
+  const addSign = () => {
+    setIsSign(true)
+    setDrawerVis(true)
+  }
+
+  const addTpl = () => {
+    setIsSign(false)
+    setDrawerVis(true)
+  }
+
+  return (
+    <div>
+      <Item
+        label="短信签名"
+        name="aaaa"
+        rules={[{required: true, message: '短信签名不能为空'}]}
+        extra="注：只能选择添加短信平台已过审的签名，签名请前往第三方短信平台查看。"
+      >
+        <Select placeholder="请选择短信签名">
+          <Option value={123}>123</Option>
+        </Select>
+      </Item>
+      <Item
+        {...tailFormItemLayout}
+      >
+        <a onClick={() => addSign()}>新增短信签名</a>
+      </Item>
+      <Item
+        label="短信模版"
+        name="bbbb"
+        rules={[{required: true, message: '短信模版不能为空'}]}
+        extra="注：只能选择添加短信平台已过审的短信模版，短信模版请前往第三方短信平台查看。"
+      >
+        <Select placeholder="请选择短信模版">
+          <Option value={222}>222</Option>
+        </Select>
+      </Item>
+      <Item
+        {...tailFormItemLayout}
+      >
+        <a onClick={() => addTpl()}>新增短信模版</a>
+      </Item>
+    </div>
+  )
+}
+
+
+const signColumns = [
+  {
+    key: 'name',
+    title: '短信签名',
+  }, {
+    key: 'action',
+    title: '操作',
+    render: (text, record) => {
+      return <a>删除</a>
+    },
+  },
+]
+
+export const setSmsSign = () => {
+  return (
+    <div>
+      <Form
+        name="sms-sign"
+      >
+        <Item
+          label="短信签名"
+        >
+          <Input placeholder="请输入阿里云审核通过的短信签名" />
+        </Item>
+        <Button type="primary">
+          添加
+        </Button>
+      </Form>
+      <Table
+        className="mt16"
+        pagination={false}
+        dataSource={[]}
+        columns={signColumns}
+      />
+    </div>
+  )
+}
+
+const signTpls = [
+  {
+    key: 'name',
+    title: '模版名称', // hover 展示详情？
+  }, {
+    key: 'code',
+    title: '模版code',
+  }, {
+    key: 'action',
+    title: '操作',
+    render: (text, record) => {
+      return <a>删除</a>
+    },
+  },
+]
+
+export const setSmsTpl = () => {
+  return (
+    <div>
+      <Form
+        name="sms-tpl"
+      >
+        <Item
+          label="短信模版"
+        >
+          <Input placeholder="请输入阿里云审核通过的短信模版code" />
+        </Item>
+        <Button type="primary">
+          添加
+        </Button>
+      </Form>
+      <Table
+        className="mt16"
+        pagination={false}
+        dataSource={[]}
+        columns={signTpls}
+      />
+    </div>
   )
 }
