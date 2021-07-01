@@ -361,6 +361,7 @@ export default ({
       setTemplateKeyList([])
       setTouchWay(0)
       setPreviewData('')
+      setSelectMedia({})
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
