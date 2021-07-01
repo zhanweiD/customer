@@ -228,7 +228,6 @@ export default ({
   const checkDoneSelectEvent = () => {
     const data = []
     stepForm.validateFields(['doneEvents']).then(value => {
-      console.log(value)
       value.doneEvents.forEach(item => {
         if (item) {
           data.push(item[2])
