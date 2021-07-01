@@ -24,7 +24,7 @@ const api = {
   getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
 
   getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
-  getThumbMediaList: get(`${marketingApi}/wechat/get_all_news`), // 微信模板
+  getThumbMediaList: post(`${marketingApi}/wechat/get_all_news`), // 微信群发消息
   getTagList: post(`${baseApi}/group/obj_target_tag_list`), // 标签列表
 
   getAllSign: get(`${marketingApi}/aliyunsms/get_all_sign`), // 查询签名下拉列表

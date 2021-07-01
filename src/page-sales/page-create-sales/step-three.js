@@ -49,8 +49,8 @@ export default ({
   const [thumbMediaList, setThumbMediaList] = useState([]) // 图文列表
   const [touchWay, setTouchWay] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [isMass, setIsMass] = useState(false) // 是否群发
-  const [accountId, setAccountId] = useState(null)
+  const [accountId, setAccountId] = useState(null) // 用于判断动作类型
+  const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
   const [myForm] = Form.useForm()
   
   const [previewData, setPreviewData] = useState('')
@@ -68,7 +68,11 @@ export default ({
   // 图文消息列表
   const getThumbMediaList = async v => {
     try {
-      const res = await io.getThumbMediaList({accountCode: v || accountId})
+      const res = await io.getThumbMediaList({
+        accountCode: v || accountCode,
+        currentPage: 1,
+        pageSize: 10, 
+      })
       setThumbMediaList(res || [])
     } catch (error) {
       errorTip(error.message)
@@ -253,7 +257,7 @@ export default ({
   const getTemplate = async v => {
     try {
       const res = await io.getTemplate({
-        accountId: v || accountId,
+        accountId: v || accountCode,
       })
       if (res && res.template_list) {
         setTemplateList(res.template_list)
@@ -266,17 +270,16 @@ export default ({
   // 触达通道
   const changeCode = (v, item) => {
     getChannelActions(v[0])
-    setAccountId(item[1].code)
+    setAccountCode(item[1].code)
   }
 
   // 
   const changeAction = v => {
+    setAccountId(v)
     if (v === 2002) {
-      setIsMass(true)
       getThumbMediaList()
     } else {
       getTemplate()
-      setIsMass(false)
     }
   }
 
@@ -401,7 +404,7 @@ export default ({
             templateList,
             templateKeyList,
             tagList,
-            isMass,
+            accountId,
             thumbMediaList,
           })
         }

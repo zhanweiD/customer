@@ -23,12 +23,13 @@ export const setTemplate = ({
   thumbMediaList,
   templateKeyList,
   tagList,
-  isMass,
+  accountId,
 }) => {
-  if (isMass) {
+  // 发送图文消息
+  if (accountId === 2002) {
     return (
       <div className="template-tip c45">
-        {/* <Item
+        <Item
           label="选择图文"
           name="thumb_media_id"
           rules={[{required: true, message: '图文不能为空'}]}
@@ -38,7 +39,7 @@ export const setTemplate = ({
               thumbMediaList.map(item => <Option value={item.thumb_media_id}>{item.title}</Option>)
             }
           </Select>
-        </Item> */}
+        </Item>
         <div className="fac">温馨提示</div>
         <div>关于群发次数限制</div>
         <p>
@@ -51,6 +52,7 @@ export const setTemplate = ({
       </div>
     )
   }
+  // 发送微信模版消息
   return (
     <div>
       <Item
