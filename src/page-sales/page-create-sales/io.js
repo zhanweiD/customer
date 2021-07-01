@@ -22,10 +22,11 @@ const api = {
   getPromptTag: post(`${groupApi}/obj_target_tag/values`), // 获取提示值
   getFilterChannelList: post(`${marketingApi}/planStrategy/getFilterChannelList`), // 行为筛选事件
   getConditionChannelList: post(`${marketingApi}/planStrategy/getConditionChannelList`), // 触发条件事件
+  getTagList: post(`${baseApi}/group/obj_target_tag_list`), // 标签列表
 
   getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
   getThumbMediaList: post(`${marketingApi}/wechat/get_all_news`), // 微信群发消息
-  getTagList: post(`${baseApi}/group/obj_target_tag_list`), // 标签列表
+  wechatPreview: post(`${marketingApi}/wechat/preview`), // 微信群发消息
 } 
 
 ioContext.create('createSales', api) 

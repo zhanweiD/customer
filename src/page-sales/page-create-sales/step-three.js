@@ -7,6 +7,7 @@ import Frame from '../icon/wechat-frame.svg'
 import io from './io'
 import data from './wechat/data'
 import {setTemplate} from './unit'
+import ContentDrawer from './content-drawer'
 
 const {Option} = Select
 const {Item} = Form
@@ -45,15 +46,18 @@ export default ({
 }) => {
   const [templateList, setTemplateList] = useState([])
   const [templateKeyList, setTemplateKeyList] = useState([])
-  const [channelActionList, setChannelActionList] = useState([])
+  const [channelActionList, setChannelActionList] = useState([]) // 动作列表
   const [thumbMediaList, setThumbMediaList] = useState([]) // 图文列表
   const [touchWay, setTouchWay] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [drawerVisible, setDrawerVisible] = useState(false) // 选择消息
+  const [vis, setVis] = useState(false) // 手机预览
   const [accountId, setAccountId] = useState(null) // 用于判断动作类型
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
   const [myForm] = Form.useForm()
   
   const [previewData, setPreviewData] = useState('')
+  const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
 
   // 营销动作列表
   const getChannelActions = async channelId => {
@@ -73,7 +77,7 @@ export default ({
         currentPage: 1,
         pageSize: 10, 
       })
-      setThumbMediaList(res || [])
+      setThumbMediaList(res.data || [])
     } catch (error) {
       errorTip(error.message)
     }
@@ -136,8 +140,6 @@ export default ({
     )
   }
 
-  const [vis, setVis] = useState(false)
-
   // 选择模版
   const templateChange = e => {
     // 目标模板数据
@@ -155,7 +157,6 @@ export default ({
         oldObj[item] = ''
       }
     })
-    console.log(oldObj)
 
     myForm.setFieldsValue(oldObj)
 
@@ -184,7 +185,6 @@ export default ({
     })
 
     myForm.validateFields().then(value => {
-      // TODO:
       // 把数据存起来
       const templateJson = []
       templateKeyList.forEach(item => {
@@ -204,6 +204,16 @@ export default ({
         })
       })
 
+      const setActionParams = () => {
+        if (value.actionId === 2002) {
+          return selectMedia
+        }
+        return {
+          templateJson,
+          templateId: value.templateId,
+        }
+      }
+
       const params = {
         ...strategyDetail,
         ...oneFormData,
@@ -214,8 +224,8 @@ export default ({
         sendOutContent: {
           ...value,
           channel: matchChannel(value.channelCode),
-          id: strategyDetail.id || null,
-          templateJson: JSON.stringify(templateJson),
+          actionParams: JSON.stringify(setActionParams()),
+          // templateJson: JSON.stringify(templateJson),
         },
       }
       
@@ -275,6 +285,7 @@ export default ({
 
   // 
   const changeAction = v => {
+    console.log(v)
     setAccountId(v)
     if (v === 2002) {
       getThumbMediaList()
@@ -284,61 +295,67 @@ export default ({
   }
 
   useEffect(() => {
-    if (!tagList.length || !strategyDetail.id || !templateList.length) return
+    if (!strategyDetail.id) return 
     const {
-      templateJson, actionId, isDelay, templateId, timeGap, timeUnit, channel,
+      actionId, isDelay, timeGap, timeUnit, channel, actionParams,
     } = strategyDetail.sendOutContent
-
-    getChannelActions(channel.channelId)
-
     const channelCode = [channel.channelId, channel.accountId]
-    const templateData = JSON.parse(templateJson)
-    // 有模板数据
-    const templateObj = {}
-    // 要处理数据
-    templateData.forEach(e => {
-      let valueTemp = e.value
-      tagList.forEach(item => {
-        if (valueTemp.indexOf(item.objIdTagId) > -1) {
-          valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
-        }
-      })
 
-      // 对 span 的处理
-      if (valueTemp.indexOf('${') > -1) {
-        valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
-        let id = 0
-        while (valueTemp.indexOf('${') > -1) {
-          id += 1
-          valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
-        }
-      }
-
-      templateObj[e.name] = valueTemp
-    })
-
-    const target = _.find(templateList, item => item.template_id === templateId)
-
-    if (target && target.content) {
-      setPreviewData(target.content)
+    if (actionId === 2002) {
+      console.log(JSON.parse(actionParams))
+      setSelectMedia(JSON.parse(actionParams))
     }
-    setTouchWay(isDelay)
-    setTemplateKeyList(_.map(templateData, 'name'))
-    
+    if (actionId === 2001) {
+      if (!templateList.length || !tagList.length) return
+      const templateData = JSON.parse(actionParams).templateJson
+      const {templateId} = JSON.parse(actionParams)
+      // 有模板数据
+      const templateObj = {}
+      // 要处理数据
+      templateData.forEach(e => {
+        let valueTemp = e.value
+        tagList.forEach(item => {
+          if (valueTemp.indexOf(item.objIdTagId) > -1) {
+            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
+          }
+        })
+  
+        // 对 span 的处理
+        if (valueTemp.indexOf('${') > -1) {
+          valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
+          let id = 0
+          while (valueTemp.indexOf('${') > -1) {
+            id += 1
+            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
+          }
+        }
+        templateObj[e.name] = valueTemp
+      })
+      const target = _.find(templateList, item => item.template_id === templateId)
+  
+      if (target && target.content) {
+        setPreviewData(target.content)
+      }
+      setTouchWay(isDelay)
+      setTemplateKeyList(_.map(templateData, 'name'))
+      myForm.setFieldsValue({
+        templateId,
+        ...templateObj,
+      })
+      setVis(true)
+    }
     myForm.setFieldsValue({
       isDelay,
       actionId,
-      templateId,
       timeGap,
       timeUnit,
       channelCode,
-      ...templateObj,
     })
-    setVis(true)
   }, [tagList, strategyDetail, templateList])
 
   useEffect(() => {
     if (!strategyDetail.id) {
+      setAccountId(null)
       setChannelActionList([])
       setTemplateList([])
       setTemplateKeyList([])
@@ -348,10 +365,16 @@ export default ({
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
     } else {
-      const {channel = {}} = strategyDetail.sendOutContent
-      if (channel.actionId === 2002) {
+      const {sendOutContent} = strategyDetail
+      const {channel = {}} = sendOutContent
+      setAccountId(sendOutContent.actionId)
+      getChannelActions(channel.channelId)
+
+      // 微信群发消息
+      if (sendOutContent.actionId === 2002) {
         getThumbMediaList(channel.accountCode)
       } else {
+        // 微信模版
         getTemplate(channel.accountCode)
       }
     }
@@ -406,6 +429,8 @@ export default ({
             tagList,
             accountId,
             thumbMediaList,
+            showDrawer: () => setDrawerVisible(true),
+            selectMedia,
           })
         }
       </Form>
@@ -424,6 +449,14 @@ export default ({
           dangerouslySetInnerHTML={{__html: previewData}} 
         />
       </div>
+      <ContentDrawer 
+        drawerVisible={drawerVisible}
+        closeDrawer={() => setDrawerVisible(false)}
+        thumbMediaList={thumbMediaList}
+        selectMedia={selectMedia}
+        setSelectMedia={v => setSelectMedia(v)}
+        accountCode={accountCode}
+      />
       {/* </Preview> */}
       <div className="steps-action">
         <Button className="mr8" onClick={prevStep}>

@@ -1,5 +1,5 @@
 import {
-  Form, DatePicker, TimePicker, Input, Select,
+  Form, DatePicker, TimePicker, Input, Select, Tag, Radio,
 } from 'antd'
 
 import Wechat from './wechat/wechat'
@@ -13,72 +13,96 @@ const timeFormat = 'HH:mm:ss'
 export const setTemplate = ({
   templateChange,
   templateList,
-  thumbMediaList,
   templateKeyList,
   tagList,
   accountId,
+  showDrawer,
+  selectMedia,
 }) => {
   // 发送图文消息
   if (accountId === 2002) {
+    const {mediaData = {}} = selectMedia
     return (
-      <div className="template-tip c45">
+      <div>
+        {
+          mediaData.title ? (
+            <div>
+              <div className="select-content">
+                <div className="FBH content-item">
+                  <div>
+                    {mediaData.thumb_url ? <img className="mr16" height={88} src={mediaData.thumb_url} alt="" /> : ''}
+                  </div>
+                  <div>
+                    <div className="item-title">{mediaData.title}</div>
+                    <div className="c65">{mediaData.digest}</div>
+                  </div>
+                </div>
+              </div>
+              <a className="ml24" onClick={showDrawer}>重新选择</a>
+            </div>
+          ) : (
+            <div className="select-content FBH FBJC FBAC">
+              <a onClick={showDrawer}>+选择内容</a>
+            </div>
+          )
+        }
+        
+        <div className="template-tip c45">
+          <div className="fac">温馨提示</div>
+          <div>
+            <Tag color="orange">关于群发次数限制</Tag>
+            {/* <Tag color="volcano">关于群发次数限制</Tag> */}
+          </div>
+          <p>
+            微信公众平台为订阅号提供了每天1条的群发权限，为服务号提供每月（自然月）4条的群发权限。
+          </p>
+          <div>
+            <Tag color="orange">关于营销动作建议</Tag>
+          </div>
+          <p>
+            因【群发消息】动作受微信发送次数限制，建议【群发消息】在大量用户同时触达时作为目标动作进行使用，单次仅触达1个用户，当月的群发次数也会减少相应次数，请谨慎使用。
+          </p>
+        </div>
+      </div>
+    )
+  }
+  if (accountId === 2001) {
+    return (
+      <div>
         <Item
-          label="选择图文"
-          name="thumb_media_id"
-          rules={[{required: true, message: '图文不能为空'}]}
+          label="内容模板"
+          name="templateId"
+          rules={[{required: true, message: '模板不能为空'}]}
         >
-          <Select onChange={templateChange} placeholder="请选择图文">
+          <Select onChange={templateChange} placeholder="请选择模版">
             {
-              thumbMediaList.map(item => <Option value={item.thumb_media_id}>{item.title}</Option>)
+              templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
             }
           </Select>
         </Item>
-        <div className="fac">温馨提示</div>
-        <div>关于群发次数限制</div>
-        <p>
-          微信公众平台为订阅号提供了每天1条的群发权限，为服务号提供每月（自然月）4条的群发权限。
-        </p>
-        <div>关于营销动作建议</div>
-        <p>
-          因【群发消息】动作受微信发送次数限制，建议【群发消息】在大量用户同时触达时作为目标动作进行使用，单次仅触达1个用户，当月的群发次数也会减少相应次数，请谨慎使用。
-        </p>
+        <Item
+          label="内容设置"
+          name="templateJson"
+        >
+          <span className="c-primary">样式预览</span>
+        </Item>
+          
+        {
+          templateKeyList.map(item => (
+            <Item
+              name={item}
+              label={item}
+              rules={[{required: true, message: '输入不能为空'}]}
+            >
+              <Wechat id={item} tagList={tagList} />
+            </Item>
+          ))
+        }
       </div>
     )
   }
   // 发送微信模版消息
-  return (
-    <div>
-      <Item
-        label="内容模板"
-        name="templateId"
-        rules={[{required: true, message: '模板不能为空'}]}
-      >
-        <Select onChange={templateChange} placeholder="请选择模版">
-          {
-            templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
-          }
-        </Select>
-      </Item>
-      <Item
-        label="内容设置"
-        name="templateJson"
-      >
-        <span className="c-primary">样式预览</span>
-      </Item>
-        
-      {
-        templateKeyList.map(item => (
-          <Item
-            name={item}
-            label={item}
-            rules={[{required: true, message: '输入不能为空'}]}
-          >
-            <Wechat id={item} tagList={tagList} />
-          </Item>
-        ))
-      }
-    </div>
-  )
+  return null
 }
 
 // step-two 设置时间dom
@@ -88,7 +112,8 @@ export const setTimeDom = ({
   // 根据重复方式生成触发时间组件
   const setMonth = () => {
     const monthData = []
-    for (let i = 1; i <= 31; i++) {
+    const dayCount = moment().daysInMonth()
+    for (let i = 1; i <= dayCount; i++) {
       monthData.push(<Option value={i}>{`${i}号`}</Option>)
     }
     return monthData

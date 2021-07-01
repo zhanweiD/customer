@@ -83,7 +83,6 @@ const CreateSales = props => {
   const [oneFormData, setOneFormData] = useState({})
   const [twoFormData, setTwoFormData] = useState({})
   const [threeFormData, setThreeFormData] = useState({})
-
   // 添加策略校验
   const addStrategyCheck = () => {
     const index = strategyList.findIndex(item => !item.id)
@@ -124,6 +123,20 @@ const CreateSales = props => {
       errorTip(error.message)
     }
   }
+  // 微信模版
+  const getTemplate = async accountId => {
+    try {
+      const res = await io.getTemplate({
+        accountId: 'wxe2b3f176ba1a4f33',
+      })
+
+      if (res && res.template_list) {
+        setTemplateList(res.template_list)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   // 配置详情
   const getStrategyDetail = async id => {
     setStrategyDetail({})
@@ -139,7 +152,6 @@ const CreateSales = props => {
       setStrName(res.strategyName)
       setStrategyDetail(res)
       setLoading(false)
-      // setListLoading(false)
     } catch (error) {
       errorTip(error.message)
     } 
@@ -280,20 +292,6 @@ const CreateSales = props => {
       errorTip(error.message)
     }
   }
-  // 微信模版
-  const getTemplate = async () => {
-    try {
-      const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
-      })
-
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   // 编辑改变详情
   const changeStrategyDetail = v => {
@@ -383,17 +381,26 @@ const CreateSales = props => {
 
   // 返回渠道详情
   const setChannelDom = sendOutContent => {
-    const {channel, actionId, templateId} = sendOutContent
+    const {channel, actionId, actionParams} = sendOutContent
+    const actionParamsObj = JSON.parse(actionParams)
+    let template = ''
+    if (actionId === 2001) {
+      const {templateId} = actionParamsObj
+      template = templateList.filter(item => templateId === item.template_id)[0] || {}
+    }
+    if (actionId === 2002) {
+      template = actionParamsObj.mediaData || {}
+    }
+
     const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
     const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
     const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-    const template = templateList.filter(item => templateId === item.template_id)[0] || {}
     return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
   }
 
   // 设置策略dom
   const setLeftItem = () => {
-    if (!conditionList.length || !strChannelList.length || !tagList.length || !templateList.length) return ''
+    if (!conditionList.length || !strChannelList.length || !tagList.length || !templateList.length) return null
     const itemList = strategyList.map((item, i) => {
       const {
         strategyName, 
@@ -405,6 +412,7 @@ const CreateSales = props => {
         strategyFixConditionContent = {},
         sendOutContent = {},
       } = item
+
       const {
         doneLogic, 
         doneEvents = [], 
@@ -414,8 +422,10 @@ const CreateSales = props => {
         startTime = strategyFixConditionContent.startTime, 
         endTime = strategyFixConditionContent.endTime,
       } = strategyEventConditionContent // 触发条件
+
       const {cron, frequency} = strategyFixConditionContent
       const {isDelay} = sendOutContent // 触发设置
+
       if (strategyName) {
         let clientGroup = {}
         if (clientGroupFilterType) {

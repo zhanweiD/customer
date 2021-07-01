@@ -58,17 +58,30 @@
           top 10px
           right 16px
       .step-three
-        .ant-collapse
-          .ant-collapse-content
-            .ant-collapse-content-box
-              padding 24px 2px 1px
-              background: rgba(246,249,251,0.40)
+        // .ant-collapse
+        //   .ant-collapse-content
+        //     .ant-collapse-content-box
+        //       padding 24px 2px 1px
+        //       background: rgba(246,249,251,0.40)
+        .select-content
+          height: 100px;
+          width: 47%;
+          border 1px solid #e3ebf6
+          margin-left: 24px;
+          border-radius: 4px;
+          padding 5px
+          .item-title
+            font-weight bold
+          .item-descr
+            word-break:break-all
+
         .template-tip
           width 47%
           border 1px solid #e3ebf6
           padding 16px 24px
           border-radius 8px
           margin-left 24px
+          margin-top 24px
       .step-content
         // min-height calc(100vh - 381px)
         min-height calc(100vh - 292px)
@@ -127,3 +140,25 @@
     right 16px
     background-image: linear-gradient(180deg, #849AFF 1%, #3F5FF4 100%);
     border-radius: 2px;
+.content-drawer
+  .item-preview
+    // margin-top -16px
+  .content-item
+    margin-top -20px
+    .item-title
+      font-weight bold
+    .item-descr
+      word-break:break-all
+  .ant-radio-group
+    width 100%
+    max-height 90px
+    position relative
+    .ant-radio-wrapper
+      width 100%
+      max-height 90px
+      .ant-radio
+        position absolute
+        right 0px
+        top 0px
+
+
