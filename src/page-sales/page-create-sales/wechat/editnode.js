@@ -12,6 +12,34 @@ class EditNode extends Component {
     }
   }
 
+  // copy过来的去掉样式
+  textPaste(event) {
+    event.preventDefault()
+    let text
+    const clp = (event.originalEvent || event).clipboardData
+    // 兼容针对于opera ie等浏览器
+    if (clp === undefined || clp === null) {
+      text = window.clipboardData.getData('text') || ''
+      if (text !== '') {
+        if (window.getSelection) {
+          // 针对于ie11 10 9 safari
+          const newNode = document.createElement('span')
+          newNode.innerHTML = text 
+          window.getSelection().getRangeAt(0).insertNode(newNode)
+        } else {
+          // 兼容ie10 9 8 7 6 5
+          document.selection.createRange().pasteHTML(text)
+        }
+      }
+    } else {
+    // 兼容chorme或hotfire
+      text = clp.getData('text/plain') || ''
+      if (text !== '') {
+        document.execCommand('insertText', false, text)
+      }
+    }
+  }
+
   onChange(e) {
     const {onCursorChange, onChange} = this.props
     const html = this.ref.current.innerHTML
@@ -87,6 +115,7 @@ class EditNode extends Component {
         dangerouslySetInnerHTML={{__html: value}}
         onInput={e => this.onChange(e)}
         onBlur={this.onChange}
+        onPaste={e => this.textPaste(e)}
         onClick={e => this.getCursortPosition(e)}
       />
     )

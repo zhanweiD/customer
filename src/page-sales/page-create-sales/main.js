@@ -631,7 +631,7 @@ const CreateSales = props => {
         </div>
       </div>
       <div className="m16 create-content">
-        <div className="content-left bgf mr16 p16">
+        <div className="content-left bgf mr16 p16 custom-border">
           <div className="left-header mb12">策略配置</div>
           {setLeftItem()}
           <Button 
@@ -644,7 +644,7 @@ const CreateSales = props => {
           </Button>
         </div>
         
-        <div className="content-right bgf">
+        <div className="content-right bgf custom-border">
           <div className="pt12 pb12 pl16 right-header">
             {
               strategyDetail.strategyName ? (

@@ -27,6 +27,12 @@ const api = {
   getTemplate: get(`${marketingApi}/wechat/get_all_private_template`), // 微信模板
   getThumbMediaList: post(`${marketingApi}/wechat/get_all_news`), // 微信群发消息
   wechatPreview: post(`${marketingApi}/wechat/preview`), // 微信群发消息
+
+  getAllSign: get(`${marketingApi}/aliyunsms/get_all_sign`), // 查询签名下拉列表
+  getAllTpl: get(`${marketingApi}/aliyunsms/get_all_template`), // 查询模版下拉列表
+  addSign: post(`${marketingApi}/aliyunsms/add_sign`), // 添加短信签名
+  addTpl: post(`${marketingApi}/aliyunsms/add_template`), // 添加短信模版
+  sendSms: post(`${marketingApi}/aliyunsms/send`), // 发送短信
 } 
 
 ioContext.create('createSales', api) 
