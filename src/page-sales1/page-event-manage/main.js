@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Button, Table, Switch, Spin, Modal} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
-import {authView, Search} from '../component'
+import {authView, Search} from '../../component'
 import searchParams from './search'
 import io from './io'
 

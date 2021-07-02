@@ -1,6 +1,6 @@
 import {Button} from 'antd'
 import {useEffect, useState} from 'react'
-import {errorTip} from '../../common/util'
+import {errorTip} from '../../../common/util'
 import io from '../io'
 
 export default props => {

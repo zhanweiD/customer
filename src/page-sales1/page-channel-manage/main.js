@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {Button, Table, Tabs, Badge} from 'antd'
 import {successTip, errorTip} from '@util'
 import io from './io'
-import {authView} from '../component'
+import {authView} from '../../component'
 import {setColumns} from './util'
 import AddDrawer from './add-drawer'
 

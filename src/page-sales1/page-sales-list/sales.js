@@ -154,7 +154,7 @@ const Sales = () => {
   }
 
   const toStrategy = record => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list/create/${record.id}`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${record.id}`
   }
 
   const columns = [
@@ -165,14 +165,14 @@ const Sales = () => {
       render: (text, record) => (
         record.targetStatisticsStatus === 0 ? (
           <div>
-            <Link target="_blank" to={`/sales/list/detail/${record.id}`}>
+            <Link target="_blank" to={`/sales/detail/${record.id}`}>
               <span className="mr4">{text}</span>
             </Link>
             <Tag text="结果统计中" status="process" />
           </div>
         ) : (
           <div>
-            <Link target="_blank" to={`/sales/list/detail/${record.id}`}>
+            <Link target="_blank" to={`/sales/detail/${record.id}`}>
               <span className="mr4">{text}</span>
             </Link>
           </div>

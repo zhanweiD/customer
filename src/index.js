@@ -20,11 +20,12 @@ import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
 import Sales from './page-sales'
-import WeappCode from './page-channel-manage/weappCode'
-import ToCustomer from './page-channel-manage/toCustomer'
+import WeappCode from './page-sales1/page-channel-manage/weappCode'
+import ToCustomer from './page-sales1/page-channel-manage/toCustomer'
 import Material from './page-material'
-import EventManage from './page-event-manage'
-import ChannelManage from './page-channel-manage'
+import EventManage from './page-sales1/page-event-manage'
+import ChannelManage from './page-sales1/page-channel-manage'
+import Sales1 from './page-sales1'
 
 const njkData = {
   dict,
@@ -44,29 +45,30 @@ function Entry() {
 
         <Frame>
           {/* 客户中心 */}
-          <Route path="/overview" component={Overview} />
+          <Route path="/home/overview" component={Overview} />
           {/* 标签集市 */}
           <Route path="/tag-market" component={TagMarket} />
           {/* 标签维护 */}
           <Route path="/tag-manage" component={TagManage} />
           {/* 标签同步 */}
-          <Route path="/tag-sync" component={Sync} />
+          <Route path="/tag-sync/manage" component={Sync} />
           {/* 客群管理 */}
           <Route path="/group" component={Group} />
           {/* 客户画像 */}
-          <Route path="/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
+          <Route path="/customer/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
           {/* 客群分析 */}
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
           {/* 自动化营销 */}
-          <Route path="/sales" component={Sales} />
+          <Route path="/sales/list" component={Sales} />
           {/* 素材管理 */}
           <Route path="/material" component={Material} />
+          <Route path="/sales" component={Sales1} />
           {/* 事件管理 */}
-          <Route path="/event-manage" component={EventManage} />
+          {/* <Route path="/event-manage" component={EventManage} /> */}
           {/* 渠道管理 */}
-          <Route path="/channel-manage" component={ChannelManage} />
+          {/* <Route path="/channel-manage" component={ChannelManage} /> */}
         </Frame>
 
       </Switch>

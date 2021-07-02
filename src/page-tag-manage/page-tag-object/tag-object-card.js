@@ -34,8 +34,8 @@ export default inject('store')(
     )
 
     const gotoManage = () => {
-      if (codeInProduct('/tag-manage/:id')) {
-        window.open(`#/tag-manage/${data.id}`, '_blank')
+      if (codeInProduct('/tag-manage/uphold/:id')) {
+        window.open(`#/tag-manage/uphold/${data.id}`, '_blank')
       }
     }
 

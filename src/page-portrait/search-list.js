@@ -57,10 +57,8 @@ const SearchList = ({data = [], title, color, id}) => {
       }
       {
         domList.map(item => (
-          <div className="dfsa item-content">
-            <div 
-              className="FBH w100 FBJA ml8" 
-            >
+          <div className="dfsa item-content fal">
+            <div className="FBH w100 ml8">
               {Array.isArray(item) ? item : null}
             </div>
           </div>

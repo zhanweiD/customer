@@ -22,33 +22,36 @@ export default class SearchResult extends Component {
         <Spin spinning={selectLoading}>
           {
             ident ? (
-              <div className="d-flex user-info mb16">
-                <div className="basis-info bgf box-border">
-                  <User store={this.store} />
-                </div>
-                <div className="user-portrait ml16 bgf">
-                  <Tabs defaultActiveKey="1">
-                    <TabPane
-                      tab={(
-                        <span>
-                          标签描摹
-                        </span>
-                      )}
-                      key="1"
-                    >
-                      <TagDepict store={this.store} />
-                    </TabPane>
-                    <TabPane 
-                      tab={(
-                        <span>
-                          业务触点
-                        </span>
-                      )} 
-                      key="2"
-                    >
-                      <BusinessContact store={this.store} />
-                    </TabPane>
-                  </Tabs>
+              <div>
+                <div style={{marginLeft: 0}} className="content-header">客户画像</div>
+                <div className="d-flex user-info mb16 mt16">
+                  <div className="basis-info bgf box-border">
+                    <User store={this.store} />
+                  </div>
+                  <div className="user-portrait ml16 bgf">
+                    <Tabs defaultActiveKey="1">
+                      <TabPane
+                        tab={(
+                          <span>
+                            标签描摹
+                          </span>
+                        )}
+                        key="1"
+                      >
+                        <TagDepict store={this.store} />
+                      </TabPane>
+                      <TabPane 
+                        tab={(
+                          <span>
+                            业务触点
+                          </span>
+                        )} 
+                        key="2"
+                      >
+                        <BusinessContact store={this.store} />
+                      </TabPane>
+                    </Tabs>
+                  </div>
                 </div>
               </div>
             ) : null
