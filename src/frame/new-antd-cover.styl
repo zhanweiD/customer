@@ -23,6 +23,10 @@
   transition none // TODO: 要不要这么改，或者改成其他动画效果
   border-color #d4dce9
 
+.ant-btn-icon-only
+  padding 0
+  line-height 30px
+
 .ant-btn-primary
   border $main-color-end
   background linear-gradient(151deg, $main-color-start 0%, $main-color-end 100%)
@@ -39,6 +43,10 @@
 
 .ant-table-thead > tr > th
   color $subhead-text-color
+  // background-color rgb(230, 235, 243)
+
+.ant-table-tbody > tr > td
+  1px solid #e6ebf3
 
 .ant-form-item-label > label
   color $main-text-color
@@ -59,3 +67,12 @@
 
   &::placeholder
     color $disable-text-color
+  
+.ant-steps-item-icon
+  border-color #d4dce9 !important
+
+.ant-steps-item-finish .ant-steps-item-icon
+  border-color $main-color-end !important
+
+.ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon
+  color rgba(22, 50, 78, 0.25) !important
