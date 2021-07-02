@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import {Form, Select, Button, Input, Radio, Collapse, Cascader, Popconfirm} from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
+import RuleItem from './ruleItem'
 import io from './io'
 
 const {Item, List} = Form
@@ -46,14 +47,18 @@ const CreateSales = ({
   const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
   const [selectKey, setSelectKey] = useState([]) // 已选事件id
   const [channelList, setChannelList] = useState([]) // 带disable的事件
+  const [comparisionDomList, setComparisionDomList] = useState([]) // 带disable的事件
   
   // 标签值预提示
-  async function getPromptTag(objIdAndTagId) {
+  async function getPromptTag(objIdAndTagId, index) {
     try {
       const res = await io.getPromptTag({
         objIdAndTagId,
       })
       // console.log(res)
+      // const newData = promptTags
+      // newData[0] = res
+      // console.log(newData)
       setPromptTags(res)
     } catch (error) {
       console.log(error)
@@ -113,6 +118,33 @@ const CreateSales = ({
       console.log(err)
     })
   }
+
+  // const changeTag = (v, index) => {
+  //   getPromptTag(v, index)
+  //   let options = ''
+  //   if (objTagList.filter(item => item.id === v)[0].tagType === 4) {
+  //     options = (
+  //       <Select style={{width: 128}} placeholder="请选择条件">
+  //         <Option value="not in">不等于</Option>
+  //         <Option value="in">等于</Option>
+  //       </Select>
+  //     )
+  //   } else {
+  //     options = (
+  //       <Select style={{width: 128}} placeholder="请选择条件">
+  //         <Option value="not in">不等于</Option>
+  //         <Option value="in">等于</Option>
+  //         <Option value="gt">大于</Option>
+  //         <Option value="gte">大于等于</Option>
+  //         <Option value="lt">小于</Option>
+  //         <Option value="lte">小于等于</Option>
+  //       </Select>
+  //     )
+  //   }
+  //   const newData = comparisionDomList
+  //   newData[index] = options
+  //   setComparisionDomList(newData)
+  // } 
 
   // 为已选择事件添加disabled
   useEffect(() => {
@@ -253,14 +285,28 @@ const CreateSales = ({
                             </div>
                           ) : null} */}
                           {/* <Input.Group compact style={{marginLeft: '48px'}}> */}
-                          <Input.Group compact>
+                          <RuleItem 
+                            restField={restField}
+                            name={name}
+                            fieldKey={fieldKey}
+                            objTagList={objTagList}
+                            remove={remove}
+                            condList={condList}
+                            setCondList={setCondList}
+                            checkSelectEvent={checkSelectEvent}
+                            index={index}
+                            clientGroup={clientGroup[index]}
+                          />
+                            
+                          {/* <Input.Group compact>
+                            
                             <Item
                               {...restField}
                               name={[name, 'tagId']}
                               fieldKey={[fieldKey, 'tagId']}
                               rules={[{required: true, message: '请选择标签'}]}
                             >
-                              <Select style={{width: 128}} placeholder="请选择标签" onChange={getPromptTag}>
+                              <Select style={{width: 128}} placeholder="请选择标签" onChange={v => changeTag(v, index)}>
                                 {
                                   objTagList.map(item => <Option value={item.id}>{item.name}</Option>)
                                 }
@@ -272,10 +318,14 @@ const CreateSales = ({
                               fieldKey={[fieldKey, 'comparision']}
                               rules={[{required: true, message: '请选择条件'}]}
                             >
-                              <Select style={{width: 128}} placeholder="请选择条件">
-                                <Option value="not in">不等于</Option>
-                                <Option value="in">等于</Option>
-                              </Select>
+                              {
+                                comparisionDomList[index] ? comparisionDomList[index] : (
+                                  <Select style={{width: 128}} placeholder="请选择条件">
+                                    <Option value="not in">不等于</Option>
+                                    <Option value="in">等于</Option>
+                                  </Select>
+                                )
+                              }
                             </Item>
                             <Item
                               {...restField}
@@ -306,15 +356,17 @@ const CreateSales = ({
                               }}
                             />
                             
-                          </Input.Group>
+                          </Input.Group> */}
                         </div>
                       )
                     })}
                     <div
                       className="add-event-btn fs14 hand"
                       onClick={() => {
-                        add()
-                        setCondList([...condList, 1])
+                        oneForm.validateFields().then(() => {
+                          add()
+                          setCondList([...condList, 1])
+                        })
                       }}
                     >
                       <img style={{marginBottom: 1}} src={Attr} alt="属性" />

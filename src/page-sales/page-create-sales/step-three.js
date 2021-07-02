@@ -48,11 +48,13 @@ export default ({
   const [templateKeyList, setTemplateKeyList] = useState([])
   const [channelActionList, setChannelActionList] = useState([]) // 动作列表
   const [thumbMediaList, setThumbMediaList] = useState([]) // 图文列表
+  const [thumbMediaPage, setThumbMediaPage] = useState(0) // 图文消息总数
   const [touchWay, setTouchWay] = useState(0)
   const [loading, setLoading] = useState(false)
   const [drawerVisible, setDrawerVisible] = useState(false) // 选择消息
+  const [mesLoading, setMesLoading] = useState(false) // 消息列表loading
   const [vis, setVis] = useState(false) // 手机预览
-  const [accountId, setAccountId] = useState(null) // 用于判断动作类型
+  const [actionId, setActionId] = useState(null) // 用于判断动作类型
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
   const [myForm] = Form.useForm()
   
@@ -70,16 +72,23 @@ export default ({
   }
 
   // 图文消息列表
-  const getThumbMediaList = async v => {
+  const getThumbMediaList = async page => {
+    setMesLoading(true)
     try {
       const res = await io.getThumbMediaList({
-        accountCode: v || accountCode,
-        currentPage: 1,
+        accountCode,
+        currentPage: page || 1,
         pageSize: 10, 
       })
       setThumbMediaList(res.data || [])
+      setThumbMediaPage({
+        currentPage: res.pages,
+        count: res.totalCount,
+      })
     } catch (error) {
       errorTip(error.message)
+    } finally {
+      setMesLoading(false)
     }
   }
 
@@ -177,6 +186,12 @@ export default ({
     }
   }
 
+  const matchAction = id => {
+    const actionObj = channelActionList.filter(item => item.actionId === id)[0] || {}
+    console.log(actionObj)
+    return actionObj
+  }
+
   // 保存策略
   const saveData = () => {
     const tagMap = {}
@@ -223,6 +238,7 @@ export default ({
         strategyName: strName,
         sendOutContent: {
           ...value,
+          ...matchAction(value.actionId),
           channel: matchChannel(value.channelCode),
           actionParams: JSON.stringify(setActionParams()),
           // templateJson: JSON.stringify(templateJson),
@@ -264,10 +280,10 @@ export default ({
   }
 
   // TODO:
-  const getTemplate = async v => {
+  const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: v || accountCode,
+        accountId: accountCode,
       })
       if (res && res.template_list) {
         setTemplateList(res.template_list)
@@ -285,8 +301,7 @@ export default ({
 
   // 
   const changeAction = v => {
-    console.log(v)
-    setAccountId(v)
+    setActionId(v)
     if (v === 2002) {
       getThumbMediaList()
     } else {
@@ -296,16 +311,16 @@ export default ({
 
   useEffect(() => {
     if (!strategyDetail.id) return 
+    const {sendOutContent} = strategyDetail
     const {
-      actionId, isDelay, timeGap, timeUnit, channel, actionParams,
-    } = strategyDetail.sendOutContent
+      isDelay, timeGap, timeUnit, channel, actionParams,
+    } = sendOutContent
     const channelCode = [channel.channelId, channel.accountId]
 
-    if (actionId === 2002) {
-      console.log(JSON.parse(actionParams))
+    if (sendOutContent.actionId === 2002) {
       setSelectMedia(JSON.parse(actionParams))
     }
-    if (actionId === 2001) {
+    if (sendOutContent.actionId === 2001) {
       if (!templateList.length || !tagList.length) return
       const templateData = JSON.parse(actionParams).templateJson
       const {templateId} = JSON.parse(actionParams)
@@ -346,7 +361,7 @@ export default ({
     }
     myForm.setFieldsValue({
       isDelay,
-      actionId,
+      actionId: sendOutContent.actionId,
       timeGap,
       timeUnit,
       channelCode,
@@ -355,30 +370,36 @@ export default ({
 
   useEffect(() => {
     if (!strategyDetail.id) {
-      setAccountId(null)
+      setActionId(null)
       setChannelActionList([])
       setTemplateList([])
       setTemplateKeyList([])
       setTouchWay(0)
       setPreviewData('')
+      setSelectMedia({})
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
     } else {
       const {sendOutContent} = strategyDetail
       const {channel = {}} = sendOutContent
-      setAccountId(sendOutContent.actionId)
+      setActionId(sendOutContent.actionId)
+      setAccountCode(channel.accountCode)
       getChannelActions(channel.channelId)
-
       // 微信群发消息
-      if (sendOutContent.actionId === 2002) {
-        getThumbMediaList(channel.accountCode)
-      } else {
-        // 微信模版
-        getTemplate(channel.accountCode)
-      }
     }
   }, [strategyDetail])
+
+  useEffect(() => {
+    if (accountCode && actionId) {
+      if (actionId === 2002) {
+        getThumbMediaList()
+      } else {
+        // 微信模版
+        getTemplate()
+      }
+    }
+  }, [accountCode, actionId])
 
   return (
     <div 
@@ -427,7 +448,7 @@ export default ({
             templateList,
             templateKeyList,
             tagList,
-            accountId,
+            actionId,
             thumbMediaList,
             showDrawer: () => setDrawerVisible(true),
             selectMedia,
@@ -453,9 +474,12 @@ export default ({
         drawerVisible={drawerVisible}
         closeDrawer={() => setDrawerVisible(false)}
         thumbMediaList={thumbMediaList}
+        thumbMediaPage={thumbMediaPage}
         selectMedia={selectMedia}
         setSelectMedia={v => setSelectMedia(v)}
         accountCode={accountCode}
+        mesLoading={mesLoading}
+        getThumbMediaList={getThumbMediaList}
       />
       {/* </Preview> */}
       <div className="steps-action">

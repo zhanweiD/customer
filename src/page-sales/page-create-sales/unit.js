@@ -22,12 +22,12 @@ export const setTemplate = ({
   templateList,
   templateKeyList,
   tagList,
-  accountId,
+  actionId,
   showDrawer,
   selectMedia,
 }) => {
   // 发送图文消息
-  if (accountId === 2002) {
+  if (actionId === 2002) {
     const {mediaData = {}} = selectMedia
     return (
       <div>
@@ -73,7 +73,7 @@ export const setTemplate = ({
       </div>
     )
   }
-  if (accountId === 2001) {
+  if (actionId === 2001) {
     return (
       <div>
         <Item
