@@ -334,15 +334,15 @@ export default ({
   // 
   const changeAction = v => {
     setActionId(v)
-    if (v === 2101) {
-      // 发送短信
-      getAllSign()
-      getAllTpl()
-    } else if (v === 2002) {
-      getThumbMediaList()
-    } else {
-      getTemplate()
-    }
+    // if (v === 2101) {
+    //   // 发送短信
+    //   getAllSign()
+    //   getAllTpl()
+    // } else if (v === 2002) {
+    //   getThumbMediaList()
+    // } else {
+    //   getTemplate()
+    // }
   }
 
   useEffect(() => {
@@ -428,12 +428,21 @@ export default ({
 
   useEffect(() => {
     if (accountCode && actionId) {
-      if (actionId === 2002) {
+      if (actionId === 2101) {
+        // 发送短信
+        getAllSign()
+        getAllTpl()
+      } else if (actionId === 2002) {
         getThumbMediaList()
       } else {
-        // 微信模版
         getTemplate()
       }
+      // if (actionId === 2002) {
+      //   getThumbMediaList()
+      // } else {
+      //   // 微信模版
+      //   getTemplate()
+      // }
     }
   }, [accountCode, actionId])
 
