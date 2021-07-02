@@ -30,8 +30,10 @@ const api = {
 
   getAllSign: get(`${marketingApi}/aliyunsms/get_all_sign`), // 查询签名下拉列表
   getAllTpl: get(`${marketingApi}/aliyunsms/get_all_template`), // 查询模版下拉列表
-  addSign: post(`${marketingApi}/aliyunsms/add_sign`), // 添加短信签名
-  addTpl: post(`${marketingApi}/aliyunsms/add_template`), // 添加短信模版
+  addSign: get(`${marketingApi}/aliyunsms/add_sign`), // 添加短信签名
+  deleteSign: get(`${marketingApi}/aliyunsms/delete_sign`), // 删除签名
+  addTpl: get(`${marketingApi}/aliyunsms/add_template`), // 添加短信模版
+  deleteTpl: get(`${marketingApi}/aliyunsms/delete_template`), // 删除模版
   sendSms: post(`${marketingApi}/aliyunsms/send`), // 发送短信
 } 
 

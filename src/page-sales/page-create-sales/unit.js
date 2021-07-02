@@ -1,7 +1,8 @@
 import {
-  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag,
+  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag, Popconfirm,
 } from 'antd'
 
+import io from './io'
 import Wechat from './wechat/wechat'
 
 const {Item} = Form
@@ -309,30 +310,74 @@ export const setSMS = ({
 }
 
 
-const signColumns = [
-  {
-    key: 'name',
-    dataIndex: 'name',
-    title: '短信签名',
-  }, {
-    key: 'action',
-    title: '操作',
-    render: (text, record) => {
-      return <a>删除</a>
-    },
-  },
-]
-
 export const setSmsSign = ({
   smsSignList,
+  accountId,
+  getAllSign,
 }) => {
+  const signColumns = [
+    {
+      key: 'name',
+      dataIndex: 'name',
+      title: '短信签名',
+    }, {
+      key: 'action',
+      title: '操作',
+      width: 60,
+      render: (text, record) => {
+        return (
+          <Popconfirm
+            title="确认删除？"
+            onConfirm={() => deleteSignIO(record.id)}
+          >
+            <a>删除</a>
+          </Popconfirm>
+        )
+      },
+    },
+  ]
+
+  const [signForm] = Form.useForm()
+  const addSign = () => {
+    // 添加短信签名
+    signForm.validateFields().then(value => {
+      addSignIO(value.signName)
+    }).catch(err => console.log(err))
+  }
+
+  const addSignIO = async signName => {
+    try {
+      const res = await io.addSign({
+        accountId,
+        signName,
+      })
+
+      getAllSign()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteSignIO = async signId => {
+    try {
+      const res = await io.deleteSign({
+        signId,
+      })
+
+      getAllSign()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       <Form
-        name="sms-sign"
+        form={signForm}
       >
         <Item
           label="短信签名"
+          name="signName"
           rules={[{required: true, message: '请输入短信签名'}]}
         >
           <div className="FBH">
@@ -340,6 +385,7 @@ export const setSmsSign = ({
             <Button 
               type="primary"
               style={{marginLeft: '16px'}}
+              onClick={addSign}
             >
               添加
             </Button>
@@ -356,51 +402,98 @@ export const setSmsSign = ({
   )
 }
 
-const signTpls = [
-  {
-    dataIndex: 'name',
-    title: '模版名称', // hover 展示详情？
-  }, {
-    dataIndex: 'code',
-    title: '模版',
-    render: (text, record) => {
-      return (
-        <div
-          style={{
-            whiteSpace: 'pre-wrap',
-            padding: '12px',
-            backgroundColor: '#f5f8fc',
-          }}
-        >
-          {text}
-        </div>
-      )
-    },
-  }, {
-    key: 'action',
-    title: '操作',
-    render: (text, record) => {
-      return <a>删除</a>
-    },
-  },
-]
 
 export const setSmsTpl = ({
   smsTplList,
+  accountId,
+  getAllTpl,
 }) => {
+  const tplColumns = [
+    {
+      dataIndex: 'name',
+      title: '模版名称', // hover 展示详情？
+    }, {
+      dataIndex: 'content',
+      title: '模版',
+      render: (text, record) => {
+        return (
+          <div
+            style={{
+              whiteSpace: 'pre-wrap',
+              padding: '12px',
+              backgroundColor: '#f5f8fc',
+            }}
+          >
+            {text}
+          </div>
+        )
+      },
+    }, {
+      key: 'action',
+      title: '操作',
+      width: 60,
+      render: (text, record) => {
+        return (
+          <Popconfirm
+            title="确认删除？"
+            onConfirm={() => deleteTplIO(record.id)}
+          >
+            <a>删除</a>
+          </Popconfirm>
+        )
+      },
+    },
+  ]
+
+  const [tplForm] = Form.useForm()
+
+  const addTpl = () => {
+    // 添加短信签名
+    tplForm.validateFields().then(value => {
+      addTplIO(value.templateCode)
+    }).catch(err => console.log(err))
+  }
+
+  const addTplIO = async templateCode => {
+    try {
+      const res = await io.addSign({
+        accountId,
+        templateCode,
+      })
+
+      getAllTpl()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteTplIO = async templateId => {
+    try {
+      const res = await io.deleteSign({
+        templateId,
+      })
+
+      getAllTpl()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       <Form
-        name="sms-tpl"
+        form={tplForm}
       >
         <Item
           label="短信模版"
+          name="templateCode"
         >
           <div className="FBH">
             <Input placeholder="请输入阿里云审核通过的短信模版code" />
             <Button 
               type="primary"
               style={{marginLeft: '16px'}}
+              onClick={addTpl}
             >
               添加
             </Button>
@@ -411,7 +504,7 @@ export const setSmsTpl = ({
         className="mt16"
         pagination={false}
         dataSource={smsTplList}
-        columns={signTpls}
+        columns={tplColumns}
       />
     </div>
   )
