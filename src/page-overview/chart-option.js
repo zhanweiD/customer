@@ -321,7 +321,6 @@ export function cbarOption(barData, type) {
 // }
 
 // 转化趋势
-
 export function lineOption(lineData) {
   const {data = [], type = []} = lineData
   const xData = []
@@ -331,14 +330,14 @@ export function lineOption(lineData) {
   }
   return {
     grid: {
-      top: 48,
+      top: 40,
       bottom: 24,
       right: 16,
       left: 48,
     },
     legend: {
       top: 0,
-      right: 16,
+      right: 8,
       data: type,
     },
     tooltip: {

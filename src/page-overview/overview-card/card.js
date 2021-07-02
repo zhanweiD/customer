@@ -62,7 +62,7 @@ export default class OverviewCard extends React.Component {
             }
           </div>
           <div>
-            <div>
+            <div className="mb8">
               {
                 values.map((value = '--', index) => (
                   index === 0

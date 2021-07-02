@@ -609,7 +609,7 @@ const CreateSales = props => {
   }, [groupList, targetChannelList])
 
   if (listLoading) {
-    return <div style={{textAlign: 'center', marginTop: '35%'}}><Spin /></div>
+    return <div style={{textAlign: 'center', marginTop: '20%'}}><Spin /></div>
   }
 
   return (

@@ -85,8 +85,8 @@ export default class User extends Component {
                 return (
                   <div className="basis-info-content-list">
                     <div className="info-title">
-                      <span className="info-title-line" />
-                      <span className="ml8">{item.cat}</span>
+                      {/* <span className="info-title-line" /> */}
+                      <span className="bold">{item.cat}</span>
                     </div>
                     <div>
                       {item.list && item.list.map(content => {
