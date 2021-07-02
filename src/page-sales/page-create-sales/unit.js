@@ -270,6 +270,7 @@ export const setSMS = ({
 const signColumns = [
   {
     key: 'name',
+    dataIndex: 'name',
     title: '短信签名',
   }, {
     key: 'action',
@@ -280,7 +281,9 @@ const signColumns = [
   },
 ]
 
-export const setSmsSign = () => {
+export const setSmsSign = ({
+  smsSignList,
+}) => {
   return (
     <div>
       <Form
@@ -288,17 +291,23 @@ export const setSmsSign = () => {
       >
         <Item
           label="短信签名"
+          rules={[{required: true, message: '请输入短信签名'}]}
         >
-          <Input placeholder="请输入阿里云审核通过的短信签名" />
+          <div className="FBH">
+            <Input placeholder="请输入阿里云审核通过的短信签名" />
+            <Button 
+              type="primary"
+              style={{marginLeft: '16px'}}
+            >
+              添加
+            </Button>
+          </div>
         </Item>
-        <Button type="primary">
-          添加
-        </Button>
       </Form>
       <Table
         className="mt16"
         pagination={false}
-        dataSource={[]}
+        dataSource={smsSignList}
         columns={signColumns}
       />
     </div>
@@ -307,11 +316,24 @@ export const setSmsSign = () => {
 
 const signTpls = [
   {
-    key: 'name',
+    dataIndex: 'name',
     title: '模版名称', // hover 展示详情？
   }, {
-    key: 'code',
-    title: '模版code',
+    dataIndex: 'code',
+    title: '模版',
+    render: (text, record) => {
+      return (
+        <div
+          style={{
+            whiteSpace: 'pre-wrap',
+            padding: '12px',
+            backgroundColor: '#f5f8fc',
+          }}
+        >
+          {text}
+        </div>
+      )
+    },
   }, {
     key: 'action',
     title: '操作',
@@ -321,7 +343,9 @@ const signTpls = [
   },
 ]
 
-export const setSmsTpl = () => {
+export const setSmsTpl = ({
+  smsTplList,
+}) => {
   return (
     <div>
       <Form
@@ -330,16 +354,21 @@ export const setSmsTpl = () => {
         <Item
           label="短信模版"
         >
-          <Input placeholder="请输入阿里云审核通过的短信模版code" />
+          <div className="FBH">
+            <Input placeholder="请输入阿里云审核通过的短信模版code" />
+            <Button 
+              type="primary"
+              style={{marginLeft: '16px'}}
+            >
+              添加
+            </Button>
+          </div>
         </Item>
-        <Button type="primary">
-          添加
-        </Button>
       </Form>
       <Table
         className="mt16"
         pagination={false}
-        dataSource={[]}
+        dataSource={smsTplList}
         columns={signTpls}
       />
     </div>
