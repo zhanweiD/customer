@@ -8,6 +8,7 @@ import io from './io'
 import data from './wechat/data'
 import {setTemplate} from './unit'
 import ContentDrawer from './content-drawer'
+import formSms from './form-sms'
 
 const {Option} = Select
 const {Item} = Form
@@ -56,10 +57,14 @@ export default ({
   const [vis, setVis] = useState(false) // 手机预览
   const [actionId, setActionId] = useState(null) // 用于判断动作类型
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
+  const [accountId, setAccountId] = useState(null) // 使用 accountId
   const [myForm] = Form.useForm()
   
   const [previewData, setPreviewData] = useState('')
   const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
+
+  const [smsSignList, setSmsSignList] = useState([])
+  const [smsTplList, setSmsTplList] = useState([])
 
   // 营销动作列表
   const getChannelActions = async channelId => {
@@ -293,16 +298,47 @@ export default ({
     }
   }
 
+  // 短信签名列表
+  const getAllSign = async () => {
+    try {
+      const res = await io.getAllSign({
+        accountId,
+      })
+
+      setSmsSignList(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 短信模版列表
+  const getAllTpl = async () => {
+    try {
+      const res = await io.getAllTpl({
+        accountId,
+      })
+
+      setSmsTplList(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // 触达通道
   const changeCode = (v, item) => {
     getChannelActions(v[0])
     setAccountCode(item[1].code)
+    setAccountId(item[1].id)
   }
 
   // 
   const changeAction = v => {
     setActionId(v)
-    if (v === 2002) {
+    if (v === 2101) {
+      // 发送短信
+      getAllSign()
+      getAllTpl()
+    } else if (v === 2002) {
       getThumbMediaList()
     } else {
       getTemplate()
@@ -455,6 +491,12 @@ export default ({
           })
         }
       </Form>
+      {
+        formSms({
+          smsSignList,
+          smsTplList,
+        })
+      }
       {/* <Preview> */}
       <div 
         className={cls({
