@@ -162,6 +162,7 @@ const Sales = () => {
       title: '营销计划名称',
       dataIndex: 'planName',
       key: 'planName',
+      width: 200,
       render: (text, record) => (
         record.targetStatisticsStatus === 0 ? (
           <div>
@@ -241,16 +242,19 @@ const Sales = () => {
       title: '开始时间',
       dataIndex: 'startTime',
       key: 'startTime',
+      width: 200,
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       key: 'endTime',
+      width: 200,
     },
     {
       title: '修改时间',
       dataIndex: 'mtime',
       key: 'mtime',
+      width: 200,
     },
     {
       title: '操作',
