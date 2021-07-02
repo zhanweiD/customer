@@ -41,7 +41,6 @@ export default class Frame extends Component {
 
     const path = props.location.pathname.split('/')
     store.pathName = `/${path[1]}/${path[2]}`
-    console.log(props.location.pathname)
     store.menuName = path[1]
     store.openKeys = [`/${path[1]}`]
   }
@@ -63,7 +62,6 @@ export default class Frame extends Component {
   // 设置窗口title
   setTitle = () => {
     let title = '客户中心'
-    console.log(store.menuName)
     switch (store.menuName) {
       case 'home':
         title = '客户中心'
@@ -135,12 +133,12 @@ export default class Frame extends Component {
   }
 
   render() {
-    // !localStorage.getItem('token')
+    if (!localStorage.getItem('token')) return null
+    
     const {children} = this.props
     const {
       collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
     } = store
-    console.log(pathName, menuName)
 
     const layout = {
       labelCol: {span: 2},
@@ -188,7 +186,7 @@ export default class Frame extends Component {
     const showAnalyze = codeInProduct('/analyze/clinch') || codeInProduct('/analyze/supply-demand') || codeInProduct('/analyze/purchase') || codeInProduct('/analyze/channel') || codeInProduct('/analyze/satisfaction')
     // eslint-disable-next-line max-len
     const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
-    const showSales = codeInProduct('/sales/list') || codeInProduct('/channel-manage') || codeInProduct('/event-manage')
+    const showSales = codeInProduct('/sales/list') || codeInProduct('/sales/channel-manage') || codeInProduct('/sales/event-manage')
     
     let myProps = {}
     if (this.collapsed) {
