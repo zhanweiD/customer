@@ -38,10 +38,12 @@ export default class Frame extends Component {
 
   constructor(props) {
     super(props)
-    
-    store.pathName = props.location.pathname
-    store.menuName = store.pathName.split('/')[1]
-    store.openKeys = [`/${store.pathName.split('/')[1]}`]
+
+    const path = props.location.pathname.split('/')
+    store.pathName = `/${path[1]}/${path[2]}`
+    console.log(props.location.pathname)
+    store.menuName = path[1]
+    store.openKeys = [`/${path[1]}`]
   }
 
   componentDidMount() {
@@ -61,8 +63,9 @@ export default class Frame extends Component {
   // 设置窗口title
   setTitle = () => {
     let title = '客户中心'
+    console.log(store.menuName)
     switch (store.menuName) {
-      case 'overview':
+      case 'home':
         title = '客户中心'
         break
       case 'tag-market':
@@ -77,7 +80,7 @@ export default class Frame extends Component {
       case 'group':
         title = '客群管理'
         break
-      case 'portrait':
+      case 'customer':
         title = '客户画像'
         break
       case 'analyze':
@@ -86,8 +89,11 @@ export default class Frame extends Component {
       case 'system':
         title = '系统管理'
         break
+      case 'sales':
+        title = '自动化营销'
+        break
       default:
-        title = '客户中心'
+        title = '慧营客'
         break
     }
     document.title = title
@@ -134,6 +140,7 @@ export default class Frame extends Component {
     const {
       collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
     } = store
+    console.log(pathName, menuName)
 
     const layout = {
       labelCol: {span: 2},
@@ -225,29 +232,29 @@ export default class Frame extends Component {
                 inlineIndent={8}
               >
                 {
-                  codeInProduct('/overview') && (
-                    <Menu.Item key="/overview" icon={<HomeOutlined />}>
+                  codeInProduct('/home/overview') && (
+                    <Menu.Item key="/home/overview" icon={<HomeOutlined />}>
                       客户分析
                     </Menu.Item>
                   )
                 }
                 {
-                  codeInProduct('/tag-market') && (
-                    <Menu.Item key="/tag-market" icon={<TagsOutlined />}>
+                  codeInProduct('/tag-market/manage') && (
+                    <Menu.Item key="/tag-market/manage" icon={<TagsOutlined />}>
                       标签集市
                     </Menu.Item>
                   )
                 }                  
                 {
-                  codeInProduct('/tag-manage') && (
-                    <Menu.Item key="/tag-manage" icon={<TagOutlined />}>
+                  codeInProduct('/tag-manage/uphold') && (
+                    <Menu.Item key="/tag-manage/uphold" icon={<TagOutlined />}>
                       标签维护
                     </Menu.Item>
                   )
                 }
                 {
-                  codeInProduct('/tag-sync') && (
-                    <Menu.Item key="/tag-sync" icon={<FileSyncOutlined />}>
+                  codeInProduct('/tag-sync/manage') && (
+                    <Menu.Item key="/tag-sync/manage" icon={<FileSyncOutlined />}>
                       标签同步
                     </Menu.Item>
                   )
@@ -260,8 +267,8 @@ export default class Frame extends Component {
                   )
                 }
                 {
-                  codeInProduct('/portrait/:ident?/:id?/:isConsultant?') && (
-                    <Menu.Item key="/portrait" icon={<UserOutlined />}>
+                  codeInProduct('/customer/portrait/:ident?/:id?/:isConsultant?') && (
+                    <Menu.Item key="/customer/portrait" icon={<UserOutlined />}>
                       客户画像
                     </Menu.Item>
                   )
@@ -307,13 +314,13 @@ export default class Frame extends Component {
                         )
                       }
                       {
-                        codeInProduct('/channel-manage') && (
-                          <Menu.Item key="/channel-manage">渠道管理</Menu.Item>
+                        codeInProduct('/sales/channel-manage') && (
+                          <Menu.Item key="/sales/channel-manage">渠道管理</Menu.Item>
                         )
                       }
                       {
-                        codeInProduct('/event-manage') && (
-                          <Menu.Item key="/event-manage">事件管理</Menu.Item>
+                        codeInProduct('/sales/event-manage') && (
+                          <Menu.Item key="/sales/event-manage">事件管理</Menu.Item>
                         )
                       }
                     </SubMenu>

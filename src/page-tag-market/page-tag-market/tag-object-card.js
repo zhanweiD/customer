@@ -16,8 +16,8 @@ export default ({data, ondelete}) => {
   )
 
   const gotoManage = () => {
-    if (codeInProduct('/tag-market/:id')) {
-      window.open(`#/tag-market/${data.id}`, '_blank')
+    if (codeInProduct('/tag-market/manage/:id')) {
+      window.open(`#/tag-market/manage/${data.id}`, '_blank')
     }
   }
 
