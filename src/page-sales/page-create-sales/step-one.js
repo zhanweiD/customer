@@ -42,28 +42,10 @@ const CreateSales = ({
   const [oneForm] = Form.useForm()
   const [radioType, setRadioType] = useState(0)
   const [condList, setCondList] = useState([1])
-  const [promptTags, setPromptTags] = useState([]) // 标签预提示
   const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
   const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
   const [selectKey, setSelectKey] = useState([]) // 已选事件id
   const [channelList, setChannelList] = useState([]) // 带disable的事件
-  const [comparisionDomList, setComparisionDomList] = useState([]) // 带disable的事件
-  
-  // 标签值预提示
-  async function getPromptTag(objIdAndTagId, index) {
-    try {
-      const res = await io.getPromptTag({
-        objIdAndTagId,
-      })
-      // console.log(res)
-      // const newData = promptTags
-      // newData[0] = res
-      // console.log(newData)
-      setPromptTags(res)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   // 返回事件全部信息（code, id）
   const matchEnent = data => {
@@ -118,33 +100,6 @@ const CreateSales = ({
       console.log(err)
     })
   }
-
-  // const changeTag = (v, index) => {
-  //   getPromptTag(v, index)
-  //   let options = ''
-  //   if (objTagList.filter(item => item.id === v)[0].tagType === 4) {
-  //     options = (
-  //       <Select style={{width: 128}} placeholder="请选择条件">
-  //         <Option value="not in">不等于</Option>
-  //         <Option value="in">等于</Option>
-  //       </Select>
-  //     )
-  //   } else {
-  //     options = (
-  //       <Select style={{width: 128}} placeholder="请选择条件">
-  //         <Option value="not in">不等于</Option>
-  //         <Option value="in">等于</Option>
-  //         <Option value="gt">大于</Option>
-  //         <Option value="gte">大于等于</Option>
-  //         <Option value="lt">小于</Option>
-  //         <Option value="lte">小于等于</Option>
-  //       </Select>
-  //     )
-  //   }
-  //   const newData = comparisionDomList
-  //   newData[index] = options
-  //   setComparisionDomList(newData)
-  // } 
 
   // 为已选择事件添加disabled
   useEffect(() => {
@@ -297,66 +252,6 @@ const CreateSales = ({
                             index={index}
                             clientGroup={clientGroup[index]}
                           />
-                            
-                          {/* <Input.Group compact>
-                            
-                            <Item
-                              {...restField}
-                              name={[name, 'tagId']}
-                              fieldKey={[fieldKey, 'tagId']}
-                              rules={[{required: true, message: '请选择标签'}]}
-                            >
-                              <Select style={{width: 128}} placeholder="请选择标签" onChange={v => changeTag(v, index)}>
-                                {
-                                  objTagList.map(item => <Option value={item.id}>{item.name}</Option>)
-                                }
-                              </Select>
-                            </Item>
-                            <Item
-                              {...restField}
-                              name={[name, 'comparision']}
-                              fieldKey={[fieldKey, 'comparision']}
-                              rules={[{required: true, message: '请选择条件'}]}
-                            >
-                              {
-                                comparisionDomList[index] ? comparisionDomList[index] : (
-                                  <Select style={{width: 128}} placeholder="请选择条件">
-                                    <Option value="not in">不等于</Option>
-                                    <Option value="in">等于</Option>
-                                  </Select>
-                                )
-                              }
-                            </Item>
-                            <Item
-                              {...restField}
-                              name={[name, 'rightParams']}
-                              fieldKey={[fieldKey, 'rightParams']}
-                              rules={[{required: true, message: '请输入或选择'}]}
-                            >
-                              <Select 
-                                mode="tags" 
-                                className="select-height"
-                                style={{width: 200}} 
-                                placeholder="请输入或选择"
-                              >
-                                {
-                                  promptTags.map(item => <Option value={item}>{item}</Option>)
-                                }
-                              </Select>
-                            </Item>
-                            
-                            <MinusCircleOutlined 
-                              style={{marginLeft: 8, marginTop: 10, fontSize: 16, color: '#999'}} 
-                              onClick={() => { 
-                                remove(name) 
-                                const newData = [...condList]
-                                newData.splice(index, 1)
-                                setCondList(newData)
-                                checkSelectEvent()
-                              }}
-                            />
-                            
-                          </Input.Group> */}
                         </div>
                       )
                     })}
