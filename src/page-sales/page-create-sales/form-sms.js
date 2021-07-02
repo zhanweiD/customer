@@ -24,10 +24,14 @@ const data = [
 export default ({
   smsSignList,
   smsTplList,
+  accountId,
+  getAllSign,
+  getAllTpl,
 }) => {
   const [smsForm] = Form.useForm()
   const [keywordForm] = Form.useForm()
-  const [drawerVis, setDrawerVis] = useState(false)
+  const [drawerSignVis, setDrawerSignVis] = useState(false)
+  const [drawerTplVis, setDrawerTplVis] = useState(false)
   const [drawerTitle, setDrawerTitle] = useState('短信签名')
   const [keywordList, setKeyworkList] = useState([])
   const [isSign, setIsSign] = useState(false) // 判断是 新增签名 还是 新增模版
@@ -35,17 +39,21 @@ export default ({
   const showSign = () => {
     setIsSign(true)
     setDrawerTitle('短信签名')
-    setDrawerVis(true)
+    setDrawerSignVis(true)
   }
 
   const showTpl = () => {
     setIsSign(false)
     setDrawerTitle('短信模版')
-    setDrawerVis(true)
+    setDrawerTplVis(true)
   }
 
-  const drawerClose = () => {
-    setDrawerVis(false)
+  const drawerSignClose = () => {
+    setDrawerSignVis(false)
+  }
+
+  const drawerTplClose = () => {
+    setDrawerTplVis(false)
   }
 
   // 模版的选择
@@ -159,17 +167,33 @@ export default ({
       <Drawer
         title={drawerTitle}
         width={525}
-        visible={drawerVis}
-        onClose={drawerClose}
+        visible={drawerSignVis}
+        onClose={drawerSignClose}
+        forceRender
+        getContainer={false}
       >
         {
-          isSign 
-            ? setSmsSign({
-              smsSignList,
-            }) 
-            : setSmsTpl({
-              smsTplList,
-            })
+          setSmsSign({
+            smsSignList,
+            accountId,
+            getAllSign,
+          })
+        }
+      </Drawer>
+      <Drawer
+        title={drawerTitle}
+        width={525}
+        visible={drawerTplVis}
+        onClose={drawerTplClose}
+        forceRender
+        getContainer={false}
+      >
+        {
+          setSmsTpl({
+            smsTplList,
+            accountId,
+            getAllTpl,
+          })
         }
       </Drawer>
     </div>

@@ -495,6 +495,9 @@ export default ({
         formSms({
           smsSignList,
           smsTplList,
+          accountId,
+          getAllSign,
+          getAllTpl,
         })
       }
       {/* <Preview> */}
