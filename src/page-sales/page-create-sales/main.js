@@ -7,6 +7,7 @@ import {errorTip, successTip, debounce} from '../../common/util'
 import StepOne from './step-one'
 import StepTwo from './step-two'
 import StepThree from './step-three'
+import {comparisionList, listToTree, matchTime, tagMap} from './unit'
 import io from './io'
 import cate from '../icon/cate.svg'
 import group from '../icon/group.svg'
@@ -14,45 +15,6 @@ import effTime from '../icon/time.svg'
 import clinch from '../icon/clinch.svg'
 
 const {Step} = Steps
-
-const listToTree = data => {
-  const newData = _.cloneDeep(data)
-
-  newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
-    if (children.length && !item.children) item.children = children
-  })
-
-  return newData.filter(item => item.parentId === -1)
-}
-
-// 0 未生效、1 已生效、2 已暂停 、3 已结束
-const tagMap = {
-  0: <Tag status="default" text="未生效" />,
-  1: <Tag status="green" text="已生效" />,
-  2: <Tag status="orange" text="已暂停" />,
-  3: <Tag status="blue" text="已结束" />,
-}
-
-const matchTime = v => {
-  if (v === 'MINUTES') {
-    return '分钟'
-  }
-  if (v === 'HOURS') {
-    return '小时'
-  }
-  return '天'
-}
-
-const comparisionList = [
-  {
-    value: 'in',
-    name: '等于',
-  }, {
-    value: 'not in',
-    name: '不等于',
-  },
-]
 
 const CreateSales = props => {
   const [strategyList, setStrategyList] = useState([{}]) // 策略列表

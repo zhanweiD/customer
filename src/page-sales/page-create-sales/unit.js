@@ -17,6 +17,56 @@ const tailFormItemLayout = {
   },
 }
 
+export const comparisionList = [{
+  value: 'in',
+  name: '等于',
+}, {
+  value: 'gt',
+  name: '大于',
+}, {
+  value: 'gte',
+  name: '大于等于',
+}, {
+  value: 'lt',
+  name: '小于',
+}, {
+  value: 'lte',
+  name: '小于等于',
+}, {
+  value: 'not in',
+  name: '不等于',
+}]
+
+
+export const listToTree = data => {
+  const newData = _.cloneDeep(data)
+
+  newData.forEach(item => {
+    const children = newData.filter(sitem => sitem.parentId === item.id)
+    if (children.length && !item.children) item.children = children
+  })
+
+  return newData.filter(item => item.parentId === -1)
+}
+
+// 0 未生效、1 已生效、2 已暂停 、3 已结束
+export const tagMap = {
+  0: <Tag status="default" text="未生效" />,
+  1: <Tag status="green" text="已生效" />,
+  2: <Tag status="orange" text="已暂停" />,
+  3: <Tag status="blue" text="已结束" />,
+}
+
+export const matchTime = v => {
+  if (v === 'MINUTES') {
+    return '分钟'
+  }
+  if (v === 'HOURS') {
+    return '小时'
+  }
+  return '天'
+}
+
 // step-three 设置模版
 export const setTemplate = ({
   templateChange,

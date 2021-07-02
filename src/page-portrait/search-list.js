@@ -29,7 +29,7 @@ const SearchList = ({data = [], title, color, id}) => {
           )
         } else {
           domItem.push(
-            <Link className="w33" target="_blank" to={`/portrait/${item.ident}/${id}`}>
+            <Link className="w33" target="_blank" to={`/customer/portrait/${item.ident}/${id}`}>
               <img className="mr8" src={item.性别 === '男' ? manIcon : womanIcon} alt="" />
               {sitem}
             </Link>
