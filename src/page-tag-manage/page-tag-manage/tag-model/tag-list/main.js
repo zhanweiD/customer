@@ -23,6 +23,7 @@ import store from './store'
 import treeStore from './store-tree'
 
 const {Option} = Select
+const {Search} = Input
 
 @observer
 class TagList extends Component {
@@ -464,8 +465,8 @@ class TagList extends Component {
               <Option value={1}>待发布</Option>
               <Option value={2}>已发布</Option>
             </Select>
-            <Input 
-              style={{width: 128, marginRight: '24px'}} 
+            <Search 
+              style={{width: 180, marginRight: '24px'}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.keyword = v.target.value

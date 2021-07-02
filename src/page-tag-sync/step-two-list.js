@@ -271,8 +271,7 @@ export default class SyncTagList extends Component {
         <div className="df-js mb8">
           <Input
             onChange={this.onChange}
-            style={{width: 300}}
-           
+            style={{width: 200}}
             // className="select-tag-search"
             placeholder="请输入标签名称关键字"
             suffix={<SearchOutlined />}
