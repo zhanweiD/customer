@@ -91,7 +91,7 @@ const Sales = () => {
       if (res) {
         successTip('创建成功')
         setModal(false)
-        window.location.href = `${window.__keeper.pathHrefPrefix}/sales/create/${res}`
+        window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list/create/${res}`
       }
     } catch (error) {
       errorTip(error.message)

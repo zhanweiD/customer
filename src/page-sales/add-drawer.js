@@ -110,10 +110,10 @@ export default ({
       accountCode: account.code,
       eventId: eventItem.id,
       eventCode: eventItem.code,
+      eventName: eventItem.name,
     }
   }
   const checkNumber = (rule, value, callback) => {
-    console.log(value)
     if (!value) {
       callback('请输入时间')
       return
@@ -131,9 +131,18 @@ export default ({
       callback('请输入有效时间')
     }
   }
+
   const onFinish = () => {
     addForm.validateFields().then(value => {
       const {startEndDate} = value
+      // 人群处理
+      const group = groupList.filter(item => item.id === value.clientGroupId)[0] || {}
+      // 详情展示name
+      const names = {
+        clientGroupName: group.name,
+        planGroupName: '默认分组',
+      }
+      value.front = JSON.stringify(names)
       // 时间处理
       value.startTime = `${startEndDate[0].format(dateFormat)} 00:00:00`
       value.endTime = `${startEndDate[1].format(dateFormat)} 23:59:59`
@@ -147,7 +156,6 @@ export default ({
       delete value.timeGap
       delete value.timeUnit
       delete value.event
-      console.log(value)
       // 编辑新增
       if (planInfo.id) {
         value.id = planInfo.id
@@ -229,6 +237,7 @@ export default ({
               rules={[{required: true, message: '请选择分组'}]}
             >
               <Select 
+                // labelInValue
                 placeholder="请选择分组"
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
               >
@@ -242,6 +251,7 @@ export default ({
               rules={[{required: true, message: '请选择人群'}]}
             >
               <Select 
+                // labelInValue
                 placeholder="请选择人群"
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
               >
