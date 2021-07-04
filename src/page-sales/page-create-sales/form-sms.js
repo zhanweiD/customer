@@ -32,6 +32,8 @@ export default ({
   tagList,
   onDefaultValChange,
   setSmsTplKeyList,
+  setVis,
+  setPreviewData,
 }) => {
   // const [smsForm] = Form.useForm()
   // const [keywordForm] = Form.useForm()
@@ -79,6 +81,10 @@ export default ({
     setKeyworkList(keywords)
     setSmsTplKeyList(keywords)
     // keywordForm.resetFields()
+    
+    // 手机模版预览
+    setPreviewData(content)
+    setVis(true)
   }
 
   return (

@@ -591,6 +591,8 @@ export default ({
               tagList,
               onDefaultValChange,
               setSmsTplKeyList,
+              setVis,
+              setPreviewData,
             })
           }
         </Form>
