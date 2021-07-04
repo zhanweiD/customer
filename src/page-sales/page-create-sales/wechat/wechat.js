@@ -1,7 +1,9 @@
-import React, {Component, useState} from 'react'
-import {Dropdown, Menu, Button, message} from 'antd'
+import React, {Fragment, Component, useState} from 'react'
+import {Dropdown, Menu, Button, message, Input} from 'antd'
 import {action, observable, toJS} from 'mobx'
 import {observer} from 'mobx-react'
+import _ from 'lodash'
+
 import EditNode from './editnode'
 import './wechat.styl'
 import Link from '../../icon/wechat-link.svg'
@@ -18,6 +20,8 @@ class SomeCompoent extends Component {
   @observable top = 0
   @observable left = 0
   @observable cursorPos = 0
+
+  @observable attrList = []
 
   @action.bound clickEvent(e) {
     // TODO: 为何触发了多次
@@ -75,7 +79,7 @@ class SomeCompoent extends Component {
   }
 
   dropdownClick(e) {
-    const {onChange} = this.props
+    const {onChange, type} = this.props
     e.stopPropagation()
 
     // 要替换的内容
@@ -97,6 +101,14 @@ class SomeCompoent extends Component {
     onChange(this.html)
 
     this.visibility = 'hidden'
+
+    if (type === 'sms') {
+      this.attrList.forEach(item => {
+        if (item.id === +this.clickedId) {
+          item.name = targetText
+        }
+      })
+    }
   }
 
   // 要处理含有 span 的情况
@@ -154,87 +166,140 @@ class SomeCompoent extends Component {
     return finalStr.replace(/@/g, '&nbsp;')
   }
 
-  add(type) {
-    const {onChange, value} = this.props
+  add(addType) {
+    const {onChange, value, tagList, type} = this.props
     if (this.html.split('/').length > 5) {
       message.warning('最多插入5个属性！')
       return 
     }
     if (value && !this.html) {
       // 有内容但是想直接插入属性，直接添加在后面
-      this.html = value + this.generateSpan(type)
+      this.html = value + this.generateSpan(addType)
     } else {
-      this.html = this.mySlice(this.html, this.generateSpan(type), this.cursorPos)
+      this.html = this.mySlice(this.html, this.generateSpan(addType), this.cursorPos)
     }
 
     onChange(this.html)
+
+    if (type === 'sms') {
+      this.attrList.push({
+        name: tagList[0].objNameTagName,
+        value: null,
+        id: this.id,
+      })
+    }
+  }
+
+  inputChange(e, index) {
+    const {onDefaultValChange} = this.props
+    this.attrList[index].value = e.target.value
+
+    onDefaultValChange(toJS(this.attrList))
   }
 
   render() {
-    const {value, onChange, id, tagList} = this.props
+    const {value, onChange, id, tagList, type} = this.props
 
     return (
-      <div className="wechat-node" id={id}>
-        <div 
-          style={{
-            height: '32px',
-            lineHeight: '32px',
-            backgroundColor: '#f6f9fb',
-            borderBottom: '1px solid #E7EFF6',
-          }}
-        >
-          <div className="FBH FBAC">
-            <div
-              className="ml8 mr8 hand"
-              onClick={() => {
+      <Fragment>
+      
+        <div className="wechat-node" id={id}>
+          <div 
+            style={{
+              height: '32px',
+              lineHeight: '32px',
+              backgroundColor: '#f6f9fb',
+              borderBottom: '1px solid #E7EFF6',
+            }}
+          >
+            <div className="FBH FBAC">
+              <div
+                className="ml8 mr8 hand"
+                onClick={() => {
                 // if (this.id > 104) {
                 //   message.warning('最多插入5个属性！')
                 //   return
                 // }
-                if (tagList && tagList.length && tagList.length > 0) {
-                  this.add(tagList[0].objNameTagName)
-                } else {
-                  console.error('暂无属性')
-                  message.error('暂无属性')
-                }
-              }}
-            >
-              <img src={Attr} alt="属性" />
-              <span className="ml4 fs14">插入属性</span>
-            </div>
-            {/* <div className="hand" onClick={() => this.add('link')}>
+                  if (tagList && tagList.length && tagList.length > 0) {
+                    this.add(tagList[0].objNameTagName)
+                  } else {
+                    console.error('暂无属性')
+                    message.error('暂无属性')
+                  }
+                }}
+              >
+                <img src={Attr} alt="属性" />
+                <span className="ml4 fs14">插入属性</span>
+              </div>
+              {/* <div className="hand" onClick={() => this.add('link')}>
               <img src={Link} alt="链接" />
               <span className="ml4 fs14">插入链接</span>
             </div> */}
+            </div>
           </div>
-        </div>
-        <div className="p8">
-          <EditNode
+          <div className="p8">
+            <EditNode
             // value={this.html}
-            value={value}
-            onChange={val => {
-              this.html = val
-              onChange(val)
+              value={value}
+              onChange={val => {
+                this.html = val
+                onChange(val)
+              }}
+              onCursorChange={pos => {
+                this.cursorPos = pos
+              }}
+            />
+          </div>
+          <div
+            className="select-dropdown"
+            style={{
+              top: this.top,
+              left: this.left,
+              visibility: this.visibility,
             }}
-            onCursorChange={pos => {
-              this.cursorPos = pos
-            }}
-          />
+            onClick={e => this.dropdownClick(e)}
+          >
+            {
+              tagList.map(item => <div className="dropdown-item">{item.objNameTagName}</div>)
+            }
+          </div>
+        
         </div>
-        <div
-          className="select-dropdown"
-          style={{
-            top: this.top,
-            left: this.left,
-            visibility: this.visibility,
-          }}
-          onClick={e => this.dropdownClick(e)}
-        >
-          {
-            tagList.map(item => <div className="dropdown-item">{item.objNameTagName}</div>)
-          }
-        </div>
-      </div>
+        {
+          type === 'sms' && this.attrList.length > 0 && (
+            <div>
+              <div 
+                className="FBH mt8" 
+                style={{
+                  backgroundColor: '#fafafa',
+                  lineHeight: '32px',
+                }}
+              >
+                <div style={{width: '80px'}}>
+                  属性值
+                </div>
+                <div className="FB1">
+                  默认值
+                </div>
+              </div>
+              {
+                this.attrList.map((item, index) => (
+                  <div className="FBH mt8">
+                    <div style={{width: '80px', lineHeight: '32px'}}>
+                      {item.name}
+                    </div>
+                    <Input 
+                      className="FB1" 
+                      placeholder="请输入默认值" 
+                      onChange={e => this.inputChange(e, index)}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+          )
+        }
+      </Fragment>
     )
   }
 }

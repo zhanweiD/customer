@@ -3,6 +3,7 @@ import {Form, Select, Input, Drawer} from 'antd'
 import _ from 'lodash'
 
 import {setSmsSign, setSmsTpl} from './unit'
+import Wechat from './wechat/wechat'
 
 const {Item} = Form
 const {Option} = Select
@@ -22,14 +23,18 @@ const data = [
 ]
 
 export default ({
+  getValues,
   smsSignList,
   smsTplList,
   accountId,
   getAllSign,
   getAllTpl,
+  tagList,
+  onDefaultValChange,
+  setSmsTplKeyList,
 }) => {
-  const [smsForm] = Form.useForm()
-  const [keywordForm] = Form.useForm()
+  // const [smsForm] = Form.useForm()
+  // const [keywordForm] = Form.useForm()
   const [drawerSignVis, setDrawerSignVis] = useState(false)
   const [drawerTplVis, setDrawerTplVis] = useState(false)
   const [drawerTitle, setDrawerTitle] = useState('短信签名')
@@ -72,54 +77,68 @@ export default ({
     })
 
     setKeyworkList(keywords)
-    keywordForm.resetFields()
+    setSmsTplKeyList(keywords)
+    // keywordForm.resetFields()
   }
 
   return (
     <div>
-      <Form
-        form={smsForm}
-        {...layout}
+
+      <Item
+        name="signName"
+        label="短信签名"
+        rules={[{required: true, message: '请选择短信签名'}]}
+        extra="注：只能选择添加短信平台已过审的短信签名，签名请前往第三方短信平台查看。"
       >
-        <Item
-          name="smsSign"
-          label="短信签名"
-          rules={[{required: true, message: '请选择短信签名'}]}
-          extra="注：只能选择添加短信平台已过审的短信签名，签名请前往第三方短信平台查看。"
+        <Select
+          placeholder="请选择短信签名"
+          getPopupContainer={triggerNode => triggerNode.parentElement}
         >
-          <Select
-            placeholder="请选择短信签名"
-            getPopupContainer={triggerNode => triggerNode.parentElement}
-          >
-            {
-              smsSignList.map(item => <Option value={item.id}>{item.name}</Option>)
-            }
-          </Select>
-          <span>
-            <a onClick={showSign}>新增签名</a>
-          </span>
-        </Item>
-        <Item
-          name="smsTpl"
-          label="短信模版"
-          rules={[{required: true, message: '请选择短信模版'}]}
-          extra="注：只能选择添加短信平台已过审的短信模版，模版请前往第三方短信平台查看。"
+          {
+            smsSignList.map(item => <Option value={item.name}>{item.name}</Option>)
+          }
+        </Select>
+        {/* <span>
+          <a onClick={showSign}>新增签名</a>
+        </span> */}
+      </Item>
+      <Item
+        name="templateCode"
+        label="短信模版"
+        rules={[{required: true, message: '请选择短信模版'}]}
+        extra="注：只能选择添加短信平台已过审的短信模版，模版请前往第三方短信平台查看。"
+      >
+        <Select
+          placeholder="请选择短信模版"
+          onChange={tplSelect}
+          getPopupContainer={triggerNode => triggerNode.parentElement}
         >
-          <Select
-            placeholder="请选择短信模版"
-            onChange={tplSelect}
-            getPopupContainer={triggerNode => triggerNode.parentElement}
+          {
+            smsTplList.map(item => <Option value={item.id}>{item.name}</Option>)
+          }
+        </Select>
+        {/* <span>
+          <a onClick={showTpl}>新增模版</a>
+        </span> */}
+      </Item>
+      {
+        keywordList.map(item => (
+          <Item
+            name={item}
+            label={item}
+            rules={[{required: true, message: '输入不能为空'}]}
           >
-            {
-              smsTplList.map(item => <Option value={item.id}>{item.name}</Option>)
-            }
-          </Select>
-          <span>
-            <a onClick={showTpl}>新增模版</a>
-          </span>
-        </Item>
-      </Form>
-      <div 
+            <Wechat 
+              id={item} 
+              tagList={tagList} 
+              type="sms"
+              onDefaultValChange={onDefaultValChange}
+            />
+          </Item>
+        ))
+      }
+      
+      {/* <div 
         className="mb24"
         style={{
           padding: '12px',
@@ -150,7 +169,11 @@ export default ({
                   <Item
                     name={`select-${index}`}
                   >
-                    <Select style={{width: '150px'}} />
+                    <Select style={{width: '150px'}}>
+                      {
+                        tagList.map(e => <Option value={e.objIdTagId}>{e.objNameTagName}</Option>)
+                      }
+                    </Select>
                   </Item>
                   <Item
                     name={`input-${index}`}
@@ -162,7 +185,7 @@ export default ({
             })
           }
         </Form>
-      </div>
+      </div> */}
       
       <Drawer
         title={drawerTitle}

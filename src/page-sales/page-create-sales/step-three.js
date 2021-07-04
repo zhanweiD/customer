@@ -59,6 +59,9 @@ export default ({
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
   const [accountId, setAccountId] = useState(null) // 使用 accountId
   const [myForm] = Form.useForm()
+  const [smsForm] = Form.useForm()
+  const [smsDefaultValues, setSmsDefaultValues] = useState(null)
+  const [smsTplKeyList, setSmsTplKeyList] = useState([])
   
   const [previewData, setPreviewData] = useState('')
   const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
@@ -199,6 +202,73 @@ export default ({
 
   // 保存策略
   const saveData = () => {
+    /*
+    {
+      "signName": "选择的签名名称",
+      "templateCode": "选择的短信模板code",
+      "templateJson":"模版json",
+      // 模板参数配置
+      "templateParams": [{
+          "key":"1", // 模板json中 动态参数key
+          "type":"USER_TAG", // 类型，预留字段可不传
+          "defaultValue": "" // 默认值， 可不填
+      },{
+          "key":"2", // 模板json中 动态参数key
+          "type":"USER_TAG", // 类型，预留字段可不传
+          "defaultValue": "默认值" // 默认值， 可不填
+      }]
+    }
+    */
+    smsForm.validateFields().then(value => {
+      console.log(value)
+      console.log(smsDefaultValues)
+
+      const {signName, templateCode} = value
+
+      // 模板字符串
+      const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
+      // const {content} = targetTpl
+      let content = targetTpl.content
+      const templateParams = []
+
+      smsTplKeyList.forEach(item => {
+        let itemValue = value[item]
+
+        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
+
+        tagList.forEach(e => {
+          if (itemValue.indexOf(e.objNameTagName) > -1) {
+            itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
+
+            // TODO: 最好找到id
+            const targetDefaultItem = _.find(smsDefaultValues, j => j.name === e.objNameTagName)
+            templateParams.push({
+              key: e.objIdTagId,
+              type: 'USER_TAG',
+              defaultValue: targetDefaultItem.value,
+            })
+          }
+        })
+
+        // eslint-disable-next-line no-useless-escape
+        content = content.replace(`\$\{${item}\}`, itemValue)
+      })
+
+      console.log('~~~~~~~')
+      console.log(content)
+      console.log(templateParams)
+
+      // 最终传值
+      const actionParams = {
+        signName,
+        templateCode,
+        templateJson: content,
+        templateParams,
+      }
+    })
+
+
+    /*
     const tagMap = {}
     tagList.forEach(item => {
       tagMap[item.objNameTagName] = item.objIdTagId
@@ -282,6 +352,7 @@ export default ({
         message.warning('请完善策略名称')
       }
     }).catch(err => console.log(err))
+    */
   }
 
   // TODO:
@@ -343,6 +414,11 @@ export default ({
     } else {
       getTemplate()
     }
+  }
+
+  // 关于属性的默认值
+  const onDefaultValChange = val => {
+    setSmsDefaultValues(val)
   }
 
   useEffect(() => {
@@ -492,13 +568,24 @@ export default ({
         }
       </Form>
       {
-        formSms({
-          smsSignList,
-          smsTplList,
-          accountId,
-          getAllSign,
-          getAllTpl,
-        })
+        <Form
+          form={smsForm}
+          {...layout}
+        >
+          {
+            formSms({
+              smsSignList,
+              smsTplList,
+              accountId,
+              getAllSign,
+              getAllTpl,
+              tagList,
+              onDefaultValChange,
+              setSmsTplKeyList,
+            })
+          }
+        </Form>
+        
       }
       {/* <Preview> */}
       <div 
