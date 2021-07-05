@@ -11,6 +11,7 @@ import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
 import bgBanner from './icon/bg-banner.png'
+import searchGroup from './icon/search-icon.svg'
 
 const {Option} = Select
 
@@ -67,10 +68,9 @@ class Portrait extends Component {
 
     return (
       <div className="portrait-wrap oa">
-        <div className="content-header">客户画像</div>
         {
           portraitId ? (
-            <div className="search m16 mr0 mt0">
+            <div className="search m16 mr0 mt2">
               {
                 ident ? null : (
                   <div>
@@ -78,7 +78,12 @@ class Portrait extends Component {
                       className="search_content mr16"
                       style={{backgroundImage: `url(${bgBanner})`}}
                     >
-                      <div>
+                      <div className="w50">
+                        <div className="content-header">
+                          <img className="mb4 mr8" src={searchGroup} alt="" /> 
+                          <span>客户画像</span>
+                        </div>
+                        
                         <Select
                           mode="multiple"
                           size="large" 
@@ -87,7 +92,7 @@ class Portrait extends Component {
                           onSearch={this.onSearch}
                           onChange={v => store.ident = v[0]}
                           placeholder={placeholder} 
-                          style={{width: 300, borderRadius: 24}} 
+                          style={{width: '100%', borderRadius: 24}} 
                         >
                           {
                             unitList.map(item => <Option value={item.ident}>{item.姓名}</Option>)

@@ -37,27 +37,29 @@ export default class WorldCloud extends Component {
       cateTitle, defaultInfo, loading,
     } = this.store
     return (
-      <div className="world-cloud">
-        <Spin spinning={loading}>
-          <div style={{position: 'relative', width: 1120}}>
-            <div className="dfjf mr16 ">
-              {
-                cateTitle.map(item => (
-                  <div className="mr8" style={{color: item.color}}>
-                    <span style={{backgroundColor: item.color}} className="legend-name-icon mr4" />
-                    <span>{item.text}</span>
-                  </div>
-                ))
-              }
+      <div>
+        <div className="dfjf mr16 ">
+          {
+            cateTitle.map(item => (
+              <div className="mr8" style={{color: item.color}}>
+                <span style={{backgroundColor: item.color}} className="legend-name-icon mr4" />
+                <span>{item.text}</span>
+              </div>
+            ))
+          }
+        </div>
+        <div className="world-cloud">
+          <Spin spinning={loading}>
+            <div style={{position: 'relative', width: 1120}}>
+              <div className="world-image">
+                <img width={240} height={240} src={defaultInfo.性别 === '男' ? manCloud : womanCloud} alt="" />
+              </div>
+              <div className="FBH FBJC">
+                <div style={{height: 600, width: 1120}} id="world-cloud" />
+              </div>
             </div>
-            <div className="world-image">
-              <img width={240} height={240} src={defaultInfo.性别 === '男' ? manCloud : womanCloud} alt="" />
-            </div>
-            <div className="FBH FBJC">
-              <div style={{height: 600, width: 1120}} id="world-cloud" />
-            </div>
-          </div>
-        </Spin>
+          </Spin>
+        </div>
       </div>
     )
   }

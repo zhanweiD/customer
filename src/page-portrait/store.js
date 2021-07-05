@@ -82,8 +82,8 @@ class Store {
 
   // 标签云图
   @observable cateTitle = [] // 搜索同类目标签标题
-  color = ['#2592FF', '#6C41FA', '#61BA46']
-  bgColor = ['rgba(134, 212, 255, 0.1)', 'rgba(196, 179, 255, 0.1)', 'rgba(191, 238, 169, 0.1)']
+  color = ['#2592FF', '#6C41FA', '#61BA46', '#FD5071', '#FFA44A']
+  bgColor = ['rgba(134, 212, 255, 0.1)', 'rgba(196, 179, 255, 0.1)', 'rgba(191, 238, 169, 0.1)', 'rgba(253, 80, 113, 0.1)', 'rgba(255, 164, 74, 0.1)']
 
   // @action pastDate(v) {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)

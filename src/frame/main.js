@@ -373,7 +373,7 @@ export default class Frame extends Component {
             <div className="FB1" style={{overflowY: 'auto'}}>
               {
                 getPerLoading ? children : (
-                  <div className="w100 h100" style={{textAlign: 'center', marginTop: '40%'}}>
+                  <div className="w100 h100" style={{textAlign: 'center', marginTop: '28%'}}>
                     <Spin spinning />
                   </div>
                 )
