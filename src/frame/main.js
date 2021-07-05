@@ -82,7 +82,7 @@ export default class Frame extends Component {
         title = '客户画像'
         break
       case 'analyze':
-        title = '场景管理'
+        title = '场景洞察'
         break
       case 'system':
         title = '系统管理'

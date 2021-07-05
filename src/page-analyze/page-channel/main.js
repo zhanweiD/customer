@@ -1,5 +1,5 @@
 /**
- * @description 渠道分析
+ * @description 渠道拓客
  */
 import {Component} from 'react'
 import {Link} from 'react-router-dom'

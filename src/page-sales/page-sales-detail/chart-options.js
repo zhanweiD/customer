@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78,1)'
 const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
 
 export function circleOneOption(data) {
@@ -31,7 +31,7 @@ export function circleOneOption(data) {
         {
           name: '计划触达',
           type: 'pie',
-          radius: ['60%', '80%'],
+          radius: ['50%', '70%'],
           avoidLabelOverlap: false,
           hoverAnimation: false,
           label: {
@@ -78,7 +78,7 @@ export function circleTwoOption(data) {
         name: 'circle',
         type: 'pie',
         clockWise: true,
-        radius: ['60%', '80%'],
+        radius: ['50%', '70%'],
         label: {
           show: false,
         },
@@ -343,10 +343,12 @@ export function funnelOption(funnelData) {
       sort: (a, b) => funnelData[b],
       height: '350',
       gap: 0,
+      zlevel: 2,
       minSize: 150,
       left: '10%',
       width: '60%',
       label: {
+        color: '#fff',
         show: true,
         position: 'inside',
         fontSize: '14',
@@ -368,13 +370,13 @@ export function funnelOption(funnelData) {
       sort: (a, b) => funnelData[b],
       height: '350',
       gap: -1,
+      zlevel: 1,
       minSize: 150,
       left: '10%',
       width: '60%',
       z: 2,
       label: {
         normal: {
-          color: '#333',
           position: 'right',
           formatter(d) {
             const ins = `{aa|${d.data.name}}\n{bb|${d.data.rate}%}`

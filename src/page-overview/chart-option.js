@@ -216,109 +216,6 @@ export function cbarOption(barData, type) {
     ],
   }
 }
-// // 转化对比
-// export function cbarOption(barData) {
-//   const {data = [], type = [], x = [], y = []} = barData
-//   return {
-//     color,
-//     title: {
-//       text: '各区域到访转化率',
-//       top: 12,
-//       textStyle: {
-//         fontSize: 14,
-//         color: titleColor,
-//         fontWeight: 500,
-//       },
-//     },
-//     tooltip: {
-//       trigger: 'axis',
-//       axisPointer: {
-//         type: 'shadow',
-//       },
-//     },
-//     grid: {
-//       top: 72,
-//       bottom: 64,
-//       left: 32,
-//     },
-//     xAxis: [
-//       {
-//         type: 'category',
-//         data: y,
-//         color: fontColor,
-//         axisTick: {
-//           show: false,
-//           color: fontColor,
-//         },
-//         nameTextStyle: {
-//           fontSize: 14,
-//           color: fontColor,
-//         },
-//         axisLabel: {
-//           textStyle: {
-//             fontSize: 14,
-//             color: fontColor,
-//           },
-//         },
-//         axisLine: {
-//           lineStyle: {
-//             color: '#ccc',
-//           },
-//         },
-//       },
-//     ],
-//     dataZoom: [
-//       {
-//         show: true,
-//         realtime: true,
-//         start: 0,
-//         end: 50,
-//       },
-//       {
-//         type: 'inside',
-//         realtime: true,
-//         start: 0,
-//         end: 50,
-//       },
-//     ],
-//     yAxis: [
-//       {
-//         name: '转化率',
-//         type: 'value',
-//         min: 0,
-//         max: 100,
-//         // data: y,
-//         nameTextStyle: {
-//           fontSize: 14,
-//           color: fontColor,
-//         },
-//         axisLabel: {
-//           textStyle: {
-//             fontSize: 14,
-//             color: fontColor,
-//           },
-//           // rotate: 40,
-//         },
-//         axisLine: {
-//           lineStyle: {
-//             color: '#ccc',
-//           },
-//         },
-//       },
-//     ],
-//     series: type.length ? (type.map((item, index) => ({
-//       name: item,
-//       data: data.map(sitem => {
-//         return sitem[item]
-//       }),
-//       barWidth: 32,
-//       type: 'bar',
-//       stack: 'total',
-//       // yAxisIndex: 1,
-//       // color: color[index],
-//     }))) : [],
-//   }
-// }
 
 // 转化趋势
 export function lineOption(lineData) {
@@ -326,7 +223,7 @@ export function lineOption(lineData) {
   const xData = []
   // eslint-disable-next-line no-restricted-syntax
   for (const item in data) {
-    xData.push({name: item, value: data[item]})
+    xData.unshift({name: item, value: data[item]})
   }
   return {
     grid: {
@@ -510,7 +407,7 @@ export function mapOption(mapType, data) {
         mapType,
         geoIndex: 0,
         top: 48,
-        left: 56,
+        left: '25%',
         roam: false,
         zoom: 1.2,
         data: data.map(item => ({name: item.name, value: item.count})),

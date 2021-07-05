@@ -22,9 +22,9 @@ import dropdown from '../icon/dropdown.svg'
 const {Option} = Select
 
 const optionTime = [
-  {name: '近一周', value: 7},
-  {name: '近一月', value: 30},
-  {name: '近一季', value: 90},
+  // {name: '近一周', value: 7},
+  // {name: '近一月', value: 30},
+  // {name: '近一季', value: 90},
   {name: '近一年', value: 365},
 ]
 const dateFormat = 'YYYY-MM-DD'
@@ -189,7 +189,7 @@ const Overview = () => {
                 expandTrigger="hover"
                 style={{margin: '0px 8px'}} 
                 onChange={changeOrg}
-                suffixIcon={<img src={dropdown} alt="dropdown" />}
+                suffixIcon={<img className="imgSize" src={dropdown} alt="dropdown" />}
               />
             ) : null
           }
