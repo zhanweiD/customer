@@ -1,5 +1,6 @@
+import {useState} from 'react'
 import {
-  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag, Popconfirm,
+  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag, Popconfirm, message,
 } from 'antd'
 
 import io from './io'
@@ -315,6 +316,8 @@ export const setSmsSign = ({
   accountId,
   getAllSign,
 }) => {
+  const [tblLoading, setTblLoading] = useState(false)
+
   const signColumns = [
     {
       key: 'name',
@@ -346,27 +349,39 @@ export const setSmsSign = ({
   }
 
   const addSignIO = async signName => {
+    setTblLoading(true)
     try {
       const res = await io.addSign({
         accountId,
         signName,
       })
 
-      getAllSign()
-    } catch (error) {
-      console.log(error)
+      getAllSign(null, () => {
+        setTblLoading(false)
+      })
+
+      signForm.resetFields()
+    } catch (e) {
+      message.error(e.message)
+    } finally {
+      setTblLoading(false)
     }
   }
 
   const deleteSignIO = async signId => {
+    setTblLoading(true)
     try {
       const res = await io.deleteSign({
         signId,
       })
 
-      getAllSign()
-    } catch (error) {
-      console.log(error)
+      getAllSign(null, () => {
+        setTblLoading(false)
+      })
+    } catch (e) {
+      message.error(e.message)
+    } finally {
+      setTblLoading(false)
     }
   }
 
@@ -395,6 +410,7 @@ export const setSmsSign = ({
       <Table
         className="mt16"
         pagination={false}
+        loading={tblLoading}
         dataSource={smsSignList}
         columns={signColumns}
       />
@@ -408,6 +424,8 @@ export const setSmsTpl = ({
   accountId,
   getAllTpl,
 }) => {
+  const [tblLoading, setTblLoading] = useState(false)
+
   const tplColumns = [
     {
       dataIndex: 'name',
@@ -455,27 +473,38 @@ export const setSmsTpl = ({
   }
 
   const addTplIO = async templateCode => {
+    setTblLoading(true)
     try {
-      const res = await io.addSign({
+      const res = await io.addTpl({
         accountId,
         templateCode,
       })
 
-      getAllTpl()
-    } catch (error) {
-      console.log(error)
+      getAllTpl(null, () => {
+        setTblLoading(false)
+      })
+      tplForm.resetFields()
+    } catch (e) {
+      message.error(e.message)
+    } finally {
+      setTblLoading(false)
     }
   }
 
   const deleteTplIO = async templateId => {
+    setTblLoading(true)
     try {
-      const res = await io.deleteSign({
+      const res = await io.deleteTpl({
         templateId,
       })
 
-      getAllTpl()
-    } catch (error) {
-      console.log(error)
+      getAllTpl(null, () => {
+        setTblLoading(false)
+      })
+    } catch (e) {
+      message.error(e.message)
+    } finally {
+      setTblLoading(false)
     }
   }
 
@@ -487,9 +516,12 @@ export const setSmsTpl = ({
         <Item
           label="短信模版"
           name="templateCode"
+          rules={[{required: true, message: '请输入短信模版code'}]}
         >
           <div className="FBH">
-            <Input placeholder="请输入阿里云审核通过的短信模版code" />
+            <Input 
+              placeholder="请输入阿里云审核通过的短信模版code" 
+            />
             <Button 
               type="primary"
               style={{marginLeft: '16px'}}
@@ -501,6 +533,7 @@ export const setSmsTpl = ({
         </Item>
       </Form>
       <Table
+        loading={tblLoading}
         className="mt16"
         pagination={false}
         dataSource={smsTplList}

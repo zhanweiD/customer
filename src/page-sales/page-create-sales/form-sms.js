@@ -16,6 +16,13 @@ const layout = {
   },
 }
 
+const tailFormItemLayout = {
+  wrapperCol: {
+    span: 9,
+    offset: 3,
+  },
+}
+
 const data = [
   'tenantName',
   'userName',
@@ -31,7 +38,9 @@ export default ({
   getAllSign,
   getAllTpl,
   tagList,
+  smsDefaultValues,
   onDefaultValChange,
+  smsTplKeyList,
   setSmsTplKeyList,
   setVis,
   setPreviewData,
@@ -94,6 +103,10 @@ export default ({
     }
   }, [smsTplId, smsTplList])
 
+  useEffect(() => {
+    setKeyworkList(smsTplKeyList)
+  }, [smsTplKeyList])
+
   return (
     <div>
 
@@ -111,9 +124,13 @@ export default ({
             smsSignList.map(item => <Option value={item.name}>{item.name}</Option>)
           }
         </Select>
-        {/* <span>
+      </Item>
+      <Item
+        {...tailFormItemLayout}
+      >
+        <span>
           <a onClick={showSign}>新增签名</a>
-        </span> */}
+        </span>
       </Item>
       <Item
         name="templateCode"
@@ -130,9 +147,14 @@ export default ({
             smsTplList.map(item => <Option value={item.id}>{item.name}</Option>)
           }
         </Select>
-        {/* <span>
+        
+      </Item>
+      <Item
+        {...tailFormItemLayout}
+      >
+        <span>
           <a onClick={showTpl}>新增模版</a>
-        </span> */}
+        </span>
       </Item>
       {
         keywordList.map((item, index) => (
@@ -146,6 +168,7 @@ export default ({
               tagList={tagList} 
               type="sms"
               onDefaultValChange={e => onDefaultValChange(e, index)}
+              defaultValues={smsDefaultValues[index]}
             />
           </Item>
         ))
