@@ -321,13 +321,12 @@ export function cbarOption(barData, type) {
 // }
 
 // 转化趋势
-
 export function lineOption(lineData) {
   const {data = [], type = []} = lineData
   const xData = []
   // eslint-disable-next-line no-restricted-syntax
   for (const item in data) {
-    xData.push({name: item, value: data[item]})
+    xData.unshift({name: item, value: data[item]})
   }
   return {
     grid: {
@@ -511,7 +510,7 @@ export function mapOption(mapType, data) {
         mapType,
         geoIndex: 0,
         top: 48,
-        left: 56,
+        left: '25%',
         roam: false,
         zoom: 1.2,
         data: data.map(item => ({name: item.name, value: item.count})),
@@ -637,11 +636,11 @@ export function sunOption(data) {
       data,
       sort: null,
       center: ['50%', '50%'],
-      radius: ['0%', '100%'],
+      radius: ['0%', '80%'],
       label: {
         // rotate: 'radial',
         color: '#fff',
-        fontSize: 10,
+        fontSize: 12,
         // minAngle: 30,
       },
     },
