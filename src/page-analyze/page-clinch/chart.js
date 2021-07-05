@@ -62,9 +62,9 @@ export default class ChartPie extends Component {
         value: funnelChart[i].count,
         goal: funnelChart[i].goal,
         name: `年度目标达成：${funnelChart[i].rate}`,
-        itemStyle: {
-          opacity: 0,
-        },
+        // itemStyle: {
+        //   opacity: 0,
+        // },
       }
       data1.push(obj1)
       data2.push(obj2)
