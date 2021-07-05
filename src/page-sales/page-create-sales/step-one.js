@@ -41,7 +41,6 @@ const CreateSales = ({
 }) => {
   const [oneForm] = Form.useForm()
   const [radioType, setRadioType] = useState(0)
-  const [condList, setCondList] = useState([1])
   const [userLogic, setUserLogic] = useState('OR') // 用户筛选关系
   const [clientGroup, setClientGroup] = useState([]) // 用户筛选详情
   const [selectKey, setSelectKey] = useState([]) // 已选事件id
@@ -213,43 +212,21 @@ const CreateSales = ({
                               onChange={checkSelectEvent}
                             />
                           </Item>
-                          
                           <MinusCircleOutlined 
                             style={{
-                              position: 'absolute', fontSize: 16, top: 10, right: 112, color: '#999'}} 
-                            onClick={() => { 
-                              remove(name) 
-                              const newData = [...condList]
-                              newData.splice(index, 1)
-                              setCondList(newData)
-                            }}
+                              position: 'absolute', fontSize: 16, top: 8, right: 112, color: '#999'}} 
+                            onClick={() => remove(name)}
                           />
-                           
                         </div>
                       ) : (  
                         <div className="pr user-config">
-                          {/* {index ? (
-                            <div className="conditions-div">
-                              <span 
-                                className="conditions-btn hand"
-                                onClick={() => changeConditions(index)}
-                                // style={{position: 'relative', top: '11px', right: '24px'}}
-                              >
-                                {condList[index] ? '或' : '且'}
-                              </span>
-                            </div>
-                          ) : null} */}
-                          {/* <Input.Group compact style={{marginLeft: '48px'}}> */}
                           <RuleItem 
                             restField={restField}
                             name={name}
                             fieldKey={fieldKey}
                             objTagList={objTagList}
                             remove={remove}
-                            condList={condList}
-                            setCondList={setCondList}
                             checkSelectEvent={checkSelectEvent}
-                            index={index}
                             clientGroup={clientGroup[index]}
                           />
                         </div>
@@ -258,10 +235,7 @@ const CreateSales = ({
                     <div
                       className="add-event-btn fs14 hand"
                       onClick={() => {
-                        oneForm.validateFields().then(() => {
-                          add()
-                          setCondList([...condList, 1])
-                        })
+                        oneForm.validateFields().then(() => add())
                       }}
                     >
                       <img style={{marginBottom: 1}} src={Attr} alt="属性" />

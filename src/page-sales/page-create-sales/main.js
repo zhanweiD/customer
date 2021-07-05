@@ -317,8 +317,9 @@ const CreateSales = props => {
 
   useEffect(() => {
     if (!groupList.length || !targetChannelList.length) return
-    const {firstTargetContent = {}, clientGroupId, startTime, endTime} = planInfo
-    const {timeGap, timeUnit, event} = firstTargetContent
+    const {firstTargetContent = {}, clientGroupId, startTime, endTime, front} = planInfo
+    const {timeGap, timeUnit, event = {}} = firstTargetContent
+    const names = JSON.parse(front)
     const setEvent = v => {
       const obj = targetChannelList.filter(item => item.id === v.eventId)[0] || {}
       return obj.name
@@ -326,12 +327,14 @@ const CreateSales = props => {
     const list = [
       {
         title: '分组',
-        value: '默认分组',
+        // value: '默认分组',
+        value: `${names.planGroupName}`,
         icon: <img style={{marginBottom: 1}} src={cate} alt="分组" />,
       },
       {
         title: '用户',
-        value: groupList.filter(item => item.id === clientGroupId)[0].name,
+        value: `${names.clientGroupName}`,
+        // value: groupList.filter(item => item.id === clientGroupId)[0].name,
         icon: <img style={{marginBottom: 1}} src={group} alt="用户" />,
       },
       {
@@ -341,7 +344,8 @@ const CreateSales = props => {
       },
       {
         title: '主要目标',
-        value: `${timeGap} ${matchTime(timeUnit)} 完成 ${setEvent(event)}`,
+        value: `${timeGap} ${matchTime(timeUnit)} 完成 ${event.eventName || ''}`,
+        // value: `${timeGap} ${matchTime(timeUnit)} 完成 ${setEvent(event)}`,
         icon: <img style={{marginBottom: 1}} src={clinch} alt="主要目标" />,
       },
     ]

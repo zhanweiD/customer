@@ -41,10 +41,7 @@ export default ({
   fieldKey,
   objTagList,
   remove,
-  condList,
-  setCondList,
   checkSelectEvent,
-  index,
   clientGroup,
 }) => {
   const [promptTags, setPromptTags] = useState([])
@@ -120,12 +117,9 @@ export default ({
         </Select>
       </Item>
       <MinusCircleOutlined 
-        style={{marginLeft: 8, marginTop: 10, fontSize: 16, color: '#999'}} 
+        style={{marginLeft: 8, marginTop: 8, fontSize: 16, color: '#999'}} 
         onClick={() => { 
           remove(name) 
-          const newData = [...condList]
-          newData.splice(index, 1)
-          setCondList(newData)
           checkSelectEvent()
         }}
       />
