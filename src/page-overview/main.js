@@ -104,7 +104,7 @@ const Overview = () => {
         title: `累计签约金额 (${signAmountUnit[1]})`,
         tooltipText: '累计签约金额',
         values: [signAmount || 0, `同比${card.signTotalAmountRise || 0}`],
-        valueTexts: [`累计认购金额 (${subscriptionAmountUnit[1]})`, subscriptionAmount || 0],
+        valueTexts: [`累计认购金额 (${subscriptionAmountUnit[1] || '万元'})`, subscriptionAmount || 0],
         fontStyle: {active: {size: 26, viceSize: 12, color: '#16324e'}, color: 'rgba(22, 50, 78, 0.85)'},
         icon: <img src={amount} alt="累计签约金额" />,
       }, {
@@ -175,7 +175,7 @@ const Overview = () => {
         }
       }}
     >
-      <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+      <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
         <span>客户中心</span>
         <div style={{width: 504}}>
           {

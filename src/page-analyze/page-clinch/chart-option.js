@@ -153,8 +153,7 @@ export function funnelOption(data1, data2) {
     } 
   }
   return ({
-    color: colors,
-    opacity: 0.8,
+    opacity: 1,
     title: {
       text: '成交转化情况',
       top: 12,
@@ -167,16 +166,18 @@ export function funnelOption(data1, data2) {
     },
     // color,
     legend: {
-      top: 32,
-      // left: '10%',
+      top: 40,
+      left: 40,
       data: data1 && data1.map(item => item.name),
     },
     series: [{
-      top: 60,
+      color: colors,
+      top: 70,
       type: 'funnel',
       sort: (a, b) => data1[b],
       height: '400',
       gap: 0,
+      zlevel: 2,
       minSize: 150,
       left: '10%',
       width: '60%',
@@ -196,20 +197,32 @@ export function funnelOption(data1, data2) {
           },
         },
       },
+      emphasis: {
+        label: {
+          color: '#fff',
+        },
+      },
       data: data1,
     },
     {
-      top: 60,
+      top: 70,
       type: 'funnel',
+      color: colors,
       sort: (a, b) => data1[b],
       height: '400',
       gap: -1,
+      zlevel: 1,
       minSize: 150,
-      left: '27%',
+      left: '10%',
+      // width: 0,
       width: '60%',
-      z: 2,
+      // z: 2,
+      itemStyle: {
+        opacity: 1,
+      },
       label: {
-        color: '#000',
+        show: true,
+        color: fontColor, 
         position: 'right',
         formatter(d) {
           const ins = `{bb|${d.data.goal}}\n{aa|${d.name}}`
