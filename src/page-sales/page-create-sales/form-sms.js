@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Form, Select, Input, Drawer} from 'antd'
 import _ from 'lodash'
 
@@ -26,6 +26,7 @@ export default ({
   getValues,
   smsSignList,
   smsTplList,
+  smsTplId,
   accountId,
   getAllSign,
   getAllTpl,
@@ -87,6 +88,12 @@ export default ({
     setVis(true)
   }
 
+  useEffect(() => {
+    if (smsTplId && smsTplList.length > 0) {
+      tplSelect(smsTplId)
+    }
+  }, [smsTplId, smsTplList])
+
   return (
     <div>
 
@@ -128,7 +135,7 @@ export default ({
         </span> */}
       </Item>
       {
-        keywordList.map(item => (
+        keywordList.map((item, index) => (
           <Item
             name={item}
             label={item}
@@ -138,7 +145,7 @@ export default ({
               id={item} 
               tagList={tagList} 
               type="sms"
-              onDefaultValChange={onDefaultValChange}
+              onDefaultValChange={e => onDefaultValChange(e, index)}
             />
           </Item>
         ))

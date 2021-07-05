@@ -59,15 +59,17 @@ export default ({
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
   const [accountId, setAccountId] = useState(null) // 使用 accountId
   const [myForm] = Form.useForm()
+
   const [smsForm] = Form.useForm()
+  const [isSms, setIsSms] = useState(false)
   const [smsDefaultValues, setSmsDefaultValues] = useState(null)
   const [smsTplKeyList, setSmsTplKeyList] = useState([])
-  
-  const [previewData, setPreviewData] = useState('')
-  const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
-
   const [smsSignList, setSmsSignList] = useState([])
   const [smsTplList, setSmsTplList] = useState([])
+  const [smsTplId, setSmsTplId] = useState(null)
+
+  const [previewData, setPreviewData] = useState('')
+  const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
 
   // 营销动作列表
   const getChannelActions = async channelId => {
@@ -202,157 +204,203 @@ export default ({
 
   // 保存策略
   const saveData = () => {
-    /*
-    {
-      "signName": "选择的签名名称",
-      "templateCode": "选择的短信模板code",
-      "templateJson":"模版json",
-      // 模板参数配置
-      "templateParams": [{
-          "key":"1", // 模板json中 动态参数key
-          "type":"USER_TAG", // 类型，预留字段可不传
-          "defaultValue": "" // 默认值， 可不填
-      },{
-          "key":"2", // 模板json中 动态参数key
-          "type":"USER_TAG", // 类型，预留字段可不传
-          "defaultValue": "默认值" // 默认值， 可不填
-      }]
-    }
-    */
-    smsForm.validateFields().then(value => {
-      console.log(value)
-      console.log(smsDefaultValues)
+    if (isSms) {
+      // 短信模块
+      /*
+        {
+          "signName": "选择的签名名称",
+          "templateCode": "选择的短信模板code",
+          "templateJson":"模版json",
+          // 模板参数配置
+          "templateParams": [{
+              "key":"1", // 模板json中 动态参数key
+              "type":"USER_TAG", // 类型，预留字段可不传
+              "defaultValue": "" // 默认值， 可不填
+          },{
+              "key":"2", // 模板json中 动态参数key
+              "type":"USER_TAG", // 类型，预留字段可不传
+              "defaultValue": "默认值" // 默认值， 可不填
+          }]
+        }
+      */
+      smsForm.validateFields().then(value => {
+        const {signName, templateCode} = value
+        const alldefaultValues = _.flatten(_.values(smsDefaultValues))
 
-      const {signName, templateCode} = value
+        // 模板字符串
+        const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
+        // const {content} = targetTpl
+        let {content} = targetTpl
+        const templateParams = []
 
-      // 模板字符串
-      const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
-      // const {content} = targetTpl
-      let content = targetTpl.content
-      const templateParams = []
+        smsTplKeyList.forEach(item => {
+          let itemValue = value[item]
 
-      smsTplKeyList.forEach(item => {
-        let itemValue = value[item]
+          itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
 
-        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
+          tagList.forEach(e => {
+            if (itemValue.indexOf(e.objNameTagName) > -1) {
+              itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
 
-        tagList.forEach(e => {
-          if (itemValue.indexOf(e.objNameTagName) > -1) {
-            itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
+              // TODO: 最好找到id
+              const targetDefaultItem = _.find(alldefaultValues, j => j.name === e.objNameTagName)
+              templateParams.push({
+                key: e.objIdTagId,
+                type: 'USER_TAG',
+                defaultValue: targetDefaultItem.value,
+              })
+            }
+          })
 
-            // TODO: 最好找到id
-            const targetDefaultItem = _.find(smsDefaultValues, j => j.name === e.objNameTagName)
-            templateParams.push({
-              key: e.objIdTagId,
-              type: 'USER_TAG',
-              defaultValue: targetDefaultItem.value,
+          // eslint-disable-next-line no-useless-escape
+          content = content.replace(`\$\{${item}\}`, itemValue)
+        })
+
+        // 短信的 actionParams 的最终传值
+        const actionParams = {
+          signName,
+          templateCode,
+          templateJson: content,
+          templateParams,
+        }
+
+        const myFormValues = myForm.getFieldsValue()
+        const params = {
+          ...strategyDetail,
+          ...oneFormData,
+          ...twoFormData,
+          planId: planInfo.id,
+          clientGroupId: planInfo.clientGroupId,
+          strategyName: strName,
+          sendOutContent: {
+            ...myFormValues,
+            ...matchAction(myFormValues.actionId),
+            channel: matchChannel(myFormValues.channelCode),
+            actionParams: JSON.stringify(actionParams),
+          },
+        }
+
+        console.log('~~~最终参数~~~')
+        console.log(params)
+        console.log('~~~最终参数~~~')
+
+        // 删除编辑前部分无用属性
+        if (params.strategyConditionType) {
+          delete params.strategyFixConditionContent
+        } else {
+          delete params.strategyEventConditionContent
+        }
+        if (params.clientGroupFilterType) {
+          delete params.clientGroupTagFilterContent
+        } else {
+          delete params.clientGroupUserActionFilterContent
+        }
+        setThreeFormData(params)
+
+        if (strName) {
+          setLoading(true)
+          if (strategyDetail.id) {
+            editStrategy(params, () => {
+              setVis(false)
+              setLoading(false)
+              nextStep()
+            })
+          } else {
+            addStrategy(params, () => {
+              setVis(false)
+              setLoading(false)
+              nextStep()
             })
           }
-        })
-
-        // eslint-disable-next-line no-useless-escape
-        content = content.replace(`\$\{${item}\}`, itemValue)
-      })
-
-      console.log('~~~~~~~')
-      console.log(content)
-      console.log(templateParams)
-
-      // 最终传值
-      const actionParams = {
-        signName,
-        templateCode,
-        templateJson: content,
-        templateParams,
-      }
-    })
-
-
-    /*
-    const tagMap = {}
-    tagList.forEach(item => {
-      tagMap[item.objNameTagName] = item.objIdTagId
-    })
-
-    myForm.validateFields().then(value => {
-      // 把数据存起来
-      const templateJson = []
-      templateKeyList.forEach(item => {
-        let itemValue = value[item]
-
-        itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
-
-        tagList.forEach(e => {
-          if (itemValue.indexOf(e.objNameTagName) > -1) {
-            itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
-          }
-        })
-
-        templateJson.push({
-          name: item,
-          value: itemValue,
-        })
-      })
-
-      const setActionParams = () => {
-        if (value.actionId === 2002) {
-          return selectMedia
-        }
-        return {
-          templateJson,
-          templateId: value.templateId,
-        }
-      }
-
-      const params = {
-        ...strategyDetail,
-        ...oneFormData,
-        ...twoFormData,
-        planId: planInfo.id,
-        clientGroupId: planInfo.clientGroupId,
-        strategyName: strName,
-        sendOutContent: {
-          ...value,
-          ...matchAction(value.actionId),
-          channel: matchChannel(value.channelCode),
-          actionParams: JSON.stringify(setActionParams()),
-          // templateJson: JSON.stringify(templateJson),
-        },
-      }
-      
-      // 删除编辑前部分无用属性
-      if (params.strategyConditionType) {
-        delete params.strategyFixConditionContent
-      } else {
-        delete params.strategyEventConditionContent
-      }
-      if (params.clientGroupFilterType) {
-        delete params.clientGroupTagFilterContent
-      } else {
-        delete params.clientGroupUserActionFilterContent
-      }
-      setThreeFormData(params)
-
-      if (strName) {
-        setLoading(true)
-        if (strategyDetail.id) {
-          editStrategy(params, () => {
-            setVis(false)
-            setLoading(false)
-            nextStep()
-          })
         } else {
-          addStrategy(params, () => {
-            setVis(false)
-            setLoading(false)
-            nextStep()
-          })
+          message.warning('请完善策略名称')
         }
-      } else {
-        message.warning('请完善策略名称')
-      }
-    }).catch(err => console.log(err))
-    */
+      }).catch(err => console.log(err))
+    } else {
+      const tagMap = {}
+      tagList.forEach(item => {
+        tagMap[item.objNameTagName] = item.objIdTagId
+      })
+
+      myForm.validateFields().then(value => {
+      // 把数据存起来
+        const templateJson = []
+        templateKeyList.forEach(item => {
+          let itemValue = value[item]
+
+          itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
+
+          tagList.forEach(e => {
+            if (itemValue.indexOf(e.objNameTagName) > -1) {
+              itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
+            }
+          })
+
+          templateJson.push({
+            name: item,
+            value: itemValue,
+          })
+        })
+
+        const setActionParams = () => {
+          if (value.actionId === 2002) {
+            return selectMedia
+          }
+          return {
+            templateJson,
+            templateId: value.templateId,
+          }
+        }
+
+        const params = {
+          ...strategyDetail,
+          ...oneFormData,
+          ...twoFormData,
+          planId: planInfo.id,
+          clientGroupId: planInfo.clientGroupId,
+          strategyName: strName,
+          sendOutContent: {
+            ...value,
+            ...matchAction(value.actionId),
+            channel: matchChannel(value.channelCode),
+            actionParams: JSON.stringify(setActionParams()),
+            // templateJson: JSON.stringify(templateJson),
+          },
+        }
+      
+        // 删除编辑前部分无用属性
+        if (params.strategyConditionType) {
+          delete params.strategyFixConditionContent
+        } else {
+          delete params.strategyEventConditionContent
+        }
+        if (params.clientGroupFilterType) {
+          delete params.clientGroupTagFilterContent
+        } else {
+          delete params.clientGroupUserActionFilterContent
+        }
+        setThreeFormData(params)
+
+        if (strName) {
+          setLoading(true)
+          if (strategyDetail.id) {
+            editStrategy(params, () => {
+              setVis(false)
+              setLoading(false)
+              nextStep()
+            })
+          } else {
+            addStrategy(params, () => {
+              setVis(false)
+              setLoading(false)
+              nextStep()
+            })
+          }
+        } else {
+          message.warning('请完善策略名称')
+        }
+      }).catch(err => console.log(err))
+    }
   }
 
   // TODO:
@@ -417,8 +465,11 @@ export default ({
   }
 
   // 关于属性的默认值
-  const onDefaultValChange = val => {
-    setSmsDefaultValues(val)
+  const onDefaultValChange = (val, index) => {
+    setSmsDefaultValues({
+      ...smsDefaultValues,
+      [index]: val,
+    })
   }
 
   useEffect(() => {
@@ -471,6 +522,33 @@ export default ({
       })
       setVis(true)
     }
+
+    if (sendOutContent.actionId === 2101) {
+      // 短信
+      const parseActionParams = JSON.parse(actionParams)
+      const {signName, templateCode} = parseActionParams
+
+      // 需要知道 accountId
+      const {strategyEventConditionContent: {doneEvents}} = strategyDetail
+      if (doneEvents.length > 0) {
+        setAccountId(doneEvents[0].accountId)
+      }
+
+      // 把签名和模版的数据准备好
+      getAllSign()
+      getAllTpl()
+
+      setSmsTplId(templateCode)
+
+      setIsSms(true)
+
+      // 设置数据
+      smsForm.setFieldsValue({
+        signName,
+        templateCode,
+      })
+    }
+
     myForm.setFieldsValue({
       isDelay,
       actionId: sendOutContent.actionId,
@@ -508,6 +586,7 @@ export default ({
         // 发送短信
         getAllSign()
         getAllTpl()
+        setIsSms(true)
       } else if (actionId === 2002) {
         getThumbMediaList()
       } else {
@@ -577,26 +656,32 @@ export default ({
         }
       </Form>
       {
-        <Form
-          form={smsForm}
-          {...layout}
+        <div
+          style={{
+            display: isSms ? 'block' : 'none',
+          }}
         >
-          {
-            formSms({
-              smsSignList,
-              smsTplList,
-              accountId,
-              getAllSign,
-              getAllTpl,
-              tagList,
-              onDefaultValChange,
-              setSmsTplKeyList,
-              setVis,
-              setPreviewData,
-            })
-          }
-        </Form>
-        
+          <Form
+            form={smsForm}
+            {...layout}
+          >
+            {
+              formSms({
+                smsSignList,
+                smsTplId,
+                smsTplList,
+                accountId,
+                getAllSign,
+                getAllTpl,
+                tagList,
+                onDefaultValChange,
+                setSmsTplKeyList,
+                setVis,
+                setPreviewData,
+              })
+            }
+          </Form>
+        </div>
       }
       {/* <Preview> */}
       <div 
