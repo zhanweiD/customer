@@ -168,7 +168,7 @@ export function funnelOption(data1, data2) {
     // color,
     legend: {
       top: 32,
-      // left: '10%',
+      left: 32,
       data: data1 && data1.map(item => item.name),
     },
     series: [{
@@ -177,6 +177,7 @@ export function funnelOption(data1, data2) {
       sort: (a, b) => data1[b],
       height: '400',
       gap: 0,
+      zlevel: 2,
       minSize: 150,
       left: '10%',
       width: '60%',
@@ -204,8 +205,9 @@ export function funnelOption(data1, data2) {
       sort: (a, b) => data1[b],
       height: '400',
       gap: -1,
+      zlevel: 1,
       minSize: 150,
-      left: '27%',
+      left: '10%',
       width: '60%',
       z: 2,
       label: {

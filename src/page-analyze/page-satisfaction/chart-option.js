@@ -34,6 +34,12 @@ const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
 }, {
   offset: 1,
   color: '#FD5071',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#FFE800 ',
+}, {
+  offset: 1,
+  color: '#FFA44A',
 }])]
 
 export function pieOption(data, total) {

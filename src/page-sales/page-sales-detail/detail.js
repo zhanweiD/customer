@@ -27,31 +27,31 @@ export default inject('store')(({store}) => {
           color = 'blue'
           break
       }
-      return <Tag color={color}>{status}</Tag>
+      return <Tag style={{}} color={color}>{status}</Tag>
     }
     return null
   }
 
   return useObserver(() => (
-    <div className="sales-detail-header box-border">
+    <div className="sales-detail-header">
       <div className="fs18 FBH FBAC">
         <div className="mr8">{store.planName}</div>
         {renderStatus()}
       </div>
-      <div className="mt8 FBH">
-        <div className="FBH FBAC mr16 black85">
+      <div className="mt8 FBH FBJB">
+        <div className="FBH FBAC mr16 c85">
           <AppstoreOutlined />
           <div className="ml4">默认分组</div>
         </div>
-        <div className="FBH FBAC mr16 black85">
+        <div className="FBH FBAC mr16 c85">
           <TeamOutlined />
           <div className="ml4">{store.planGroup}</div>
         </div>
-        <div className="FBH FBAC mr16 black85">
+        <div className="FBH FBAC mr16 c85">
           <ClockCircleOutlined />
           <div className="ml4">{store.planTime}</div>
         </div>
-        <div className="FBH FBAC black85">
+        <div className="FBH FBAC c85">
           <AimOutlined />
           <div className="ml4">{store.planTarget}</div>
         </div>
