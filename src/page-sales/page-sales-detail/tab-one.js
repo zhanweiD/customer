@@ -91,7 +91,7 @@ export default inject('store')(({store}) => {
   }
 
   return useObserver(() => (
-    <div className="detail-chart oa">
+    <div className="oa detail-chart">
       {
         store.lineChartData.length > 0 && (
           <div className="chart-filter">

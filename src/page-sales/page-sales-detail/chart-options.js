@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(0,0,0,0.85)'
+const titleColor = 'rgba(0,0,0,1)'
 const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff']
 
 export function circleOneOption(data) {
