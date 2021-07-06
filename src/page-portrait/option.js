@@ -12,16 +12,17 @@ export function cloudOption(data, maskImage) {
       // right: 24,
       // top: 24,
       // bottom: 24,
-      sizeRange: [10, 20],
+      // sizeRange: [10, 20],
       rotationRange: [0, 0],
       // gridSize: 24,
       // rotationStep: 45,
-      gridSize: 22,
+      gridSize: 21,
       shape: 'circle',
       maskImage,
       drawOutOfBound: false, // 画布之外显示
       // shrinkToFit: true, // 画布内字体自适应大小
-      maskGapWidth: 90,
+      maskGapWidth: 0, // 方块之间的间隙宽度
+      drawMask: true, // 绘制正方形
       rotateRatio: 0,
       rotationSteps: 0,
       

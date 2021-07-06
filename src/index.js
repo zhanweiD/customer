@@ -22,7 +22,6 @@ import TagManage from './page-tag-manage'
 import Sales from './page-sales'
 import WeappCode from './page-sales1/page-channel-manage/weappCode'
 import ToCustomer from './page-sales1/page-channel-manage/toCustomer'
-import Material from './page-material'
 import EventManage from './page-sales1/page-event-manage'
 import ChannelManage from './page-sales1/page-channel-manage'
 import Sales1 from './page-sales1'
@@ -62,8 +61,6 @@ function Entry() {
           <Route path="/system" component={System} />
           {/* 自动化营销 */}
           <Route path="/sales/list" component={Sales} />
-          {/* 素材管理 */}
-          <Route path="/material" component={Material} />
           <Route path="/sales" component={Sales1} />
           {/* 事件管理 */}
           {/* <Route path="/event-manage" component={EventManage} /> */}

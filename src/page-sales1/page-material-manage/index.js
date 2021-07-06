@@ -1,4 +1,4 @@
-import {asyncComponent} from '../common/util'
+import {asyncComponent} from '../../common/util'
 
 export default asyncComponent(async () => {
   try {
