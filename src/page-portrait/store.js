@@ -221,12 +221,12 @@ class Store {
             // 同类标签颜色生成
             const newList = item.list.map(text => {
               text.name = `${text.tag}: ${text.val}`
-              text.value = 16
+              text.value = 14
               text.textStyle = {
                 color: this.color[i % 5],
                 backgroundColor: this.bgColor[i % 5],
                 padding: [8, 12],
-                margin: [12, 8],
+                // margin: [12, 8],
                 borderRadius: 16,
               }
               return text

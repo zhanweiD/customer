@@ -42,7 +42,6 @@ export default class WorldCloud extends Component {
           {
             cateTitle.map(item => (
               <div className="mr8" style={{color: item.color}}>
-                {console.log(item.color)}
                 <span style={{backgroundColor: item.color}} className="legend-name-icon mr4" />
                 <span>{item.text}</span>
               </div>
