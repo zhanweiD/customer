@@ -415,10 +415,10 @@ class TagList extends Component {
                 treeStore.getList({currentPage: 1})
               }}
             >
-              <Option style={{fontSize: '12px'}} value="">全部</Option>
-              <Option style={{fontSize: '12px'}} value={0}>待配置</Option>
-              <Option style={{fontSize: '12px'}} value={1}>待发布</Option>
-              <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
+              <Option value="">全部</Option>
+              <Option value={0}>待配置</Option>
+              <Option value={1}>待发布</Option>
+              <Option value={2}>已发布</Option>
             </Select>
             <Input 
               style={{width: 128, marginRight: '24px'}} 

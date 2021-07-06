@@ -222,8 +222,12 @@ export function lineOption(lineData) {
   const {data = [], type = []} = lineData
   const xData = []
   // eslint-disable-next-line no-restricted-syntax
-  for (const item in data) {
-    xData.unshift({name: item, value: data[item]})
+  // for (const item in data) {
+  //   xData.unshift({name: item, value: data[item]})
+  // }
+  const keys = Object.keys(data).length ? Object.keys(data).sort() : []
+  for (let i = 0; i < keys.length; i++) {
+    xData.push({name: keys[i], value: data[keys[i]]})
   }
   return {
     grid: {

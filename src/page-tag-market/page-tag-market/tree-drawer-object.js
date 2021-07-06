@@ -219,7 +219,7 @@ class ModalObject extends Component {
               <Select placeholder="请选择数据类型" showSearch optionFilterProp="children">
                 {
                   window.njkData.dict.dataType.map(item => (
-                    <Option style={{fontSize: '12px'}} key={item.key} value={item.key}>{item.value}</Option>
+                    <Option key={item.key} value={item.key}>{item.value}</Option>
                   ))
                 }
               </Select>

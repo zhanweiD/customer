@@ -113,7 +113,7 @@ class SupplyDemand extends Component {
               }}
             >
               {
-                unFitList.map(item => <Option style={{fontSize: '12px'}} key={item}>{item}</Option>)
+                unFitList.map(item => <Option key={item}>{item}</Option>)
               }
             </Select> 
             <Button onClick={() => downloadResult({index: store.indicators, ...store.reqData}, 'supply/export')} style={{marginRight: '24px'}} type="primary">导出</Button>

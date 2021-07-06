@@ -180,11 +180,11 @@ class Channel extends Component {
               getPopupContainer={triggerNode => triggerNode.parentElement}
               suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
-              <Option style={{fontSize: '12px'}} key="">全部</Option>
-              <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>
-              <Option style={{fontSize: '12px'}} key={1}>到访客户</Option>
-              <Option style={{fontSize: '12px'}} key={2}>认筹客户</Option>
-              <Option style={{fontSize: '12px'}} key={3}>认购客户</Option>
+              <Option key="">全部</Option>
+              <Option key={0}>报备客户</Option>
+              <Option key={1}>到访客户</Option>
+              <Option key={2}>认筹客户</Option>
+              <Option key={3}>认购客户</Option>
             </Select> 
             <Button 
               onClick={() => downloadResult({...store.reqChaData, ...store.reqData, ...store.reqProData}, 'expand/export')} 

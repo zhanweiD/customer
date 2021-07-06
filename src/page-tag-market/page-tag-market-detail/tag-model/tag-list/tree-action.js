@@ -71,7 +71,7 @@ export default class Action extends Component {
               onClick={this.addTree} 
               onKeyDown={() => {}} 
               style={{
-                fontSize: '12px', 
+                fontSize: '14px', 
                 margin: '-5px -12px', 
                 padding: '4px 20px',
                 cursor: 'pointer',

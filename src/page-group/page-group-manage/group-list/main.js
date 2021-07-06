@@ -62,12 +62,14 @@ export default class GroupList extends Component {
     }, {
       key: 'lastCount',
       title: '覆盖人数',
+      width: 100,
       dataIndex: 'lastCount',
     }, 
     {
       key: 'status',
       title: '客群状态',
       dataIndex: 'status',
+      width: 100,
       render: v => {
         if (v === 1) {
           return (<Badge color="green" text="正常" />)
@@ -81,19 +83,20 @@ export default class GroupList extends Component {
       key: 'lastTime',
       title: '创建时间',
       dataIndex: 'lastTime',
-      width: 170,
+      width: 200,
       render: text => <Time timestamp={text} />,
     }, 
     {
       key: 'cuserName',
       title: '创建人',
       dataIndex: 'cuserName',
+      width: 140,
     },
     {
       key: 'updateTime',
       title: '更新时间',
       dataIndex: 'updateTime',
-      width: 170,
+      width: 200,
       render: text => <Time timestamp={text} />,
     }, 
     {

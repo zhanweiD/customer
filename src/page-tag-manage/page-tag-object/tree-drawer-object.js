@@ -225,7 +225,7 @@ class ModalObject extends Component {
               >
                 {
                   window.njkData.dict.dataType.map(item => (
-                    <Option style={{fontSize: '12px'}} key={item.key} value={item.key}>{item.value}</Option>
+                    <Option key={item.key} value={item.key}>{item.value}</Option>
                   ))
                 }
               </Select>

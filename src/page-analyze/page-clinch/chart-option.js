@@ -167,7 +167,7 @@ export function funnelOption(data1, data2) {
     // color,
     legend: {
       top: 40,
-      left: 40,
+      left: '10%',
       data: data1 && data1.map(item => item.name),
     },
     series: [{
