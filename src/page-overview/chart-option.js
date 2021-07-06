@@ -541,7 +541,7 @@ export function sunOption(data) {
       label: {
         // rotate: 'radial',
         color: '#fff',
-        fontSize: 10,
+        fontSize: 12,
         // minAngle: 30,
       },
     },

@@ -21,6 +21,7 @@ export default class WorldCloud extends Component {
     const {props} = this
     this.cloudChart = echarts.init(document.getElementById('world-cloud'))
     maskImage.src = bgImage
+    maskImage.width = 1560
 
     props.getDrawCloud(this.drawChart)
   }

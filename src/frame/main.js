@@ -56,46 +56,46 @@ export default class Frame extends Component {
     icoNode.setAttribute('href', finalIco)
     document.head.appendChild(icoNode)
 
-    this.setTitle()
+    // this.setTitle()
   }
 
   // 设置窗口title
-  setTitle = () => {
-    let title = '客户中心'
-    switch (store.menuName) {
-      case 'home':
-        title = '客户中心'
-        break
-      case 'tag-market':
-        title = '标签集市'
-        break
-      case 'tag-manage':
-        title = '标签维护'
-        break
-      case 'tag-sync':
-        title = '标签同步'
-        break
-      case 'group':
-        title = '客群管理'
-        break
-      case 'customer':
-        title = '客户画像'
-        break
-      case 'analyze':
-        title = '场景洞察'
-        break
-      case 'system':
-        title = '系统管理'
-        break
-      case 'sales':
-        title = '自动化营销'
-        break
-      default:
-        title = '慧营客'
-        break
-    }
-    document.title = title
-  }
+  // setTitle = () => {
+  //   let title = '客户中心'
+  //   switch (store.menuName) {
+  //     case 'home':
+  //       title = '客户中心'
+  //       break
+  //     case 'tag-market':
+  //       title = '标签集市'
+  //       break
+  //     case 'tag-manage':
+  //       title = '标签维护'
+  //       break
+  //     case 'tag-sync':
+  //       title = '标签同步'
+  //       break
+  //     case 'group':
+  //       title = '客群管理'
+  //       break
+  //     case 'customer':
+  //       title = '客户画像'
+  //       break
+  //     case 'analyze':
+  //       title = '场景洞察'
+  //       break
+  //     case 'system':
+  //       title = '系统管理'
+  //       break
+  //     case 'sales':
+  //       title = '自动化营销'
+  //       break
+  //     default:
+  //       title = '慧营客'
+  //       break
+  //   }
+  //   document.title = title
+  // }
 
   onCollapse = collapsed => {
     store.collapsed = collapsed

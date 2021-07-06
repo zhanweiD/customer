@@ -139,7 +139,7 @@ class Consultant extends Component {
         }}
       >
         <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-          <div className="mr24">顾问分析</div>
+          <div className="mr8">顾问分析</div>
           <div>
             <Cascader
               placeholder="请选择区域"

@@ -211,7 +211,7 @@ class Purchase extends Component {
         }}
       >
         <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-          <div className="mr24">复购挖掘</div>
+          <div className="mr8">复购挖掘</div>
           <div style={{width: 504}}>
             <Cascader
               placeholder="请选择区域"
