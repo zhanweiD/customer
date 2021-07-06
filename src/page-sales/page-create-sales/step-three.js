@@ -102,6 +102,7 @@ export default ({
     }
   }
 
+  // 切换触发方式立即/延迟
   const changTouchWay = v => {
     setTouchWay(v)
     myForm.setFields([{
@@ -326,32 +327,37 @@ export default ({
       })
 
       myForm.validateFields().then(value => {
-      // 把数据存起来
+        // 微信模版把数据存起来
         const templateJson = []
-        templateKeyList.forEach(item => {
-          let itemValue = value[item]
-
-          itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
-
-          tagList.forEach(e => {
-            if (itemValue.indexOf(e.objNameTagName) > -1) {
-              itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
-            }
+        if (value.actionId === 2001) {
+          templateKeyList.forEach(item => {
+            let itemValue = value[item]
+  
+            itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
+  
+            tagList.forEach(e => {
+              if (itemValue.indexOf(e.objNameTagName) > -1) {
+                itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
+              }
+            })
+  
+            templateJson.push({
+              name: item,
+              value: itemValue,
+            })
           })
-
-          templateJson.push({
-            name: item,
-            value: itemValue,
-          })
-        })
-
+        }
+        
+        // 哪种动作
         const setActionParams = () => {
           if (value.actionId === 2002) {
             return selectMedia
-          }
-          return {
-            templateJson,
-            templateId: value.templateId,
+          } 
+          if (value.actionId === 2001) {
+            return {
+              templateJson,
+              templateId: value.templateId,
+            } 
           }
         }
 
@@ -485,9 +491,11 @@ export default ({
     } = sendOutContent
     const channelCode = [channel.channelId, channel.accountId]
 
+    // 群发消息处理
     if (sendOutContent.actionId === 2002) {
       setSelectMedia(JSON.parse(actionParams))
     }
+    // 模版消息处理
     if (sendOutContent.actionId === 2001) {
       if (!templateList.length || !tagList.length) return
       const templateData = JSON.parse(actionParams).templateJson

@@ -320,10 +320,10 @@ const CreateSales = props => {
     const {firstTargetContent = {}, clientGroupId, startTime, endTime, front} = planInfo
     const {timeGap, timeUnit, event = {}} = firstTargetContent
     const names = JSON.parse(front)
-    const setEvent = v => {
-      const obj = targetChannelList.filter(item => item.id === v.eventId)[0] || {}
-      return obj.name
-    }
+    // const setEvent = v => {
+    //   const obj = targetChannelList.filter(item => item.id === v.eventId)[0] || {}
+    //   return obj.name
+    // }
     const list = [
       {
         title: '分组',
