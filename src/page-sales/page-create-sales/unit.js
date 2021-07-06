@@ -99,18 +99,18 @@ export const setTemplate = ({
         }
         
         <div className="template-tip c45">
-          <div className="fac">温馨提示</div>
-          <div>
+          <div className="fac mb12">温馨提示</div>
+          <div className="mb4">
             <Tag color="orange">关于群发次数限制</Tag>
             {/* <Tag color="volcano">关于群发次数限制</Tag> */}
           </div>
-          <p>
+          <p style={{textIndent: '2em'}}>
             微信公众平台为订阅号提供了每天1条的群发权限，为服务号提供每月（自然月）4条的群发权限。
           </p>
-          <div>
+          <div className="mb4">
             <Tag color="orange">关于营销动作建议</Tag>
           </div>
-          <p>
+          <p style={{textIndent: '2em'}}>
             因【群发消息】动作受微信发送次数限制，建议【群发消息】在大量用户同时触达时作为目标动作进行使用，单次仅触达1个用户，当月的群发次数也会减少相应次数，请谨慎使用。
           </p>
         </div>

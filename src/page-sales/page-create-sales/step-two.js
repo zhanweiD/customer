@@ -102,6 +102,7 @@ export default ({
     return {
       eventId: event.id,
       eventCode: event.code,
+      eventName: event.name,
       channelId: channel.id,
       channelCode: channel.code,
       accountId: account.id,
@@ -119,6 +120,7 @@ export default ({
         value.startTime = `${startEndDate[0].format(dateTimeFormat)} 00:00:00`
         value.endTime = `${startEndDate[1].format(dateTimeFormat)} 23:59:59`
       }
+      // 事件触发
       if (value.strategyConditionType) {
         const {doneEvents, notDoneEvents} = value
         const strategyEventConditionContent = {
@@ -137,6 +139,7 @@ export default ({
           strategyEventConditionContent,
         }
       } else {
+        // 定时触发
         value.strategyFixConditionContent = {}
         let cycle = null // corn
         let ctime = null
@@ -280,6 +283,7 @@ export default ({
       }, 0)
       return
     } 
+    // 事件触发
     if (strategyDetail.strategyConditionType) {
       const {strategyEventConditionContent, strategyConditionType} = strategyDetail
       const {doneEvents, notDoneEvents = []} = strategyEventConditionContent
@@ -292,6 +296,7 @@ export default ({
       setDoneLogic(strategyEventConditionContent.doneLogic)
       setPlanType(strategyConditionType)
     } else {
+      // 定时触发
       const {strategyFixConditionContent, strategyConditionType} = strategyDetail
       const {cron, frequency} = strategyFixConditionContent
       setStrategyEventCondition(strategyFixConditionContent)
