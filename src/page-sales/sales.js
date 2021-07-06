@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Button, Table, Popconfirm, Badge, Tooltip} from 'antd'
+import {QuestionCircleFilled} from '@ant-design/icons'
 import {successTip, changeToOptions, errorTip} from '@util'
 import {authView, Search, Tag} from '../component'
 import searchParams from './search'
@@ -162,6 +163,7 @@ const Sales = () => {
       title: '营销计划名称',
       dataIndex: 'planName',
       key: 'planName',
+      width: 200,
       render: (text, record) => (
         record.targetStatisticsStatus === 0 ? (
           <div>
@@ -197,7 +199,7 @@ const Sales = () => {
       title: '计划状态',
       dataIndex: 'planStatus',
       key: 'planStatus',
-      width: 100,
+      width: 140,
       render: (text, record) => {
         let status = ''
         let color = ''
@@ -221,10 +223,10 @@ const Sales = () => {
         }
         if (record.remark && text === 2) {
           return (
-            <div>
+            <div className="FBH">
               <Badge status="red" text={status} />
               <Tooltip title={record.remark}>
-                ?
+                <QuestionCircleFilled style={{color: 'red', marginLeft: 4, marginTop: 4, fontSize: 14}} />
               </Tooltip>
             </div>
           )
@@ -241,16 +243,19 @@ const Sales = () => {
       title: '开始时间',
       dataIndex: 'startTime',
       key: 'startTime',
+      width: 180,
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       key: 'endTime',
+      width: 180,
     },
     {
       title: '修改时间',
       dataIndex: 'mtime',
       key: 'mtime',
+      width: 180,
     },
     {
       title: '操作',

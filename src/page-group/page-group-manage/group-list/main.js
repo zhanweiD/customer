@@ -81,7 +81,7 @@ export default class GroupList extends Component {
       key: 'lastTime',
       title: '创建时间',
       dataIndex: 'lastTime',
-      width: 170,
+      width: 180,
       render: text => <Time timestamp={text} />,
     }, 
     {
@@ -93,7 +93,7 @@ export default class GroupList extends Component {
       key: 'updateTime',
       title: '更新时间',
       dataIndex: 'updateTime',
-      width: 170,
+      width: 180,
       render: text => <Time timestamp={text} />,
     }, 
     {
