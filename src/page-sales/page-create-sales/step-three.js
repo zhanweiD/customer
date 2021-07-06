@@ -747,6 +747,7 @@ export default ({
                 setSmsTplKeyList,
                 setVis,
                 setPreviewData,
+                smsForm,
               })
             }
           </Form>
