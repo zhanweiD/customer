@@ -4,6 +4,7 @@ import {MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
 import RuleItem from './ruleItem'
 import io from './io'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Item, List} = Form
 const {Option} = Select 
@@ -176,6 +177,7 @@ const CreateSales = ({
                       style={{width: 72, margin: '4px'}} 
                       onClick={e => e.stopPropagation()}
                       onChange={changeUserLogic}
+                      suffixIcon={<img src={dropdown} alt="dropdown" />}
                     >
                       <Option value="OR">任意</Option>
                       <Option value="AND">全部</Option>
