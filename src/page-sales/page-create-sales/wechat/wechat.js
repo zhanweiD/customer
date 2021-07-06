@@ -59,7 +59,7 @@ class SomeCompoent extends Component {
   componentDidMount() {
     window.addEventListener('click', this.windowClickEvent)
     const {defaultValues} = this.props
-    this.attrList = defaultValues
+    this.attrList = defaultValues || []
   }
 
   componentWillUnmount() {
@@ -201,7 +201,7 @@ class SomeCompoent extends Component {
 
   render() {
     const {value, onChange, id, tagList, type, defaultValues} = this.props
-    
+
     return (
       <Fragment>
       

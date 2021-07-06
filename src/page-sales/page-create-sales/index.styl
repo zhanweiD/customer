@@ -1,13 +1,16 @@
 .create-sales
+  height 100%
   .create-content
     // min-height: calc(100vh - 234px)
-    min-height: calc(100vh - 144px)
+    // min-height: calc(100vh - 144px)
     display flex
-    margin-bottom 0
+    overflow-y auto
+    // margin-bottom 0
+    margin 0 16px 16px 16px
     .content-left
       width 30%
       // height calc(100vh - 251px)
-      height calc(100vh - 155px)
+      // height calc(100vh - 155px)
       overflow auto
       .left-header
         color #3F5FF4
@@ -26,9 +29,10 @@
         .left-item-header-select
           border-bottom 1px solid #3F5FF4
     .content-right
-      width 70%
       // height calc(100vh - 251px)
-      height calc(100vh - 155px)
+      // height calc(100vh - 155px)
+      position relative
+      height 100%
       overflow auto
       .right-header
         border-bottom 1px solid #e6ebf3
@@ -84,10 +88,14 @@
           margin-top 24px
       .step-content
         // min-height calc(100vh - 381px)
-        min-height calc(100vh - 292px)
-        padding-bottom 36px
+        // min-height calc(100vh - 292px)
+        height calc(100vh - 284px)
+        padding-bottom 54px
+        overflow-y auto
+
       .steps-action
         position absolute
+        z-index 10
         left 0
         bottom 0
         width 100%
