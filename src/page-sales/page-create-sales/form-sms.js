@@ -122,11 +122,13 @@ export default ({
     modalForm.validateFields().then(value => {
       const formValues = smsForm.getFieldsValue()
 
+      const targetTpl = _.find(smsTplList, e => e.id === formValues.templateCode)
+
       sendSMSIO({
         accountId,
         phoneNumbers: +value.phoneNumbers,
         signName: formValues.signName,
-        templateCode: formValues.templateCode,
+        templateCode: targetTpl.code,
         templateParam,
       })
     }).catch(err => console.log(err))
