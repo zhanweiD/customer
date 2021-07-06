@@ -95,7 +95,7 @@ class Portrait extends Component {
                           style={{width: '100%', borderRadius: 24}} 
                         >
                           {
-                            unitList.map(item => <Option value={item.ident}>{item.姓名}</Option>)
+                            unitList.map(item => <Option value={item.ident}>{item.search}</Option>)
                           }
                         </Select>
                       </div>
