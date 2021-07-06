@@ -58,6 +58,8 @@ class SomeCompoent extends Component {
 
   componentDidMount() {
     window.addEventListener('click', this.windowClickEvent)
+    const {defaultValues} = this.props
+    this.attrList = defaultValues
   }
 
   componentWillUnmount() {
@@ -198,8 +200,8 @@ class SomeCompoent extends Component {
   }
 
   render() {
-    const {value, onChange, id, tagList, type} = this.props
-
+    const {value, onChange, id, tagList, type, defaultValues} = this.props
+    
     return (
       <Fragment>
       
@@ -291,6 +293,7 @@ class SomeCompoent extends Component {
                     <Input 
                       className="FB1" 
                       placeholder="请输入默认值" 
+                      defaultValue={item.value}
                       onChange={e => this.inputChange(e, index)}
                     />
                   </div>

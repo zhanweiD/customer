@@ -229,8 +229,7 @@ export default ({
 
         // 模板字符串
         const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
-        // const {content} = targetTpl
-        let {content} = targetTpl
+        const templateJson = []
         const templateParams = []
 
         smsTplKeyList.forEach(item => {
@@ -253,14 +252,18 @@ export default ({
           })
 
           // eslint-disable-next-line no-useless-escape
-          content = content.replace(`\$\{${item}\}`, itemValue)
+          // content = content.replace(`\$\{${item}\}`, itemValue)
+          templateJson.push({
+            name: item,
+            value: itemValue,
+          })
         })
 
         // 短信的 actionParams 的最终传值
         const actionParams = {
           signName,
           templateCode,
-          templateJson: content,
+          templateJson: JSON.stringify(templateJson),
           templateParams,
         }
 
@@ -418,26 +421,28 @@ export default ({
   }
 
   // 短信签名列表
-  const getAllSign = async () => {
+  const getAllSign = async (id, cb = () => {}) => {
     try {
       const res = await io.getAllSign({
-        accountId,
+        accountId: id || accountId,
       })
 
       setSmsSignList(res)
+      cb()
     } catch (error) {
       console.log(error)
     }
   }
 
   // 短信模版列表
-  const getAllTpl = async () => {
+  const getAllTpl = async (id, cb = () => {}) => {
     try {
       const res = await io.getAllTpl({
-        accountId,
+        accountId: id || accountId,
       })
 
       setSmsTplList(res)
+      cb()
     } catch (error) {
       console.log(error)
     }
@@ -523,10 +528,11 @@ export default ({
       setVis(true)
     }
 
-    if (sendOutContent.actionId === 2101) {
-      // 短信
+    if (sendOutContent.actionId === 2101 && tagList.length > 0) {
+      // 短信 -------------预处理-------------
       const parseActionParams = JSON.parse(actionParams)
-      const {signName, templateCode} = parseActionParams
+      const {signName, templateCode, templateJson, templateParams} = parseActionParams
+      const parseTemplateJson = JSON.parse(templateJson)
 
       // 需要知道 accountId
       const {strategyEventConditionContent: {doneEvents}} = strategyDetail
@@ -534,9 +540,67 @@ export default ({
         setAccountId(doneEvents[0].accountId)
       }
 
+      // 关键字列表
+      setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
+
+      const defaultValues = {} // 属性的默认值
+      parseTemplateJson.forEach((item, index) => {
+        const {value} = item
+
+        if (value.indexOf('${')) {
+          // 说明有属性
+          // TODO: 如何快速提取 ${}
+          const valueSplit = value.split('${')
+          valueSplit.forEach(e => {
+            if (e.indexOf('}') > -1) {
+              const target = e.split('}')[0]
+              const targetName = _.find(tagList, j => j.objIdTagId === target).objNameTagName
+              const targetValue = templateParams.shift().defaultValue
+              if (defaultValues[index] && defaultValues[index].length) {
+                defaultValues[index].push({
+                  name: targetName,
+                  value: targetValue,
+                })
+              } else {
+                defaultValues[index] = []
+                defaultValues[index].push({
+                  name: targetName,
+                  value: targetValue,
+                })
+              }
+            }
+          })
+        } else {
+          defaultValues[index] = null
+        }
+      })
+
+      setSmsDefaultValues(defaultValues)
+
+      const templateObj = {}
+      parseTemplateJson.forEach(e => {
+        let valueTemp = e.value
+        tagList.forEach(item => {
+          if (valueTemp.indexOf(item.objIdTagId) > -1) {
+            valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
+          }
+        })
+  
+        // 对 span 的处理
+        if (valueTemp.indexOf('${') > -1) {
+          valueTemp = valueTemp.replace(/}/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>')
+          let id = 0
+          while (valueTemp.indexOf('${') > -1) {
+            id += 1
+            valueTemp = valueTemp.replace('${', `<span class="tag-drop" contentEditable="false" id="${id}">&nbsp;&nbsp;`)
+          }
+        }
+        templateObj[e.name] = valueTemp
+      })
+
       // 把签名和模版的数据准备好
-      getAllSign()
-      getAllTpl()
+      getAllSign(doneEvents[0].accountId)
+      getAllTpl(doneEvents[0].accountId)
 
       setSmsTplId(templateCode)
 
@@ -546,7 +610,10 @@ export default ({
       smsForm.setFieldsValue({
         signName,
         templateCode,
+        ...templateObj,
       })
+    } else {
+      setIsSms(false)
     }
 
     myForm.setFieldsValue({
@@ -584,8 +651,8 @@ export default ({
     if (accountCode && actionId) {
       if (actionId === 2101) {
         // 发送短信
-        getAllSign()
-        getAllTpl()
+        getAllSign(accountId)
+        getAllTpl(accountId)
         setIsSms(true)
       } else if (actionId === 2002) {
         getThumbMediaList()
@@ -674,7 +741,9 @@ export default ({
                 getAllSign,
                 getAllTpl,
                 tagList,
+                smsDefaultValues,
                 onDefaultValChange,
+                smsTplKeyList,
                 setSmsTplKeyList,
                 setVis,
                 setPreviewData,
