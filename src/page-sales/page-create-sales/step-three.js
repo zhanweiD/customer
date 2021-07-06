@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, Fragment} from 'react'
 import {Form, Button, Input, Select, Cascader, message} from 'antd'
 import _ from 'lodash'
 import cls from 'classnames'
@@ -20,7 +20,7 @@ data.forEach(item => {
 
 const layout = {
   labelCol: {
-    span: 3,
+    span: 4,
   },
   wrapperCol: {
     span: 9,
@@ -62,7 +62,7 @@ export default ({
 
   const [smsForm] = Form.useForm()
   const [isSms, setIsSms] = useState(false)
-  const [smsDefaultValues, setSmsDefaultValues] = useState(null)
+  const [smsDefaultValues, setSmsDefaultValues] = useState({})
   const [smsTplKeyList, setSmsTplKeyList] = useState([])
   const [smsSignList, setSmsSignList] = useState([])
   const [smsTplList, setSmsTplList] = useState([])
@@ -637,6 +637,9 @@ export default ({
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
+      
+      setIsSms(false)
+      smsForm.resetFields()
     } else {
       const {sendOutContent} = strategyDetail
       const {channel = {}} = sendOutContent
@@ -669,118 +672,119 @@ export default ({
   }, [accountCode, actionId])
 
   return (
-    <div 
-      className="step-content step-three pr pl16 pr16"
-      style={{display: current === 2 ? 'block' : 'none'}}
-    >
-      <Form
-        {...layout}
-        style={{marginBottom: '192px'}}
-        form={myForm}
-      >
-        <Item label="触达方式">
-          {setTouchType()}
-        </Item>
-        <Item
-          label="触达通道"
-          name="channelCode"
-          rules={[{required: true, message: '请选择触达渠道'}]}
-        >
-          <Cascader
-            placeholder="请选择触达通道"
-            options={treeStrChannelList}
-            expandTrigger="hover"
-            onChange={changeCode}
-            fieldNames={{
-              label: 'name',
-              value: 'id',
-              children: 'children',
-            }}
-          />
-        </Item>
-        <Item
-          label="营销动作"
-          name="actionId"
-          rules={[{required: true, message: '请选择营销动作'}]}
-        >
-          <Select placeholder="请选择动作" onChange={changeAction}>
-            {
-              channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
-            }
-          </Select>
-        </Item>
-        {
-          setTemplate({
-            templateChange,
-            templateList,
-            templateKeyList,
-            tagList,
-            actionId,
-            thumbMediaList,
-            showDrawer: () => setDrawerVisible(true),
-            selectMedia,
-          })
-        }
-      </Form>
-      {
-        <div
-          style={{
-            display: isSms ? 'block' : 'none',
-          }}
-        >
-          <Form
-            form={smsForm}
-            {...layout}
-          >
-            {
-              formSms({
-                smsSignList,
-                smsTplId,
-                smsTplList,
-                accountId,
-                getAllSign,
-                getAllTpl,
-                tagList,
-                smsDefaultValues,
-                onDefaultValChange,
-                smsTplKeyList,
-                setSmsTplKeyList,
-                setVis,
-                setPreviewData,
-                smsForm,
-              })
-            }
-          </Form>
-        </div>
-      }
-      {/* <Preview> */}
+    <Fragment>
       <div 
-        className={cls({
-          'wechat-preview': true,
-          FBH: true,
-          FBJC: true,
-          'wechat-active': vis,
-        })}
+        className="step-content step-three pr pl16 pr16"
+        style={{display: current === 2 ? 'block' : 'none'}}
       >
-        <img src={Frame} alt="frame" style={{width: '245px'}} />
+        <Form
+          {...layout}
+          style={{marginTop: '1px'}}
+          form={myForm}
+        >
+          <Item label="触达方式">
+            {setTouchType()}
+          </Item>
+          <Item
+            label="触达通道"
+            name="channelCode"
+            rules={[{required: true, message: '请选择触达渠道'}]}
+          >
+            <Cascader
+              placeholder="请选择触达通道"
+              options={treeStrChannelList}
+              expandTrigger="hover"
+              onChange={changeCode}
+              fieldNames={{
+                label: 'name',
+                value: 'id',
+                children: 'children',
+              }}
+            />
+          </Item>
+          <Item
+            label="营销动作"
+            name="actionId"
+            rules={[{required: true, message: '请选择营销动作'}]}
+          >
+            <Select placeholder="请选择动作" onChange={changeAction}>
+              {
+                channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
+              }
+            </Select>
+          </Item>
+          {
+            setTemplate({
+              templateChange,
+              templateList,
+              templateKeyList,
+              tagList,
+              actionId,
+              thumbMediaList,
+              showDrawer: () => setDrawerVisible(true),
+              selectMedia,
+            })
+          }
+        </Form>
+        {
+          <div
+            style={{
+              display: isSms ? 'block' : 'none',
+            }}
+          >
+            <Form
+              form={smsForm}
+              {...layout}
+            >
+              {
+                formSms({
+                  smsSignList,
+                  smsTplId,
+                  smsTplList,
+                  accountId,
+                  getAllSign,
+                  getAllTpl,
+                  tagList,
+                  smsDefaultValues,
+                  onDefaultValChange,
+                  smsTplKeyList,
+                  setSmsTplKeyList,
+                  setVis,
+                  setPreviewData,
+                  smsForm,
+                })
+              }
+            </Form>
+          </div>
+        }
+        {/* <Preview> */}
         <div 
-          className="preview-box mt20" 
-          dangerouslySetInnerHTML={{__html: previewData}} 
+          className={cls({
+            'wechat-preview': true,
+            FBH: true,
+            FBJC: true,
+            'wechat-active': vis,
+          })}
+        >
+          <img src={Frame} alt="frame" style={{width: '245px'}} />
+          <div 
+            className="preview-box mt20" 
+            dangerouslySetInnerHTML={{__html: previewData}} 
+          />
+        </div>
+        <ContentDrawer 
+          drawerVisible={drawerVisible}
+          closeDrawer={() => setDrawerVisible(false)}
+          thumbMediaList={thumbMediaList}
+          thumbMediaPage={thumbMediaPage}
+          selectMedia={selectMedia}
+          setSelectMedia={v => setSelectMedia(v)}
+          accountCode={accountCode}
+          mesLoading={mesLoading}
+          getThumbMediaList={getThumbMediaList}
         />
       </div>
-      <ContentDrawer 
-        drawerVisible={drawerVisible}
-        closeDrawer={() => setDrawerVisible(false)}
-        thumbMediaList={thumbMediaList}
-        thumbMediaPage={thumbMediaPage}
-        selectMedia={selectMedia}
-        setSelectMedia={v => setSelectMedia(v)}
-        accountCode={accountCode}
-        mesLoading={mesLoading}
-        getThumbMediaList={getThumbMediaList}
-      />
-      {/* </Preview> */}
-      <div className="steps-action">
+      <div className="steps-action" style={{display: current === 2 ? 'block' : 'none'}}>
         <Button className="mr8" onClick={prevStep}>
           上一步
         </Button>
@@ -788,6 +792,6 @@ export default ({
           完成
         </Button>
       </div>
-    </div>
+    </Fragment>
   )
 }

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, Fragment} from 'react'
 import {Form, Select, Button, Input, Radio, Collapse, Cascader, Popconfirm} from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
@@ -141,115 +141,118 @@ const CreateSales = ({
   }, [clientGroup])
 
   return (
-    <div 
-      style={{display: current === 0 ? 'block' : 'none'}} 
-      className="p24 pt0 bgf pr step-one step-content"
-    >
-      <Form
-        name="create-form"
-        {...layout}
-        form={oneForm}
+    <Fragment>
+      <div 
+        style={{display: current === 0 ? 'block' : 'none'}} 
+        className="pt0 bgf pr step-one step-content"
       >
-        <Item
-          name="clientGroupFilterType"
-          label="筛选类型"
-          initialValue={radioType}
-          style={{marginBottom: 12}}
-        >
-          <Radio.Group name="radiogroup" onChange={v => setRadioType(v.target.value)}>
-            <Radio value={0}>按用户标签筛选</Radio>
-            <Radio value={1}>按用户行为筛选</Radio>
-          </Radio.Group>
-        </Item>
-        <Collapse 
-          defaultActiveKey={['1']}
-          style={{position: 'relative'}}
-        >
-          <Panel 
-            header={(
-              <div className="FBH header-select">
-                {radioType ? '用户行为属性满足' : '用户实体属性满足'}
-                <Select 
-                  value={userLogic}
-                  style={{width: 72, margin: '4px'}} 
-                  onClick={e => e.stopPropagation()}
-                  onChange={changeUserLogic}
-                >
-                  <Option value="OR">任意</Option>
-                  <Option value="AND">全部</Option>
-                </Select>
-              </div>
-              // '用户实体属性满足'
-            )} 
-            key="1"
+        <div className="p16">
+          <Form
+            name="create-form"
+            {...layout}
+            form={oneForm}
           >
-            <List
-              name="clientGroupFilterContent"
-              initialValue={clientGroup}
+            <Item
+              name="clientGroupFilterType"
+              label="筛选类型"
+              initialValue={radioType}
+              style={{marginBottom: 12}}
             >
-              {(fields, {add, remove}) => {
-                return (
-                  <div>
-                    {fields.map(({key, name, fieldKey, ...restField}, index) => {
-                      return radioType ? (
-                        <div className="pr">
-                          <Item
-                            {...restField}
-                            name={[name, 'event']}
-                            fieldKey={[fieldKey, 'event']}
-                            rules={[{required: true, message: '请选择事件'}]}
-                          >
-                            <Cascader
-                              placeholder="请选择事件"
-                              // options={filterChannelList}
-                              options={channelList}
-                              expandTrigger="hover"
-                              fieldNames={{
-                                label: 'name',
-                                value: 'id',
-                                children: 'children',
-                              }}
-                              onChange={checkSelectEvent}
-                            />
-                          </Item>
-                          <MinusCircleOutlined 
-                            style={{
-                              position: 'absolute', fontSize: 16, top: 8, right: 112, color: '#999'}} 
-                            onClick={() => remove(name)}
-                          />
-                        </div>
-                      ) : (  
-                        <div className="pr user-config">
-                          <RuleItem 
-                            restField={restField}
-                            name={name}
-                            fieldKey={fieldKey}
-                            objTagList={objTagList}
-                            remove={remove}
-                            checkSelectEvent={checkSelectEvent}
-                            clientGroup={clientGroup[index]}
-                          />
-                        </div>
-                      )
-                    })}
-                    <div
-                      className="add-event-btn fs14 hand"
-                      onClick={() => {
-                        oneForm.validateFields().then(() => add())
-                      }}
+              <Radio.Group name="radiogroup" onChange={v => setRadioType(v.target.value)}>
+                <Radio value={0}>按用户标签筛选</Radio>
+                <Radio value={1}>按用户行为筛选</Radio>
+              </Radio.Group>
+            </Item>
+            <Collapse 
+              defaultActiveKey={['1']}
+              style={{position: 'relative'}}
+            >
+              <Panel 
+                header={(
+                  <div className="FBH header-select">
+                    {radioType ? '用户行为属性满足' : '用户实体属性满足'}
+                    <Select 
+                      value={userLogic}
+                      style={{width: 72, margin: '4px'}} 
+                      onClick={e => e.stopPropagation()}
+                      onChange={changeUserLogic}
                     >
-                      <img style={{marginBottom: 1}} src={Attr} alt="属性" />
-                      <span className="ml4">添加</span>
-                    </div>
+                      <Option value="OR">任意</Option>
+                      <Option value="AND">全部</Option>
+                    </Select>
                   </div>
-                )
-              }}
-            </List>
-          </Panel>
-        </Collapse>
-      </Form>
-
-      <div className="steps-action">
+                  // '用户实体属性满足'
+                )} 
+                key="1"
+              >
+                <List
+                  name="clientGroupFilterContent"
+                  initialValue={clientGroup}
+                >
+                  {(fields, {add, remove}) => {
+                    return (
+                      <div>
+                        {fields.map(({key, name, fieldKey, ...restField}, index) => {
+                          return radioType ? (
+                            <div className="pr">
+                              <Item
+                                {...restField}
+                                name={[name, 'event']}
+                                fieldKey={[fieldKey, 'event']}
+                                rules={[{required: true, message: '请选择事件'}]}
+                              >
+                                <Cascader
+                                  placeholder="请选择事件"
+                                  // options={filterChannelList}
+                                  options={channelList}
+                                  expandTrigger="hover"
+                                  fieldNames={{
+                                    label: 'name',
+                                    value: 'id',
+                                    children: 'children',
+                                  }}
+                                  onChange={checkSelectEvent}
+                                />
+                              </Item>
+                              <MinusCircleOutlined 
+                                style={{
+                                  position: 'absolute', fontSize: 16, top: 8, right: 112, color: '#999'}} 
+                                onClick={() => remove(name)}
+                              />
+                            </div>
+                          ) : (  
+                            <div className="pr user-config">
+                              <RuleItem 
+                                restField={restField}
+                                name={name}
+                                fieldKey={fieldKey}
+                                objTagList={objTagList}
+                                remove={remove}
+                                checkSelectEvent={checkSelectEvent}
+                                clientGroup={clientGroup[index]}
+                              />
+                            </div>
+                          )
+                        })}
+                        <div
+                          className="add-event-btn fs14 hand"
+                          onClick={() => {
+                            oneForm.validateFields().then(() => add())
+                          }}
+                        >
+                          <img style={{marginBottom: 1}} src={Attr} alt="属性" />
+                          <span className="ml4">添加</span>
+                        </div>
+                      </div>
+                    )
+                  }}
+                </List>
+              </Panel>
+            </Collapse>
+          </Form>
+        </div>
+      </div>
+      <div className="steps-action" style={{display: current === 0 ? 'block' : 'none'}}>
         <Popconfirm
           title="取消后返回营销计划列表?"
           onConfirm={() => window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`}
@@ -265,7 +268,7 @@ const CreateSales = ({
           下一步
         </Button>
       </div>
-    </div>
+    </Fragment>
   )
 }
 

@@ -59,9 +59,12 @@ class EditNode extends Component {
 
   componentDidUpdate() {
     if (this.props.value !== this.ref.current.innerHTML) {
-      this.ref.current.innerHTML = this.props.value
+      if (typeof this.props.value === 'undefined') {
+        this.ref.current.innerHTML = ''
+      } else {
+        this.ref.current.innerHTML = this.props.value
+      }
     }
-    // console.log('child')
   }
 
   onClick() {

@@ -357,7 +357,7 @@ const CreateSales = props => {
   }
 
   return (
-    <div className="create-sales">
+    <div className="create-sales FBV">
       <div className="m16">
         <div className="pb8 FBH FBAC">
           <span className="fs18 mr8">{planInfo.planName}</span>
@@ -374,7 +374,7 @@ const CreateSales = props => {
           }
         </div>
       </div>
-      <div className="m16 create-content">
+      <div className="create-content FB1 FBH">
         <div className="content-left bgf mr16 p16 custom-border">
           <div className="left-header mb12">策略配置</div>
           <StrategyItem
@@ -400,8 +400,7 @@ const CreateSales = props => {
             添加
           </Button>
         </div>
-        
-        <div className="content-right bgf custom-border">
+        <div className="content-right bgf custom-border FB1 FBV">
           <div className="pt12 pb12 pl16 right-header">
             {
               strategyDetail.strategyName ? (

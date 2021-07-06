@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Form, Select, Input, Drawer, Modal, Button, message} from 'antd'
+import {Form, Select, Input, Drawer, Modal, Button, message, Col} from 'antd'
 import {PlaySquareOutlined} from '@ant-design/icons'
 import _ from 'lodash'
 
@@ -17,19 +17,6 @@ const layout = {
     span: 12,
   },
 }
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    span: 9,
-    offset: 3,
-  },
-}
-
-const data = [
-  'tenantName',
-  'userName',
-  'password',
-]
 
 export default ({
   getValues,
@@ -60,6 +47,7 @@ export default ({
   const [smsContent, setSmsContent] = useState(null)
   const [templateParam, setTemplateParam] = useState({})
   const [btnLoading, setBtnLoading] = useState(false)
+  const [showTestSMS, setShowTestSMS] = useState(false)
 
   const showSign = () => {
     setIsSign(true)
@@ -102,6 +90,7 @@ export default ({
     // 手机模版预览
     setPreviewData(content)
     setVis(true)
+    setShowTestSMS(true)
   }
 
   const showSendSMS = () => {
@@ -188,13 +177,11 @@ export default ({
           }
         </Select>
       </Item>
-      <Item
-        {...tailFormItemLayout}
-      >
-        <span>
+      <Col offset={4} span={9}>
+        <div className="mb4">
           <a onClick={showSign}>新增签名</a>
-        </span>
-      </Item>
+        </div>
+      </Col>
       <Item
         name="templateCode"
         label="短信模版"
@@ -212,13 +199,11 @@ export default ({
         </Select>
         
       </Item>
-      <Item
-        {...tailFormItemLayout}
-      >
-        <span>
+      <Col offset={4} span={9}>
+        <div className="mb4">
           <a onClick={showTpl}>新增模版</a>
-        </span>
-      </Item>
+        </div>
+      </Col>
       {
         keywordList.map((item, index) => (
           <Item
@@ -236,14 +221,17 @@ export default ({
           </Item>
         ))
       }
-      <Item
-        {...tailFormItemLayout}
-      >
-        <span className="hand" onClick={showSendSMS}>
-          <PlaySquareOutlined style={{color: '#3f5ff4'}} />
-          <a className="ml8">测试发送</a>
-        </span>
-      </Item>
+      {
+        showTestSMS && (
+          <Col offset={4} span={9}>
+            <span className="hand" onClick={showSendSMS}>
+              <PlaySquareOutlined style={{color: '#3f5ff4'}} />
+              <a className="ml8">测试发送</a>
+            </span>
+          </Col>
+        )
+      }
+      
       
       {/* <div 
         className="mb24"
