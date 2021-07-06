@@ -210,7 +210,7 @@ class Purchase extends Component {
           }
         }}
       >
-        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
           <div className="mr24">复购挖掘</div>
           <div style={{width: 504}}>
             <Cascader

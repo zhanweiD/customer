@@ -189,7 +189,7 @@ class Satisfaction extends Component {
           }
         }}
       >
-        <div className={`content-header-fixed FBH FBJB ${isScroll ? 'header-scroll' : ''}`}>
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
           <div className="mr24">满意度提升</div>
           <div style={{width: 872}}>
             <Cascader
