@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
 import {Button, Table, Popconfirm, Spin, Modal} from 'antd'
 import {successTip, changeToOptions, errorTip} from '@util'
-import {Search} from '../component'
+import {Search} from '../../component'
 import AddModal from './add-modal'
 import searchParams from './search'
-import groupImg from '../icon/new-group1.svg'
+import groupImg from '../../icon/new-group1.svg'
 import io from './io'
 
 export default () => {
@@ -134,7 +134,7 @@ export default () => {
   return (
     <div className="oa">
       <div className="content-header">素材管理</div>
-      <div className="m16 mt72 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
+      <div className="m16 bgf p16 pt0" style={{minHeight: 'calc(100vh - 137px)'}}>
         <Search
           onReset={() => console.log('重置')}
           onSearch={setSearchParam}

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Button, Upload, message, Modal, Form, Input, Radio} from 'antd'
 import {LoadingOutlined, PlusOutlined} from '@ant-design/icons'
 
-import {baseApi} from '../common/util'
+import {baseApi} from '../../common/util'
 
 const layout = {
   labelCol: {span: 4},
