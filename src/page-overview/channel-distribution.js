@@ -74,7 +74,7 @@ const ChannelDistribution = ({
                 : null
             }
             <div ref={chartSun} style={{height: '340px', width: '100%'}} />
-            <div style={{height: '150px', marginLeft: '25%'}} className="FBV FBJC categroy-legend-box">
+            <div style={{height: '150px', marginLeft: '28%'}} className="FBV FBJC categroy-legend-box">
               {
                 sunData.map((item, i) => (
                   <LegendItem 

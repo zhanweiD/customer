@@ -136,7 +136,7 @@ class SupplyDemand extends Component {
         }}
       >
         <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-          <div className="mr24">供需分析</div>
+          <div className="mr8">供需分析</div>
           <div style={{width: 600}}>
             <Cascader
               placeholder="请选择区域"

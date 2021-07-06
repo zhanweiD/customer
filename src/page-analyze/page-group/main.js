@@ -53,7 +53,7 @@ class Group extends Component {
         }}
       >
         <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-          <div className="mr24">客群画像</div>
+          <div className="mr8">客群画像</div>
           <div>
             <Select 
               placeholder="请选择客群"

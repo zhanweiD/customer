@@ -1,5 +1,3 @@
-import {toJS} from 'mobx'
-
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
 const fontColor = 'rgba(22,50,78,0.85)'
 const titleColor = 'rgba(22,50,78, 1)'
@@ -10,14 +8,19 @@ export function cloudOption(data, maskImage) {
   return {
     series: [{
       type: 'wordCloud',
+      // left: 32, 
+      // right: 24,
+      // top: 24,
+      // bottom: 24,
       sizeRange: [10, 20],
       rotationRange: [0, 0],
       // gridSize: 24,
       // rotationStep: 45,
-      gridSize: 24,
+      gridSize: 22,
       shape: 'circle',
       maskImage,
-      drawOutOfBound: false,
+      drawOutOfBound: false, // 画布之外显示
+      // shrinkToFit: true, // 画布内字体自适应大小
       maskGapWidth: 90,
       rotateRatio: 0,
       rotationSteps: 0,
@@ -42,7 +45,6 @@ export function cloudOption(data, maskImage) {
 }
 
 export function pieOption(data, total) {
-  console.log(data)
   if (!data.length) {
     return {
       title: [{

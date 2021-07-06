@@ -173,7 +173,7 @@ class Clinch extends Component {
         }}
       >
         <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-          <div className="mr24">成交分析</div>
+          <div className="mr8">成交分析</div>
           <div style={{width: 624}}>
             <Cascader
               placeholder="请选择区域"
