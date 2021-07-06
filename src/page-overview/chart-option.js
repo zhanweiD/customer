@@ -324,16 +324,12 @@ export function cbarOption(barData, type) {
 export function lineOption(lineData) {
   const {data = [], type = []} = lineData
   const xData = []
-  let obj = {}
-  // eslint-disable-next-line no-restricted-syntax
-  for (const item in data) {
-    if (item !== '2021-01') {
-      xData.unshift({name: item, value: data[item]})
-    } else {
-      obj = {name: item, value: data[item]}
-    }
+  
+  const keys = Object.keys(data).length ? Object.keys(data).sort() : []
+  for (let i = 0; i < keys.length; i++) {
+    xData.push({name: keys[i], value: data[keys[i]]})
   }
-  xData.splice(5, 0, obj) // 跨年时间颠倒问题
+  
   return {
     grid: {
       top: 48,
