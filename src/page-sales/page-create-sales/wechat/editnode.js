@@ -41,9 +41,23 @@ class EditNode extends Component {
   }
 
   onChange(e) {
-    const {onCursorChange, onChange} = this.props
+    const {onCursorChange, onChange, onUpdateAttrList} = this.props
     const html = this.ref.current.innerHTML
     if (onChange && html !== this.lastHtml) {
+      if (this.lastHtml.length - html.length > 100) {
+        // 说明删除了 span 节点
+        let tempLast = this.lastHtml
+        const tempHtml = html
+        tempLast = tempLast.replace(tempHtml, '') // 删除的内容
+
+        const templateIds = tempLast.match(/id="[^"]+"/g)
+        // eslint-disable-next-line no-useless-escape
+        const templateKey = _.map(templateIds, j => j.replace('id=\"', '').replace('\"', ''))
+
+        // 对应删除默认值
+        onUpdateAttrList(templateKey)
+      }
+
       onChange(html)
     }
     this.lastHtml = html
@@ -63,6 +77,7 @@ class EditNode extends Component {
         this.ref.current.innerHTML = ''
       } else {
         this.ref.current.innerHTML = this.props.value
+        this.lastHtml = this.props.value
       }
     }
   }
