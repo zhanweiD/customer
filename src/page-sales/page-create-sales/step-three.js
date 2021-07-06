@@ -551,6 +551,7 @@ export default ({
           // 说明有属性
           // TODO: 如何快速提取 ${}
           const valueSplit = value.split('${')
+          let id = 0
           valueSplit.forEach(e => {
             if (e.indexOf('}') > -1) {
               const target = e.split('}')[0]
@@ -566,6 +567,7 @@ export default ({
                 defaultValues[index].push({
                   name: targetName,
                   value: targetValue,
+                  id: ++id,
                 })
               }
             }

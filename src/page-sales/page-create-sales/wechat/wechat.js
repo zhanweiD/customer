@@ -250,6 +250,11 @@ class SomeCompoent extends Component {
               onCursorChange={pos => {
                 this.cursorPos = pos
               }}
+              onUpdateAttrList={keys => {
+                if (type === 'sms') {
+                  _.remove(this.attrList, e => keys.indexOf(String(e.id)) > -1)
+                }
+              }}
             />
           </div>
           <div
