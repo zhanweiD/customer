@@ -1,18 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import {Form, Select, Input, Drawer} from 'antd'
+import {Form, Select, Input, Drawer, Modal, Button, message} from 'antd'
+import {PlaySquareOutlined} from '@ant-design/icons'
 import _ from 'lodash'
 
 import {setSmsSign, setSmsTpl} from './unit'
 import Wechat from './wechat/wechat'
+import io from './io'
 
 const {Item} = Form
 const {Option} = Select
 const layout = {
   labelCol: {
-    span: 3,
+    span: 6,
   },
   wrapperCol: {
-    span: 9,
+    span: 12,
   },
 }
 
@@ -44,14 +46,20 @@ export default ({
   setSmsTplKeyList,
   setVis,
   setPreviewData,
+  smsForm,
 }) => {
   // const [smsForm] = Form.useForm()
   // const [keywordForm] = Form.useForm()
+  const [modalForm] = Form.useForm()
   const [drawerSignVis, setDrawerSignVis] = useState(false)
   const [drawerTplVis, setDrawerTplVis] = useState(false)
+  const [modalVis, setModalVis] = useState(false)
   const [drawerTitle, setDrawerTitle] = useState('短信签名')
   const [keywordList, setKeyworkList] = useState([])
   const [isSign, setIsSign] = useState(false) // 判断是 新增签名 还是 新增模版
+  const [smsContent, setSmsContent] = useState(null)
+  const [templateParam, setTemplateParam] = useState({})
+  const [btnLoading, setBtnLoading] = useState(false)
 
   const showSign = () => {
     setIsSign(true)
@@ -80,7 +88,6 @@ export default ({
     
     const keywords = []
     const {content} = target
-    // debugger
     const contentSplit = content.split('${')
     contentSplit.forEach(item => {
       if (item.indexOf('}') > -1) {
@@ -95,6 +102,62 @@ export default ({
     // 手机模版预览
     setPreviewData(content)
     setVis(true)
+  }
+
+  const showSendSMS = () => {
+    const formValues = smsForm.getFieldsValue()
+    const target = _.find(smsTplList, e => e.id === formValues.templateCode)
+    let {content} = target
+
+    const templateParamObj = {}
+
+    smsTplKeyList.forEach(item => {
+      let itemValue = formValues[item]
+
+      itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
+      templateParamObj[item] = itemValue
+
+      // eslint-disable-next-line no-useless-escape
+      content = content.replace(`\$\{${item}\}`, itemValue)
+    })
+
+    setTemplateParam(templateParamObj)
+    content = content.replace(/$/g, '')
+    setSmsContent(content)
+    // const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
+    setModalVis(true)
+  }
+
+  // 测试发送短信
+  const sendSMS = () => {
+    modalForm.validateFields().then(value => {
+      const formValues = smsForm.getFieldsValue()
+
+      sendSMSIO({
+        accountId,
+        phoneNumbers: +value.phoneNumbers,
+        signName: formValues.signName,
+        templateCode: formValues.templateCode,
+        templateParam,
+      })
+    }).catch(err => console.log(err))
+  }
+
+  const sendSMSIO = async params => {
+    setBtnLoading(true)
+    try {
+      const res = await io.sendSms({
+        ...params,
+      })
+
+      setModalVis(false)
+      modalForm.resetFields()
+      message.success('发送成功')
+    } catch (e) {
+      message.error(e.message)
+    } finally {
+      setBtnLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -173,6 +236,14 @@ export default ({
           </Item>
         ))
       }
+      <Item
+        {...tailFormItemLayout}
+      >
+        <span className="hand" onClick={showSendSMS}>
+          <PlaySquareOutlined style={{color: '#3f5ff4'}} />
+          <a className="ml8">测试发送</a>
+        </span>
+      </Item>
       
       {/* <div 
         className="mb24"
@@ -255,6 +326,63 @@ export default ({
           })
         }
       </Drawer>
+      <Modal
+        title="测试发送"
+        visible={modalVis}
+        destroyOnClose
+        maskClosable={false}
+        forceRender
+        footer={(
+          <div
+            style={{
+              textAlign: 'right',
+            }}
+          >
+            <Button 
+              className="mr8" 
+              onClick={() => {
+                setModalVis(false)
+                modalForm.resetFields()
+              }}
+            >
+              取消
+            </Button>
+            <Button type="primary" onClick={() => sendSMS()} loading={btnLoading}>
+              发送
+            </Button>
+          </div>
+        )}
+        onCancel={() => {
+          setModalVis(false)
+          modalForm.resetFields()
+        }}
+      >
+        <Form
+          form={modalForm}
+          {...layout}
+        >
+          <Item
+            label="短信内容"
+          >
+            <div
+              style={{
+                whiteSpace: 'pre-wrap',
+                padding: '12px',
+                backgroundColor: '#f5f8fc',
+              }}
+            >
+              {smsContent}
+            </div>
+          </Item>
+          <Item
+            name="phoneNumbers"
+            label="测试手机号"
+            rules={[{required: true, message: '手机号不能为空'}]}
+          >
+            <Input prefix="+86" placeholder="请输入测试手机号" />
+          </Item>
+        </Form>
+      </Modal>
     </div>
   )
 }
