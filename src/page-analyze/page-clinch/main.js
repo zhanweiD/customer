@@ -136,19 +136,19 @@ class Clinch extends Component {
           </div>
           <div>
             <Select 
-              defaultValue=""
               style={{width: 160, marginRight: '8px'}} 
+              defaultValue=""
               suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={v => {
                 store.reqCliData.customerType = v
                 store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
               }}
             >
-              <Option style={{fontSize: '12px'}} key="">全部</Option>
-              <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>
-              <Option style={{fontSize: '12px'}} key={1}>到访客户</Option>
-              <Option style={{fontSize: '12px'}} key={2}>认筹客户</Option>
-              <Option style={{fontSize: '12px'}} key={3}>认购客户</Option>
+              <Option key="">全部</Option>
+              <Option key={0}>报备客户</Option>
+              <Option key={1}>到访客户</Option>
+              <Option key={2}>认筹客户</Option>
+              <Option key={3}>认购客户</Option>
             </Select> 
             <Button onClick={() => downloadResult({...reqData, ...reqProData, ...reqCliData}, 'deal/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
           </div>

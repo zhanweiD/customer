@@ -1,5 +1,5 @@
 
-const nameTextStyleColor = 'rgba(0, 0, 0, .45)'
+const nameTextStyleColor = 'rgba(22, 50, 78, .45)'
 const areaColor = '#31C5E9'
 const formatterFn = title => params => `日期: ${moment(+params[0].axisValue).format('YYYY-MM-DD')} <br/>${title}: ${params[0].value}`
 

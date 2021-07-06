@@ -119,7 +119,7 @@ export function barOption(data) {
       stack: 'Tik Tok',
       barWidth: 12,
       itemStyle: {
-        shadowColor: 'rgba(0, 0, 0, .3)',
+        shadowColor: 'rgba(22, 50, 78, .3)',
         // borderRadius: 12,
         shadowBlur: 1,
         shadowOffsetY: 1,
@@ -143,7 +143,7 @@ export function barOption(data) {
       stack: 'Tik Tok',
       barWidth: 12,
       itemStyle: {
-        shadowColor: 'rgba(0, 0, 0, .3)',
+        shadowColor: 'rgba(22, 50, 78, .3)',
         // borderRadius: 12,
         shadowBlur: 1,
         shadowOffsetY: 1,

@@ -84,7 +84,7 @@ class AddDrawer extends Component {
                   checkedKeys={dataCheckedKeys}
                   // defaultExpandAll
                   // treeData={menuTree}
-                  style={{fontSize: '12px'}}
+                  style={{fontSize: '14px'}}
                   className="roleTree"
                 >
                   {this.renderTreeNodes(projectList)}

@@ -136,7 +136,7 @@ export default class TagCateTree extends Component {
         // iconNodeSrc={e => getIconNodeSrc(e)}
         actionList={this.setActionList(node)}
         nodeData={node}
-        style={{fontSize: '12px'}}
+        style={{fontSize: '14px'}}
       >
         {
           this.processNodeData(node.children)

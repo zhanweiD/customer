@@ -37,7 +37,7 @@ const SelectTypes = ({
     >
       {
         mergeOption && mergeOption.map(({name, ...optionProps}) => (
-          <antd.Select.Option style={{fontSize: '12px'}} key={optionProps.value} {...optionProps}>{name}</antd.Select.Option>
+          <antd.Select.Option key={optionProps.value} {...optionProps}>{name}</antd.Select.Option>
         ))
       }
     </antd.Select>
