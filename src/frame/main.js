@@ -25,6 +25,7 @@ import ico from '../icon/dtwave.ico'
 import store from './store'
 import {errorTip, codeInProduct} from '../common/util'
 import defaultLightLogo from '../icon/default-light-logo.svg'
+import headerLogo from '../icon/header-logo.svg'
 import dropdown from '../icon/dropdown.svg'
 
 const {Header, Content, Sider} = Layout
@@ -362,8 +363,8 @@ export default class Frame extends Component {
           <div className="FBV FB1" style={{overflowX: 'hidden'}}>
             <div className="frame-header FBH FBJB FBAC">
               <div className="FBH FBAC ml24">
-                <img src={defaultLightLogo} alt="logo" width="36" height="28" />
-                <div className="fcf fs18">慧营客</div>
+                <img src={headerLogo} alt="logo" width="28" height="22" />
+                <div className="fcf fs18 ml8">慧营客</div>
               </div>
               <div className="mr24">
                 <Dropdown overlay={userMenu}>
