@@ -14,7 +14,7 @@ import './main.styl'
 const {TabPane} = Tabs
 const GroupManage = () => {
   return (
-    <div className="oa FBV">
+    <div className="oa FBV group-container">
       <div className="content-header">客群管理</div>
       <div className="header-page FB1">
         <Tabs defaultActiveKey={codeInProduct('/group/manage') ? '0' : '1'} className="group-manage">

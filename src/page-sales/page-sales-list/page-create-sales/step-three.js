@@ -327,7 +327,7 @@ export default ({
       })
 
       myForm.validateFields().then(value => {
-        // 微信模版把数据存起来
+        // 如果是微信模版把数据存起来
         const templateJson = []
         if (value.actionId === 2001) {
           templateKeyList.forEach(item => {
@@ -348,11 +348,13 @@ export default ({
           })
         }
         
-        // 哪种动作
+        // 动作参数处理
         const setActionParams = () => {
+          // 微信群发消息
           if (value.actionId === 2002) {
             return selectMedia
           } 
+          // 微信模版消息
           if (value.actionId === 2001) {
             return {
               templateJson,
@@ -461,18 +463,9 @@ export default ({
     setAccountId(item[1].id)
   }
 
-  // 
+  // 改变动作
   const changeAction = v => {
     setActionId(v)
-    // if (v === 2101) {
-    //   // 发送短信
-    //   getAllSign()
-    //   getAllTpl()
-    // } else if (v === 2002) {
-    //   getThumbMediaList()
-    // } else {
-    //   getTemplate()
-    // }
   }
 
   // 关于属性的默认值
@@ -535,7 +528,7 @@ export default ({
       })
       setVis(true)
     }
-
+    // 短信消息处理
     if (sendOutContent.actionId === 2101 && tagList.length > 0) {
       // 短信 -------------预处理-------------
       const parseActionParams = JSON.parse(actionParams)
@@ -656,7 +649,6 @@ export default ({
       setActionId(sendOutContent.actionId)
       setAccountCode(channel.accountCode)
       getChannelActions(channel.channelId)
-      // 微信群发消息
     }
   }, [strategyDetail])
 
@@ -668,16 +660,12 @@ export default ({
         getAllTpl(accountId)
         setIsSms(true)
       } else if (actionId === 2002) {
+        // 微信群发消息
         getThumbMediaList()
       } else {
+        // 微信模版消息
         getTemplate()
       }
-      // if (actionId === 2002) {
-      //   getThumbMediaList()
-      // } else {
-      //   // 微信模版
-      //   getTemplate()
-      // }
     }
   }, [accountCode, actionId])
 
