@@ -222,10 +222,16 @@ const Sales = () => {
             break
         }
         if (record.remark && text === 2) {
+          const remarkData = []
+          record.remark.split('\n').forEach((v, i) => {
+            remarkData.push(v)
+            remarkData.push(<br key={i} />)
+          })
+
           return (
             <div className="FBH">
               <Badge status="red" text={status} />
-              <Tooltip title={record.remark}>
+              <Tooltip title={remarkData}>
                 <QuestionCircleFilled style={{color: 'red', marginLeft: 4, marginTop: 4, fontSize: 14}} />
               </Tooltip>
             </div>
