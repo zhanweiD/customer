@@ -102,9 +102,13 @@ export default class Store {
 
       const texts = this.geneComparisionList(comparisionList)
 
-      const all = texts.join(` ${logicMap[logic]} `)
+      const all = texts.join(` <span class="logic-word">${logicMap[logic]}</span> `)
 
-      this.ruleText = this.ruleText.concat(all).concat(` ${logicMap[logic]} `)
+      this.ruleText = this.ruleText.concat(all)
+
+      if (this.ruleText) {
+        this.ruleText = this.ruleText.concat(` <span class="logic-word">${logicMap[logic]}</span> `)
+      }
 
       childList.forEach(item => {
         this.geneRuleText(item)
@@ -115,8 +119,7 @@ export default class Store {
 
       const texts = this.geneComparisionList(comparisionList)
 
-      const all = texts.join(` ${logicMap[logic]} `)
-
+      const all = texts.join(` <span class="logic-word">${logicMap[logic]}</span> `)
 
       // let totalText = ''
 
@@ -155,7 +158,7 @@ export default class Store {
     if (list && list.length && list.length > 0) {
       const result = []
       list.forEach(item => {
-        const text = `${this.findTargetTag(item.left.params.join())} ${comparisionMap[item.comparision]} ${item.right.params.join(',')}`
+        const text = `${this.findTargetTag(item.left.params.join())} <span class="logic-comp">${comparisionMap[item.comparision]}</span> ${item.right.params.join(',')}`
         result.push(text)
       })
 
@@ -178,7 +181,6 @@ export default class Store {
       })
 
       const logicFormat = JSON.parse(res.logicExper)
-      console.log(logicFormat)
 
       this.geneRuleText(logicFormat)
 

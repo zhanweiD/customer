@@ -47,9 +47,14 @@ export default inject('store')(({store, id}) => {
               <div className="c45">
                 圈选规则：
               </div>
-              <div className="c65" style={{marginRight: '50px'}}>
+              {/* <div className="c65" style={{marginRight: '50px'}}>
                 {store.groupDetail.logicExper}
-              </div>
+              </div> */}
+              <div
+                className="c65"
+                style={{marginRight: '50px'}}
+                dangerouslySetInnerHTML={{__html: store.groupDetail.logicExper}}
+              />
             </div>
           </div>
           <div className="FBH" style={{wordBreak: 'keep-all'}}>
