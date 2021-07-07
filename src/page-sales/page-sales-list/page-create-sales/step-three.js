@@ -229,7 +229,6 @@ export default ({
         const alldefaultValues = _.flatten(_.values(smsDefaultValues))
 
         // 模板字符串
-        const targetTpl = _.find(smsTplList, e => e.id === value.templateCode)
         const templateJson = []
         const templateParams = []
 

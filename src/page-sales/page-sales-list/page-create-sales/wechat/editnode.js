@@ -44,7 +44,7 @@ class EditNode extends Component {
     const {onCursorChange, onChange, onUpdateAttrList} = this.props
     const html = this.ref.current.innerHTML
     if (onChange && html !== this.lastHtml) {
-      if (this.lastHtml.length - html.length > 100) {
+      if (this.lastHtml && this.lastHtml.length - html.length > 100) {
         // 说明删除了 span 节点
         let tempLast = this.lastHtml
         const tempHtml = html
