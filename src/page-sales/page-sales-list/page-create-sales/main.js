@@ -118,7 +118,7 @@ const CreateSales = props => {
       return
     }
     try {
-      const res = await io.getStrategyDetail({id})
+      const res = await io.getStrategyDetail({id}) || {}
       setStrName(res.strategyName)
       setStrategyDetail(res)
       setLoading(false)
@@ -295,6 +295,7 @@ const CreateSales = props => {
     setStrName('')
     setCurrent(0)
     setSelectItemId(v)
+    console.log(111)
     getStrategyDetail(v)
   }
 
