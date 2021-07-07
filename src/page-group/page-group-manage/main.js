@@ -16,7 +16,7 @@ const GroupManage = () => {
   return (
     <div className="oa FBV">
       <div className="content-header">客群管理</div>
-      <div className="header-page FB1">
+      <div className="custom-border m16 FB1">
         <Tabs defaultActiveKey={codeInProduct('/group/manage') ? '0' : '1'} className="group-manage">
           {
             codeInProduct('/group/manage') && (

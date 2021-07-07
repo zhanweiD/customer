@@ -39,6 +39,7 @@ export default class PushList extends Component {
   }, {
     key: 'status',
     title: '状态',
+    width: 90,
     dataIndex: 'status',
     render: v => {
       if (v === 1) {
@@ -59,6 +60,7 @@ export default class PushList extends Component {
   }, {
     key: 'action',
     title: '操作',
+    width: 120,
     render: (text, record) => (
       <div className="FBH FBAC">
         {record.status === 3 ? (
@@ -145,7 +147,10 @@ export default class PushList extends Component {
       ],
     }
     return (
-      <div className="group-push-list" style={{minHeight: 'calc(100vh - 198px)'}}>
+      <div 
+        className="group-push-list" 
+        // style={{minHeight: 'calc(100vh - 198px)'}}
+      >
         <div className="list-content">
           <ListContent {...listConfig} />
         </div>
