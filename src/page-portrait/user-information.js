@@ -68,7 +68,8 @@ export default class User extends Component {
               <div className="dfjc lh32 pt16">
                 <div>
                   <img width={32} height={32} src={defaultInfo.性别 === '男' ? manIcon : womanIcon} alt="" />
-                  <span className="ml8">{defaultInfo.姓名}</span>
+                  <span className="ml8">{defaultInfo.客户姓名}</span>
+                  {/* <span className="ml8">{defaultInfo.姓名}</span> */}
                 </div>
                 <Button 
                   type="primary" 
