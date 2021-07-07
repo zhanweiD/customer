@@ -135,7 +135,7 @@ export default ({
                 <Popconfirm
                   title={`你确定删除策略${i + 1}-${strategyName}吗?`}
                   onConfirm={e => {
-                    e.stopPropagation()
+                    // e.stopPropagation()
                     deleteStrategy(item.id)
                   }}
                   onCancel={() => {}}
@@ -232,7 +232,7 @@ export default ({
             strategyList.length > 1 ? (
               <span 
                 onClick={e => {
-                  e.stopPropagation()
+                  // e.stopPropagation()
                   deleteStrategy(item.id)
                 }}
                 className="hand mr12" 
