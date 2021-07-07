@@ -70,9 +70,9 @@ export default ({
   }
 
   // 模版的选择
-  const tplSelect = id => {
+  const tplSelect = code => {
     // 提取关键词
-    const target = _.find(smsTplList, e => e.id === id)
+    const target = _.find(smsTplList, e => e.code === code)
     
     const keywords = []
     const {content} = target
@@ -95,7 +95,7 @@ export default ({
 
   const showSendSMS = () => {
     const formValues = smsForm.getFieldsValue()
-    const target = _.find(smsTplList, e => e.id === formValues.templateCode)
+    const target = _.find(smsTplList, e => e.code === formValues.templateCode)
     let {content} = target
 
     const templateParamObj = {}
@@ -196,7 +196,7 @@ export default ({
           getPopupContainer={triggerNode => triggerNode.parentElement}
         >
           {
-            smsTplList.map(item => <Option value={item.id}>{item.name}</Option>)
+            smsTplList.map(item => <Option value={item.code}>{item.name}</Option>)
           }
         </Select>
         
