@@ -4,7 +4,7 @@ import {MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
 import RuleItem from './ruleItem'
 import io from './io'
-import dropdown from '../../icon/dropdown.svg'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Item, List} = Form
 const {Option} = Select 

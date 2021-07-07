@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import {Modal, Form, Select, Input} from 'antd'
 
-import {errorTip, getNamePattern, successTip} from '../../common/util'
+import {errorTip, getNamePattern, successTip} from '../../../common/util'
 import io from './io'
 
 const {Option} = Select

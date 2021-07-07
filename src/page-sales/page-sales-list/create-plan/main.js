@@ -11,7 +11,7 @@ import {
 import DAG from '@dtwave/oner-dag'
 
 import {errorTip} from '@util'
-import {Loading} from '../../component'
+import {Loading} from '../../../component'
 import {save, all, clear} from '../icon'
 import RunDrawer from './run-drawer'
 import WechatDrawer from './wechat-drawer'

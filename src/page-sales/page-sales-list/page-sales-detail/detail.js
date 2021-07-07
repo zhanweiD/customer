@@ -3,7 +3,7 @@ import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 // import {Tag} from 'antd'
 import {AppstoreOutlined, TeamOutlined, ClockCircleOutlined, AimOutlined} from '@ant-design/icons'
-import {Tag} from '../../component'
+import {Tag} from '../../../component'
 
 // 0 未生效、1 已生效、2 已暂停 、3 已结束
 const tagMap = {

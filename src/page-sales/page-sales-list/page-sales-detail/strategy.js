@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {CycleSelect} from '@dtwave/uikit'
-import {errorTip} from '../../common/util'
+import {errorTip} from '../../../common/util'
 import io from './io'
 
 const comparisionList = [

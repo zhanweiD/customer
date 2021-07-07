@@ -1,8 +1,8 @@
 import {Button} from 'antd'
 import {
   Tag, Search, Authority, Card, DtGrid,
-} from '../component'
-import {IconDel, IconEdit} from '../icon-comp'
+} from '../../component'
+import {IconDel, IconEdit} from '../../icon-comp'
 
 const list = [
   {

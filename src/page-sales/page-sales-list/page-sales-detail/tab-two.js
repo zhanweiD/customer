@@ -4,7 +4,7 @@ import {inject} from 'mobx-react'
 import {Empty, Spin} from 'antd'
 import {useObserver} from 'mobx-react-lite'
 import Strategy from './strategy'
-import NoData from '../../component/no-data'
+import NoData from '../../../component/no-data'
 
 export default inject('store')(({store}) => {
   useEffect(() => {

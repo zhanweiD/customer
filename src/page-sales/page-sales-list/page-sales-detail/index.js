@@ -1,4 +1,4 @@
-import {asyncComponent} from '../../common/util'
+import {asyncComponent} from '../../../common/util'
 import './index.styl'
 
 export default asyncComponent(async () => {

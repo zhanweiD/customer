@@ -1,6 +1,6 @@
 import {observable, action, toJS} from 'mobx'
 import _ from 'lodash'
-import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
+import {errorTip, changeToOptions, userLog, listToTree} from '../../../common/util'
 import io from './io'
 
 export default class Store {

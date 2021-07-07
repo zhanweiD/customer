@@ -4,7 +4,7 @@ import {
 } from 'antd'
 import {errorTip, debounce} from '@util'
 import io from './io'
-import dropdown from '../icon/dropdown.svg'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Option} = Select
 const {Item} = Form

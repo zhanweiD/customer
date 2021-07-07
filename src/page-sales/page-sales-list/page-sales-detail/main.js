@@ -5,7 +5,7 @@ import Detail from './detail'
 import TabOne from './tab-one'
 import TabTwo from './tab-two'
 import Store from './store'
-import {authView} from '../../component'
+import {authView} from '../../../component'
 
 const {TabPane} = Tabs
 

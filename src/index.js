@@ -19,12 +19,10 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
+// import Sales from './page-sales1/page-sales-list'
+import WeappCode from './page-sales/page-channel-manage/weappCode'
+import ToCustomer from './page-sales/page-channel-manage/toCustomer'
 import Sales from './page-sales'
-import WeappCode from './page-sales1/page-channel-manage/weappCode'
-import ToCustomer from './page-sales1/page-channel-manage/toCustomer'
-import EventManage from './page-sales1/page-event-manage'
-import ChannelManage from './page-sales1/page-channel-manage'
-import Sales1 from './page-sales1'
 
 const njkData = {
   dict,
@@ -60,8 +58,8 @@ function Entry() {
           {/* 系统管理 */}
           <Route path="/system" component={System} />
           {/* 自动化营销 */}
-          <Route path="/sales/list" component={Sales} />
-          <Route path="/sales" component={Sales1} />
+          {/* <Route path="/sales/list" component={Sales} /> */}
+          <Route path="/sales" component={Sales} />
           {/* 事件管理 */}
           {/* <Route path="/event-manage" component={EventManage} /> */}
           {/* 渠道管理 */}
