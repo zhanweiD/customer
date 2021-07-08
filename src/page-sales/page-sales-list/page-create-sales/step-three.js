@@ -75,7 +75,14 @@ export default ({
   const getChannelActions = async channelId => {
     try {
       const res = await io.getChannelActions({channelId})
-      setChannelActionList(res || [])
+      // strategyConditionType
+      let newData = []
+      if (twoFormData.strategyConditionType) {
+        newData = res || []
+      } else {
+        newData = res.filter(item => item.actionId !== 2002)
+      }
+      setChannelActionList(newData)
     } catch (error) {
       errorTip(error.message)
     }
@@ -667,6 +674,10 @@ export default ({
       }
     }
   }, [accountCode, actionId])
+
+  useEffect(() => {
+    myForm.resetFields()
+  }, [twoFormData, oneFormData])
 
   return (
     <Fragment>
