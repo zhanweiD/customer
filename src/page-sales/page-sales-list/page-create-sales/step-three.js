@@ -43,6 +43,7 @@ export default ({
   oneFormData,
   twoFormData,
   threeFormData,
+  setResetThreeForm, // 为了step-two能重置step-three
   strName, // 策略名称
 }) => {
   const [templateList, setTemplateList] = useState([])
@@ -679,6 +680,9 @@ export default ({
       }
     }
   }, [accountCode, actionId])
+  useEffect(() => {
+    setResetThreeForm(myForm)
+  }, [])
 
   return (
     <Fragment>
