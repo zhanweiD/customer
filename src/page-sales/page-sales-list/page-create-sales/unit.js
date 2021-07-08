@@ -5,6 +5,7 @@ import {
 
 import io from './io'
 import Wechat from './wechat/wechat'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Item} = Form
 const {Option} = Select
@@ -125,7 +126,11 @@ export const setTemplate = ({
           name="templateId"
           rules={[{required: true, message: '模板不能为空'}]}
         >
-          <Select onChange={templateChange} placeholder="请选择模版">
+          <Select 
+            onChange={templateChange} 
+            placeholder="请选择模版"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             {
               templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
             }
@@ -190,7 +195,11 @@ export const setTimeDom = ({
           rules={[{required: true, message: '请选择日期'}]}
           initialValue={cornTime.interval}
         >
-          <Select style={{width: '60%'}} placeholder="请选择日期">
+          <Select 
+            style={{width: '60%'}} 
+            placeholder="请选择日期"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             <Option value={1}>星期一</Option>
             <Option value={2}>星期二</Option>
             <Option value={3}>星期三</Option>
@@ -220,7 +229,11 @@ export const setTimeDom = ({
           rules={[{required: true, message: '请选择日期'}]}
           initialValue={cornTime.interval}
         >
-          <Select style={{width: '60%'}} placeholder="请选择日期">
+          <Select 
+            style={{width: '60%'}} 
+            placeholder="请选择日期"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             {
               setMonth()
             }
@@ -282,7 +295,10 @@ export const setSMS = ({
         rules={[{required: true, message: '短信签名不能为空'}]}
         extra="注：只能选择添加短信平台已过审的签名，签名请前往第三方短信平台查看。"
       >
-        <Select placeholder="请选择短信签名">
+        <Select 
+          placeholder="请选择短信签名"
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
+        >
           <Option value={123}>123</Option>
         </Select>
       </Item>
@@ -297,7 +313,10 @@ export const setSMS = ({
         rules={[{required: true, message: '短信模版不能为空'}]}
         extra="注：只能选择添加短信平台已过审的短信模版，短信模版请前往第三方短信平台查看。"
       >
-        <Select placeholder="请选择短信模版">
+        <Select 
+          placeholder="请选择短信模版"
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
+        >
           <Option value={222}>222</Option>
         </Select>
       </Item>

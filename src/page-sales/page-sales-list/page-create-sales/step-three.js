@@ -4,11 +4,13 @@ import _ from 'lodash'
 import cls from 'classnames'
 import {errorTip} from '../../../common/util'
 import Frame from '../icon/wechat-frame.svg'
+import FrameSMS from '../icon/wechat-sms.svg'
 import io from './io'
 import data from './wechat/data'
 import {setTemplate} from './unit'
 import ContentDrawer from './content-drawer'
 import formSms from './form-sms'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Option} = Select
 const {Item} = Form
@@ -131,6 +133,7 @@ export default ({
           <Select 
             style={{width: touchWay === 0 ? '100%' : '30%'}} 
             onChange={changTouchWay}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
             <Option value={0}>立即</Option>
             <Option value={1}>延迟</Option>
@@ -155,7 +158,10 @@ export default ({
               initialValue="MINUTES"
               rules={[{required: true, message: '请选择单位'}]}
             >
-              <Select style={{width: '30%'}}>
+              <Select 
+                style={{width: '30%'}}
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 <Option value="MINUTES">分钟</Option>
                 <Option value="HOURS">小时</Option>
                 <Option value="DAYS">天</Option>
@@ -703,6 +709,7 @@ export default ({
               options={treeStrChannelList}
               expandTrigger="hover"
               onChange={changeCode}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               fieldNames={{
                 label: 'name',
                 value: 'id',
@@ -715,7 +722,11 @@ export default ({
             name="actionId"
             rules={[{required: true, message: '请选择营销动作'}]}
           >
-            <Select placeholder="请选择动作" onChange={changeAction}>
+            <Select 
+              placeholder="请选择动作" 
+              onChange={changeAction}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            >
               {
                 channelActionList.map(item => <Option value={item.actionId}>{item.actionName}</Option>)
               }
@@ -772,9 +783,10 @@ export default ({
             FBH: true,
             FBJC: true,
             'wechat-active': vis,
+            mt10: true,
           })}
         >
-          <img src={Frame} alt="frame" style={{width: '245px'}} />
+          <img src={isSms ? FrameSMS : Frame} alt="frame" style={{width: '245px'}} />
           <div 
             className="preview-box mt20" 
             dangerouslySetInnerHTML={{__html: previewData}} 

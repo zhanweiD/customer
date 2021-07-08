@@ -6,6 +6,7 @@ import {MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
 import {setTimeDom} from './unit'
 import Attr from '../icon/wechat-attr.svg'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Option} = Select
 const {Item} = Form
@@ -332,7 +333,10 @@ export default ({
             initialValue={planType}
             rules={[{required: true, message: '请选择计划类型'}]}
           >
-            <Select onChange={changePlanType}>
+            <Select 
+              onChange={changePlanType}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            >
               <Option value={0}>定时触发</Option>
               <Option value={1}>事件触发</Option>
             </Select>
@@ -354,6 +358,7 @@ export default ({
                           onChange={changeDoneLogic}
                           value={doneLogic} 
                           style={{width: 72, margin: '4px'}}
+                          suffixIcon={<img src={dropdown} alt="dropdown" />}
                         >
                           <Option value={0}>任意</Option>
                           <Option value={1}>全部</Option>
@@ -388,6 +393,7 @@ export default ({
                                   expandTrigger="hover"
                                   style={{width: 360}}
                                   onChange={checkDoneSelectEvent}
+                                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
                                     value: 'id',
@@ -437,7 +443,10 @@ export default ({
                       initialValue={strategyEventCondition.timeUnit || 'MINUTES'}
                       rules={[{required: true, message: '请选择单位'}]}
                     >
-                      <Select style={{width: 72}}>
+                      <Select 
+                        style={{width: 72}}
+                        suffixIcon={<img src={dropdown} alt="dropdown" />}
+                      >
                         <Option value="MINUTES">分钟</Option>
                         <Option value="HOURS">小时</Option>
                         <Option value="DAYS">天</Option>
@@ -459,6 +468,7 @@ export default ({
                           onChange={changeNotDoneLogic}
                           value={notDoneLogic} 
                           style={{width: 72, margin: '4px'}}
+                          suffixIcon={<img src={dropdown} alt="dropdown" />}
                         >
                           <Option value={0}>任意</Option>
                           <Option value={1}>全部</Option>
@@ -489,6 +499,7 @@ export default ({
                                   expandTrigger="hover"
                                   style={{width: 360}}
                                   onChange={checkSelectEvent}
+                                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
                                     value: 'id',
@@ -540,7 +551,11 @@ export default ({
                   rules={[{required: true, message: '请选择周期'}]}
                   initialValue={period}
                 >
-                  <Select onChange={changePeriod} placeholder="请选择周期">
+                  <Select 
+                    onChange={changePeriod} 
+                    placeholder="请选择周期"
+                    suffixIcon={<img src={dropdown} alt="dropdown" />}
+                  >
                     <Option value="0">单次</Option>
                     <Option value="1">每天</Option>
                     <Option value="2">每周</Option>

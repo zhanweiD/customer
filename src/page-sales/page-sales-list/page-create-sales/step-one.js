@@ -208,6 +208,7 @@ const CreateSales = ({
                                   // options={filterChannelList}
                                   options={channelList}
                                   expandTrigger="hover"
+                                  suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
                                     value: 'id',

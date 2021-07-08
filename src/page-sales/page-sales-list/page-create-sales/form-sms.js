@@ -6,6 +6,7 @@ import _ from 'lodash'
 import {setSmsSign, setSmsTpl} from './unit'
 import Wechat from './wechat/wechat'
 import io from './io'
+import dropdown from '../../../icon/dropdown.svg'
 
 const {Item} = Form
 const {Option} = Select
@@ -173,6 +174,7 @@ export default ({
         <Select
           placeholder="请选择短信签名"
           getPopupContainer={triggerNode => triggerNode.parentElement}
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
         >
           {
             smsSignList.map(item => <Option value={item.name}>{item.name}</Option>)
@@ -194,6 +196,7 @@ export default ({
           placeholder="请选择短信模版"
           onChange={tplSelect}
           getPopupContainer={triggerNode => triggerNode.parentElement}
+          suffixIcon={<img src={dropdown} alt="dropdown" />}
         >
           {
             smsTplList.map(item => <Option value={item.code}>{item.name}</Option>)
