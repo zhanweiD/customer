@@ -482,7 +482,6 @@ export default ({
 
   // 改变动作
   const changeAction = v => {
-    console.log(v)
     setActionId(v)
   }
 
@@ -556,9 +555,10 @@ export default ({
 
       // 需要知道 accountId
       const {strategyEventConditionContent: {doneEvents}} = strategyDetail
-      if (doneEvents.length > 0) {
-        setAccountId(doneEvents[0].accountId)
-      }
+      // if (doneEvents.length > 0) {
+      //   setAccountId(doneEvents[0].accountId)
+      // }
+      setAccountId(channel.accountId)
 
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
@@ -621,8 +621,10 @@ export default ({
       })
 
       // 把签名和模版的数据准备好
-      getAllSign(doneEvents[0].accountId)
-      getAllTpl(doneEvents[0].accountId)
+      // getAllSign(doneEvents[0].accountId)
+      // getAllTpl(doneEvents[0].accountId)
+      getAllSign(channel.accountId)
+      getAllTpl(channel.accountId)
 
       setSmsTplId(templateCode)
 

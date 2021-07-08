@@ -165,7 +165,7 @@ const Sales = () => {
       key: 'planName',
       width: 200,
       render: (text, record) => (
-        record.targetStatisticsStatus === 0 ? (
+        record.targetStatisticsStatus === 1 && record.planStatus === 3 ? ( // 已结束且到时间
           <div>
             <Link target="_blank" to={`/sales/list/detail/${record.id}`}>
               <span className="mr4">{text}</span>
