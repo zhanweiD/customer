@@ -68,16 +68,6 @@ export default ({list}) => {
     }
   }
 
-  // 营销动作列表
-  const getChannelActions = async channelId => {
-    try {
-      const res = await io.getChannelActions({channelId})
-      setAllChannelActions([...allChannelActions, ...res])
-    } catch (error) {
-      errorTip(error.message)
-    }
-  }
-
   // 触发条件事件
   const getConditionChannelList = async () => {
     try {
@@ -111,19 +101,32 @@ export default ({list}) => {
       console.log(error)
     }
   }
+  const [wechartActions, setWechartActions] = useState([])
+  const [smsActions, setSmsActions] = useState([])
+  // 营销动作列表
+  const getChannelActions = async channelId => {
+    try {
+      const res = await io.getChannelActions({channelId})
+      if (channelId === 1) {
+        setWechartActions(res)
+      }
+      if (channelId === 2) {
+        setSmsActions(res)
+      }
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
 
   useEffect(() => {
-    console.log(list)
     if (list.length) {
       setGroupId(list[0].clientGroupId)
     }
     setStrategyList(list)
     getGroupList()
     getFilterChannelList()
-    list.forEach(item => {
-      const {channel} = item.sendOutContent
-      getChannelActions(channel.channelId)
-    })
+    getChannelActions(1)
+    getChannelActions(2)
   }, [list])
   useEffect(() => {
     const obj = groupList.filter(item => item.id === groupId)
@@ -137,93 +140,6 @@ export default ({list}) => {
     getTemplate()
     getStrChannelList()
   }, [])
-
-  // // 设置策略dom
-  // const setLeftItem = () => {
-  //   if (!conditionList.length || !strChannelList.length || !allChannelActions.length || !templateList.length) return ''
-  //   const matchTime = v => {
-  //     if (v === 'MINUTES') {
-  //       return '分钟'
-  //     }
-  //     if (v === 'HOURS') {
-  //       return '小时'
-  //     }
-  //     return '天'
-  //   }
-  //   const setEventDom = event => {
-  //     const channelName = conditionList.filter(item => item.id === event.channelId)[0].name
-  //     const accountName = conditionList.filter(item => item.id === event.accountId)[0].name
-  //     const eventName = conditionList.filter(item => item.id === event.eventId)[0].name
-  //     return `${channelName}-${accountName}-${eventName}`
-  //   }
-  //   const setChannelDom = sendOutContent => {
-  //     const {channel, actionId, templateId} = sendOutContent
-  //     const channelName = strChannelList.filter(item => channel.channelId === item.id)[0].name
-  //     const accountName = strChannelList.filter(item => channel.accountId === item.id)[0].name
-  //     const {actionName} = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-  //     // const templateName = templateList.filter(item => templateId === item.template_id)[0].title
-  //     // return `${channelName}-${accountName} ${actionName}(${templateName})`
-  //     return `${channelName}-${accountName} ${actionName}`
-  //   }
-  //   const itemList = strategyList.map((item, i) => {
-  //     const {
-  //       strategyName, strategyConditionType, strategyEventConditionContent = {}, sendOutContent = {},
-  //     } = item
-  //     const {
-  //       doneLogic, doneEvents, notDoneLogic, notDoneEvents, timeGap, timeUnit, startTime, endTime,
-  //     } = strategyEventConditionContent // 触发条件
-      
-  //     const {
-  //       isDelay, channel, actionId, templateId,
-  //     } = sendOutContent // 触发设置
-  //     return (
-  //       <div className="strategy-list">
-  //         <div className="left-item-select mb12 mr12" style={{minHeight: 72}}>
-  //           <div className="left-item-header-select pl16 pt8 pb8 fs14 FBH FBJB">
-  //             <span>{strategyName}</span>
-  //           </div>
-  //           <div className="mt8 mb8 ml16 mr16 c45">
-  //             <div>
-  //               <div className="c85">用户筛选</div>
-  //               <div className="c45">未添加筛选条件</div>
-  //             </div>
-  //             <div>
-  //               <div className="c85">触发条件</div>
-  //               <div className="c45">
-  //                 <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>
-  //                 <div>{`完成 ${doneLogic ? '全部' : '任意'} 事件`}</div>
-  //                 {
-  //                   doneEvents && doneEvents.map(event => (
-  //                     <div>{setEventDom(event)}</div>
-  //                   ))
-  //                 }
-  //                 <div>{`且 ${timeGap}${matchTime(timeUnit)} 未完成 ${notDoneLogic ? '全部' : '任意'} 事件`}</div>
-  //                 {
-  //                   notDoneEvents && notDoneEvents.map(event => (
-  //                     <div>{setEventDom(event)}</div>
-  //                   ))
-  //                 }
-  //                 <div>{`起止时间：${startTime}~${endTime}`}</div>
-  //               </div>
-  //             </div>
-  //             <div>
-  //               <div className="c85">触发设置</div>
-  //               <div className="c45">
-  //                 <div>
-  //                   {isDelay ? `延迟 ${sendOutContent.timeGap} ${matchTime(sendOutContent.timeUnit)} 触达` : '立即 触达'}
-  //                 </div>
-  //                 <div>
-  //                   {setChannelDom(sendOutContent)}
-  //                 </div>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     )
-  //   })
-  //   return itemList
-  // }
 
   const setEventDom = event => {
     const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
@@ -271,13 +187,37 @@ export default ({list}) => {
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${event.name || '事件不可用'}`
   }
 
+  // const setChannelDom = sendOutContent => {
+  //   const {channel, actionId, templateId} = sendOutContent
+  //   const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
+  //   const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
+  //   const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
+  //   const template = templateList.filter(item => templateId === item.template_id)[0] || {}
+  //   return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
+  // }
   const setChannelDom = sendOutContent => {
-    const {channel, actionId, templateId} = sendOutContent
+    const {channel, actionId, actionParams} = sendOutContent
+    const actionParamsObj = JSON.parse(actionParams)
+    let template = {}
+    let action = {}
+    if (actionId === 2001) {
+      const {templateId} = actionParamsObj
+      template = templateList.filter(item => templateId === item.template_id)[0] || {}
+      action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
+    }
+    if (actionId === 2002) {
+      template = actionParamsObj.mediaData || {}
+      action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
+    }
+    if (actionId === 2101) {
+      const {templateCode} = actionParamsObj
+      action = smsActions.filter(item => actionId === item.actionId)[0] || {}
+      template = templateCode
+    }
+
     const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
     const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
-    const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-    const template = templateList.filter(item => templateId === item.template_id)[0] || {}
-    return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
+    return `${obj.name}-${account.name} ${action.actionName}(${template.title || template})`
   }
 
 
