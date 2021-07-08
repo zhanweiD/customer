@@ -53,6 +53,7 @@ const CreateSales = props => {
   const [oneFormData, setOneFormData] = useState({})
   const [twoFormData, setTwoFormData] = useState({})
   const [threeFormData, setThreeFormData] = useState({})
+  const [resetThreeForm, setResetThreeForm] = useState(null)
   // 添加策略校验
   const addStrategyCheck = () => {
     const index = strategyList.findIndex(item => !item.id)
@@ -295,7 +296,6 @@ const CreateSales = props => {
     setStrName('')
     setCurrent(0)
     setSelectItemId(v)
-    console.log(111)
     getStrategyDetail(v)
   }
 
@@ -450,6 +450,7 @@ const CreateSales = props => {
             strategyDetail={strategyDetail}
             setStrategyDetail={changeStrategyDetail}
             setTwoFormData={setTwoFormData}
+            resetThreeForm={resetThreeForm}
           />
           <StepThree
             prevStep={prevStep}
@@ -471,6 +472,7 @@ const CreateSales = props => {
             twoFormData={twoFormData}
             threeFormData={threeFormData}
             strName={strName}
+            setResetThreeForm={form => setResetThreeForm(form)}
           />
         </div>
       </div>

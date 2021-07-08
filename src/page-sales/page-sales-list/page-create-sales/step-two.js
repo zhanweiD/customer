@@ -55,6 +55,7 @@ export default ({
   strategyDetail,
   treeConditionList,
   conditionList,
+  resetThreeForm,
 }) => {
   const [stepForm] = Form.useForm()
   const [planType, setPlanType] = useState(1) // 计划类型 0定时1事件
@@ -185,6 +186,7 @@ export default ({
   // 改变触发类型
   const changePlanType = v => {
     setPlanType(v)
+    // resetThreeForm.resetFields()
   }
 
   // 改变重复类型
@@ -216,7 +218,6 @@ export default ({
   const checkSelectEvent = () => {
     const data = []
     stepForm.validateFields(['notDoneEvents']).then(value => {
-      console.log(value)
       value.notDoneEvents.forEach(item => {
         if (item) {
           data.push(item[2])
@@ -335,6 +336,7 @@ export default ({
           >
             <Select 
               onChange={changePlanType}
+              disabled={strategyDetail.id}
               suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
               <Option value={0}>定时触发</Option>
