@@ -474,10 +474,15 @@ export default ({
     getChannelActions(v[0])
     setAccountCode(item[1].code)
     setAccountId(item[1].id)
+    setActionId(undefined)
+    myForm.setFieldsValue({actionId: undefined})
+    setIsSms(false)
+    setVis(false)
   }
 
   // 改变动作
   const changeAction = v => {
+    console.log(v)
     setActionId(v)
   }
 
@@ -488,11 +493,6 @@ export default ({
       [index]: val,
     })
   }
-
-  // 导致编辑回显失效
-  // useEffect(() => {
-  //   myForm.resetFields()
-  // }, [twoFormData, oneFormData])
 
   useEffect(() => {
     if (!strategyDetail.id) return 
@@ -508,7 +508,8 @@ export default ({
     }
     // 模版消息处理
     if (sendOutContent.actionId === 2001) {
-      if (!templateList.length || !tagList.length) return
+      // getTemplate()
+      // if (!templateList.length || !tagList.length) return
       const templateData = JSON.parse(actionParams).templateJson
       const {templateId} = JSON.parse(actionParams)
       // 有模板数据
@@ -644,7 +645,7 @@ export default ({
       timeUnit,
       channelCode,
     })
-  }, [tagList, strategyDetail, templateList])
+  }, [tagList, strategyDetail])
 
   useEffect(() => {
     if (!strategyDetail.id) {
@@ -683,12 +684,15 @@ export default ({
       } else {
         // 微信模版消息
         getTemplate()
+        setVis(true)
+        setIsSms(false)
       }
     }
   }, [accountCode, actionId])
-  useEffect(() => {
-    setResetThreeForm(myForm)
-  }, [])
+
+  // useEffect(() => {
+  //   setResetThreeForm(myForm)
+  // }, [])
 
   return (
     <Fragment>
@@ -750,6 +754,7 @@ export default ({
             })
           }
         </Form>
+        {/* {console.log(isSms)} */}
         {
           <div
             style={{
