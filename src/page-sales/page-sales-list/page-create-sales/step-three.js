@@ -555,10 +555,10 @@ export default ({
 
       // 需要知道 accountId
       const {strategyEventConditionContent: {doneEvents}} = strategyDetail
-      // if (doneEvents.length > 0) {
-      //   setAccountId(doneEvents[0].accountId)
-      // }
+      
       setAccountId(channel.accountId)
+      // const {sendOutContent: {channel: editChannel}} = strategyDetail
+      // setAccountId(editChannel.accountId)
 
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
@@ -621,10 +621,10 @@ export default ({
       })
 
       // 把签名和模版的数据准备好
-      // getAllSign(doneEvents[0].accountId)
-      // getAllTpl(doneEvents[0].accountId)
       getAllSign(channel.accountId)
       getAllTpl(channel.accountId)
+      // getAllSign(editChannel.accountId)
+      // getAllTpl(editChannel.accountId)
 
       setSmsTplId(templateCode)
 
@@ -675,7 +675,7 @@ export default ({
 
   useEffect(() => {
     if (accountCode && actionId) {
-      if (actionId === 2101) {
+      if (actionId === 2101 && accountId) {
         // 发送短信
         getAllSign(accountId)
         getAllTpl(accountId)
