@@ -78,9 +78,9 @@ export default ({
       // strategyConditionType
       let newData = []
       if (twoFormData.strategyConditionType) {
-        newData = res || []
-      } else {
         newData = res.filter(item => item.actionId !== 2002)
+      } else {
+        newData = res || []
       }
       setChannelActionList(newData)
     } catch (error) {
@@ -482,6 +482,11 @@ export default ({
     })
   }
 
+  // 导致编辑回显失效
+  // useEffect(() => {
+  //   myForm.resetFields()
+  // }, [twoFormData, oneFormData])
+
   useEffect(() => {
     if (!strategyDetail.id) return 
     const {sendOutContent} = strategyDetail
@@ -674,10 +679,6 @@ export default ({
       }
     }
   }, [accountCode, actionId])
-
-  useEffect(() => {
-    myForm.resetFields()
-  }, [twoFormData, oneFormData])
 
   return (
     <Fragment>
