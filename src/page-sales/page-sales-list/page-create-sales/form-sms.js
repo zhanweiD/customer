@@ -128,7 +128,7 @@ export default ({
         accountId,
         phoneNumbers: +value.phoneNumbers,
         signName: formValues.signName,
-        templateCode: targetTpl.code,
+        templateCode: formValues.templateCode,
         templateParam,
       })
     }).catch(err => console.log(err))
