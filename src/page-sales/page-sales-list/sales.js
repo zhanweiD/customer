@@ -277,12 +277,12 @@ const Sales = () => {
         </a>,
         record.planStatus === 0 ? (
           <a className="mr16" onClick={() => detailPlan(record.id)}>编辑</a>
-        ) : <a className="disabled mr16">编辑</a>,
+        ) : <span className="disabled mr16">编辑</span>,
         // <a className="mr16" onClick={() => copyPlan(record.id)}>复制</a>,
         record.planStatus === 0 ? (
           <a className="mr16" onClick={() => toStrategy(record)}>策略管理</a>
-        ) : (<a className="disabled mr16">策略管理</a>),
-        record.planStatus === 1 ? (<a className="disabled">删除</a>) : (
+        ) : (<span className="disabled mr16">策略管理</span>),
+        record.planStatus === 1 ? (<span className="disabled">删除</span>) : (
           <Popconfirm
             title="确认删除计划吗?"
             onConfirm={() => delPlan(record.id)}

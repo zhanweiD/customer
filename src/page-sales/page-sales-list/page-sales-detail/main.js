@@ -24,7 +24,7 @@ const SalesDetail = props => {
     <Provider store={detailStore}>
       <div className="sales-detail FBV">
         <Detail />
-        <div className="sales-detail-analyze FB1 box-border m16">
+        <div className="sales-detail-analyze FB1 custom-border m16">
           <Tabs>
             <TabPane tab="数据详情" key="1">
               <TabOne />

@@ -99,7 +99,7 @@ export default class Action extends Component {
           onPressEnter={this.searchTree}
         />
 
-        <div className="FBH pr6 pl6" style={{maxWidth: 70, color: 'rgba(22, 50, 78, .25)'}}>
+        <div className="FBH pr6 pl6" style={{maxWidth: 70, color: 'rgba(22, 50, 78, .45)'}}>
           <IconRefresh size="14" className="mr8" onClick={this.refreshTree} />
           {
             this.dropdownDom()
