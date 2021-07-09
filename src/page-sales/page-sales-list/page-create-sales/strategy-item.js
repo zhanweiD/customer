@@ -1,7 +1,9 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {Popconfirm} from 'antd'
 import {DeleteOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
+import {errorTip} from '@util'
+import io from './io'
 
 export default ({
   conditionList = [],
@@ -17,6 +19,28 @@ export default ({
   originEventList = [],
   allChannelActions = [],
 }) => {
+  const [wechartActions, setWechartActions] = useState([])
+  const [smsActions, setSmsActions] = useState([])
+  const [smsTplList, setSmsTplList] = useState([])
+  // 营销动作列表
+  const getChannelActions = async channelId => {
+    try {
+      const res = await io.getChannelActions({channelId})
+      if (channelId === 1) {
+        setWechartActions(res)
+      }
+      if (channelId === 2) {
+        setSmsActions(res)
+      }
+    } catch (error) {
+      errorTip(error.message)
+    }
+  }
+  
+  useEffect(() => {
+    getChannelActions(1)
+    getChannelActions(2)
+  }, [])
   // 返回事件详情
   const setEventDom = event => {
     const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
@@ -73,18 +97,25 @@ export default ({
     const {channel, actionId, actionParams} = sendOutContent
     const actionParamsObj = JSON.parse(actionParams)
     let template = {}
+    let action = {}
     if (actionId === 2001) {
       const {templateId} = actionParamsObj
       template = templateList.filter(item => templateId === item.template_id)[0] || {}
+      action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
     }
     if (actionId === 2002) {
       template = actionParamsObj.mediaData || {}
+      action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
+    }
+    if (actionId === 2101) {
+      const {templateCode} = actionParamsObj
+      action = smsActions.filter(item => actionId === item.actionId)[0] || {}
+      template = templateCode
     }
 
     const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
     const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
-    const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-    return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
+    return `${obj.name}-${account.name} ${action.actionName}(${template.title || template})`
   }
 
   // 设置策略dom

@@ -474,6 +474,10 @@ export default ({
     getChannelActions(v[0])
     setAccountCode(item[1].code)
     setAccountId(item[1].id)
+    setActionId(undefined)
+    myForm.setFieldsValue({actionId: undefined})
+    setIsSms(false)
+    setVis(false)
   }
 
   // 改变动作
@@ -489,11 +493,6 @@ export default ({
     })
   }
 
-  // 导致编辑回显失效
-  // useEffect(() => {
-  //   myForm.resetFields()
-  // }, [twoFormData, oneFormData])
-
   useEffect(() => {
     if (!strategyDetail.id) return 
     const {sendOutContent} = strategyDetail
@@ -508,7 +507,8 @@ export default ({
     }
     // 模版消息处理
     if (sendOutContent.actionId === 2001) {
-      if (!templateList.length || !tagList.length) return
+      // getTemplate()
+      // if (!templateList.length || !tagList.length) return
       const templateData = JSON.parse(actionParams).templateJson
       const {templateId} = JSON.parse(actionParams)
       // 有模板数据
@@ -555,8 +555,10 @@ export default ({
 
       // 需要知道 accountId
       const {strategyEventConditionContent: {doneEvents}} = strategyDetail
-      const {sendOutContent: {channel: editChannel}} = strategyDetail
-      setAccountId(editChannel.accountId)
+      
+      setAccountId(channel.accountId)
+      // const {sendOutContent: {channel: editChannel}} = strategyDetail
+      // setAccountId(editChannel.accountId)
 
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
@@ -619,8 +621,10 @@ export default ({
       })
 
       // 把签名和模版的数据准备好
-      getAllSign(editChannel.accountId)
-      getAllTpl(editChannel.accountId)
+      getAllSign(channel.accountId)
+      getAllTpl(channel.accountId)
+      // getAllSign(editChannel.accountId)
+      // getAllTpl(editChannel.accountId)
 
       setSmsTplId(templateCode)
 
@@ -643,7 +647,7 @@ export default ({
       timeUnit,
       channelCode,
     })
-  }, [tagList, strategyDetail, templateList])
+  }, [tagList, strategyDetail])
 
   useEffect(() => {
     if (!strategyDetail.id) {
@@ -682,12 +686,15 @@ export default ({
       } else {
         // 微信模版消息
         getTemplate()
+        setVis(true)
+        setIsSms(false)
       }
     }
   }, [accountCode, actionId])
-  useEffect(() => {
-    setResetThreeForm(myForm)
-  }, [])
+
+  // useEffect(() => {
+  //   setResetThreeForm(myForm)
+  // }, [])
 
   return (
     <Fragment>
@@ -749,6 +756,7 @@ export default ({
             })
           }
         </Form>
+        {/* {console.log(isSms)} */}
         {
           <div
             style={{

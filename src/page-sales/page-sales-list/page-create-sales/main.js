@@ -143,10 +143,10 @@ const CreateSales = props => {
       } else {
         getStrategyDetail(selectItemId)
       }
-      res.forEach(item => {
-        const {channel} = item.sendOutContent
-        getChannelActions(channel.channelId)
-      })
+      // res.forEach(item => {
+      //   const {channel} = item.sendOutContent
+      //   getChannelActions(channel.channelId)
+      // })
       setTimeout(() => {
         setListLoading(false)
       }, 200)
