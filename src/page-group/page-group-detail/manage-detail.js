@@ -26,16 +26,14 @@ export default inject('store')(({store, id}) => {
       <div className="manage-detail-header">
         <div className="FBH FBJB FBAC">
           <div className="FBV">
-            <div>
-              <span className="detail-head">
-                客群名称：
-                {store.groupDetail.name}
-              </span>
+            <div className="detail-head">
+              客群名称：
+              {store.groupDetail.name}
               {/* <EditOutlined className="header-icon ml16" />
             <CopyOutlined className="header-icon ml16" />
             <ReloadOutlined className="header-icon ml16" /> */}
             </div>
-            <div className="FBH">
+            <div className="FBH" style={{lineHeight: '24px'}}>
               <div className="c45">
                 客群描述：
               </div>
@@ -43,7 +41,7 @@ export default inject('store')(({store, id}) => {
                 {store.groupDetail.descr}
               </div>
             </div>
-            <div className="FBH" style={{wordBreak: 'keep-all'}}>
+            <div className="FBH" style={{wordBreak: 'keep-all', lineHeight: '24px'}}>
               <div className="c45">
                 圈选规则：
               </div>

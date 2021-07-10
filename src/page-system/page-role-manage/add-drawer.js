@@ -74,15 +74,15 @@ class AddDrawer extends Component {
     const drawerProps = {
       visible: this.store.drawerVisible,
       title: roleStatus === 0 ? '新建角色' : (roleStatus === 1 ? '编辑角色' : '角色详情'),
-      width: 960,
+      width: 560,
       className: 'role-drawer',
       maskClosable: false,
       destroyOnClose: true,
       onClose: () => this.onClose(),
     }
     const layout = {
-      labelCol: {span: 3},
-      wrapperCol: {span: 11},
+      labelCol: {span: 4},
+      wrapperCol: {span: 12},
     }
     
     return (

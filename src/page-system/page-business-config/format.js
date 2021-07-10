@@ -80,7 +80,7 @@ export default inject('store')(({store}) => {
   }, [])
 
   return useObserver(() => (
-    <div className="tab-box">
+    <div className="tab-box custom-border pt16">
       <div className="FBH mb8">
         {
           codeInProduct('system-business:add') && (

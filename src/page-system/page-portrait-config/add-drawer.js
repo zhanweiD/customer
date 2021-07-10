@@ -7,6 +7,7 @@ import {action, toJS} from 'mobx'
 import {Spin, Drawer, Button, Form, Select, Space, Tree} from 'antd'
 import {errorTip} from '../../common/util'
 import {Loading} from '../../component'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Option} = Select
 const {TreeNode} = Tree
@@ -214,6 +215,7 @@ class AddDrawer extends Component {
                       className="select-item"
                       showArrow
                       disabled={item.name === 'objId' && !addstatus}
+                      suffixIcon={<img src={dropdown} alt="dropdown" />}
                     >
                       {
                         item.option && item.option.map(content => {

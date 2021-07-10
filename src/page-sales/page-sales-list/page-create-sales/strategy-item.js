@@ -186,7 +186,7 @@ export default ({
           <div className="mt8 mb8 ml16 mr16 c45">
             <div>
               <div className="c85">用户筛选</div>
-              <div className="c45">
+              <div className="c45 ml16">
                 <div>{clientGroupFilterType ? '按用户行为筛选' : '按用户标签筛选'}</div>
                 {
                   clientGroupFilterType ? (
@@ -206,7 +206,7 @@ export default ({
             </div>
             <div>
               <div className="c85">触发条件</div>
-              <div className="c45">
+              <div className="c45 ml16">
                 <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>
                 <div>
                   {
@@ -236,7 +236,7 @@ export default ({
             </div>
             <div>
               <div className="c85">触发设置</div>
-              <div className="c45">
+              <div className="c45 ml16">
                 <div>
                   {isDelay ? `延迟 ${sendOutContent.timeGap} ${matchTime(sendOutContent.timeUnit)} 触达` : '立即 触达'}
                 </div>

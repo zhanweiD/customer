@@ -46,16 +46,16 @@ export default inject('store')(({store}) => {
         <span className="mr8">{store.planName}</span>
         <span>{tagMap[store.planStatus]}</span>
       </div>
-      <div className="mt8 FBH FBJB">
-        <div className="FBH FBAC mr16 c85">
+      <div className="mt8 FBH">
+        <div className="FBH FBAC mr48 c85">
           <AppstoreOutlined />
           <div className="ml4">默认分组</div>
         </div>
-        <div className="FBH FBAC mr16 c85">
+        <div className="FBH FBAC mr48 c85">
           <TeamOutlined />
           <div className="ml4">{store.planGroup}</div>
         </div>
-        <div className="FBH FBAC mr16 c85">
+        <div className="FBH FBAC mr48 c85">
           <ClockCircleOutlined />
           <div className="ml4">{store.planTime}</div>
         </div>

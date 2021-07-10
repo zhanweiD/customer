@@ -451,7 +451,7 @@ class TagList extends Component {
           </div>
           <div>
             <Select 
-              style={{width: 128, marginRight: '8px'}} 
+              style={{width: 128}} 
               placeholder="请选择标签状态"
               defaultValue=""
               suffixIcon={<img src={dropdown} alt="dropdown" />}
@@ -466,7 +466,7 @@ class TagList extends Component {
               <Option value={2}>已发布</Option>
             </Select>
             <Search 
-              style={{width: 180, marginRight: '24px'}} 
+              style={{width: 180, marginLeft: '8px'}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.keyword = v.target.value

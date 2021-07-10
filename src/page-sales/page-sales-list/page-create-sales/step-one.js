@@ -196,7 +196,7 @@ const CreateSales = ({
                       <div>
                         {fields.map(({key, name, fieldKey, ...restField}, index) => {
                           return radioType ? (
-                            <div className="pr">
+                            <div className="pr FBH">
                               <Item
                                 {...restField}
                                 name={[name, 'event']}
@@ -214,14 +214,23 @@ const CreateSales = ({
                                     value: 'id',
                                     children: 'children',
                                   }}
+                                  style={{
+                                    width: '200px',
+                                  }}
                                   onChange={checkSelectEvent}
                                 />
                               </Item>
-                              <MinusCircleOutlined 
-                                style={{
-                                  position: 'absolute', fontSize: 16, top: 8, right: 112, color: '#999'}} 
-                                onClick={() => remove(name)}
-                              />
+                              <div>
+                                <MinusCircleOutlined 
+                                  style={{
+                                    fontSize: 16, 
+                                    marginTop: 8, 
+                                    marginLeft: 8,
+                                    color: '#999',
+                                  }} 
+                                  onClick={() => remove(name)}
+                                />
+                              </div>
                             </div>
                           ) : (  
                             <div className="pr user-config">

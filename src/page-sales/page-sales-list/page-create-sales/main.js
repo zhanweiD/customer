@@ -364,10 +364,10 @@ const CreateSales = props => {
           <span className="fs18 mr8">{planInfo.planName}</span>
           <span>{tagMap[planInfo.planStatus]}</span>
         </div>
-        <div className="FBH FBJB">
+        <div className="FBH">
           {
             baseInfo.map(item => (
-              <span>
+              <span className="mr48">
                 <span className="mr8">{item.icon}</span>
                 <span className="c85">{item.value}</span>
               </span>
