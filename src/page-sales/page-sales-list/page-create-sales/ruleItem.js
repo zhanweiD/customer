@@ -93,7 +93,7 @@ export default ({
         fieldKey={[fieldKey, 'comparision']}
         rules={[{required: true, message: '请选择条件'}]}
       >
-        <Select style={{width: 128}} placeholder="请选择条件">
+        <Select style={{width: 128, marginLeft: '8px'}} placeholder="请选择条件">
           {
             comparisionDomList.map(item => <Option value={item.value}>{item.name}</Option>)
           }
@@ -108,7 +108,7 @@ export default ({
         <Select 
           mode="tags" 
           className="select-height"
-          style={{width: 200}} 
+          style={{width: 200, marginLeft: '8px'}} 
           placeholder="请输入或选择"
         >
           {
