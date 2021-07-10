@@ -16,6 +16,8 @@ import './main.styl'
 
 const {RangePicker} = DatePicker
 
+const {Search} = Input
+
 // import {errorTip} from '../../common/util'
 
 @observer
@@ -59,11 +61,10 @@ class SystemLog extends Component {
       searchParams: {},
       scroll: {x: 960},
       buttons: [
-        <div className="dfjf mr24">
-          <Input 
+        <div className="dfjf">
+          <Search 
             placeholder="请输入用户名或者账号"
-            style={{width: 210, marginRight: '8px'}}
-            suffix={<SearchOutlined />}
+            style={{width: 220, marginRight: '8px'}}
             allowClear
             onChange={e => {
               store.reqData = {

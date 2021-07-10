@@ -32,9 +32,6 @@ export default inject('store')(({store}) => {
       title: '所属业务域',
       dataIndex: 'p_bizName', // 要自己查找处理
     }, {
-      title: '场景描述',
-      dataIndex: 'descr',
-    }, {
       title: '操作',
       render: (text, record) => {
         return codeInProduct('system-business:add') ? (
@@ -100,7 +97,7 @@ export default inject('store')(({store}) => {
   }, [])
 
   return useObserver(() => (
-    <div className="tab-box">
+    <div className="tab-box custom-border pt16">
       <div className="FBH FBJB mb8">
         <div className="FBH">
           {

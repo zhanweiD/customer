@@ -253,7 +253,7 @@ class TagList extends Component {
               <Option value={2}>已发布</Option>
             </Select> */}
             <Search
-              style={{width: 180, marginRight: '24px'}} 
+              style={{width: 180}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.searchParams.searchKey = v.target.value
