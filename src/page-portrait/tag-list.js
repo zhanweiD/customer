@@ -18,7 +18,7 @@ export default class TagList extends Component {
     const {tagList, selectName, searchKey} = this.store
     return (
       <div className="p16 pt0 bgf">
-        <div className="d-flex">
+        <div className="portrait-tag-list">
           {
             tagList.map(item => {
               const isShow = selectName.find(sitem => sitem === item.cat)

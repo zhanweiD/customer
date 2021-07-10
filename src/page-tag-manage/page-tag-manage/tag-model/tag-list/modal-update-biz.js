@@ -110,6 +110,8 @@ export default class ModalTagMove extends Component {
               <MultiCascader
                 data={toJS(this.bigStore.bizList)}
                 placeholder="请选择"
+                okText="确认"
+                cancelText="取消"
               />
             )}
           </Form.Item>

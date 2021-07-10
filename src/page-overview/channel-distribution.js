@@ -63,18 +63,21 @@ const ChannelDistribution = ({
     <div className="customer-chart mb16">
       <Spin spinning={loading}>
         <div className="bgf p16">
-          <div style={{height: '483px'}}>
+          <div style={{height: '340px'}}>
             {
               !sunData.length
                 ? (
-                  <div className="no-Data d-flex" style={{height: '600px', width: '100%'}}>
+                  <div className="no-Data d-flex" style={{height: '340px', width: '100%'}}>
                     <NoData text="暂无数据" size="small" />
                   </div>
                 )
                 : null
             }
-            <div ref={chartSun} style={{height: '340px', width: '100%'}} />
-            <div style={{height: '150px', marginLeft: '28%'}} className="FBV FBJC categroy-legend-box">
+            <div ref={chartSun} style={{height: '340px', width: '60%', display: 'inline-block'}} />
+            <div 
+              style={{width: '40%', display: 'inline-block', top: -95}} 
+              className="FBV FBJC pr categroy-legend-box"
+            >
               {
                 sunData.map((item, i) => (
                   <LegendItem 

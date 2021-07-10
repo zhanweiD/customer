@@ -140,16 +140,21 @@
               color #3F5FF4
           // .ant-btn > .anticon
           //   line-height 24px
-        
-        .tag-list
-          width 75%
-          .info-tag
-            padding 4px 12px
-            background: rgba(22,50,78,0.04)
-            border-radius: 16px
+        .portrait-tag-list
+          overflow-x auto
+          white-space nowrap
+          .tag-list
             display inline-block
-        .tag-tree
-          width 25%
+            width 23%
+            white-space normal
+            vertical-align top
+            .info-tag
+              padding 4px 12px
+              background: rgba(22,50,78,0.04)
+              border-radius: 16px
+              display inline-block
+          .tag-tree
+            width 25%
 
       // .ant-tabs
       //   border 1px solid #E6EBF3
@@ -242,8 +247,6 @@
 
   // .ant-input-search-large .ant-input-search-button
   //   height 33px
-  .ant-btn > .anticon
-    margin-left: -6px
   // .ant-select-multiple
   //   .ant-select-selection-item
   //     margin-bottom 4px

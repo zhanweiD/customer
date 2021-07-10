@@ -89,7 +89,7 @@ const DistributionChart = ({
   return (
     <div className="p16 bgf customer-chart">
       <Spin spinning={loading}>
-        <div ref={chartMap} style={{height: '500px', width: '100%', marginBottom: 12}} />
+        <div ref={chartMap} style={{height: '400px', width: '100%', marginBottom: 12}} />
         <div ref={chartBar} style={{height: '355px', width: '100%', backgroundColor: 'rgba(230, 235, 243, 0.2)', paddingLeft: 12}} />
       </Spin>
     </div> 

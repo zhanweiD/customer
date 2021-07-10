@@ -50,8 +50,8 @@ export function pieOption(data, total) {
     return {
       title: [{
         text: '业务类型分布',
-        top: 16,
-        left: 16,
+        top: 0,
+        left: 0,
         textStyle: {
           fontSize: 14,
           color: titleColor,
@@ -126,7 +126,7 @@ export function pieOption(data, total) {
     }, {
       text: '业务类型分布',
       top: 0,
-      left: 24,
+      left: 0,
       textStyle: {
         fontSize: 14,
         color: titleColor,

@@ -4,6 +4,38 @@ const color = ['#61BA46', '#2592FF', '#355FF9', '#6C41FA', '#FD5071', '#0099cc']
 const fontColor = 'rgba(22,50,78,0.85)'
 const titleColor = '#16324E'
 
+const colors = [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
+
 
 // 客户转化率
 export function funnelOption(funnelData, dataIndex = 0) {
@@ -62,7 +94,8 @@ export function funnelOption(funnelData, dataIndex = 0) {
       type: 'funnel',
       sort: 'none',
       height: '260',
-      gap: 0,
+      gap: 1,
+      zlevel: 2,
       minSize: 150,
       // left: '5%',
       left: 'center',
@@ -83,7 +116,7 @@ export function funnelOption(funnelData, dataIndex = 0) {
         textBorderColor: '#fff',
         // fontWeight: 400,
         formatter(d) {
-          const ins = `${d.name}{aa|}\n${d.value}`
+          const ins = `${d.name}{aa|}`
           return ins
         },
         rich: {
@@ -96,51 +129,55 @@ export function funnelOption(funnelData, dataIndex = 0) {
         name: item.name, 
         value: item.count,
       })),
-    }, 
-    // {
-    //   top: 96,
-    //   type: 'funnel',
-    //   // sort: (a, b) => data.map(item => item.count)[b],
-    //   sort: 'descending',
-    //   height: '300',
-    //   gap: -1,
-    //   minSize: 150,
-    //   left: '5%',
-    //   width: '60%',
-    //   z: 2,
-    //   label: {
-    //     normal: {
-    //       color: '#333',
-    //       position: 'right',
-    //       // formatter(d) {
-    //       //   const ins = `{bb|${d.data.goal}}\n{aa|${d.name}}`
-    //       //   return ins
-    //       // },
-    //       // rich: {
-    //       //   aa: {
-    //       //     align: 'center',
-    //       //     color: fontColor,
-    //       //     fontSize: '12',
-    //       //     lineHeight: '30',
-    //       //   },
-    //       //   bb: {
-    //       //     align: 'center',
-    //       //     color: titleColor,
-    //       //     fontSize: '22',
-    //       //   },
-    //       // },
-    //     },
-    //   },
-    //   labelLine: {
-    //     show: false,
-    //   },
-    //   data: data.map(item => ({name: item.name, value: item.count})),
-    // },
+    }, {
+      top: 32,
+      type: 'funnel',
+      sort: 'none',
+      height: '260',
+      gap: 0,
+      zlevel: 1,
+      minSize: 150,
+      // left: '5%',
+      left: 'center',
+      width: '60%',
+      selectedMode: 'single',
+      select: {
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 4,
+          // color: color[dataIndex],
+        },
+      },
+      label: {
+        show: true,
+        position: 'right',
+        fontSize: '14',
+        color: fontColor,
+        textBorderColor: '#fff',
+        // fontWeight: 400,
+        formatter(d) {
+          const ins = `${d.value}`
+          return ins
+        },
+        rich: {
+          aa: {
+            padding: [8, 0, 6, 0],
+          },
+        },
+      },
+      labelLine: {
+        show: false,
+      },
+      data: data.map(item => ({
+        name: item.name, 
+        value: item.count,
+      })),
+    },
     ],
   })
 }
 
-// 转化对比
+// 各区域转化率
 export function cbarOption(barData, type) {
   const {data = [], x = [], y = []} = barData
   return {
@@ -158,11 +195,16 @@ export function cbarOption(barData, type) {
       axisPointer: {
         type: 'shadow',
       },
+      formatter(item) {
+        const obj = item[0] || {}
+        return `${obj.name}: ${obj.value}%`
+      },
     },
     grid: {
       top: 72,
       bottom: 64,
       left: 80,
+      right: 72,
     },
     xAxis: {
       type: 'value',
@@ -192,6 +234,19 @@ export function cbarOption(barData, type) {
     series: [
       {
         type: 'bar',
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(22,50,78,0.05)',
+          borderRadius: 12,
+        },
+        labelLayout(params) {
+          return {
+            x: '89%',
+            y: params.rect.y + params.rect.height / 2,
+            verticalAlign: 'middle',
+            align: 'left',
+          }
+        },
         barWidth: 16,
         itemStyle: {
           barBorderRadius: 12,
@@ -207,6 +262,10 @@ export function cbarOption(barData, type) {
           show: true,
           position: 'right',
           // position: 'inside',
+          formatter(d) {
+            const ins = `${d.value}%`
+            return ins
+          },
         },
         name: type,
         data: data.map(sitem => {
@@ -345,16 +404,19 @@ export function mapOption(mapType, data) {
       },
     },
     dataRange: {
+      itemWidth: 8,
+      itemHeight: 72,
       min: 0,
       max: counts.length ? Math.max(...counts) : 0,
       show: true,
       x: 'left',
       y: 'bottom',
+      width: 12,
       inRange: {
         color: ['rgba(187, 202, 255, 1)', 'rgba(105, 137, 255, 1)'], // 渐变颜色
       },
-    // text: ['高', '低'], // 文本，默认为数值文本
-    // calculable: false,
+      text: ['高', '低'], // 文本，默认为数值文本
+      calculable: false,
     },
     // geo: {
     //   map: mapType,
@@ -410,10 +472,10 @@ export function mapOption(mapType, data) {
         },
         mapType,
         geoIndex: 0,
-        top: 48,
-        left: '25%',
+        top: 108,
+        left: '30%',
         roam: false,
-        zoom: 1.2,
+        zoom: 1.6,
         data: data.map(item => ({name: item.name, value: item.count})),
       },
     ],
@@ -442,6 +504,7 @@ export function dbarOption(data) {
       left: 128,
       bottom: 12,
       top: 48,
+      right: 60,
     },
     xAxis: {
       type: 'value',
@@ -482,6 +545,19 @@ export function dbarOption(data) {
             color: '#7F59FB',
           }]),
         },
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(22,50,78,0.05)',
+          borderRadius: 12,
+        },
+        labelLayout(params) {
+          return {
+            x: '90%',
+            y: params.rect.y + params.rect.height / 2,
+            verticalAlign: 'middle',
+            align: 'left',
+          }
+        },
         label: {
           show: true,
           position: 'right',
@@ -496,37 +572,7 @@ export function dbarOption(data) {
 // 渠道分布
 export function sunOption(data) {
   return {
-    color: [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-      offset: 0,
-      color: '#BFEEA9',
-    }, {
-      offset: 1,
-      color: '#61BA46',
-    }]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-      offset: 0,
-      color: '#86D4FF',
-    }, {
-      offset: 1,
-      color: '#2592FF',
-    }]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-      offset: 0,
-      color: '#8D9FFF',
-    }, {
-      offset: 1,
-      color: '#355FF9',
-    }]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-      offset: 0,
-      color: '#AE95FF',
-    }, {
-      offset: 1,
-      color: '#6C41FA',
-    }]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
-      offset: 0,
-      color: '#FFA1BC ',
-    }, {
-      offset: 1,
-      color: '#FD5071',
-    }])],
+
     tooltip: {
       trigger: 'item',
       formatter: '{b} : {c}',
@@ -534,10 +580,17 @@ export function sunOption(data) {
     
     series: {
       type: 'sunburst',
-      data,
+      data: data.map((item, index) => {
+        item.itemStyle = {
+          normal: {
+            color: colors[index % colors.length],
+          },
+        }
+        return item
+      }),
       sort: null,
       center: ['50%', '50%'],
-      radius: ['0%', '100%'],
+      radius: ['0%', '80%'],
       label: {
         // rotate: 'radial',
         color: '#fff',

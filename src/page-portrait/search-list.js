@@ -23,18 +23,30 @@ const SearchList = ({data = [], title, color, id}) => {
       }
 
       valueList.forEach((sitem, index) => {
-        if (index > 0) {
+        if (index !== 1) {
           domItem.push(
             <div className="c85 w33">{sitem}</div>
           )
         } else {
-          domItem.push(
+          domItem.unshift(
             <Link className="w33" target="_blank" to={`/customer/portrait/${item.ident}/${id}`}>
               <img className="mr8" src={item.性别 === '男' ? manIcon : womanIcon} alt="" />
               {sitem}
             </Link>
           )
         }
+        // if (index > 0) {
+        //   domItem.push(
+        //     <div className="c85 w33">{sitem}</div>
+        //   )
+        // } else {
+        //   domItem.push(
+        //     <Link className="w33" target="_blank" to={`/customer/portrait/${item.ident}/${id}`}>
+        //       <img className="mr8" src={item.性别 === '男' ? manIcon : womanIcon} alt="" />
+        //       {sitem}
+        //     </Link>
+        //   )
+        // }
       })
       return domItem
     })

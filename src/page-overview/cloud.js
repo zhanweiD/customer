@@ -98,7 +98,7 @@ const Cloud = ({
 
     fill = d3.scaleOrdinal(d3.schemeCategory10)
     layout = cloud()
-      .size([parseFloat(box.style('width')), 300])
+      .size([parseFloat(box.style('width')), 343])
       .words(data.map((d, index) => {
         const scaleFont = Math.round((Math.random() * (2 - 0.5) + 0.5) * 10) / 10
         return {text: d.text, size: d.size, color: d.color}
@@ -129,7 +129,7 @@ const Cloud = ({
         {
           !cloudData.length
             ? (
-              <div className="no-Data" style={{height: '300px'}}>
+              <div className="no-Data" style={{height: '343px'}}>
                 <NoData text="暂无数据" />
               </div>
             )

@@ -44,6 +44,7 @@ function listToTree(data) {
 
 const Overview = () => {
   const [org, setOrg] = useState(null) // 区域
+  const [orglength, setOrglength] = useState(1)
   const [projectCode, setProjectCode] = useState(null) // 项目code
   const [orgList, setOrgList] = useState([]) // 组织架构
   const [card, setCard] = useState({}) // 指标卡
@@ -59,7 +60,7 @@ const Overview = () => {
       setOrgList(listToTree(res))
       setOrg(listToTree(res)[0].orgCode)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.message)
     }
   }
 
@@ -75,7 +76,7 @@ const Overview = () => {
       })
       setCard(res)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.messsage)
     } finally {
       setOrgLoading(false)
     }
@@ -133,6 +134,7 @@ const Overview = () => {
   }
 
   const changeOrg = (v, item) => {
+    setOrglength(v.length)
     let newOrg = null
 
     if (item[item.length - 1].level) {
@@ -177,7 +179,7 @@ const Overview = () => {
     >
       <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
         <span>客户中心</span>
-        <div style={{width: 504}}>
+        <div style={{width: '60%'}}>
           {
             org ? (
               <Cascader
@@ -187,7 +189,7 @@ const Overview = () => {
                 options={orgList}
                 fieldNames={{label: 'orgName', value: 'orgCode'}}
                 expandTrigger="hover"
-                style={{margin: '0px 8px'}} 
+                style={{margin: '0px 8px', width: orglength > 2 ? 320 : 180}} // min-width因position失效
                 onChange={changeOrg}
                 suffixIcon={<img className="imgSize" src={dropdown} alt="dropdown" />}
               />
@@ -202,32 +204,6 @@ const Overview = () => {
             {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
           </Select>
         </div>
-        {/* <div className="overview oa">
-      <div className="content-header">
-        <span>客户中心</span>
-        {
-          org ? (
-            <Cascader
-              defaultValue={[org]}
-              changeOnSelect
-              allowClear={false}
-              options={orgList}
-              fieldNames={{label: 'orgName', value: 'orgCode'}}
-              expandTrigger="hover"
-              style={{margin: '0px 8px'}} 
-              onChange={changeOrg}
-              suffixIcon={<img src={dropdown} alt="dropdown" />}
-            />
-          ) : null
-        }
-        <Select 
-          style={{width: 128}} 
-          onChange={changeTime}
-          defaultValue={365}
-          suffixIcon={<img src={dropdown} alt="dropdown" />}
-        >
-          {optionTime.map(item => <Option value={item.value}>{item.name}</Option>)}
-        </Select> */}
       </div>
       <Spin spinning={orgLoading}>
         <div className="p16 pb0 mt48">
@@ -236,7 +212,7 @@ const Overview = () => {
         {
           org ? (
             <div className="m16">
-              <div className="mb16">
+              <div className="mb16 customer-chart-box">
                 <div className="period-header">客户转化率</div>
                 <div className="bgf customer-chart">
                   <CustomerChart 
@@ -254,7 +230,7 @@ const Overview = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="customer-chart-box">
                 <div className="period-header">转化趋势</div>
                 <TransformationTrend 
                   orgCodes={org} 
@@ -265,7 +241,7 @@ const Overview = () => {
               </div>
               
               <div className="FBH">
-                <div style={{width: '50%'}} className="mr16">
+                <div style={{width: '50%'}} className="mr16 customer-chart-box">
                   <div className="period-header">客户分布</div>
                   <DistributionChart 
                     orgCodes={org} 
@@ -275,17 +251,18 @@ const Overview = () => {
                   />
                 </div>
                 <div style={{width: '50%'}}>
-                  <div className="period-header">
-                    客户渠道分布
+                  <div className="customer-chart-box">
+                    <div className="period-header">
+                      客户渠道分布
+                    </div>
+                    <ChannelDistribution 
+                      orgCodes={org} 
+                      timeStart={timeStart}
+                      timeEnd={timeEnd}
+                      projectCode={projectCode}
+                    />
                   </div>
-                  <ChannelDistribution 
-                    orgCodes={org} 
-                    timeStart={timeStart}
-                    timeEnd={timeEnd}
-                    projectCode={projectCode}
-                  />
-                  
-                  <div className="bgf" style={{height: '350px', width: '100%'}}>
+                  <div className="bgf customer-chart-box" style={{height: '350px', width: '100%'}}>
                     <div className="period-header">
                       客户心声
                     </div>
