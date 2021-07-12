@@ -585,7 +585,11 @@ export default ({
                 name="startEndDate"
                 // style={{marginTop: 24}}
                 rules={[{required: true, message: '请选择日期'}]}
-                initialValue={strategyEventCondition.startTime ? [moment(strategyEventCondition.startTime, dateTimeFormat), moment(strategyEventCondition.endTime, dateTimeFormat)] : undefined}
+                initialValue={
+                  strategyEventCondition.startTime ? (
+                    [moment(strategyEventCondition.startTime, dateTimeFormat), moment(strategyEventCondition.endTime, dateTimeFormat)]
+                  ) : [moment(planInfo.ctime, dateTimeFormat), moment(planInfo.endTime, dateTimeFormat)]
+                }
               >
                 <RangePicker disabledDate={disabledDate} format={dateTimeFormat} />
               </Item>
