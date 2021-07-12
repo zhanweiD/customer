@@ -212,7 +212,7 @@ export default class DataSheet extends Component {
 
     return (
       <Provider dataSheetStore={store}>
-        <div>
+        <div className="custom-border h-100 pt16">
           <ListContent {...listConfig} />
           <ModalAddTable store={store} />
           {

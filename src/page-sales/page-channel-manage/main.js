@@ -108,8 +108,8 @@ const ChannelManage = () => {
         break
     }
     return (
-      <div>
-        <div className="far pr24 mb8">
+      <div className="custom-border h-100">
+        <div className="far pr16 mb8 mt16">
           <Button type="primary" onClick={() => authoriza(name)}>
             授权账号
           </Button>
@@ -119,7 +119,7 @@ const ChannelManage = () => {
           dataSource={listDate} 
           rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
           scroll={{x: 720}} 
-          style={{margin: '0px 24px'}}
+          style={{margin: '0px 16px'}}
           loading={tableLoading}
           pagination={{
             ...pagination,
@@ -141,8 +141,8 @@ const ChannelManage = () => {
   return (
     <div className="oa FBV channel-manage">
       <div className="content-header">渠道管理</div>
-      <div className="m16 bgf pt0 custom-border FB1">
-        <Tabs onChange={changeTabs}>
+      <div className="m16 pt0 FB1">
+        <Tabs onChange={changeTabs} style={{height: '100%'}}>
           {
             channelList.map(item => (
               <TabPane tab={`${item.name}(${item.cnt})`} key={item.code}>

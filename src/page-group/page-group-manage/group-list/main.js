@@ -205,7 +205,9 @@ export default class GroupList extends Component {
     }
 
     return (
-      <ListContent {...listConfig} />
+      <div className="custom-border h-100 oa">
+        <ListContent {...listConfig} />
+      </div>
     )
   }
 }
