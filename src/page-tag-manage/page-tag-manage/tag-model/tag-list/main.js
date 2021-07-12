@@ -483,7 +483,7 @@ class TagList extends Component {
 
     return (
       <Provider bigStore={store}>
-        <div className="h-100">
+        <div className="h-100 custom-border pt16">
           <div className="d-flex h-100 tag-model">
             <TagCateTree bigStore={store} store={treeStore} />
             <div className="FB1" style={{overflowY: 'auto'}}>

@@ -63,8 +63,10 @@ export default class ObjectDetail extends Component {
             <div className="FBV">
               <div className="content-header">{`对象名称：${objDetail.name}`}</div>
               <div className="ml16">
-                <span className="c85">描述：</span>
-                <span className="c85">{objDetail.descr || '-'}</span>
+                <span className="c65">描述：</span>
+                {
+                  objDetail.descr ? <span className="c85">{objDetail.descr}</span> : <span className="c25">-</span>
+                }
               </div>
             </div>
             <div className="ml16 mr16">

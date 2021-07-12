@@ -257,10 +257,11 @@ export default ({
 
               // TODO: 最好找到id
               const targetDefaultItem = _.find(alldefaultValues, j => j.name === e.objNameTagName)
+
               templateParams.push({
                 key: e.objIdTagId,
                 type: 'USER_TAG',
-                defaultValue: targetDefaultItem.value,
+                defaultValue: targetDefaultItem && targetDefaultItem.value,
               })
             }
           })
