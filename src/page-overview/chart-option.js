@@ -512,6 +512,13 @@ export function dbarOption(data) {
     },
     tooltip: {
       trigger: 'axis',
+      formatter(item) {
+        if (!item[0]) {
+          return '-'
+        }
+        const ins = `${item[0].name}<br /> 客户人数：${item[0].value || '-'}`
+        return ins
+      },
       axisPointer: {
         type: 'shadow',
       },
