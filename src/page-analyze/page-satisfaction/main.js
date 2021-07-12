@@ -149,28 +149,23 @@ class Satisfaction extends Component {
       scroll: {x: 1120},
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div className="mt6">
-            评价详情
-          </div>
-          <div>
-            <Select 
-              allowClear
-              placeholder="评价结果"
-              style={{width: 160, marginRight: '8px'}} 
-              onChange={v => {
-                store.satisfaction = v
-                store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
-              }}
-              getPopupContainer={triggerNode => triggerNode.parentElement}
-              suffixIcon={<img src={dropdown} alt="dropdown" />}
-            >
-              {
-                list4.map(item => <Option value={item}>{item}</Option>)
-              }
-            </Select> 
-            <Button onClick={() => downloadResult({satisfaction: store.satisfaction, ...store.reqData}, 'satisfaction/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
+        <div className="FBH FBJB">
+          <Button onClick={() => downloadResult({satisfaction: store.satisfaction, ...store.reqData}, 'satisfaction/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
+          <Select 
+            allowClear
+            placeholder="评价结果"
+            style={{width: 160, marginRight: '8px'}} 
+            onChange={v => {
+              store.satisfaction = v
+              store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
+            }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            {
+              list4.map(item => <Option value={item}>{item}</Option>)
+            }
+          </Select> 
         </div>,   
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
@@ -268,21 +263,24 @@ class Satisfaction extends Component {
         <div className="ml16 mr16 mb16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 p24 pt16 custom-border">
-              {/* {
+            {/* {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               } */}
-              <Chart 
-                getDraw={(cb1, cb2) => {
-                  this.getDraw = cb1
-                  this.getDraw1 = cb2
-                }} 
-                store={store} 
-              />
-            </div>
+            <Chart 
+              getDraw={(cb1, cb2) => {
+                this.getDraw = cb1
+                this.getDraw1 = cb2
+              }} 
+              store={store} 
+            />
           </Spin>
-          <div className="custom-border mb16">
-            <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              评价详情
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
           </div>
         </div>
       </div>

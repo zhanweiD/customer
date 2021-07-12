@@ -60,13 +60,13 @@ export default class ChartPie extends Component {
   render() {
     const {lineLoading, loading} = this.store
     return (
-      <div className="chartPie-ad">
-        <div style={{height: '480px', width: '50%', display: 'inline-block'}} >
+      <div className="period-content">
+        <div style={{height: '480px', width: '50%', display: 'inline-block'}}>
           <Spin spinning={loading}>
             <div ref="chartsBar" style={{height: '480px'}} />
           </Spin>
         </div>
-        <div style={{height: '480px', width: '50%', display: 'inline-block'}} >
+        <div style={{height: '480px', width: '50%', display: 'inline-block'}}>
           <Spin spinning={lineLoading}>
             <div ref="chartsLine" style={{height: '480px'}} />
           </Spin>

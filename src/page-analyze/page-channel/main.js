@@ -153,10 +153,14 @@ class Channel extends Component {
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div className="mt6">
-            未转化客户
-          </div>
+        <div className="FBH FBJB">
+          <Button 
+            onClick={() => downloadResult({...store.reqChaData, ...store.reqData, ...store.reqProData}, 'expand/export')} 
+            style={{marginRight: '24px'}} 
+            type="primary"
+          >
+            导出
+          </Button>
           <div>
             <Cascader
               placeholder="请选择渠道"
@@ -172,7 +176,7 @@ class Channel extends Component {
             />
             <Select 
               defaultValue=""
-              style={{width: 160, marginRight: '8px'}} 
+              style={{width: 160}} 
               onChange={v => {
                 store.reqChaData.customerType = v
                 store.getList({...store.reqChaData, ...store.reqData, ...store.reqProData, currentPage: 1})
@@ -186,13 +190,6 @@ class Channel extends Component {
               <Option key={2}>认筹客户</Option>
               <Option key={3}>认购客户</Option>
             </Select> 
-            <Button 
-              onClick={() => downloadResult({...store.reqChaData, ...store.reqData, ...store.reqProData}, 'expand/export')} 
-              style={{marginRight: '24px'}} 
-              type="primary"
-            >
-              导出
-            </Button>
           </div>
         </div>,   
       ],
@@ -248,15 +245,20 @@ class Channel extends Component {
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 custom-border">
+            <div className="mb16">
               {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               }
               <Chart getDraw={draw => this.getDraw = draw} store={store} />
             </div>
           </Spin>
-          <div className="custom-border mb16">
-            <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              未转化客户
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
           </div>
         </div>
       </div>

@@ -40,25 +40,17 @@ const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
 export function pieOption(data, total) {
   if (!data.length) {
     return {
-      title: [{
-        text: '客户状态分布',
-        top: 16,
-        left: 16,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }, {
-        text: '暂无数据',
-        top: '50%',
-        left: '50%',
-        textStyle: {
-          fontSize: 32,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }],
+      title: [
+        {
+          text: '暂无数据',
+          top: '50%',
+          left: '50%',
+          textStyle: {
+            fontSize: 32,
+            color: titleColor,
+            fontWeight: 400,
+          },
+        }],
     } 
   }
   return ({
@@ -86,16 +78,8 @@ export function pieOption(data, total) {
           },
         },
       },
-    }, {
-      text: '客户状态分布',
-      top: 12,
-      left: 16,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    }],
+    }, 
+    ],
     series: [{
       type: 'pie',
       radius: ['40%', '55%'],
@@ -154,25 +138,14 @@ export function funnelOption(data1, data2) {
   }
   return ({
     opacity: 1,
-    title: {
-      text: '成交转化情况',
-      top: 12,
-      left: 16,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
-    // color,
     legend: {
-      top: 40,
+      top: 16,
       left: '10%',
       data: data1 && data1.map(item => item.name),
     },
     series: [{
       color: colors,
-      top: 70,
+      top: 48,
       type: 'funnel',
       sort: (a, b) => data1[b],
       height: '400',
@@ -205,7 +178,7 @@ export function funnelOption(data1, data2) {
       data: data1,
     },
     {
-      top: 70,
+      top: 48,
       type: 'funnel',
       color: colors,
       sort: (a, b) => data1[b],

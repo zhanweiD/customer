@@ -96,29 +96,24 @@ class SupplyDemand extends Component {
       tableLoading,
       scroll: {x: 1120},
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div className="mt6">
-            供需不匹配客户
-          </div>
-          <div>
-            <Select 
-              allowClear
-              placeholder="请选择指标"
-              style={{width: 160, marginRight: '8px'}} 
-              getPopupContainer={triggerNode => triggerNode.parentElement}
-              suffixIcon={<img src={dropdown} alt="dropdown" />}
-              onChange={v => {
-                store.indicators = v
-                store.getList({...store.reqData, index: v, currentPage: 1})
-              }}
-            >
-              {
-                unFitList.map(item => <Option key={item}>{item}</Option>)
-              }
-            </Select> 
-            <Button onClick={() => downloadResult({index: store.indicators, ...store.reqData}, 'supply/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
-        </div>,   
+        <div className="FBH FBJB">
+          <Button onClick={() => downloadResult({index: store.indicators, ...store.reqData}, 'supply/export')} type="primary">导出</Button>
+          <Select 
+            allowClear
+            placeholder="请选择指标"
+            style={{width: 160}} 
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+            onChange={v => {
+              store.indicators = v
+              store.getList({...store.reqData, index: v, currentPage: 1})
+            }}
+          >
+            {
+              unFitList.map(item => <Option key={item}>{item}</Option>)
+            }
+          </Select> 
+        </div>,
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
@@ -165,7 +160,10 @@ class SupplyDemand extends Component {
         <div className="ml16 mr16 mt72">
           {/* <Spin spinning={loading}> */}
           {/* <OverviewCardWrap cards={cards} /> */}
-          <div className="bgf mb16 mt16 custom-border">
+          <div className="chart-border mb16">
+            <div className="period-header">
+              供需拟合
+            </div>
             <Chart
               getDraw={(cb1, cb2) => {
                 this.getDraw = cb1
@@ -175,8 +173,13 @@ class SupplyDemand extends Component {
             />
           </div>
           {/* </Spin> */}
-          <div className="custom-border mb16">
-            <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              供需不匹配客户
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
           </div>
         </div>
       </div>

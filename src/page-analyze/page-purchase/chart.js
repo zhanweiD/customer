@@ -1,6 +1,4 @@
-/**
- * @description 渠道拓客分布
- */
+
 import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'

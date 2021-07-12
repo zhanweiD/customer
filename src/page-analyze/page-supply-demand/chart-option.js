@@ -40,15 +40,6 @@ export function barOption(data) {
   if (!data.length) {
     return ({
       title: [{
-        top: 16,
-        left: 16,
-        text: '供需拟合',
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }, {
         text: '暂无数据',
         top: '50%',
         left: '35%',
@@ -62,16 +53,6 @@ export function barOption(data) {
   }
   return ({
     backgroundColor: bgColor,
-    title: {
-      top: 16,
-      left: 16,
-      text: '供需拟合',
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -82,15 +63,15 @@ export function barOption(data) {
     },
     color: colors,
     legend: {
-      top: '12%',
-      left: '50%',
+      top: 24,
+      right: 16,
       data: ['匹配客户', '不匹配客户'],
     },
     grid: {
-      left: '5%',
-      right: '5%',
-      bottom: '3%',
-      top: '16%',
+      left: 24,
+      right: -32,
+      bottom: -24,
+      top: 32,
       containLabel: true,
     },
     xAxis: {
@@ -185,10 +166,17 @@ export function lineOption(data) {
     legend: {
       show: true,
       icon: 'circle',
-      top: '13%',
+      top: 24,
+      right: 16,
       itemWidth: 6,
       itemHeight: 6,
       itemGap: 25,
+    },
+    grid: {
+      left: 24,
+      right: 48,
+      bottom: 16,
+      containLabel: true,
     },
     tooltip: {
       trigger: 'axis',

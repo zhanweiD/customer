@@ -60,15 +60,22 @@ export default class ChartPie extends Component {
   }
 
   render() {
-    // const noDataConfig = {
-    //   text: '暂无数据',
-    // }
     return (
       <div className="chartPie-ad">
         {/* <div className="content-header">渠道拓客分布（可下转二级渠道）</div> */}
         {/* <NoData {...noDataConfig} /> */}
-        <div ref="chartsPie" style={{height: '960px', width: '40%', display: 'inline-block'}} />
-        <div ref="chartsSanKey" style={{height: '960px', width: '60%', left: '24px', display: 'inline-block'}} />
+        <div className="chart-border mb16">
+          <div className="period-header">渠道拓客分布（可下转二级渠道）</div>
+          <div className="period-content">
+            <div ref="chartsPie" style={{height: '360px', width: '100%'}} />
+          </div>
+        </div>
+        <div className="chart-border">
+          <div className="period-header">渠道拓客转化</div>
+          <div className="period-content">
+            <div ref="chartsSanKey" style={{height: '720px', width: '100%'}} />
+          </div>
+        </div>
       </div> 
     )
   }
