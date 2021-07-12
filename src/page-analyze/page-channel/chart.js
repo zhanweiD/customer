@@ -5,6 +5,7 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 
+import {LegendItem} from '../../component'
 import {pieOption, sanKeyOption} from './chart-option'
 
 @observer
@@ -69,6 +70,21 @@ export default class ChartPie extends Component {
           <div className="period-content">
             <div ref="chartsPie" style={{height: '360px', width: '100%'}} />
           </div>
+          {/* <div 
+            style={{width: '40%', display: 'inline-block', top: -95}} 
+            className="FBV FBJC pr categroy-legend-box"
+          >
+            {
+              sunData.map((item, i) => (
+                <LegendItem 
+                  title={item.name} 
+                  percent={`${((item.value / count) * 100).toFixed(2)}%`}
+                  counts={item.value}
+                  color={color[i]}
+                />
+              ))
+            }
+          </div> */}
         </div>
         <div className="chart-border">
           <div className="period-header">渠道拓客转化</div>

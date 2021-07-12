@@ -233,7 +233,7 @@ export default class Frame extends Component {
                 {
                   codeInProduct('/home/overview') && (
                     <Menu.Item key="/home/overview" icon={<HomeOutlined />}>
-                      客户分析
+                      客户总览
                     </Menu.Item>
                   )
                 }
@@ -350,7 +350,7 @@ export default class Frame extends Component {
                       }
                       {
                         codeInProduct('/system/system-log') && (
-                          <Menu.Item key="/system/system-log">行为日志</Menu.Item>
+                          <Menu.Item key="/system/system-log">审计日志</Menu.Item>
                         )
                       }
                     </SubMenu>

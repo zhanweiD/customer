@@ -155,8 +155,8 @@ export function sanKeyOption(data, links) {
     series: [{
       type: 'sankey',
       top: 24,
-      left: 24,
-      right: 72,
+      left: 48,
+      right: 96,
       bottom: 24,
       focusNodeAdjacency: true,
       nodeGap: 12,
