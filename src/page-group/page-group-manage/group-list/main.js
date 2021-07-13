@@ -54,6 +54,7 @@ export default class GroupList extends Component {
       key: 'name',
       title: '客群名称',
       dataIndex: 'name',
+      width: 200,
       render: (text, record) => (codeInProduct('/group/manage/:id/:objId') ? (
         <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
           {text}

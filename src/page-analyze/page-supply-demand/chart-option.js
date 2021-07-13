@@ -67,6 +67,9 @@ export function barOption(data) {
       right: 16,
       data: ['匹配客户', '不匹配客户'],
     },
+    label: {
+      color: fontColor,
+    },
     grid: {
       left: 24,
       right: -32,
@@ -80,6 +83,12 @@ export function barOption(data) {
       axisTick: {
         show: false,
       },
+      axisLabel: {
+        interval: 0,
+        textStyle: {
+          color: fontColor,
+        },
+      },
       axisLine: {
         show: false,
       },
@@ -88,6 +97,11 @@ export function barOption(data) {
       type: 'category',
       axisTick: {
         show: false,
+      },
+      axisLabel: {
+        textStyle: {
+          color: fontColor,
+        },
       },
       axisLine: {
         show: false,
