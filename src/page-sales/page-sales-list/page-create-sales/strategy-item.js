@@ -130,7 +130,6 @@ export default ({
       strategyFixConditionContent = {},
       sendOutContent = {},
     } = item
-
     const {
       doneLogic, 
       doneEvents = [], 
@@ -143,7 +142,6 @@ export default ({
 
     const {cron, frequency} = strategyFixConditionContent
     const {isDelay} = sendOutContent // 触发设置
-
     if (strategyName) {
       let clientGroup = {}
       if (clientGroupFilterType) {
@@ -184,7 +182,7 @@ export default ({
             }
           </div>
           <div className="mt8 mb8 ml16 mr16 c45">
-            <div>
+            <div className="mb8">
               <div className="c85">用户筛选</div>
               <div className="c45 ml16">
                 <div>{clientGroupFilterType ? '按用户行为筛选' : '按用户标签筛选'}</div>
@@ -204,7 +202,7 @@ export default ({
                 }
               </div>
             </div>
-            <div>
+            <div className="mb8">
               <div className="c85">触发条件</div>
               <div className="c45 ml16">
                 <div>{strategyConditionType ? '事件触发' : '定时触发'}</div>

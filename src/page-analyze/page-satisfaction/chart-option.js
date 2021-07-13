@@ -46,15 +46,6 @@ export function pieOption(data, total) {
   if (!data.length) {
     return ({
       title: [{
-        text: '评价结果分布',
-        top: 0,
-        left: 0,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }, {
         text: '暂无数据',
         top: '50%',
         left: '35%',
@@ -93,16 +84,6 @@ export function pieOption(data, total) {
         },
       },
     }, 
-    {
-      text: '评价结果分布',
-      top: 0,
-      left: 0,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
     ],
     series: [{
       type: 'pie',
@@ -157,18 +138,7 @@ export function scatterOption(data) {
         return `${params.value[1]}人对${params.name}结果${data.y[params.seriesIndex]}`
       },
     },
-    title: [
-      {
-        text: '客户心声',
-        top: 0,
-        left: 0,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      },
-    ],
+    title: [],
     singleAxis: [],
     series: [],
   }
@@ -176,14 +146,18 @@ export function scatterOption(data) {
   echarts.util.each(data.y, (day, idx) => {
     option.title.push({
       textBaseline: 'middle',
-      top: `${(idx + 0.7) * 100 / 6}%`,
+      top: `${(idx + 0.6) * 100 / 6}%`,
+      left: 16,
+      bottom: 16,
       text: day,
       textStyle: {
         fontSize: 14,
+        color: fontColor,
+        fontWeight: 400,
       },
     })
     option.singleAxis.push({
-      left: 96,
+      left: 108,
       type: 'category',
       boundaryGap: false,
       data: data.x,
@@ -195,13 +169,13 @@ export function scatterOption(data) {
       axisLine: {
         lineStyle: {
           width: 1,
-          color: '#333',
+          color: fontColor,
         },
       },
       axisTick: {
         lineStyle: {
           width: 1,
-          color: '#333',
+          color: fontColor,
         },
       },
     })

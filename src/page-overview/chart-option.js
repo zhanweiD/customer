@@ -241,10 +241,11 @@ export function cbarOption(barData, type) {
         },
         labelLayout(params) {
           return {
-            x: '89%',
+            // x: 48,
+            x: '97%',
             y: params.rect.y + params.rect.height / 2,
             verticalAlign: 'middle',
-            align: 'left',
+            align: 'right',
           }
         },
         barWidth: 16,
@@ -413,6 +414,7 @@ export function mapOption(mapType, data) {
       y: 'bottom',
       width: 12,
       inRange: {
+        // color: ['rgba(105, 137, 255, 0.1)', 'rgba(105, 137, 255, 1)'], // 渐变颜色
         color: ['rgba(187, 202, 255, 1)', 'rgba(105, 137, 255, 1)'], // 渐变颜色
       },
       text: ['高', '低'], // 文本，默认为数值文本
@@ -470,12 +472,26 @@ export function mapOption(mapType, data) {
             }, // 省份标签字体颜色
           },
         },
+        select: {
+          show: true,
+          itemStyle: {
+            areaColor: '#A88EFF',
+            borderColor: '#ccccf6',
+            borderWidth: 2,
+          },
+          label: {
+            show: true, // 显示省份标签
+            textStyle: {
+              color: '#fff',
+            }, // 省份标签字体颜色
+          },
+        },
         mapType,
         geoIndex: 0,
-        top: 108,
+        top: 120,
         left: '30%',
         roam: false,
-        zoom: 1.6,
+        zoom: 1.7,
         data: data.map(item => ({name: item.name, value: item.count})),
       },
     ],
@@ -496,6 +512,13 @@ export function dbarOption(data) {
     },
     tooltip: {
       trigger: 'axis',
+      formatter(item) {
+        if (!item[0]) {
+          return '-'
+        }
+        const ins = `${item[0].name}<br /> 客户人数：${item[0].value || '-'}`
+        return ins
+      },
       axisPointer: {
         type: 'shadow',
       },
@@ -552,10 +575,10 @@ export function dbarOption(data) {
         },
         labelLayout(params) {
           return {
-            x: '90%',
+            x: '96%',
             y: params.rect.y + params.rect.height / 2,
             verticalAlign: 'middle',
-            align: 'left',
+            align: 'right',
           }
         },
         label: {

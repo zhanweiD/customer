@@ -178,7 +178,7 @@ const Overview = () => {
       }}
     >
       <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
-        <span>客户中心</span>
+        <span>客户总览</span>
         <div style={{width: '60%'}}>
           {
             org ? (

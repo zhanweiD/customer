@@ -41,15 +41,6 @@ export function pieOption(data, total) {
   if (!data.length) {
     return ({
       title: [{
-        text: '渠道拓客分布（可下转二级渠道）',
-        top: 16,
-        left: 16,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }, {
         text: '暂无数据',
         top: '50%',
         left: '50%',
@@ -94,21 +85,12 @@ export function pieOption(data, total) {
         },
       },
     }, 
-    {
-      text: '渠道拓客分布（可下转二级渠道）',
-      top: 16,
-      left: 16,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
     ],
     series: [{
       type: 'pie',
-      radius: ['35%', '48%'],
+      radius: ['50%', '65%'],
       center: ['50%', '50%'],
+      top: 16,
       data: data.map(item => {
         return {name: item.name, value: item.sub, child: item.child}
       }),
@@ -152,15 +134,6 @@ export function sanKeyOption(data, links) {
   if (!data.length) {
     return {
       title: [{
-        text: '渠道拓客转化',
-        top: 16,
-        left: 16,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        },
-      }, {
         text: '暂无数据',
         top: '50%',
         left: '40%',
@@ -179,20 +152,12 @@ export function sanKeyOption(data, links) {
       trigger: 'item',
       triggerOn: 'mousemove',
     },
-    title: [{
-      text: '渠道拓客转化',
-      top: 16,
-      left: 16,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
-    ],
     series: [{
       type: 'sankey',
-      top: 48,
+      top: 24,
+      left: 48,
+      right: 96,
+      bottom: 24,
       focusNodeAdjacency: true,
       nodeGap: 12,
       layoutIterations: 84,

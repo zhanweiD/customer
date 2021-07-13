@@ -555,8 +555,6 @@ export default ({
       const parseTemplateJson = JSON.parse(templateJson)
 
       // 需要知道 accountId
-      const {strategyEventConditionContent: {doneEvents}} = strategyDetail
-      
       setAccountId(channel.accountId)
       // const {sendOutContent: {channel: editChannel}} = strategyDetail
       // setAccountId(editChannel.accountId)

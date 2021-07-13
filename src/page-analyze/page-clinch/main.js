@@ -130,29 +130,29 @@ class Clinch extends Component {
       scroll: {x: 1120},
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div className="mt6">
-            未转化客户
-          </div>
-          <div>
-            <Select 
-              style={{width: 160, marginRight: '8px'}} 
-              defaultValue=""
-              suffixIcon={<img src={dropdown} alt="dropdown" />}
-              onChange={v => {
-                store.reqCliData.customerType = v
-                store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
-              }}
-            >
-              <Option key="">全部</Option>
-              <Option key={0}>报备客户</Option>
-              <Option key={1}>到访客户</Option>
-              <Option key={2}>认筹客户</Option>
-              <Option key={3}>认购客户</Option>
-            </Select> 
-            <Button onClick={() => downloadResult({...reqData, ...reqProData, ...reqCliData}, 'deal/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
-        </div>,   
+        <div className="FBH FBJB">
+          <Button 
+            onClick={() => downloadResult({...reqData, ...reqProData, ...reqCliData}, 'deal/export')} 
+            type="primary"
+          >
+            导出
+          </Button>
+          <Select 
+            style={{width: 160}} 
+            defaultValue=""
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+            onChange={v => {
+              store.reqCliData.customerType = v
+              store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
+            }}
+          >
+            <Option key="">全部</Option>
+            <Option key={0}>报备客户</Option>
+            <Option key={1}>到访客户</Option>
+            <Option key={2}>认筹客户</Option>
+            <Option key={3}>认购客户</Option>
+          </Select> 
+        </div>,
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
@@ -212,15 +212,20 @@ class Clinch extends Component {
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 custom-border">
+            <div className="mb16">
               {
                 clinchData.pieChart && clinchData.pieChart.length ? null : <NoData style={{paddingTop: '128px', marginBottom: '-376px'}} {...noDataConfig} />
               }
               <Chart getDraw={draw => this.getDraw = draw} store={store} />
             </div>
           </Spin>
-          <div className="custom-border mb16">
-            <ListContent {...listConfig} />
+          <div className="mb16 chart-border">
+            <div className="period-header">
+              未转化客户
+            </div>
+            <div className="pt16 period-content">
+              <ListContent {...listConfig} />
+            </div>
           </div>
         </div>
       </div>
