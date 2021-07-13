@@ -14,7 +14,7 @@ export default inject('store')(
     }, [])
 
     return useObserver(() => (
-      <div className="pl16 pr16" style={{minHeight: 'calc(100vh - 204px)'}}>
+      <div className="p16 custom-border" style={{minHeight: 'calc(100vh - 204px)'}}>
         <Authority
           authCode="group-manage:export-group"
         >

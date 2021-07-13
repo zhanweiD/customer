@@ -51,7 +51,7 @@ export default inject('store')(
     }, [])
 
     return useObserver(() => (
-      <div className="tab-card FBH">
+      <div className="tab-card FBH custom-border">
         <div 
           style={{
             border: '1px solid #f0f0f0', 
