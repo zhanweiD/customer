@@ -12,8 +12,8 @@ export default inject('store')(
       <div
         className="tab-card FBH"
         style={{
-          height: 'calc(100vh - 204px)',
-          overflowY: 'auto',
+          minHeight: 'calc(100vh - 204px)',
+          // overflowY: 'auto',
         }}
       >
         <div className="FBV FB1 mr16">
