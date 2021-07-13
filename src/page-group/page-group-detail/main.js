@@ -19,7 +19,7 @@ const Main = ({match}) => {
 
   return (
     <Provider store={groupStore}>
-      <div className="group-detail-2">
+      <div className="group-detail-2 FBV">
         <ManageDetail id={match.params.id} />
         <div className="m16">
           <Tabs defaultActiveKey="1">

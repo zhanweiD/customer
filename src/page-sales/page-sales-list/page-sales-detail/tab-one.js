@@ -32,15 +32,17 @@ export default inject('store')(({store}) => {
   useEffect(() => {
     store.getStatistics(() => {
       // 画两个饼图
-      store.circleOneChart = echarts.init(circleOne.current)
-      store.circleOneChart.setOption(circleOneOption(store.touchCount))
+      if (circleOne.current) {
+        store.circleOneChart = echarts.init(circleOne.current)
+        store.circleOneChart.setOption(circleOneOption(store.touchCount))
 
-      window.addEventListener('resize', () => store.circleOneChart.resize())
+        window.addEventListener('resize', () => store.circleOneChart.resize())
 
-      store.circleTwoChart = echarts.init(circleTwo.current)
-      store.circleTwoChart.setOption(circleTwoOption(store.targetRate))
+        store.circleTwoChart = echarts.init(circleTwo.current)
+        store.circleTwoChart.setOption(circleTwoOption(store.targetRate))
 
-      window.addEventListener('resize', () => store.circleTwoChart.resize())
+        window.addEventListener('resize', () => store.circleTwoChart.resize())            
+      }
     })
 
     // 画折线图
@@ -48,25 +50,31 @@ export default inject('store')(({store}) => {
       chartBeginDate: moment().subtract(6, 'day').format('YYYY-MM-DD'),
       chartEndDate: moment().subtract(0, 'day').format('YYYY-MM-DD'),
     }, () => {
-      store.lineChart = echarts.init(lineRef.current)
-      store.lineChart.setOption(lineOption(store.lineChartData))
+      if (lineRef.current) {
+        store.lineChart = echarts.init(lineRef.current)
+        store.lineChart.setOption(lineOption(store.lineChartData))
 
-      window.addEventListener('resize', () => store.lineChart.resize())
+        window.addEventListener('resize', () => store.lineChart.resize())
+      }
     })
 
     // 分析配置的图
     store.getEventStatistics(() => {
       // 柱状图
-      store.barChart = echarts.init(barRef.current)
-      store.barChart.setOption(barOption(store.eventStatistics))
+      if (barRef.current) {
+        store.barChart = echarts.init(barRef.current)
+        store.barChart.setOption(barOption(store.eventStatistics))
 
-      window.addEventListener('resize', () => store.barChart.resize())
+        window.addEventListener('resize', () => store.barChart.resize())
+      }
 
       // funnel
-      store.funnelChart = echarts.init(funnelRef.current)
-      store.funnelChart.setOption(funnelOption(store.eventStatistics))
+      if (funnelRef.current) {
+        store.funnelChart = echarts.init(funnelRef.current)
+        store.funnelChart.setOption(funnelOption(store.eventStatistics))
 
-      window.addEventListener('resize', () => store.funnelChart.resize())
+        window.addEventListener('resize', () => store.funnelChart.resize())
+      }
     })
   }, [])
 
