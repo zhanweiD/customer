@@ -74,6 +74,7 @@ class SyncList extends Component {
     title: '操作',
     dataIndex: 'action',
     width: 280,
+    fixed: 'right',
     render: (text, record) => (
       <div>
         {/* 方案状态 0 未完成、1 提交成功 2 提交失败 3提交中 4更新成功 5更新失败 6更新中 */}

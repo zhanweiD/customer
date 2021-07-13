@@ -10,7 +10,7 @@ export default inject('store')(
   ({store}) => {
     return useObserver(() => (
       <div
-        className="tab-card FBH"
+        className="tab-card FBH custom-border"
         style={{
           minHeight: 'calc(100vh - 204px)',
           // overflowY: 'auto',

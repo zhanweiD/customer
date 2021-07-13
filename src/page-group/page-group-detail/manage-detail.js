@@ -37,9 +37,13 @@ export default inject('store')(({store, id}) => {
               <div className="c45">
                 客群描述：
               </div>
-              <div className="c65">
-                {store.groupDetail.descr}
-              </div>
+              {
+                !store.groupDetail.descr ? <div className="c25">-</div> : (
+                  <div className="c65">
+                    {store.groupDetail.descr}
+                  </div>
+                )
+              }
             </div>
             <div className="FBH" style={{wordBreak: 'keep-all', lineHeight: '24px'}}>
               <div className="c45">

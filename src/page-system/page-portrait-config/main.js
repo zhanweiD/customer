@@ -49,6 +49,7 @@ class PortraitConfig extends Component {
     key: 'action',
     title: '操作',
     width: 200,
+    fixed: 'right',
     render: (text, record) => (
       <div className="FBH FBAC">
         <Authority
