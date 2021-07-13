@@ -130,7 +130,6 @@ export default ({
       strategyFixConditionContent = {},
       sendOutContent = {},
     } = item
-
     const {
       doneLogic, 
       doneEvents = [], 
@@ -143,7 +142,6 @@ export default ({
 
     const {cron, frequency} = strategyFixConditionContent
     const {isDelay} = sendOutContent // 触发设置
-
     if (strategyName) {
       let clientGroup = {}
       if (clientGroupFilterType) {
