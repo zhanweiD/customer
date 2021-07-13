@@ -289,6 +289,7 @@ export function lineOption(lineData) {
   for (let i = 0; i < keys.length; i++) {
     xData.push({name: keys[i], value: data[keys[i]]})
   }
+  
   return {
     grid: {
       top: 40,
