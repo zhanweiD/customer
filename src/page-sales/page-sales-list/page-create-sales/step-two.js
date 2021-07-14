@@ -115,6 +115,7 @@ export default ({
   // 保存表单数据
   const onFinish = () => {
     stepForm.validateFields().then(value => {
+      delete value.triggerTimeRule
       const {startEndDate, interval, time} = value
       let params = {}
 
@@ -315,6 +316,10 @@ export default ({
       stepForm.resetFields()
     }, 0)
   }, [strategyDetail])
+
+  useEffect(() => {
+    stepForm.resetFields(['startEndDate'])
+  }, [planInfo])
 
   return (
     <Fragment>
@@ -566,6 +571,9 @@ export default ({
                 </Item>
                 <Item
                   label="触发时间"
+                  name="triggerTimeRule"
+                  initialValue="triggerTimeRule"
+                  rules={[{required: true, message: '请选择时间'}]}
                   extra="将在这个时间对受众用户进行触达"
                 >
                   {setTimeDom({
