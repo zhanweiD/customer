@@ -2,6 +2,7 @@ import {Component} from 'react'
 import {action, toJS} from 'mobx'
 import {inject, observer} from 'mobx-react'
 import {Modal} from 'antd'
+import _ from 'lodash'
 import {Form} from '@ant-design/compatible'
 import MultiCascader from 'antd-multi-cascader'
 import {ModalForm} from '../../../../component'
@@ -34,7 +35,7 @@ export default class ModalTagMove extends Component {
       if (!err) {
         const {biz} = values
         const {bizOriginList} = bigStore
-        const bizValue = []
+        let bizValue = []
 
         biz.forEach(item => {
           const target = _.find(bizOriginList, e => e.bizCode === item)
@@ -50,6 +51,16 @@ export default class ModalTagMove extends Component {
             bizValue.push([parentNode.parentCode, target.parentCode, target.bizCode])
           }
         })
+
+        // 去掉【全部】
+        bizValue.forEach(item => {
+          _.remove(item, e => e === 'ALL')
+        })
+
+        // 选择【全部】的情况
+        if (JSON.stringify(bizValue) === '[[]]') {
+          bizValue = undefined
+        }
 
         store.batchUpdateBiz({
           tagIds: toJS(store.publishRowKeys),
@@ -99,6 +110,8 @@ export default class ModalTagMove extends Component {
               <MultiCascader
                 data={toJS(this.bigStore.bizList)}
                 placeholder="请选择"
+                okText="确认"
+                cancelText="取消"
               />
             )}
           </Form.Item>

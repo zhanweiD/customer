@@ -1,26 +1,36 @@
 .group-detail-2
-  height calc(100vh - 48px)
-  overflow-y auto
+  height 100%
+  // height calc(100vh - 48px)
+  // overflow-y auto
 
   .manage-detail-header
-    background-color #fff
-    border-bottom 1px solid #f0f0f0
-    padding 16px
+    // background-color #fff
+    // border-bottom 1px solid #f0f0f0
+    padding 16px 16px 0px
 
     .detail-head
-      font-size 16px
-      color rgba(0,0,0,.85)
+      font-size $head-text-size
+      color $head-text-color
+      line-height 32px
     
     .header-icon
       cursor pointer  
       :hover
-        color #0078ff
+        color #3F5FF4
   
   .tab-card
-    padding 0px 16px 16px
+    padding 16px
     min-height calc(100vh - 204px)
   
   .table-box
     width 24px
     height 24px
     text-align center
+  
+.logic-word
+  font-weight 500
+  color rgba(22,50,78,1)
+
+.logic-comp
+  font-weight 500
+  color rgba(22,50,78,0.85)

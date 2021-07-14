@@ -121,20 +121,19 @@ class GroupConfig extends Component {
             <Authority
               authCode="system:role-manage:add"
             >
-              <Button type="primary" className="mr8" onClick={() => this.openDrawer(0)}>新增角色</Button>
+              <Button type="primary" onClick={() => this.openDrawer(0)}>新增角色</Button>
             </Authority>
             <Authority
               authCode="system:role-manage:add"
             >
               <Popconfirm title="你确定要删除该角色吗？" disabled={!publishRowKeys.length} okText="确定" cancelText="取消" onConfirm={() => this.delRole(publishRowKeys)}>
-                <Button disabled={!publishRowKeys.length} className="mr8">{`批量删除(${publishRowKeys.length})`}</Button>
+                <Button disabled={!publishRowKeys.length} className="ml8">{`批量删除(${publishRowKeys.length})`}</Button>
               </Popconfirm>
             </Authority>
           </div>
           <div>
             <Input 
-              size="small"
-              style={{width: 160, marginRight: '24px'}} 
+              style={{width: 160, marginLeft: '8px'}} 
               placeholder="请输入角色名称" 
               // onChange={v => store.getList({searchKey: v.target.value})}
               onChange={this.searchRole}
@@ -146,9 +145,9 @@ class GroupConfig extends Component {
     }
 
     return (
-      <div className="oa">
+      <div className="oa FBV">
         <div className="content-header">角色管理</div> 
-        <div className="user-manage mt72">
+        <div className="user-manage FB1 custom-border m16 pt16">
           <ListContent {...listConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

@@ -39,8 +39,8 @@ class TagMarket extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <div className="tag-object">
-          <div className="object-header">
+        <div className="tag-object oa">
+          <div className="content-header">
             标签集市
           </div>
           {

@@ -5,6 +5,7 @@ import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import {Modal, Select, Switch, Radio, Input} from 'antd'
 import {OmitTooltip} from '../../../component'
+import dropdown from '../../../icon/dropdown.svg'
 
 const FormItem = Form.Item
 const {Option} = Select
@@ -154,7 +155,13 @@ class ModalAddTable extends Component {
             {getFieldDecorator('dataTableName', {
               rules: [{required: true, message: '请选择数据表'}],
             })(
-              <Select placeholder="请选择数据表" onSelect={v => this.selectDataSheet(v)} showSearch optionFilterProp="children">
+              <Select 
+                placeholder="请选择数据表" 
+                onSelect={v => this.selectDataSheet(v)} 
+                showSearch 
+                optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 {
                   dataSheetList.map(item => (
                     <Option key={item.tableName} value={item.tableName} disabled={item.isUsed}>{item.tableName}</Option>
@@ -171,7 +178,13 @@ class ModalAddTable extends Component {
             {getFieldDecorator('mappingKey', {
               rules: [{required: true, message: '请选择主标签绑定的字段'}],
             })(
-              <Select placeholder="请选择主标签绑定的字段" onSelect={v => this.selectMajorKey(v)} showSearch optionFilterProp="children">
+              <Select 
+                placeholder="请选择主标签绑定的字段" 
+                onSelect={v => this.selectMajorKey(v)} 
+                showSearch 
+                optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 {
                   fieldList.map(item => (
                     <Option key={item.field} value={item.field} disabled={!item.isMajor}>{item.field}</Option>

@@ -21,7 +21,8 @@ export const addPathPrefix = path => {
   return pathPrefix + path
 }
 
-export const baseApi = `${pathPrefix}hub_api` // 标签中心
+export const baseApi = `${pathPrefix}hub_api` // 客户中台
+export const marketingApi = `${pathPrefix}marketing_api` // 营销模块
 export const sceneApi = `${pathPrefix}hub_api/occasion` // 场景
 export const baseSyncApi = `${pathPrefix}hub_api/objTransmission` // 标签中心
 export const baseUserApi = `${pathPrefix}hub_api` // 用户中心
@@ -31,18 +32,6 @@ export const baseRole = `${pathPrefix}hub_user_api/role` // 角色
 export const basePerm = `${pathPrefix}hub_user_api/perm` // 权限
 export const groupApi = `${pathPrefix}hub_api/group` // 客群管理
 export const derivativeApi = `${pathPrefix}hub_api/derivation` // 可视化加工
-
-// export const baseApi = `${pathPrefix}hub_api_dev` // 标签中心
-// export const sceneApi = `${pathPrefix}hub_api_dev/occasion` // 场景
-// export const baseSyncApi = `${pathPrefix}hub_api_dev/objTransmission` // 标签中心
-// export const baseUserApi = `${pathPrefix}hub_api_dev` // 用户中心
-// export const baseUser = `${pathPrefix}hub_user_api_dev/user` // 用户
-// export const baseZtOrg = `${pathPrefix}hub_user_api_dev/ztOrg` // 部门
-// export const baseRole = `${pathPrefix}hub_user_api_dev/role` // 角色
-// export const basePerm = `${pathPrefix}hub_user_api_dev/perm` // 权限
-// export const groupApi = `${pathPrefix}hub_api_dev/group` // 客群管理
-// export const derivativeApi = `${pathPrefix}hub_api_dev/derivation` // 可视化加工
-
 
 // 接口前缀
 
@@ -204,6 +193,23 @@ export function limitSelect(rule, values, callback, number) {
   // }
   callback()
 }
+
+/**
+ * @author 凡书
+ * @description 获取当月天数
+ */
+export function getCountDays() {
+  var curDate = new Date()
+/* 获取当前月份 */
+  var curMonth = curDate.getMonth()
+  /*  生成实际的月份: 由于curMonth会比实际月份小1, 故需加1 */
+  curDate.setMonth(curMonth + 1)
+  /* 将日期设置为0, 这里为什么要这样设置, 我不知道原因, 这是从网上学来的 */
+  curDate.setDate(0)
+  /* 返回当月的天数 */
+  return curDate.getDate()
+}
+
 
 export function isJsonFormat(str) {
   try {

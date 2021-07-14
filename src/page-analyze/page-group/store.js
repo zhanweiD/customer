@@ -7,6 +7,7 @@ import io from './io'
 class Store {
   @observable loading = true 
   @observable tagLoading = true 
+  @observable isScroll = false 
 
   @observable checkList = [] // 选中的标签
   @observable tagList = [] // 标签列表

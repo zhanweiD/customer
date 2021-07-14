@@ -74,15 +74,15 @@ class AddDrawer extends Component {
     const drawerProps = {
       visible: this.store.drawerVisible,
       title: roleStatus === 0 ? '新建角色' : (roleStatus === 1 ? '编辑角色' : '角色详情'),
-      width: 960,
+      width: 560,
       className: 'role-drawer',
       maskClosable: false,
       destroyOnClose: true,
       onClose: () => this.onClose(),
     }
     const layout = {
-      labelCol: {span: 3},
-      wrapperCol: {span: 11},
+      labelCol: {span: 4},
+      wrapperCol: {span: 12},
     }
     
     return (
@@ -101,7 +101,7 @@ class AddDrawer extends Component {
               {validator: this.checkName},
             ]}
           >
-            <Input placeHolder="请输入用户名" size="small" />
+            <Input placeHolder="请输入用户名" />
           </Form.Item>
           <Form.Item
             label="描述"
@@ -111,11 +111,11 @@ class AddDrawer extends Component {
               {max: 128, message: '描述不能超过128个字符'},
             ]}
           >
-            <Input.TextArea placeHolder="请输入描述" size="small" autoSize={{minRows: 3}} />
+            <Input.TextArea placeHolder="请输入描述" autoSize={{minRows: 3}} />
           </Form.Item>
         </Form>
         <div className="ml32 mb24">
-          <div className="mb16 fs12">功能权限</div>
+          <div className="mb16">功能权限</div>
           {menuTree.length ? (
             <Tree
               checkable
@@ -127,7 +127,7 @@ class AddDrawer extends Component {
               checkedKeys={menuCheckedKeys}
               // defaultExpandAll
               // treeData={menuTree}
-              style={{fontSize: '12px'}}
+              style={{fontSize: '14px'}}
               className="roleTree"
             >
               {this.renderTreeNodes(menuTree)}

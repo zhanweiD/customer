@@ -10,6 +10,7 @@ import {NoData, LegendItem} from '../component'
 
 import {pieOption, barOption} from './option'
 
+const colors = ['#61BA46 ', '#2592FF', '#355FF9', '#6C41FA', '#FD5071'] 
 
 @observer
 export default class ChartPie extends Component {
@@ -48,35 +49,32 @@ export default class ChartPie extends Component {
   }
 
   render() {
-    const {pieData, pieTotal, chartLoading, color, barData} = this.store
+    const {pieData, pieTotal, chartLoading, barData} = this.store
     return (
-      <div className="chart m16 mt8 p16 box-border">
+      <div className="contact-chart m16 mb0">
         <Spin spinning={chartLoading}>
           {/* <div className="d-flex" style={{display: pieData.length ? 'flex' : 'none'}}> */}
-          <div className="d-flex">
+          <div className="d-flex type-distribution p16">
             <div ref="chartPie" style={{height: '300px', width: '50%'}} />
-            <div className="w50 fs12 FBV FBJC FBAC categroy-legend-box">
+            <div className="w50 fs14 FBV FBJC FBAC categroy-legend-box">
               {
                 pieData.map((item, i) => (
                   <LegendItem 
                     title={item.name} 
                     percent={`${((item.value / pieTotal) * 100).toFixed(2)}%`}
                     counts={item.value}
-                    color={color[i]}
+                    color={colors[i]}
                   />
                 ))
               }
             </div>
           </div>
-          {/* <NoData 
-            style={{height: '300px', paddingTop: '100px', display: pieData.length ? 'none' : 'block'}} 
-            text="暂无数据" 
-            size="small" 
-          /> */}
-          <div 
-            ref="chartBar" 
-            style={{height: '180px', width: '100%'}} 
-          />
+          <div className="mt16 type-distribution p16">
+            <div 
+              ref="chartBar" 
+              style={{height: '180px', width: '100%'}} 
+            />
+          </div>
         </Spin>
       </div> 
     )

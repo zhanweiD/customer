@@ -2,14 +2,18 @@ import {Component, Fragment} from 'react'
 import {action, toJS} from 'mobx'
 import {observer, inject} from 'mobx-react'
 import {Spin, Input, Select} from 'antd'
+import {SearchOutlined} from '@ant-design/icons'
+import {debounce} from '@util'
 
 import {NoData, authView} from '../component'
 
 import store from './store'
 import SearchResult from './search-result'
 import SearchList from './search-list'
+import bgBanner from './icon/bg-banner.png'
+import searchGroup from './icon/search-icon.svg'
 
-const {Search} = Input
+const {Option} = Select
 
 @observer
 class Portrait extends Component {
@@ -28,16 +32,11 @@ class Portrait extends Component {
 
   componentDidMount() {
     if (store.isJump) return
-
     store.getPortrait()
   }
 
   onSearch = v => {
-    store.searchKey = v
-    store.isFirst = true
-    store.isLast = false
-    store.currentPage = 1
-    store.getUnitList()
+    debounce(() => store.getUnitList(v), 500)
   }
 
   @action onChange = (v, item) => {
@@ -51,11 +50,13 @@ class Portrait extends Component {
     const {
       placeholder, 
       unitList,
+      unitKeys,
       followList,
       followLoading,
       scanList,
       portraitId,
-      isJump,
+      selectLoading,
+      ident,
     } = store
     const noDataText = (
       <span>
@@ -67,33 +68,45 @@ class Portrait extends Component {
 
     return (
       <div className="portrait-wrap oa">
-        <div className="content-header">客户画像</div>
         {
           portraitId ? (
-            <div className="search m16 mr0 mt72">
+            <div className="search m16 mr0 mt2">
               {
-                isJump ? null : (
+                ident ? null : (
                   <div>
-                    <div className="search_content mr16">
-                      <Search 
-                        size="large"
-                        placeholder={placeholder} 
-                        onSearch={this.onSearch} 
-                        style={{width: '25%', borderLeft: 'none'}} 
-                      />
+                    <div 
+                      className="search_content mr16"
+                      style={{backgroundImage: `url(${bgBanner})`}}
+                    >
+                      <div className="w50">
+                        <div className="content-header">
+                          <img className="mb4 mr8" src={searchGroup} alt="" /> 
+                          <span>客户画像</span>
+                        </div>
+                        
+                        <Select
+                          mode="multiple"
+                          size="large" 
+                          filterOption={false}
+                          notFoundContent={selectLoading ? <Spin size="small" /> : null}
+                          onSearch={this.onSearch}
+                          onChange={v => store.ident = v[0]}
+                          placeholder={placeholder} 
+                          style={{width: '100%', borderRadius: 24}} 
+                        >
+                          {
+                            unitList.map(item => <Option value={item.ident}>{item.search}</Option>)
+                          }
+                        </Select>
+                      </div>
                     </div>
-                    {
-                      !unitList.length ? (
-                        <Spin spinning={followLoading}>
-                          <div className="d-flex">
-                            {/* <SearchList data={data} title="相关客户推荐" color="#339999" />
-                            <SearchList data={data} title="待跟进客户" color="#cc6699" /> */}
-                            <SearchList data={followList} title="已关注客户" color="#00cccc" id={portraitId} />
-                            <SearchList data={scanList} title="最近浏览客户" color="#6699cc" id={portraitId} />
-                          </div>
-                        </Spin>
-                      ) : null
-                    }
+                   
+                    <Spin spinning={followLoading}>
+                      <div className="d-flex">
+                        <SearchList data={followList} title="已关注客户" id={portraitId} />
+                        <SearchList data={scanList} title="最近浏览客户" id={portraitId} />
+                      </div>
+                    </Spin>
                   </div>
                 )
               }

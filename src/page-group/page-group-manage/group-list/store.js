@@ -166,7 +166,7 @@ class Store extends ListContentStore(io.getGroupList) {
         }
       })
     } catch (error) {
-      errorTip(error)
+      errorTip(error.message)
     }
   }
 }

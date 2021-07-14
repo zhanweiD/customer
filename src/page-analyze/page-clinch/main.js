@@ -6,11 +6,13 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -24,7 +26,7 @@ class Clinch extends Component {
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -101,7 +103,9 @@ class Clinch extends Component {
   //   }
   // }
   render() {
-    const {clinchData, tableLoading, loading, reqData, reqProData, reqCliData} = store
+    const {
+      clinchData, tableLoading, loading, reqData, reqProData, reqCliData, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -123,31 +127,32 @@ class Clinch extends Component {
       rowKey: 'id',
       initParams: {...reqData, ...reqProData, ...reqCliData},
       columns: this.columns,
+      scroll: {x: 1120},
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
-            未转化客户
-          </div>
-          <div>
-            <Select 
-              size="small"
-              defaultValue=""
-              style={{width: 160, marginRight: '8px'}} 
-              onChange={v => {
-                store.reqCliData.customerType = v
-                store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
-              }}
-            >
-              <Option style={{fontSize: '12px'}} key="">全部</Option>
-              <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>
-              <Option style={{fontSize: '12px'}} key={1}>到访客户</Option>
-              <Option style={{fontSize: '12px'}} key={2}>认筹客户</Option>
-              <Option style={{fontSize: '12px'}} key={3}>认购客户</Option>
-            </Select> 
-            <Button onClick={() => downloadResult({...reqData, ...reqProData, ...reqCliData}, 'deal/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
-        </div>,   
+        <div className="FBH FBJB">
+          <Button 
+            onClick={() => downloadResult({...reqData, ...reqProData, ...reqCliData}, 'deal/export')} 
+            type="primary"
+          >
+            导出
+          </Button>
+          <Select 
+            style={{width: 160}} 
+            defaultValue=""
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+            onChange={v => {
+              store.reqCliData.customerType = v
+              store.getList({...reqData, ...reqProData, ...reqCliData, currentPage: 1})
+            }}
+          >
+            <Option key="">全部</Option>
+            <Option key={0}>报备客户</Option>
+            <Option key={1}>到访客户</Option>
+            <Option key={2}>认筹客户</Option>
+            <Option key={3}>认购客户</Option>
+          </Select> 
+        </div>,
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
@@ -156,53 +161,72 @@ class Clinch extends Component {
       text: '暂无数据',
     }
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">成交分析</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            showSearch={this.filter}
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{marginRight: '8px'}}
-          />
-          <RangePicker
-            size="small"
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            // format={dateFormat}
-            // disabledDate={this.disabledDate}
-            allowClear={false}
-            onChange={value => {
+      <div 
+        id="chinchId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('chinchId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">成交分析</div>
+          <div style={{width: 624}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              showSearch={this.filter}
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{marginRight: '8px'}}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              // format={dateFormat}
+              // disabledDate={this.disabledDate}
+              allowClear={false}
+              onChange={value => {
               // store.limitTime = {
               //   startTime: value ? value[0] : '',
               //   endTime: value ? value[1] : '',
               // }
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
-              }
-              // store.endTime = value ? value[1].format('YYYY-MM-DD') : ''
-              store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
-              store.getClinch(data => {
-                this.getDraw(data)
-              })
-            }}
-          />
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                // store.endTime = value ? value[1].format('YYYY-MM-DD') : ''
+                store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
+                store.getClinch(data => {
+                  this.getDraw(data)
+                })
+              }}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16">
+            <div className="mb16">
               {
                 clinchData.pieChart && clinchData.pieChart.length ? null : <NoData style={{paddingTop: '128px', marginBottom: '-376px'}} {...noDataConfig} />
               }
               <Chart getDraw={draw => this.getDraw = draw} store={store} />
             </div>
           </Spin>
-          <ListContent {...listConfig} />
+          <div className="mb16 chart-border">
+            <div className="period-header">
+              未转化客户
+            </div>
+            <div className="pt16 period-content">
+              <ListContent {...listConfig} />
+            </div>
+          </div>
         </div>
       </div>
     )

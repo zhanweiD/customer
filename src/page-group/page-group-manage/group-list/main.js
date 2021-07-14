@@ -35,14 +35,14 @@ export default class GroupList extends Component {
     return (
       <Menu>
         <Menu.Item>
-          <a className="fs12" href>复制</a>
+          <a className="fs14" href>复制</a>
         </Menu.Item>
         <Menu.Item>
           <Authority
             authCode="group-manage:export-group"
           >
             <Link target="_blank" to={`/group/manage/unit/${record.id}/${record.lastTime}`}>
-              <a className="fs12 c85" href>个体列表</a>
+              <a className="fs14 c85" href>个体列表</a>
             </Link>
           </Authority>
         </Menu.Item>
@@ -54,6 +54,7 @@ export default class GroupList extends Component {
       key: 'name',
       title: '客群名称',
       dataIndex: 'name',
+      width: 200,
       render: (text, record) => (codeInProduct('/group/manage/:id/:objId') ? (
         <Link target="_blank" to={`/group/manage/${record.id}/${record.objId}`}>
           {text}
@@ -62,12 +63,14 @@ export default class GroupList extends Component {
     }, {
       key: 'lastCount',
       title: '覆盖人数',
+      width: 100,
       dataIndex: 'lastCount',
     }, 
     {
       key: 'status',
       title: '客群状态',
       dataIndex: 'status',
+      width: 100,
       render: v => {
         if (v === 1) {
           return (<Badge color="green" text="正常" />)
@@ -81,25 +84,26 @@ export default class GroupList extends Component {
       key: 'lastTime',
       title: '创建时间',
       dataIndex: 'lastTime',
-      width: 170,
+      width: 200,
       render: text => <Time timestamp={text} />,
     }, 
     {
       key: 'cuserName',
       title: '创建人',
       dataIndex: 'cuserName',
+      width: 140,
     },
     {
       key: 'updateTime',
       title: '更新时间',
       dataIndex: 'updateTime',
-      width: 170,
+      width: 200,
       render: text => <Time timestamp={text} />,
     }, 
     {
       key: 'action',
       title: '操作',
-      width: 150,
+      width: 180,
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">
@@ -202,7 +206,7 @@ export default class GroupList extends Component {
     }
 
     return (
-      <div style={{minHeight: 'calc(100vh - 198px)'}}>
+      <div className="custom-border h-100 oa">
         <ListContent {...listConfig} />
       </div>
     )

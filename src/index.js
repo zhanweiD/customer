@@ -19,6 +19,9 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
+// import Sales from './page-sales1/page-sales-list'
+import WeappCode from './page-sales/page-channel-manage/weappCode'
+import ToCustomer from './page-sales/page-channel-manage/toCustomer'
 import Sales from './page-sales'
 
 const njkData = {
@@ -34,25 +37,33 @@ function Entry() {
         {/* 登录 */}
         <Route path="/login" component={Login} />
         <Route path="/upload-tag" component={UploadTag} />
+        <Route path="/weappCode/:userAccount/:host?" component={WeappCode} />
+        <Route path="/toCustomer/:authCode?/:expiresIn?" component={ToCustomer} />
 
         <Frame>
           {/* 客户中心 */}
-          <Route path="/overview" component={Overview} />
+          <Route path="/home/overview" component={Overview} />
           {/* 标签集市 */}
           <Route path="/tag-market" component={TagMarket} />
           {/* 标签维护 */}
           <Route path="/tag-manage" component={TagManage} />
           {/* 标签同步 */}
-          <Route path="/tag-sync" component={Sync} />
+          <Route path="/tag-sync/manage" component={Sync} />
           {/* 客群管理 */}
           <Route path="/group" component={Group} />
           {/* 客户画像 */}
-          <Route path="/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
+          <Route path="/customer/portrait/:ident?/:id?/:isConsultant?" component={Portrait} />
           {/* 客群分析 */}
           <Route path="/analyze" component={Analyze} />
           {/* 系统管理 */}
           <Route path="/system" component={System} />
+          {/* 自动化营销 */}
+          {/* <Route path="/sales/list" component={Sales} /> */}
           <Route path="/sales" component={Sales} />
+          {/* 事件管理 */}
+          {/* <Route path="/event-manage" component={EventManage} /> */}
+          {/* 渠道管理 */}
+          {/* <Route path="/channel-manage" component={ChannelManage} /> */}
         </Frame>
 
       </Switch>

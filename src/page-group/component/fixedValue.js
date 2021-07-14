@@ -132,7 +132,7 @@ export default class FixedValue extends Component {
             ],
           })(
             getFieldValue('thenFunction') === '固定值' 
-              ? <Input size="small" placeholder="请输入" style={{width: 180}} value={params} /> 
+              ? <Input  placeholder="请输入" style={{width: 180}} value={params} /> 
               : (
                 <Select 
                   showSearch

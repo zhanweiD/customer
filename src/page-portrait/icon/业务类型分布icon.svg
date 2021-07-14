@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>编组</title>
+    <desc>Created with Sketch.</desc>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="5-客户画像-业务触点-收起" transform="translate(-417.000000, -254.000000)">
+            <g id="编组-6" transform="translate(400.000000, 232.000000)">
+                <g id="编组" transform="translate(16.000000, 21.000000)">
+                    <polygon id="路径" points="0 0 14 0 14 14 0 14"></polygon>
+                    <g transform="translate(1.000000, 1.000000)" fill="#D4DCE9" id="形状">
+                        <path d="M5.03332246,0.842801883 L5.03332246,6.96667754 L11.1571981,6.96667754 C10.8770098,9.79260847 8.4923335,12 5.59258051,12 C2.50379829,12 0,9.49620171 0,6.40741949 C0,3.5076665 2.20739153,1.12299017 5.03332246,0.842801883 Z M6.15183856,0 C9.25739852,0.26676609 11.7326747,2.74260148 12,5.84816144 L6.15183856,5.84816144 L6.15183856,0 Z"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

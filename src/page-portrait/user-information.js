@@ -7,6 +7,10 @@ import {action} from 'mobx'
 import {observer} from 'mobx-react'
 import {Button, Spin} from 'antd'
 
+import manIcon from './icon/man-icon.svg'
+import womanIcon from './icon/woman-icon.svg'
+import focusIcon from './icon/focus-icon.svg'
+
 @observer
 export default class User extends Component {
   infoName = ''
@@ -54,36 +58,40 @@ export default class User extends Component {
   }
 
   render() {
-    const {basicLoading, attention} = this.store
+    const {basicLoading, attention, defaultInfo, unitKeys} = this.store
     return (
       <div className="basis-info-content ml16 mr16">
         <Spin spinning={basicLoading}>
           <div>
-            <div className="herder">客户档案</div>
-            <div className="fs12 c65 pb8 bbc">
-              <div className="dfjc lh24">
-                <div>{`${this.infoName}: ${this.nameValue || '-'}`}</div>
-                <Button onClick={this.focus}>{attention ? '取关' : '关注'}</Button>
+            {/* <div className="herder">客户档案</div> */}
+            <div className="fs14 c85 pb8">
+              <div className="dfjc lh32 pt16">
+                <div>
+                  <img width={32} height={32} src={defaultInfo.性别 === '男' ? manIcon : womanIcon} alt="" />
+                  <span className="ml8">{defaultInfo.客户姓名}</span>
+                </div>
+                <Button 
+                  type="primary" 
+                  onClick={this.focus} 
+                  icon={<img className="mb2 mr6" src={focusIcon} alt="" />}
+                >
+                  {attention ? '取关' : '关注'}
+                </Button>
               </div>
-              {
-                this.setInfo()
-              }
+              
             </div>
             {
               this.store.unitBasic.map(item => {
                 return (
                   <div className="basis-info-content-list">
                     <div className="info-title">
-                      {item.cat}
+                      {/* <span className="info-title-line" /> */}
+                      <span className="bold">{item.cat}</span>
                     </div>
                     <div>
                       {item.list && item.list.map(content => {
                         return (
-                        // <p className="info-content">
-                        //   <div className="p-tag">{`${content.tag}:`}</div>
-                        //   <div className="p-val"><OmitTooltip text={content.val} maxWidth={160} /></div>
-                        // </p>
-                          <span className="mr8 mb8 fs12 c65 info-tag">{content.val}</span>
+                          <span className="mr8 mb8 fs14 c85 info-tag">{content.val}</span>
                         )
                       })}
                     </div>

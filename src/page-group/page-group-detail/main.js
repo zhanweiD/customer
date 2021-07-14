@@ -19,9 +19,9 @@ const Main = ({match}) => {
 
   return (
     <Provider store={groupStore}>
-      <div className="group-detail-2">
+      <div className="group-detail-2 FBV">
         <ManageDetail id={match.params.id} />
-        <div className="comp-tab">
+        <div className="m16">
           <Tabs defaultActiveKey="1">
             <TabPane tab="显著特征" key="1">
               <TabOne />

@@ -1,15 +1,17 @@
 /**
- * @description 渠道分析
+ * @description 渠道拓客
  */
 import {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, NoData, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -27,7 +29,7 @@ class Channel extends Component {
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -127,7 +129,9 @@ class Channel extends Component {
   }
 
   render() {
-    const {channelData, tableLoading, loading, reqData, treeDate, reqProData, reqChaData} = store
+    const {
+      channelData, tableLoading, loading, reqData, treeDate, reqProData, reqChaData, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -145,13 +149,18 @@ class Channel extends Component {
       key: 'id',
       rowKey: 'id',
       initParams: {...reqChaData, ...reqData, ...reqProData},
+      scroll: {x: 1120},
       columns: this.columns,
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
-            未转化客户
-          </div>
+        <div className="FBH FBJB">
+          <Button 
+            onClick={() => downloadResult({...store.reqChaData, ...store.reqData, ...store.reqProData}, 'expand/export')} 
+            style={{marginRight: '24px'}} 
+            type="primary"
+          >
+            导出
+          </Button>
           <div>
             <Cascader
               placeholder="请选择渠道"
@@ -162,29 +171,25 @@ class Channel extends Component {
               onChange={this.selectChannel}
               showSearch={this.filter}
               style={{marginRight: '8px'}}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             />
             <Select 
-              size="small"
               defaultValue=""
-              style={{width: 160, marginRight: '8px'}} 
+              style={{width: 160}} 
               onChange={v => {
                 store.reqChaData.customerType = v
                 store.getList({...store.reqChaData, ...store.reqData, ...store.reqProData, currentPage: 1})
               }}
+              getPopupContainer={triggerNode => triggerNode.parentElement}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
             >
-              <Option style={{fontSize: '12px'}} key="">全部</Option>
-              <Option style={{fontSize: '12px'}} key={0}>报备客户</Option>
-              <Option style={{fontSize: '12px'}} key={1}>到访客户</Option>
-              <Option style={{fontSize: '12px'}} key={2}>认筹客户</Option>
-              <Option style={{fontSize: '12px'}} key={3}>认购客户</Option>
+              <Option key="">全部</Option>
+              <Option key={0}>报备客户</Option>
+              <Option key={1}>到访客户</Option>
+              <Option key={2}>认筹客户</Option>
+              <Option key={3}>认购客户</Option>
             </Select> 
-            <Button 
-              onClick={() => downloadResult({...store.reqChaData, ...store.reqData, ...store.reqProData}, 'expand/export')} 
-              style={{marginRight: '24px'}} 
-              type="primary"
-            >
-              导出
-            </Button>
           </div>
         </div>,   
       ],
@@ -195,52 +200,66 @@ class Channel extends Component {
       text: '暂无数据',
     }
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">渠道拓客</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            showSearch={this.filter}
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{marginRight: '8px'}}
-          />
-          <RangePicker
-            size="small"
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            // format={dateFormat}
-            allowClear={false}
-            onChange={value => {
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
-              }
-              store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
-              store.getChannel(data => {
-                this.getDraw(data)
-              })
-            }}
-          />
+      <div 
+        id="channelId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('channelId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">渠道拓客</div>
+          <div style={{width: 624}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              showSearch={this.filter}
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{marginRight: '8px'}}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              // format={dateFormat}
+              allowClear={false}
+              onChange={value => {
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                store.getList({...store.reqProData, ...store.reqData, currentPage: 1})
+                store.getChannel(data => {
+                  this.getDraw(data)
+                })
+              }}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16">
-              {/* {
-                channelData.pieChart && channelData.pieChart.length ? (
-                  <Chart getDraw={draw => this.getDraw = draw} store={store} />
-                ) : <NoData {...noDataConfig} />
-              } */}
+            <div className="mb16">
               {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               }
               <Chart getDraw={draw => this.getDraw = draw} store={store} />
             </div>
           </Spin>
-          <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              未转化客户
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
+          </div>
         </div>
       </div>
     )

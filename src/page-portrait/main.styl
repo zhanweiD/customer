@@ -1,7 +1,6 @@
 .portrait-wrap
   height 100%
   box-sizing border-box
-  overflow hidden
   position relative
 
   .noData-box
@@ -17,11 +16,9 @@
     font-weight 500
     color rgba(0,0,0,0.85)
     line-height 46px
-  .bbc 
-    border-bottom 1px solid #E6EDF8
-    .lh24
-      height 24px
-      line-height 24px
+  
+  .lh32
+    line-height 32px
   .search
     margin-bottom 0px
     .search-list
@@ -29,12 +26,12 @@
       min-height calc(100vh - 233px)
       .list-height
         height 48px
+        padding-left 16px
         line-height 48px
-        color #fff
-        text-align center
-        font-size 16px
+        color #16324e
+        font-size 14px
       .item-content
-        border-bottom 1px solid #f3f4f9
+        border-bottom 1px solid #E6EBF3
         margin 8px
         padding-bottom 8px
         line-height 32px
@@ -46,86 +43,137 @@
     .ant-tabs-tab
       border-radius 2px !important
       margin-right 24px
-      font-size 12px
+      font-size 14px
 
     // 搜素框
     .search_content
       padding-top 24px
       padding-bottom 24px
-      background-color #fff
-      font-size 12px 
+      height 240px
+      line-height 192px
+      // background-image: url('./icon/bg-banner.png')
+      background-size: 100% 100%
+      // background-color #fff
+      font-size 14px 
       color rgba(0,0,0,0.65)
       display flex
       justify-content center
-      background-color #1890ff
+      // background-color #1890ff
+      .content-header
+        color #fff
+        font-size 24px
+        width 100%
+        text-align center
+        margin 0
+        margin-top 40px
+        margin-bottom -48px
+      .ant-select-selector
+        border-radius 24px
+        .ant-select-selection-placeholder
+          left 24px
   // 用户信息  
   .user-info
-    background-color #f3f4f9
     // height calc(100vh - 328px)
-    height calc(100vh - 137px)
+    height calc(100vh - 128px)
     
     .basis-info
-      width 20%
+      width 300px
       overflow auto
 
       &-content
         &-list
           width 100%
           .info-tag
-            padding 4px 8px
-            background-color rgba(0,0,0,0.05)
-            border 1px solid #e6edf8
-            border-radius 6px
+            padding 4px 12px
+            background: rgba(22,50,78,0.04)
+            border-radius: 16px
             display inline-block
+            max-width 266px
+            white-space nowrap
+            overflow hidden
+            text-overflow ellipsis
           .info-title
-            color rgba(0,0,0,.65)
+            color #16324E
             margin-bottom 8px
             margin-top 8px
             padding-left 8px
-            border-left 3px solid rgba(0,0,0,.45)
-            
+            .info-title-line
+              display inline-block
+              width 3px
+              height 22px
+              margin-bottom -6px
+              background: linear-gradient(#849AFF, #3F5FF4)
+            // border-image: -webkit-linear-gradient(red,yellow) 30 30;
+            // border-image: -moz-linear-gradient(red,yellow) 30 30;
+            // border-image: linear-gradient(red,yellow) 30 30;
+
     // 画像模块
     .user-portrait
-      width 80%
+      width calc(100% - 302px)
       overflow-y auto
+      border 1px solid #E6EBF3
       .tag-depict
         background-color #fff
         min-height calc(100vh - 185px)
+
+        .world-cloud
+          position relative
+          overflow auto
+          .world-image
+            position absolute
+            // left 376px
+            left 40%
+            top 180px
         .search-condition
           padding 16px
-          
-          .ant-btn > .anticon
-            line-height 24px
-        
-        .tag-list
-          width 75%
-          .info-tag
-            padding 4px 8px
-            background-color rgba(0,0,0,0.05)
-            border 1px solid #e6edf8
-            border-radius 6px
-            display inline-block
-        .tag-tree
-          width 25%
 
-      .ant-tabs
-        border 1px solid #e6edf8
-        height 100%
+          .condition-radio
+            background-color #f3f4f9
+            border-radius: 4px
+            line-height 33px
+            .radio-item
+              border-radius: 4px
+              padding 4px 8px
+              margin 4px
+            .radio-item-check
+              background: #FFFFFF
+              color #3F5FF4
+          // .ant-btn > .anticon
+          //   line-height 24px
+        .portrait-tag-list
+          overflow-x auto
+          white-space nowrap
+          .tag-list
+            display inline-block
+            width 23%
+            white-space normal
+            vertical-align top
+            .info-tag
+              padding 4px 12px
+              background: rgba(22,50,78,0.04)
+              border-radius: 16px
+              display inline-block
+          .tag-tree
+            width 25%
+
+      // .ant-tabs
+      //   border 1px solid #E6EBF3
+      //   height 100%
       .ant-tabs-nav
-        background-color #fff
+        background-color #f6f9fb
         margin-bottom 0px
         padding-bottom 0px
         .ant-tabs-tab
           font-size 14px
 
-      .chart
+      .contact-chart
         width 60%
         position relative
-        height calc(100vh - 440px)
         .tag-herder
           font-size 14px
           color rgba(0,0,0,.85)
-
+        .type-distribution
+          border 1px solid #e6ebf3
       .evaluation-cloud
         width 50%
         .evaluation-herder
@@ -144,18 +192,18 @@
         background #FFFFFF
         border-top 0
         border-radius 2px
-        height calc(100vh - 241px)
+        // height calc(100vh - 241px)
 
         &-header
           line-height 56px
           padding-left 16px
           font-size 14px
-          color rgba(0, 0, 0, .85)
-          border-bottom 1px solid #E6EDF8
+          color rgba(22, 50, 78, .85)
+          border-bottom 1px solid #E6EBF3
 
         &-count
-          font-size 12px
-          color rgba(0, 0, 0, .45) 
+          font-size 14px
+          color rgba(22, 50, 78, .45) 
 
         &-content
           height 480px
@@ -177,29 +225,28 @@
     //   width 100%
     .time-list
       width 40%
-      height calc(100vh - 440px)
-      overflow-y auto
-      overflow-x hidden
+      // height calc(100vh - 440px)
+      overflow auto
+      // overflow-x hidden
       margin-left 0px
       border 1px solid #E6EDF8
       padding 16px
-    
-    .ant-menu-submenu-title
-      padding-left 0 !important
-      line-height 24px
-      height 24px
-      font-size 12px
-      margin 0
-      margin-top -2px
-    .ant-timeline-item
-      padding-bottom 0
-    .ant-timeline.ant-timeline-label .ant-timeline-item-label, .ant-timeline-item-content
-      top -4px
 
-  .ant-input-search-large .ant-input-search-button
-    height 33px
-  .ant-btn > .anticon
-    line-height 38px
-  .ant-select-multiple
-    .ant-select-selection-item
-      margin-bottom 4px
+    
+      .ant-menu-submenu-title
+        padding-left 0 !important
+        line-height 24px
+        height 24px
+        font-size 14px
+        margin 0
+        margin-top -2px
+      .ant-timeline-item
+        padding-bottom 0
+      .ant-timeline.ant-timeline-label .ant-timeline-item-label, .ant-timeline-item-content
+        top -4px
+
+  // .ant-input-search-large .ant-input-search-button
+  //   height 33px
+  // .ant-select-multiple
+  //   .ant-select-selection-item
+  //     margin-bottom 4px

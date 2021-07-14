@@ -52,7 +52,7 @@ export default class List extends Component {
     } = this.store
     
     return (
-      <div className="list-content mt8" style={{width: '30%'}}>
+      <div className="list-content mt8" style={{width: '40%'}}>
         <Table
           columns={this.columns}
           dataSource={listDate}

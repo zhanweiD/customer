@@ -4,8 +4,8 @@
 # 打 提测包
 # eg: sh ./deploy.sh tag_name
 
-package_name="customer"
-tar_build_name="customer"
+package_name="customer_dev"
+tar_build_name="customer_dev"
 # 打包命令
 npm run build
 
@@ -33,4 +33,4 @@ tar -zcvf tgz/$tar_name $package_name/
 rm -rf $package_name/
 
 echo "打包完成!"
-echo "可使用scp命令进行上传：scp tgz/${tar_name} deploy@192.168.90.54:/opt/workspace/front"
+echo "可使用scp命令进行上传：scp tgz/${tar_name} deploy@192.168.90.135:/opt/workspace/front"

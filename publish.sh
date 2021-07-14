@@ -5,7 +5,7 @@ set timeout 30
 set addr [lindex $argv 0]
 set password [lindex $argv 1]
 
-set package_name "customer"
+set package_name "customer_dev"
 # set default_addr "112"
 set default_dir "/opt/workspace/front"
 set default_user "deploy"

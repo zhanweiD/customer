@@ -7,6 +7,7 @@ import {action, toJS} from 'mobx'
 import {Spin, Drawer, Button, Form, Select, Space, Tree} from 'antd'
 import {errorTip} from '../../common/util'
 import {Loading} from '../../component'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Option} = Select
 const {TreeNode} = Tree
@@ -26,7 +27,8 @@ class AddDrawer extends Component {
   @action onClose = () => {
     this.store.drawerVisible = false
     this.store.addstatus = false
-    this.store.existTablesList = []
+    this.store.defBasicList = []    
+    this.store.defPortraitList = []    
     this.store.resetValue()
   }
 
@@ -44,6 +46,7 @@ class AddDrawer extends Component {
 
   @action basisCheck = (keys, item) => {
     const {cates, basic} = this.store
+    this.store.defBasicList = keys
     this.store.basic = []
     const tags = item.checkedNodes.filter(sitem => !sitem.children)
     cates.forEach(sitem => {
@@ -56,6 +59,7 @@ class AddDrawer extends Component {
   @action portraitCheck = (keys, item) => {
     const {cates, portrait} = this.store
     this.store.portrait = []
+    this.store.defPortraitList = keys
     const tags = item.checkedNodes.filter(sitem => !sitem.children)
     cates.forEach(sitem => {
       const childs = tags.filter(citem => sitem.id === citem.parentId)
@@ -126,7 +130,7 @@ class AddDrawer extends Component {
       defPortraitList,
       defBasicList,
     } = this.store
-
+    console.log(toJS(defPortraitList))
     const {
       objId,
       search,
@@ -137,7 +141,6 @@ class AddDrawer extends Component {
       eventTableInfo,
       type,
     } = detailObj
-
     // drawer设施项
     const drawerProps = {
       visible: drawerVisible,
@@ -212,6 +215,7 @@ class AddDrawer extends Component {
                       className="select-item"
                       showArrow
                       disabled={item.name === 'objId' && !addstatus}
+                      suffixIcon={<img src={dropdown} alt="dropdown" />}
                     >
                       {
                         item.option && item.option.map(content => {
@@ -236,11 +240,12 @@ class AddDrawer extends Component {
                 key="basic" 
                 name="basic"
                 label="客户档案"
+                initialValue={toJS(defBasicList)}
                 rules={[{validator: this.selectTag}]} 
               >
                 <Tree
                   checkable
-                  defaultCheckedKeys={toJS(defBasicList)}
+                  checkedKeys={toJS(defBasicList)}
                   onCheck={this.basisCheck}
                   selectable={false}
                   // treeData={catList}
@@ -253,11 +258,12 @@ class AddDrawer extends Component {
                 key="portrait" 
                 name="portrait"
                 label="标签描摹"
+                initialValue={toJS(defPortraitList)}
                 rules={[{validator: this.selectTag}]}
               >
                 <Tree
                   checkable
-                  defaultCheckedKeys={toJS(defPortraitList)}
+                  checkedKeys={toJS(defPortraitList)}
                   onCheck={this.portraitCheck}
                   selectable={false}
                 >

@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import {Timeline, Button, Select, Menu, Spin} from 'antd'
 import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
-import {ShrinkOutlined, ArrowsAltOutlined, RetweetOutlined} from '@ant-design/icons'
+import dropDownIcon from './icon/drop-down-icon.svg'
+import openIcon from './icon/open-icon.svg'
+import packupIcon from './icon/packup-icon.svg'
 
 import {NoData} from '../component'
 
@@ -34,7 +36,7 @@ export default class Contact extends Component {
   @action setContact = v => {
     return (
       v.detailContent.map(item => (
-        <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '12px', marginRight: '8px'}}>
+        <div style={{minHeight: '24px', lineHeight: '24px', fontSize: '14px', marginRight: '8px'}}>
           {item}
         </div>
       ))
@@ -43,10 +45,12 @@ export default class Contact extends Component {
 
   // 全部展开menu
   @action openMenu = () => {
+    this.store.isOpen = true
     this.store.openKeys = this.store.cateList
   }
   // 关闭menu
   @action closeMenu = () => {
+    this.store.isOpen = false
     this.store.openKeys = []
   }
   // 点击展开
@@ -55,20 +59,29 @@ export default class Contact extends Component {
   }
 
   render() {
-    const {unitEvents, contactLoading, openKeys, getUnitEvent} = this.store
+    const {unitEvents, contactLoading, openKeys, getUnitEvent, isOpen} = this.store
     return (
-      <div className="m16 mt8 time-list">
+      <div className="m16 mb0 time-list">
         <div className="dfjc">
           <div className="mb16">业务触点</div>
-          <div className="far mr16">
-            <RetweetOutlined onClick={getUnitEvent} />
-            <ArrowsAltOutlined style={{margin: '0px 8px'}} onClick={this.openMenu} />
-            <ShrinkOutlined onClick={this.closeMenu} />
+          <div className="far hand">
+            {
+              isOpen ? (
+                <span onClick={this.closeMenu}>
+                  <img src={packupIcon} alt="" />
+                </span>
+              ) : (
+                <span onClick={this.openMenu}>
+                  <img src={openIcon} alt="" />
+                </span>
+              )
+            }
+            
           </div>
         </div>
         
         <Spin spinning={contactLoading}>
-          <Timeline mode="left" style={{marginLeft: '-44%'}}>
+          <Timeline mode="left" style={{marginLeft: '-20%'}}>
             {
               unitEvents.map(items => {
                 return items.detailsList.map(item => {
@@ -82,6 +95,8 @@ export default class Contact extends Component {
                           openKeys={openKeys} 
                           onOpenChange={v => this.clickMenu(v)}
                           mode="inline"
+                          expandIcon={<img src={dropDownIcon} alt="" />}
+                          // overflowedIndicator={<img style={{transform: 'rotate(180deg)'}} src={dropDownIcon} alt="" />}
                         >
                           <SubMenu key={item.monthDay} title={item.tableZhName}>
                             {this.setContact(item)}
@@ -99,7 +114,7 @@ export default class Contact extends Component {
           </Timeline>
     
           {
-            unitEvents.length ? null : (<NoData style={{marginTop: '60%'}} text="暂无数据" size="small" />)
+            unitEvents.length ? null : (<NoData style={{marginTop: '60%'}} text="暂无数据" />)
           }
         </Spin>
       </div>

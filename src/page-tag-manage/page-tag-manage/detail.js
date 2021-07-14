@@ -1,7 +1,7 @@
 /**
  * @description 对象管理 - 对象详情信息
  */
-import {Component} from 'react'
+import {Component, Fragment} from 'react'
 import {observer, Provider} from 'mobx-react'
 import {Spin, Tabs} from 'antd'
 import {action} from 'mobx'
@@ -11,6 +11,9 @@ import {
 import TagModel from './tag-model'
 import DateSheet from './data-sheet'
 import RelationSheet from './relation-sheet'
+import cardIcon1 from '../../icon/card-icon-1.svg'
+import cardIcon2 from '../../icon/card-icon-2.svg'
+import cardIcon3 from '../../icon/card-icon-3.svg'
 
 const {TabPane} = Tabs
 
@@ -36,45 +39,57 @@ export default class ObjectDetail extends Component {
         title: '标签总数',
         tooltipText: '该对象下的标签总数',
         values: [objDetailNew.tag],
+        icon: cardIcon1,
       }, {
         title: '已绑定字段数',
         tooltipText: '该对象绑定的字段总数',
         values: [objDetailNew.bindDbFieldCnt],
+        icon: cardIcon2,
       }, {
         title: '字段总数',
         tooltipText: '该对象下的字段总数',
         values: [objDetailNew.dbFieldCnt],
+        icon: cardIcon3,
       },
     ]
 
     return (
-      <div className="object-detail">
+      <Fragment>
         <Spin spinning={loading}>
-          <div className="mb16 box-border">
-            <DetailHeader 
-              name={`对象名称：${objDetail.name}`}
-              descr={objDetail.descr}
-              btnMinWidth={160}
-            />
+          <div>
+            <div className="FBV">
+              <div className="content-header">{`对象名称：${objDetail.name}`}</div>
+              <div className="ml16">
+                <span className="c65">描述：</span>
+                {
+                  objDetail.descr ? <span className="c85">{objDetail.descr}</span> : <span className="c25">-</span>
+                }
+              </div>
+            </div>
             <div className="ml16 mr16">
               <OverviewCardWrap cards={cards} />
             </div>
           </div>
         </Spin>
-        <div className="bgf box-border h-436">
+        <div 
+          className="FB1"
+          style={{
+            margin: '0 16px 16px 16px',
+          }}
+        >
           <Provider bigStore={this.store}>
-            <Tabs className="h-428" defaultActiveKey="1" onChange={this.changeTab}>
-              <TabPane className="h-428" tab="标签维护" key="1">
+            <Tabs className="h-100" defaultActiveKey="1" onChange={this.changeTab}>
+              <TabPane tab="标签维护" key="1" style={{height: '100%'}}>
                 {
                   this.store.tabId === '1' ? <TagModel objId={objId} bigStore={this.store} /> : null
                 }
               </TabPane>
-              <TabPane className="h-428" tab="数据表管理" key="2">
+              <TabPane tab="数据表管理" key="2">
                 {
                   this.store.tabId === '2' ? <DateSheet objId={objId} bigStore={this.store} /> : null
                 }
               </TabPane>
-              {/* <TabPane className="h-428" tab="关系表管理" key="3">
+              {/* <TabPane tab="关系表管理" key="3">
                 {
                   this.store.tabId === '3' ? <RelationSheet objId={objId} bigStore={this.store} /> : null
                 }
@@ -82,7 +97,7 @@ export default class ObjectDetail extends Component {
             </Tabs>
           </Provider>
         </div>
-      </div>
+      </Fragment>
     )
   }
 }

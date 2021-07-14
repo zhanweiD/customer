@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>编组</title>
+    <desc>Created with Sketch.</desc>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4-客户画像-标签描摹-列表" transform="translate(-405.000000, -139.000000)">
+            <g id="编组-8" transform="translate(384.000000, 120.000000)">
+                <g id="编组" transform="translate(21.000000, 19.000000)">
+                    <rect id="矩形" fill-opacity="0.01" fill="#FFFFFF" fill-rule="nonzero" x="0" y="0" width="12" height="12"></rect>
+                    <path d="M10.542275,7.311275 L7.315775,10.537775 C7.146975,10.706775 6.9179,10.801725 6.679025,10.801725 C6.44015,10.801725 6.2111,10.706775 6.042275,10.537775 L2,6.5 L2,2 L6.5,2 L10.542275,6.042275 C10.891225,6.3933 10.891225,6.96025 10.542275,7.311275 Z" id="路径" stroke="#3F5FF4" stroke-width="1.16666667" fill="#3F5FF4" fill-rule="nonzero" stroke-linejoin="round"></path>
+                    <path d="M4.625,5.25 C4.970175,5.25 5.25,4.970175 5.25,4.625 C5.25,4.279825 4.970175,4 4.625,4 C4.279825,4 4,4.279825 4,4.625 C4,4.970175 4.279825,5.25 4.625,5.25 Z" id="路径" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

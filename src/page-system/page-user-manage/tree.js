@@ -70,7 +70,7 @@ export default class TagCateTree extends Component {
       showDetail: true,
     }
     return (
-      <div className="object-tree tree-border">
+      <div className="object-tree tree-border custom-border m16 manage-left">
         <DtTreeBox {...treeBoxConfig}>
           {treeLoading
             ? <Loading mode="block" height={100} />

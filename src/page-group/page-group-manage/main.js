@@ -14,24 +14,26 @@ import './main.styl'
 const {TabPane} = Tabs
 const GroupManage = () => {
   return (
-    <div className="oa">
+    <div className="oa FBV group-container">
       <div className="content-header">客群管理</div>
-      <Tabs defaultActiveKey={codeInProduct('/group/manage') ? '0' : '1'} className="group-manage">
-        {
-          codeInProduct('/group/manage') && (
-            <TabPane tab="客群列表" key="0">
-              <GroupList />
-            </TabPane>
-          )
-        }
-        {
-          codeInProduct('group-manage:push-view') && (
-            <TabPane tab="推送列表" key="1">
-              <PushList />
-            </TabPane>
-          )
-        }
-      </Tabs>
+      <div className="FB1 p16">
+        <Tabs defaultActiveKey={codeInProduct('/group/manage') ? '0' : '1'} className="group-manage">
+          {
+            codeInProduct('/group/manage') && (
+              <TabPane tab="客群列表" key="0">
+                <GroupList />
+              </TabPane>
+            )
+          }
+          {
+            codeInProduct('group-manage:push-view') && (
+              <TabPane tab="推送列表" key="1">
+                <PushList />
+              </TabPane>
+            )
+          }
+        </Tabs>
+      </div>
     </div>
   )
 }

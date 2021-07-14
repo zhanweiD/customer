@@ -6,6 +6,7 @@ import {DatePicker, Select, Cascader} from 'antd'
 
 import Chart from './chart'
 import Contact from './contact'
+import dropdown from '../icon/dropdown.svg'
 
 const {RangePicker} = DatePicker
 const {Option} = Select
@@ -59,7 +60,7 @@ export default class BusinessContact extends Component {
   render() {
     const {businessList} = this.store
     return (
-      <div style={{height: 'calc(100vh - 392px)'}}>
+      <div>
         <div className="dfjf mt16 mr16">
           <RangePicker onChange={this.changePicker} />
           <Cascader
@@ -69,8 +70,13 @@ export default class BusinessContact extends Component {
             expandTrigger="hover"
             style={{margin: '0px 8px'}} 
             onChange={this.changeBizCode}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
-          <Select onChange={this.changeEventType} placeholder="触点类型">
+          <Select 
+            onChange={this.changeEventType} 
+            placeholder="触点类型"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             <Option value={0}>线上触点</Option>
             <Option value={1}>线下触点</Option>
           </Select>

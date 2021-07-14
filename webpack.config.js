@@ -36,15 +36,14 @@ module.exports = {
     noInfo: true,
     proxy: [
       // {
-      //   context: ['/hub_api'],
-      //   target: 'http://192.168.10.143:8877',
+      //   context: ['/marketing_api'],
+      //   target: 'http://192.168.10.143:8787',
       //   changeOrigin: true,
       // },
       {
-        context: ['/hub_user_api', '/hub_api'],
-        target: 'http://192.168.90.135',
-        // target: 'http://192.168.90.54:8173',
-        // target: 'http://192.168.10.145:8877',
+        context: ['/hub_user_api', '/hub_api', '/marketing_api'],
+        // target: 'http://cust.estate.dtwave-inc.com',
+        target: 'http://192.168.90.135:8173',
         changeOrigin: true,
       },
     ],
@@ -54,7 +53,7 @@ module.exports = {
   entry: './src/index',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: `${pkg.version}/[name].js`,
+    filename: isDev ? `${pkg.version}/[name].js` : `${pkg.version}/[name].[contenthash].js`,
     chunkFilename: isDev ? '[name].chunk.js' : `${pkg.version}/[name].[contenthash].js`,
     // 决定静态资源的 url 前缀, 注意包括 chunk 文件, 所以要同时把 dev 和 pro 环境都配对
     publicPath: isDev ? '/' : './',
@@ -115,7 +114,12 @@ module.exports = {
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          'stylus-loader',
+          {
+            loader: 'stylus-loader',
+            options: {
+              import: [path.join(__dirname, 'src/common/theme.styl')],
+            },
+          },
         ],
         include: [path.resolve(__dirname, 'src')],
         exclude: /node_modules/,
@@ -212,7 +216,7 @@ module.exports = {
             js: [
               './public/d3/3.3.6/d3.min.js',
               './public/echarts/4.2.0/echarts.min.js',
-              './public/dagre/data-manage-dagre.js',
+              // './public/dagre/data-manage-dagre.js',
               './public/jquery/2.0.0/jquery.min.js',
             ],
             // 除公共资源，项目需要加载的第三方css
@@ -221,7 +225,7 @@ module.exports = {
             // 页面keeper
             __keeper: {
               pathPrefix: '/',
-              pathHrefPrefix: '/customer/index.html#',
+              pathHrefPrefix: '/customer_dev/index.html#',
               isPrivate: true,
               encryptType: 'md5',
               showDoc: false,

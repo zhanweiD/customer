@@ -36,23 +36,37 @@ class Group extends Component {
   } 
 
   render() {
-    const {loading, tagList, groupList, groupId, tagLoading, checkList, tagData} = store
+    const {
+      loading, tagList, groupList, groupId, tagLoading, checkList, tagData, isScroll,
+    } = store
 
     return (
-      <div className="analyze-group oa">
-        <div className="content-header">
-          <span className="mr24">客群画像</span>
-          <Select 
-            placeholder="请选择客群"
-            value={groupId ? `${groupId}` : null} 
-            style={{width: '128px'}} 
-            onChange={this.changeGroup}
-          >
-            {
-              groupList.map(item => <Option key={item.groupId}>{item.groupName}</Option>)
-            }
-          </Select>
-        </div> 
+      <div 
+        id="groupId"
+        className="analyze-group oa"
+        onScroll={() => {
+          if (document.getElementById('groupId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">客群画像</div>
+          <div>
+            <Select 
+              placeholder="请选择客群"
+              value={groupId ? `${groupId}` : null} 
+              style={{width: '128px'}} 
+              onChange={this.changeGroup}
+            >
+              {
+                groupList.map(item => <Option key={item.groupId}>{item.groupName}</Option>)
+              }
+            </Select>
+          </div> 
+        </div>
 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>

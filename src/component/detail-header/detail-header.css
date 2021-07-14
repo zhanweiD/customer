@@ -14,17 +14,17 @@
 
 .detail-name{
   font-size: 16px;
-  color: rgba(0, 0, 0, .85);
+  color: rgba(22, 50, 78, 0.25)
   /* margin-bottom: 8px; */
 }
 
 .detail-descr{
   max-width: 1120px;
   margin-right: 200px;
-  color: rgba(0, 0, 0, .45);
+  color: rgba(22, 50, 78, 0.25)
 }
 .detail-descr-d{
-  color: rgba(0, 0, 0, .65);
+  color: rgba(22, 50, 78, 0.25)
 }
 
 .detail-base-info{

@@ -90,7 +90,7 @@ class ModalTagEdit extends Component {
                   ...getNamePattern(),
                   {validator: this.checkName},
                 ],
-              })(<Input size="small" autoComplete="off" placeholder="不超过32个字，允许中文、英文、数字或下划线" />)}
+              })(<Input autoComplete="off" placeholder="不超过32个字，允许中文、英文、数字或下划线" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="标签标识">
@@ -101,14 +101,14 @@ class ModalTagEdit extends Component {
                   ...getEnNamePattern(),
                   {validator: this.checkName},
                 ],
-              })(<Input size="small" autoComplete="off" placeholder="不超过32个字，允许英文、数字或下划线，必须以英文开头" />)}
+              })(<Input autoComplete="off" placeholder="不超过32个字，允许英文、数字或下划线，必须以英文开头" />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="是否枚举">
               {getFieldDecorator('isEnum', {
                 initialValue: tagDetail.isEnum || 0,
                 valuePropName: 'checked',
-              })(<Switch size="small" checkedChildren="是" unCheckedChildren="否" onChange={v => this.changeIsEnum(v)} />)}
+              })(<Switch checkedChildren="是" unCheckedChildren="否" onChange={v => this.changeIsEnum(v)} />)}
             </FormItem>
 
             <FormItem {...formItemLayout} label="数据类型">
@@ -132,7 +132,7 @@ class ModalTagEdit extends Component {
                 initialValue: pathIds,
               })(
                 <Cascader
-                  size="small"
+                 
                   options={cateList}
                   placeholder="请选择标签类目"
                 />
@@ -150,7 +150,7 @@ class ModalTagEdit extends Component {
                 <Input.TextArea
                   autoComplete="off"
                   rows="3"
-                  size="small"
+                 
                   placeholder="标签表示的业务逻辑，例如“该用户的手机号”，不超过128个字"
                 />
               )}

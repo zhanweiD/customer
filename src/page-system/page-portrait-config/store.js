@@ -1,5 +1,5 @@
 import {
-  observable, action, runInAction,
+  observable, action, runInAction, toJS,
 } from 'mobx'
 import {successTip, errorTip, userLog, listToTree} from '../../common/util'
 import io from './io'
@@ -70,14 +70,14 @@ class Store extends ListContentStore(io.getList) {
         this.basic = res.basic
 
         res.basic.forEach(item => {
-          if (item.tagIdList.length > 1) {
+          if (item.tagIdList.length > 0) {
             this.defBasicList = [...this.defBasicList, ...item.tagIdList]
           }
         })
         this.defBasicList = this.defBasicList.map(String)
 
         res.portrait.forEach(item => {
-          if (item.tagIdList.length > 1) {
+          if (item.tagIdList.length > 0) {
             this.defPortraitList = [...this.defPortraitList, ...item.tagIdList]
           }
         })
@@ -189,6 +189,8 @@ class Store extends ListContentStore(io.getList) {
       runInAction(() => {
         this.addstatus = false
         this.drawerVisible = false
+        this.defBasicList = []
+        this.defPortraitList = []
         this.getList()
         successTip('添加成功')
         userLog('系统管理/画像配置/添加画像')
@@ -206,6 +208,8 @@ class Store extends ListContentStore(io.getList) {
       const res = await io.getUpdate(params)
       runInAction(() => {
         this.drawerVisible = false
+        this.defBasicList = []
+        this.defPortraitList = []
         this.getList()
         successTip('编辑成功')
         userLog('系统管理/画像配置/编辑画像')

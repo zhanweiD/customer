@@ -3,11 +3,11 @@ import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import _ from 'lodash'
 import {debounce, getNamePattern} from '../../common/util'
-
+import dropdown from '../../icon/dropdown.svg'
 
 const formItemLayout = {
-  labelCol: {span: 6},
-  wrapperCol: {span: 18},
+  labelCol: {span: 5},
+  wrapperCol: {span: 19},
   colon: false,
 }
 
@@ -136,6 +136,7 @@ export default inject('store')(({store}) => {
         >
           <Select 
             placeHolder="请选择所属业态" 
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
             onChange={e => {
               formatChange(e)
               form.setFieldsValue({parentCode: undefined})
@@ -151,7 +152,10 @@ export default inject('store')(({store}) => {
           name="parentCode"
           rules={[{required: true, message: '请选择所属业务域'}]}
         >
-          <Select placeHolder="请选择所属业务域">
+          <Select 
+            placeHolder="请选择所属业务域"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
             {
               store.domainOption.map(item => <Select.Option value={item.bizCode}>{item.bizName}</Select.Option>)
             }

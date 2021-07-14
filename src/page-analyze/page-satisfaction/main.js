@@ -6,11 +6,13 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
@@ -38,7 +40,7 @@ class Satisfaction extends Component {
     dataIndex: 'customerName',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -123,7 +125,9 @@ class Satisfaction extends Component {
   }
 
   render() {
-    const {evaluationPeo, evaluationNum, satisfactionPer, tableLoading, loading, reqData, satisfaction} = store
+    const {
+      evaluationPeo, evaluationNum, satisfactionPer, tableLoading, loading, reqData, satisfaction, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -142,29 +146,26 @@ class Satisfaction extends Component {
       rowKey: 'id',
       initParams: {...reqData, satisfaction},
       columns: this.columns,
+      scroll: {x: 1120},
       tableLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
-            评价详情
-          </div>
-          <div>
-            <Select 
-              size="small"
-              allowClear
-              placeholder="评价结果"
-              style={{width: 160, marginRight: '8px'}} 
-              onChange={v => {
-                store.satisfaction = v
-                store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
-              }}
-            >
-              {
-                list4.map(item => <Option value={item}>{item}</Option>)
-              }
-            </Select> 
-            <Button onClick={() => downloadResult({satisfaction: store.satisfaction, ...store.reqData}, 'satisfaction/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
+        <div className="FBH FBJB">
+          <Button onClick={() => downloadResult({satisfaction: store.satisfaction, ...store.reqData}, 'satisfaction/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
+          <Select 
+            allowClear
+            placeholder="评价结果"
+            style={{width: 160, marginRight: '8px'}} 
+            onChange={v => {
+              store.satisfaction = v
+              store.getList({satisfaction: v, ...store.reqData, currentPage: 1})
+            }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            {
+              list4.map(item => <Option value={item}>{item}</Option>)
+            }
+          </Select> 
         </div>,   
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
@@ -172,98 +173,115 @@ class Satisfaction extends Component {
     }
     
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">满意度提升</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 108, marginRight: '8px'}}
-            showSearch={this.filter}
-          />
-          <Select 
-            size="small"
-            allowClear
-            style={{width: 90, marginRight: '8px'}} 
-            placeholder="产品业态"
-            onChange={v => {
-              store.reqData.format = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+      <div 
+        id="satisfactionId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('satisfactionId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">满意度提升</div>
+          <div style={{width: 872}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 108, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="产品业态"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.format = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
               // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list2.map(item => <Option value={item}>{item}</Option>)
-            }
-          </Select>
-          <Select 
-            size="small"
-            allowClear
-            style={{width: 90, marginRight: '8px'}} 
-            placeholder="业务场景"
-            onChange={v => {
-              store.reqData.evaluateType = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list1.map(item => <Option value={item}>{item}</Option>)
-            }
-          </Select>
-          <Select 
-            size="small"
-            allowClear
-            style={{width: 90, marginRight: '8px'}} 
-            placeholder="客户类型"
-            onChange={v => {
-              store.reqData.customerType = v
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
-            }}
-          >
-            {
-              list3.map((item, index) => <Option value={index}>{item}</Option>)
-            }
-          </Select>
-          <RangePicker
-            size="small"
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            onChange={value => {
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+              }}
+            >
+              {
+                list2.map(item => <Option value={item}>{item}</Option>)
               }
-              store.getAllData(this.getDraw, this.getDraw1)
-              store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
-            }}
-          />
+            </Select>
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="业务场景"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.evaluateType = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
+              }}
+            >
+              {
+                list1.map(item => <Option value={item}>{item}</Option>)
+              }
+            </Select>
+            <Select 
+              allowClear
+              style={{width: 100, marginRight: '8px'}} 
+              placeholder="客户类型"
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+              onChange={v => {
+                store.reqData.customerType = v
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              // store.getList({...store.reqChaData, ...store.reqData, ...store.reqData, currentPage: 1})
+              }}
+            >
+              {
+                list3.map((item, index) => <Option value={index}>{item}</Option>)
+              }
+            </Select>
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              onChange={value => {
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                store.getAllData(this.getDraw, this.getDraw1)
+                store.getList({satisfaction: store.satisfaction, ...store.reqData, currentPage: 1})
+              }}
+            />
+          </div>
           {/* <Button style={{marginLeft: '8px'}} type="primary" onClick={this.resetData}>重置</Button> */}
         </div> 
         <div className="ml16 mr16 mb16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 p24 pt16">
-              {/* {
+            {/* {
                 channelData.pieChart && channelData.pieChart.length ? null : <NoData style={{paddingTop: '200px', marginBottom: '-468px'}} {...noDataConfig} />
               } */}
-              <Chart 
-                getDraw={(cb1, cb2) => {
-                  this.getDraw = cb1
-                  this.getDraw1 = cb2
-                }} 
-                store={store} 
-              />
-            </div>
+            <Chart 
+              getDraw={(cb1, cb2) => {
+                this.getDraw = cb1
+                this.getDraw1 = cb2
+              }} 
+              store={store} 
+            />
           </Spin>
-          <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              评价详情
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
+          </div>
         </div>
       </div>
     )

@@ -130,7 +130,7 @@ export default class StepTwo extends React.Component {
             showIcon
             closable
             message={(
-              <span className="fs12">
+              <span className="fs14">
                 选择结果：可新建标签
                 <span style={{color: '#1890FF'}}>{blueCount}</span>
                 个，新建失败

@@ -3,6 +3,7 @@ import {action, toJS} from 'mobx'
 import {observer} from 'mobx-react'
 import {UploadOutlined} from '@ant-design/icons'
 import {Drawer, Form, Select, Input, Upload, Button, Modal, Alert} from 'antd'
+import dropdown from '../../../icon/dropdown.svg'
 
 import {errorTip, baseApi, debounce, failureTip, getNamePattern} from '../../../common/util'
 
@@ -215,6 +216,7 @@ export default class IdCreate extends Component {
                 onChange={value => this.selectEntity(value)} 
                 showSearch
                 optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
               >
                 {entityOptions}
               </Select>
@@ -235,7 +237,7 @@ export default class IdCreate extends Component {
                 {validator: this.checkName},
               ]}
             >
-              <Input size="small" disabled={!isAdd || !objId} placeholder="请输入名称" />
+              <Input  disabled={!isAdd || !objId} placeholder="请输入名称" />
             </Item>
             
             <Item
@@ -283,7 +285,7 @@ export default class IdCreate extends Component {
                 {required: true, message: '请选择标签'},
               ]}
             >
-              <Select size="small" placeholder="请选择标签" mode="multiple" showSearch optionFilterProp="children">
+              <Select  placeholder="请选择标签" mode="multiple" showSearch optionFilterProp="children">
                 {tagOptions}
               </Select>
             </Item>

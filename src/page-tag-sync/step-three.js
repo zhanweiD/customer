@@ -103,14 +103,14 @@ export default class StepThree extends Component {
           />
           <div className="info-title ">配置同步标签</div>
           <div className="FBH mb24">
-            <div style={{color: ' rgba(0, 0, 0, 0.45)'}}>
+            <div className="c45">
               <span>同步标签总数：</span>
               {tableData.length}
             </div>
             <div>{previewData.tagTotalCount}</div>
           </div>
           <div className="FBH mb24">
-            <div style={{color: ' rgba(0, 0, 0, 0.45)'}}>同步标签：</div>
+            <div className="c45">同步标签：</div>
             <div>{tableData.map(d => <Tag>{d.name}</Tag>)}</div>
           </div>
         </div>

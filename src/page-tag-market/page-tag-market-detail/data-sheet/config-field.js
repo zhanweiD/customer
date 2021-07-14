@@ -65,7 +65,7 @@ export default class ConfigField extends Component {
         destroyOnClose
       >
         {/* 步骤条 */}
-        <Steps size="small" current={this.currentStep} style={{padding: '0 100px', marginBottom: '32px'}}>
+        <Steps current={this.currentStep} style={{padding: '0 100px', marginBottom: '32px'}}>
           {
             steps.map(item => (
               <Step key={item.title} title={item.title} />
