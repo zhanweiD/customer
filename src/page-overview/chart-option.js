@@ -203,7 +203,7 @@ export function cbarOption(barData, type) {
     grid: {
       top: 72,
       bottom: 64,
-      left: 80,
+      left: 128,
       right: 72,
     },
     xAxis: {
