@@ -71,7 +71,7 @@ export default class Action extends Component {
               onClick={this.addTree} 
               onKeyDown={() => {}} 
               style={{
-                fontSize: '12px', 
+                fontSize: '14px', 
                 margin: '-5px -12px', 
                 padding: '4px 20px',
                 cursor: 'pointer',
@@ -94,12 +94,12 @@ export default class Action extends Component {
     return (
       <div className="object-tree-action">
         <NoBorderInput 
-          placeholder="请输入类目名称" 
+          placeholder="请输入名称" 
           onChange={this.searchTree}
           onPressEnter={this.searchTree}
         />
 
-        <div className="FBH pr6 pl6" style={{maxWidth: 70}}>
+        <div className="FBH pr6 pl6" style={{maxWidth: 70, color: 'rgba(22, 50, 78, .45)'}}>
           <IconRefresh size="14" className="mr8" onClick={this.refreshTree} />
           {
             this.dropdownDom()

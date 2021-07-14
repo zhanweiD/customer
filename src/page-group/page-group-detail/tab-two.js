@@ -51,7 +51,7 @@ export default inject('store')(
     }, [])
 
     return useObserver(() => (
-      <div className="tab-card FBH">
+      <div className="tab-card FBH custom-border">
         <div 
           style={{
             border: '1px solid #f0f0f0', 
@@ -67,7 +67,7 @@ export default inject('store')(
             {
               store.tabTwoChartDatas.length ? (
                 store.tabTwoChartDatas.map(item => (
-                  <div className="fl pl16" style={{width: '50%'}}>
+                  <div className="fl pl16 pb12" style={{width: '50%'}}>
                     <Chart data={item.data} title={item.tagName} />
                   </div>
                 ))

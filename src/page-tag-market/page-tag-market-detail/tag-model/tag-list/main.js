@@ -13,6 +13,7 @@ import {
 import {
   tagStatusBadgeMap,
 } from '../util'
+import dropdown from '../../../../icon/dropdown.svg'
 
 import ModalTagMove from './modal-tag-move'
 import DrawerCreate from './drawer-create'
@@ -164,7 +165,7 @@ class TagList extends Component {
           authCode="tag-manage:release-tag"
         >
           <a 
-            className="fs12" 
+            className="fs14" 
             disabled={!keys.length} 
             onClick={() => store.updateTagStatus({
               status: 1,
@@ -179,7 +180,7 @@ class TagList extends Component {
         <Authority
           authCode="tag-manage:add-tag"
         >
-          <a className="fs12" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
+          <a className="fs14" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
         </Authority>
       </Menu.Item>
     </Menu>
@@ -220,6 +221,7 @@ class TagList extends Component {
               placeholder="业务类型" 
               expandTrigger="hover"
               changeOnSelect
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={e => {
                 if (e.length !== 0) {
                   treeStore.searchParams.biz = e[e.length - 1]
@@ -245,13 +247,13 @@ class TagList extends Component {
                 treeStore.getList({currentPage: 1})
               }}
             >
-              <Option style={{fontSize: '12px'}} value="">全部</Option>
-              <Option style={{fontSize: '12px'}} value={0}>待配置</Option>
-              <Option style={{fontSize: '12px'}} value={1}>待发布</Option>
-              <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
+              <Option value="">全部</Option>
+              <Option value={0}>待配置</Option>
+              <Option value={1}>待发布</Option>
+              <Option value={2}>已发布</Option>
             </Select> */}
             <Search
-              style={{width: 150, marginRight: '24px'}} 
+              style={{width: 180}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.searchParams.searchKey = v.target.value
@@ -273,10 +275,17 @@ class TagList extends Component {
 
     return (
       <Provider bigStore={store}>
-        <div className="h-100">
-          <div className="d-flex h-100 tag-model pt16" style={{minHeight: 'calc(100vh - 303px)'}}>
+        <Fragment>
+          <div className="FBH h-100" id="tag-market-detail">
             <TagCateTree bigStore={store} store={treeStore} />
-            <ListContent {...listConfig} />
+            <div 
+              className="FB1 custom-border pt16"
+              style={{
+                margin: '0 16px 16px 0',
+              }}
+            >
+              <ListContent {...listConfig} />
+            </div>
           </div>
           <TagDetailModal store={store} />
           <ModalTagMove store={store} treeStore={treeStore} />
@@ -290,7 +299,7 @@ class TagList extends Component {
             onUpdate={updateTagConfig}
             type={drawerTagConfigType}
           />
-        </div>
+        </Fragment>
       </Provider>
     )
   }

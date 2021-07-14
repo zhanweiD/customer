@@ -48,7 +48,8 @@ class PortraitConfig extends Component {
   {
     key: 'action',
     title: '操作',
-    width: 140,
+    width: 200,
+    fixed: 'right',
     render: (text, record) => (
       <div className="FBH FBAC">
         <Authority
@@ -107,14 +108,14 @@ class PortraitConfig extends Component {
       store,
       initParams: {},
       initGetDataByParent: false,
-      scroll: {x: 1000},
+      scroll: {x: 1120},
       buttons: [<Button type="primary" onClick={this.addButton}>添加画像</Button>],
     }
 
     return (
-      <div className="oa">
+      <div className="oa FBV">
         <div className="content-header">画像配置</div>
-        <div className="m16 bgf pt16 config-content mt72">
+        <div className="config-content custom-border m16 pt16 FB1">
           <ListContent {...listContentConfig} />
         </div>
         {store.drawerVisible ? <AddDrawer store={store} /> : null}

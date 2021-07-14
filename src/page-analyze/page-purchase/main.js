@@ -6,6 +6,7 @@ import {observer} from 'mobx-react'
 import {Link} from 'react-router-dom'
 import {action, toJS} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {OverviewCardWrap, ListContent, authView} from '../../component'
 import {downloadResult} from '../../common/util'
@@ -55,7 +56,7 @@ class Purchase extends Component {
     fixed: 'left',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -144,7 +145,9 @@ class Purchase extends Component {
   }
 
   render() {
-    const {cardData, tabLoading, loading, merit, tgiMerit, formatList, defaultNames} = store
+    const {
+      cardData, tabLoading, loading, merit, tgiMerit, formatList, defaultNames, isScroll,
+    } = store
     // 对象指标信息卡
     const cards = [
       {
@@ -161,72 +164,81 @@ class Purchase extends Component {
     const listConfig = {
       key: 'id',
       rowKey: 'id',
-      scroll: {x: 1000},
+      scroll: {x: 1120},
       initParams: {...store.reqData, tag: merit},
       columns: this.columns,
       tabLoading,
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
-            潜在复购客户推荐
-          </div>
-          <div>
-            <Select 
-              size="small"
-              allowClear
-              style={{width: 160, marginRight: '8px'}} 
-              placeholder="请选择纬度"
-              value={store.merit}
-              onChange={v => {
-                store.merit = v
-                store.getList({...store.reqData, tag: v, currentPage: 1})
-              }}
-            >
-              {
-                tgiMerit.map(item => <Option key={item}>{item}</Option>)
-              }
-            </Select> 
-            <Button onClick={() => downloadResult({...store.reqData, tag: store.merit}, 'repurchase/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
-        </div>,   
+        <div className="FBH FBJB">
+          <Button onClick={() => downloadResult({...store.reqData, tag: store.merit}, 'repurchase/export')} type="primary">导出</Button>
+          <Select 
+            allowClear
+            style={{width: 160}} 
+            placeholder="请选择纬度"
+            value={store.merit}
+            onChange={v => {
+              store.merit = v
+              store.getList({...store.reqData, tag: v, currentPage: 1})
+            }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            {
+              tgiMerit.map(item => <Option key={item}>{item}</Option>)
+            }
+          </Select> 
+        </div>,
       ],
       initGetDataByParent: true, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
     }
     
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">复购挖掘</span>
-          <Cascader
-            placeholder="请选择区域"
-            value={defaultNames}
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 160, marginRight: '8px'}}
-            showSearch={this.filter}
-          />
-          <Select 
-            size="small"
-            allowClear
-            style={{width: 160}} 
-            placeholder="产品业态"
-            onChange={this.selectFormat}
-          >
-            {
-              formatList.map(item => <Option key={item}>{item}</Option>)
-            }
-          </Select> 
+      <div 
+        id="purchaseId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('purchaseId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">复购挖掘</div>
+          <div style={{width: 504}}>
+            <Cascader
+              placeholder="请选择区域"
+              value={defaultNames}
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 160, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <Select 
+              allowClear
+              style={{width: 160}} 
+              placeholder="产品业态"
+              onChange={this.selectFormat}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            >
+              {
+                formatList.map(item => <Option key={item}>{item}</Option>)
+              }
+            </Select> 
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           <Spin spinning={loading}>
             <OverviewCardWrap cards={cards} />
-            <div className="bgf mb16 pt16">
-              <div className="ml24 fs14 c85">复购人群特征分布</div>
-              <div className="p24 pt8 dfjs">
+            <div className="bgf mb16 chart-border">
+              <div className="period-header">复购人群特征分布</div>
+              <div className="p24 pt8 dfjs period-content">
                 <List store={store} />
                 <Chart getDraw={draw => this.getDraw = draw} store={store} />
               </div>
@@ -235,7 +247,14 @@ class Purchase extends Component {
           {/* {
             tgiMerit[0] ? <ListContent {...listConfig} /> : null
           } */}
-          <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              潜在复购客户推荐
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
+          </div>
         </div>
       </div>
     )

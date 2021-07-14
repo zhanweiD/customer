@@ -146,36 +146,42 @@ export default class ListContent extends Component {
         {
           this.renderBtn()
         }
-        <Table
-          // @see {@link antd/table}
-          pagination={false}
-          loading={tableLoading}
-          dataSource={toJS(list)}
-          rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
-          onChange={handleTableChange}
-          {...rest}
-          className="table"
-        />
-        {
-          hasPaging && list.length ? (
-            <div className="pagination">
-              <Pagination 
-                // @see {@link antd/Pagination}
-                // showQuickJumper, 
-                // showSizeChanger
-                showSizeChanger
-                {...paginationConfig}
-                pageSize={pagination.pageSize}
-                current={pagination.currentPage}
-                total={pagination.totalCount}
-                onChange={handlePageChange}
-                // onChange={() => console.log(111)}
-                showTotal={() => `合计${pagination.totalCount}条记录`}
-              />
-            </div>
-          ) : null
-        }
+        <div className="ant-table-custom-wrapper">
+          <Table
+            // @see {@link antd/table}
+            pagination={false}
+            loading={tableLoading}
+            dataSource={toJS(list)}
+            rowClassName={(rowData, index) => `ant-table-row-${index % 2}`}
+            onChange={handleTableChange}
+            {...rest}
+            className="table"
+          />
         
+        
+          {
+            hasPaging && list.length ? (
+              <div>
+                <div className="pagination">
+                  <Pagination 
+                  // @see {@link antd/Pagination}
+                  // showQuickJumper, 
+                  // showSizeChanger
+                    showSizeChanger
+                    {...paginationConfig}
+                    pageSize={pagination.pageSize}
+                    current={pagination.currentPage}
+                    total={pagination.totalCount}
+                    onChange={handlePageChange}
+                    // onChange={() => console.log(111)}
+                    showTotal={() => `合计${pagination.totalCount}条记录`}
+                  />
+                </div>
+                <div style={{clear: 'both'}} /> 
+              </div>
+            ) : null
+          }
+        </div>
       </div>
     )
   }

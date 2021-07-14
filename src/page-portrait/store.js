@@ -35,16 +35,12 @@ class Store {
   @observable portraitId = null // 画像列表默认值
   @observable placeholder = '请输入' // 输入提示
   @observable porLoading = false // 画像列表加载
-  @observable changeLoading = false // 画像列表加载
+  @observable selectLoading = false // selectLoading
  
   @observable unitList = [] // 画像个体列表
-  @observable tabLoading = false // 切换loading
+  @observable unitKeys = [] // 存放个人对象key，key是可变的，直接obj.key有时会有问题
   @observable ident = null // 画像个体id
   @observable isCustomer = true // 客户对象 顾问对象 ？
-  @observable currentPage = 1 // 页数
-  @observable searchKey = '' // 
-  @observable isLast = false // 是否是最后一页
-  @observable isFirst = true // 是否是第一页
 
   @observable followList = [] // 关注客户列表
   @observable followLoading = false // 关注客户列表
@@ -59,7 +55,7 @@ class Store {
 
   // 标签描摹
   @observable cloudData = [] // 标签
-  @observable toAllTag = true // 切换标签描摹模式 默认全量
+  @observable toAllTag = false // 切换标签描摹模式 默认云图
   @observable treeData = [] // 切换标签描摹模式 默认全量
   @observable businessType = null // 业务类型
   @observable defPortraitList = [] // 已配置标签
@@ -71,6 +67,7 @@ class Store {
   @observable chartLoading = false // 类型分布加载
   @observable cateList = [] // 全部触点key
   @observable openKeys = [] // 触点展开列表
+  @observable isOpen = false // 是否展开
   @observable unitTableList = [] // 画像个体触点
   @observable unitEvents = [] // 画像个体触点信息
   @observable businessList = [] // 业务类型
@@ -85,7 +82,8 @@ class Store {
 
   // 标签云图
   @observable cateTitle = [] // 搜索同类目标签标题
-  color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
+  color = ['#2592FF', '#6C41FA', '#61BA46', '#FD5071', '#FFA44A']
+  bgColor = ['rgba(134, 212, 255, 0.1)', 'rgba(196, 179, 255, 0.1)', 'rgba(191, 238, 169, 0.1)', 'rgba(253, 80, 113, 0.1)', 'rgba(255, 164, 74, 0.1)']
 
   // @action pastDate(v) {
   //   this.queryStartTime = moment(+date.getTime() - 1000 * 60 * 60 * 24 * v).format(dateFormat)
@@ -174,9 +172,6 @@ class Store {
           this.getFollow()
           this.getScan()
         }
-
-        // 演示环境默认展示
-        // this.getUnitList()
       })
     } catch (e) {
       errorTip(e.message)
@@ -186,30 +181,24 @@ class Store {
   }
 
   // 获取个体列表
-  @action async getUnitList() {
-    this.tabLoading = true
+  @action async getUnitList(searchKey) {
+    this.selectLoading = true
     try {
       const res = await io.getUnitList({
         id: this.portraitId,
-        searchKey: this.searchKey,
-        currentPage: this.currentPage,
+        searchKey,
+        currentPage: 1,
       })
       runInAction(() => {
-        if (res.data.length === 0) {
-          this.isLast = true
-          message.warning('已经到底了！')
-          return
-        }
-        if (res.data.length < 10) this.isLast = true
-        if (res.data.length === 10) this.isLast = false
         this.unitList = res.data
-        this.ident = this.unitList[0].ident
-        // this.getUnitBasic()
+        if (res.data.length) {
+          this.unitKeys = Object.keys(res.data[0]) 
+        }
       })
     } catch (e) {
       errorTip(e.message)
     } finally {
-      this.tabLoading = false
+      this.selectLoading = false
     }
   }
 
@@ -227,17 +216,26 @@ class Store {
         this.cloudData = []
         const list = res || []
         list.forEach((item, i) => {
-          this.cateTitle.push({text: item.biz, color: this.color[i]})
+          this.cateTitle.push({text: item.biz, color: this.color[i % 5]})
           if (item.list) {
             // 同类标签颜色生成
             const newList = item.list.map(text => {
-              text.color = this.color[i]
+              text.name = `${text.tag}: ${text.val}`
+              text.value = 14
+              text.textStyle = {
+                color: this.color[i % 5],
+                backgroundColor: this.bgColor[i % 5],
+                padding: [8, 12],
+                fontSize: 14,
+                // margin: [12, 8],
+                borderRadius: 16,
+              }
               return text
             })
             this.cloudData = [...this.cloudData, ...newList]
           }
         })
-        cb(this.cloudData)
+        if (cb) cb(this.cloudData)
       })
     } catch (e) {
       errorTip(e.message)
@@ -342,7 +340,7 @@ class Store {
   }
 
   // 获取业务类型下拉
-  @action async getBizType() {
+  @action async getBizType(cb) {
     try {
       const res = await io.getBizType({
         id: this.portraitId,
@@ -357,6 +355,9 @@ class Store {
         this.businessList = busListToTree(this.bizList)
         this.businessType = this.businessList.map(item => [item.bizCode])
       })
+      if (cb) {
+        this.getObjCloud(cb)
+      }
     } catch (e) {
       errorTip(e.message)
     }
@@ -370,11 +371,6 @@ class Store {
         id: this.portraitId,
         ident: this.ident,
         ...this.businessParams,
-        // ident: '2RnX1YmRme2VkchQ7scc4g2tNCijVQ3KCyZFLAYYjBgnAp8pmX',
-        // startTime: '2021-01-01',
-        // endTime: '2021-05-01',
-        // eventType: 1,
-        // bizCode: 'DC',
       })
       runInAction(() => {
         this.unitEvents = res.map(item => {

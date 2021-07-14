@@ -20,11 +20,13 @@
   .inner-area
     min-height calc(100vh - 48px)
     .content
-      width 1150px
-      height 530px
+      // width 1150px
+      // height 530px
       box-shadow 8px 8px 20px 0 rgba(7,56,156,0.20)
       .main-pic
         position relative
+        width 640px
+        height 620px
         .title-container
           width 746px
           position absolute
@@ -46,8 +48,8 @@
           width 100%
           height 100%
       .operation
-        width 404px
-        padding 36px
+        width 520px
+        padding 60px
         background-color #fff
   .extra-area
     color #99D5FB
@@ -69,19 +71,19 @@
     position relative !important
     top -10px !important
   .action
-    color #0056DC
-    margin-bottom: 36px
+    color rgba(22,50,78,0.85)
+    margin-bottom: 40px
     .tab
       width 100%
       height 36px
       line-height 28px
-      text-align center
+      // text-align center
       display inline-block
-      border-bottom 1px solid #c6dee9
+      // border-bottom 1px solid #c6dee9
       cursor pointer
-      font-size 16px
+      font-size 32px
     .active
-      border-bottom 1px solid #0056DC
+      // border-bottom 1px solid #0056DC
       position relative
       .caret-blue
         top 30px
@@ -116,6 +118,12 @@
      cursor pointer
   .btn-box
     margin-top 24px
+    .dt-btn 
+      width: 400px;
+      height: 48px;
+      background-image: linear-gradient(135deg, #6F92FF 0%, #4A64DD 100%);
+      border-radius: 23px;
+      font-size 20px
   .msg-btn
     height 36px
     margin-bottom 8px

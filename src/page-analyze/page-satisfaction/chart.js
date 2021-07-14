@@ -63,8 +63,18 @@ export default class ChartPie extends Component {
     // }
     return (
       <div className="chartPie-ad">
-        <div ref="chartsPie" style={{height: '480px', width: '45%', display: 'inline-block'}} />
-        <div ref="chartsScatter" style={{height: '480px', width: '55%', left: '24px', display: 'inline-block'}} />
+        <div style={{width: 'calc(50% - 8px)'}} className="chart-border mb16 d-ilbl mr16">
+          <div className="period-header">评价结果分布</div>
+          <div className="period-content">
+            <div ref="chartsPie" style={{height: '486px', width: '100%'}} />
+          </div>
+        </div>
+        <div style={{width: 'calc(50% - 8px)'}} className="chart-border mb16 d-ilbl">
+          <div className="period-header">客户心声</div>
+          <div className="period-content">
+            <div ref="chartsScatter" style={{height: '480px', width: '100%', display: 'inline-block'}} />
+          </div>
+        </div>
       </div> 
     )
   }

@@ -183,16 +183,25 @@ export default class TagCateTree extends Component {
       showDetail: true,
     }
     return (
-      <div className="object-tree tree-border ml16 mb16">
+      <div 
+        className="object-tree tree-border ml16 mb16"
+        style={{
+          borderLeft: '1px solid #e6edf8',
+          borderTop: '1px solid #e6edf8',
+          borderBottom: '1px solid #e6edf8',
+        }}
+      >
         <DtTreeBox {...treeBoxConfig}>
           {treeLoading
             ? <Loading mode="block" height={100} />
             : (
-              <DtTree {...treeConfig}>
-                {
-                  this.processNodeData(treeData)
-                }
-              </DtTree>
+              <div>
+                <DtTree {...treeConfig}>
+                  {
+                    this.processNodeData(treeData)
+                  }
+                </DtTree>
+              </div>
             )
           }
         </DtTreeBox>

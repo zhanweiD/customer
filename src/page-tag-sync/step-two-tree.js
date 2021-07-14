@@ -235,7 +235,6 @@ export default class SyncTagTree extends Component {
           <Button
             type="primary"
             icon={<RightOutlined />}
-            size="small"
             style={{display: 'block'}}
             className="mb4"
             disabled={!this.checkedTagData.length}

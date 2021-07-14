@@ -28,19 +28,19 @@ const StepThree = ({
       <CheckCircleTwoTone twoToneColor="#52c41a" style={{fontSize: 72}} />
       <h1 className="fs28 mt24">保存成功</h1>
       <div className="save-info">
-        <div className="fs12 h32 FBH">
+        <div className="fs14 h32 FBH">
           <div className="c85 far w50">客群名称：</div>
           <div className="c65 fal w50">{saveInfo.name}</div>
         </div>
-        <div className="fs12 h32 FBH">
+        <div className="fs14 h32 FBH">
           <div className="c85 far w50">客群描述：</div>
           <div className="c65 fal w50">{saveInfo.descr || '-'}</div>
         </div>
-        <div className="fs12 h32 FBH">
+        <div className="fs14 h32 FBH">
           <div className="c85 far w50">覆盖人群：</div>
           <div className="c65 fal w50">{saveInfo.nums || 0}</div>
         </div>
-        <div className="fs12 h32 FBH">
+        <div className="fs14 h32 FBH">
           <div className="c85 far w50">责任人：</div>
           <div className="c65 fal w50">{saveInfo.cUserName}</div>
         </div>

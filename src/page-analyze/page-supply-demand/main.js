@@ -6,11 +6,13 @@ import {Link} from 'react-router-dom'
 import {observer} from 'mobx-react'
 import {action} from 'mobx'
 import {DatePicker, Select, Spin, Cascader, Button} from 'antd'
+import dropdown from '../../icon/dropdown.svg'
 
 import {authView, ListContent} from '../../component'
 import {downloadResult} from '../../common/util'
 import Chart from './chart'
 import store from './store'
+import './index.styl'
 
 const {RangePicker} = DatePicker
 const {Option} = Select
@@ -25,7 +27,7 @@ class SupplyDemand extends Component {
     fixed: 'left',
     render: (text, record) => {
       if (record.ident && record.id) {
-        return <Link target="_blank" to={`/portrait/${record.ident}/${record.id}`}>{text}</Link>
+        return <Link target="_blank" to={`/customer/portrait/${record.ident}/${record.id}`}>{text}</Link>
       }
       return text
     },
@@ -83,72 +85,85 @@ class SupplyDemand extends Component {
   }
 
   render() {
-    const {indicators, tableLoading, loading, unFitList, reqData} = store
+    const {
+      indicators, tableLoading, loading, unFitList, reqData, isScroll,
+    } = store
     const listConfig = {
       key: 'id',
       rowKey: 'id',
       initParams: {...store.reqData, index: indicators},
       columns: this.columns,
       tableLoading,
-      scroll: {x: 1400},
+      scroll: {x: 1120},
       buttons: [
-        <div className="dfjs mt16 fs14 c85">
-          <div style={{lineHeight: '24px'}}>
-            供需不匹配客户
-          </div>
-          <div>
-            <Select 
-              size="small"
-              allowClear
-              placeholder="请选择指标"
-              style={{width: 160, marginRight: '8px'}} 
-              onChange={v => {
-                store.indicators = v
-                store.getList({...store.reqData, index: v, currentPage: 1})
-              }}
-            >
-              {
-                unFitList.map(item => <Option style={{fontSize: '12px'}} key={item}>{item}</Option>)
-              }
-            </Select> 
-            <Button onClick={() => downloadResult({index: store.indicators, ...store.reqData}, 'supply/export')} style={{marginRight: '24px'}} type="primary">导出</Button>
-          </div>
-        </div>,   
+        <div className="FBH FBJB">
+          <Button onClick={() => downloadResult({index: store.indicators, ...store.reqData}, 'supply/export')} type="primary">导出</Button>
+          <Select 
+            allowClear
+            placeholder="请选择指标"
+            style={{width: 160}} 
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+            onChange={v => {
+              store.indicators = v
+              store.getList({...store.reqData, index: v, currentPage: 1})
+            }}
+          >
+            {
+              unFitList.map(item => <Option key={item}>{item}</Option>)
+            }
+          </Select> 
+        </div>,
       ],
       initGetDataByParent: false, // 初始请求 在父层组件处理。列表组件componentWillMount内不再进行请求
       store, // 必填属性
     }
     return (
-      <div className="oa">
-        <div className="content-header">
-          <span className="mr24">供需分析</span>
-          <Cascader
-            placeholder="请选择区域"
-            fieldNames={{label: 'name', value: 'name'}}
-            expandTrigger="hover"
-            changeOnSelect
-            options={window.__keeper.projectTree}
-            onChange={this.selectPro}
-            style={{width: 160, marginRight: '8px'}}
-            showSearch={this.filter}
-          />
-          <RangePicker
-            size="small"
-            defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
-            onChange={value => {
-              store.reqData = {
-                reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
-                reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
-              }
-              store.getFitList(this.getDraw, this.getDraw1)
-              store.getList({...store.reqData, currentPage: 1})
-            }}
-          />
+      <div 
+        id="supDemId"
+        className="oa"
+        onScroll={() => {
+          if (document.getElementById('supDemId').scrollTop === 0) {
+            store.isScroll = false
+          } else {
+            store.isScroll = true
+          }
+        }}
+      >
+        <div className={`content-header-fixed FBH ${isScroll ? 'header-scroll' : ''}`}>
+          <div className="mr8">供需分析</div>
+          <div style={{width: 600}}>
+            <Cascader
+              placeholder="请选择区域"
+              fieldNames={{label: 'name', value: 'name'}}
+              expandTrigger="hover"
+              changeOnSelect
+              options={window.__keeper.projectTree}
+              onChange={this.selectPro}
+              style={{width: 160, marginRight: '8px'}}
+              showSearch={this.filter}
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
+            />
+            <RangePicker
+              defaultValue={[moment(reqData.reportTimeStart, dateFormat), moment(reqData.reportTimeEnd, dateFormat)]}
+              onChange={value => {
+                store.reqData = {
+                  reportTimeStart: value ? value[0].format('YYYY-MM-DD') : '',
+                  reportTimeEnd: value ? value[1].format('YYYY-MM-DD') : '',
+                }
+                store.getFitList(this.getDraw, this.getDraw1)
+                store.getList({...store.reqData, currentPage: 1})
+              }}
+            />
+          </div>
         </div> 
         <div className="ml16 mr16 mt72">
           {/* <Spin spinning={loading}> */}
           {/* <OverviewCardWrap cards={cards} /> */}
-          <div className="bgf mb16 mt16">
+          <div className="chart-border mb16">
+            <div className="period-header">
+              供需拟合
+            </div>
             <Chart
               getDraw={(cb1, cb2) => {
                 this.getDraw = cb1
@@ -158,7 +173,14 @@ class SupplyDemand extends Component {
             />
           </div>
           {/* </Spin> */}
-          <ListContent {...listConfig} />
+          <div className="chart-border mb16">
+            <div className="period-header">
+              供需不匹配客户
+            </div>
+            <div className="period-content pt16">
+              <ListContent {...listConfig} />
+            </div>
+          </div>
         </div>
       </div>
     )

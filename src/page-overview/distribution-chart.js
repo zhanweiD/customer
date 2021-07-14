@@ -87,10 +87,10 @@ const DistributionChart = ({
   }, [orgCodes, timeStart, projectCode])
  
   return (
-    <div className="p16 bgf">
+    <div className="p16 bgf customer-chart">
       <Spin spinning={loading}>
-        <div ref={chartMap} style={{height: '678px', width: '62%', display: 'inline-block'}} />
-        <div ref={chartBar} style={{height: '480px', width: '38%', display: 'inline-block'}} />
+        <div ref={chartMap} style={{height: '400px', width: '100%', marginBottom: 12}} />
+        <div ref={chartBar} style={{height: '355px', width: '100%', backgroundColor: 'rgba(230, 235, 243, 0.2)', paddingLeft: 12}} />
       </Spin>
     </div> 
   )

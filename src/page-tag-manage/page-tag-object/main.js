@@ -39,8 +39,8 @@ class TagObject extends Component {
   render() {
     return (
       <Provider store={this.store}>
-        <div className="tag-object">
-          <div className="object-header">
+        <div className="tag-object oa">
+          <div className="content-header">
             标签管理
           </div>
           {
@@ -58,7 +58,7 @@ class TagObject extends Component {
                         this.store.visible = true
                       }}
                     >
-                      <div className="black65" style={{fontSize: '20px'}}>+ 新增对象</div>
+                      <div className="c85" style={{fontSize: '20px'}}>+ 新增对象</div>
                     </div>
                   </div>
                   {

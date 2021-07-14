@@ -93,40 +93,57 @@ export default class Store {
   
   geneRuleText(obj) {
     const {logic, comparisionList, childList} = obj
-    
+
     if (childList && childList.length) {
       // 说明有子数据
-      const {oneText} = this.geneComparisionListOne(comparisionList)
+      // const {oneText} = this.geneComparisionListOne(comparisionList)
 
-      const totalText = `${oneText} ${logicMap[logic]} `
+      // const totalText = `${oneText} ${logicMap[logic]} `
 
-      this.ruleText = this.ruleText.concat(totalText)
+      const texts = this.geneComparisionList(comparisionList)
+
+      const all = texts.join(` <span class="logic-word">${logicMap[logic]}</span> `)
+
+      this.ruleText = this.ruleText.concat(all)
+
+      if (this.ruleText) {
+        this.ruleText = this.ruleText.concat(` <span class="logic-word">${logicMap[logic]}</span> `)
+      }
 
       childList.forEach(item => {
         this.geneRuleText(item)
       })
     } else {
       // 没有了，只需要对 comparisionList 处理
-      const {oneText, twoText} = this.geneComparisionListTwo(comparisionList)
+      // const {oneText, twoText} = this.geneComparisionListTwo(comparisionList)
 
-      let totalText = ''
+      const texts = this.geneComparisionList(comparisionList)
 
-      if (twoText) {
-        totalText = `${oneText} ${logicMap[logic]} ${twoText}`
-      } else {
-        totalText = oneText
-      }
+      const all = texts.join(` <span class="logic-word">${logicMap[logic]}</span> `)
 
-      this.ruleText = this.ruleText.concat(totalText)
+      // let totalText = ''
+
+      // if (twoText) {
+      //   totalText = `${oneText} ${logicMap[logic]} ${twoText}`
+      // } else {
+      //   totalText = oneText
+      // }
+
+      this.ruleText = this.ruleText.concat(all)
     }
   }
 
   // 有一个的
   geneComparisionListOne(list) {
-    const [one] = list
-    const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
+    if (list && list.length && list.length > 0) {
+      const [one] = list
+      const oneText = `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}`
 
-    return {oneText}
+      return {oneText}
+    } 
+    return {
+      oneText: '',
+    }
   }
 
   // 有两个的
@@ -135,6 +152,19 @@ export default class Store {
     const oneText = one ? `${this.findTargetTag(one.left.params.join())} ${comparisionMap[one.comparision]} ${one.right.params.join(',')}` : ''
     const twoText = two ? `${this.findTargetTag(two.left.params.join())} ${comparisionMap[two.comparision]} ${two.right.params.join(',')}` : ''
     return {oneText, twoText}
+  }
+
+  geneComparisionList(list) {
+    if (list && list.length && list.length > 0) {
+      const result = []
+      list.forEach(item => {
+        const text = `${this.findTargetTag(item.left.params.join())} <span class="logic-comp">${comparisionMap[item.comparision]}</span> ${item.right.params.join(',')}`
+        result.push(text)
+      })
+
+      return result
+    }
+    return []
   }
 
   /**
@@ -151,7 +181,6 @@ export default class Store {
       })
 
       const logicFormat = JSON.parse(res.logicExper)
-      console.log(logicFormat)
 
       this.geneRuleText(logicFormat)
 

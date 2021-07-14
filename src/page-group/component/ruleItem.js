@@ -185,7 +185,6 @@ const RuleItem = ({
         >
           <Select 
             mode="tags" 
-            size="small"
             style={{minWidth: 128}} 
             placeholder="请输入或者选择"
           >
@@ -206,7 +205,6 @@ const RuleItem = ({
         >
           <DatePicker 
             format={dateFormat} 
-            size="small" 
             style={{width: 120}} 
             disabled={rest.page === 'detail'} 
             onChange={v => console.log(v)}
@@ -223,7 +221,6 @@ const RuleItem = ({
         >
           <Select 
             mode="tags" 
-            size="small"
             style={{minWidth: 128}} 
             placeholder="请输入或者选择"
           >
@@ -241,7 +238,7 @@ const RuleItem = ({
         rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
         initialValue={rest.rightParams}
       >
-        <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
+        <Input placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
       </FormItem>,
     ])
   }
@@ -254,7 +251,7 @@ const RuleItem = ({
             ruleType === 'set-rule' && +ruleIfBoxKey.slice(-1) === 1 ? (
               <FormItem
                 label={null}
-                size="small"
+                
                 name={[key, 'relId']}
                 initialValue={rest.relId || (otherEntity[0] && otherEntity[0].objId)}
                 rules={[{required: true, message: '请选择'}]}
@@ -432,7 +429,7 @@ const RuleItem = ({
             rules={[{required: true, message: '不能为空'}, ...getNamePattern()]}
             initialValue={rest.rightParams}
           >
-            <Input size="small" placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
+            <Input  placeholder="请输入" style={{width: 120}} disabled={rest.page === 'detail'} />
           </FormItem> */}
 
           {
@@ -443,7 +440,7 @@ const RuleItem = ({
                     +ruleIfBoxKey.slice(-1) === 1 
                 && ruleType === 'config' 
                 && relId 
-                      ? <a href onClick={open} className="ml8 fs12">设置筛选</a> : null
+                      ? <a href onClick={open} className="ml8 fs14">设置筛选</a> : null
                   }
 
                   {
@@ -482,7 +479,7 @@ const RuleItem = ({
             rest.page === 'detail'  
             && +ruleIfBoxKey.slice(-1) === 1 
             && ruleType === 'config' 
-            && relId ? <a href onClick={open} className="ml8 fs12 mt8">查看筛选</a> : null
+            && relId ? <a href onClick={open} className="ml8 fs14 mt8">查看筛选</a> : null
           }
      
         </Input.Group>

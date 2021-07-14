@@ -1,20 +1,193 @@
 /* eslint-disable guard-for-in */
-// const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#9692ff', '#8C8D8']
-const color = ['#1cd389', '#668eff', '#ffc751', '#ff6e73', '#8683e6', '#0099cc']
+const color = ['#61BA46', '#2592FF', '#355FF9', '#6C41FA', '#FD5071', '#0099cc']
 
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
-// 转化对比
-export function cbarOption(barData) {
-  const {data = [], type = [], x = [], y = []} = barData
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = '#16324E'
+
+const colors = [new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
+
+
+// 客户转化率
+export function funnelOption(funnelData, dataIndex = 0) {
+  const {data = [], type = []} = funnelData
+  if (!data.length) {
+    return {
+      title: [
+        {text: '暂无数据',
+          top: '50%',
+          left: '30%',
+          textStyle: {
+            fontSize: 32,
+            color: titleColor,
+            fontWeight: 400,
+          }},
+      ],
+    } 
+  }
+  return ({
+    color: [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#BFEEA9',
+    }, {
+      offset: 1,
+      color: '#61BA46',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#86D4FF',
+    }, {
+      offset: 1,
+      color: '#2592FF',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#8D9FFF',
+    }, {
+      offset: 1,
+      color: '#355FF9',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#AE95FF',
+    }, {
+      offset: 1,
+      color: '#6C41FA',
+    }]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+      offset: 0,
+      color: '#FFA1BC ',
+    }, {
+      offset: 1,
+      color: '#FD5071',
+    }])],
+    itemStyle: {
+      opacity: 0.8,
+    },
+    series: [{
+      top: 32,
+      type: 'funnel',
+      sort: 'none',
+      height: '260',
+      gap: 1,
+      zlevel: 2,
+      minSize: 150,
+      // left: '5%',
+      left: 'center',
+      width: '60%',
+      selectedMode: 'single',
+      select: {
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 4,
+          // color: color[dataIndex],
+        },
+      },
+      label: {
+        show: true,
+        position: 'inside',
+        fontSize: '14',
+        color: '#fff',
+        textBorderColor: '#fff',
+        // fontWeight: 400,
+        formatter(d) {
+          const ins = `${d.name}{aa|}`
+          return ins
+        },
+        rich: {
+          aa: {
+            padding: [8, 0, 6, 0],
+          },
+        },
+      },
+      data: data.map(item => ({
+        name: item.name, 
+        value: item.count,
+      })),
+    }, {
+      top: 32,
+      type: 'funnel',
+      sort: 'none',
+      height: '260',
+      gap: 0,
+      zlevel: 1,
+      minSize: 150,
+      // left: '5%',
+      left: 'center',
+      width: '60%',
+      selectedMode: 'single',
+      select: {
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 4,
+          // color: color[dataIndex],
+        },
+      },
+      label: {
+        show: true,
+        position: 'right',
+        fontSize: '14',
+        color: fontColor,
+        textBorderColor: '#fff',
+        // fontWeight: 400,
+        formatter(d) {
+          const ins = `${d.value}`
+          return ins
+        },
+        rich: {
+          aa: {
+            padding: [8, 0, 6, 0],
+          },
+        },
+      },
+      labelLine: {
+        show: false,
+      },
+      data: data.map(item => ({
+        name: item.name, 
+        value: item.count,
+      })),
+    },
+    ],
+  })
+}
+
+// 各区域转化率
+export function cbarOption(barData, type) {
+  const {data = [], x = [], y = []} = barData
   return {
-    color,
     title: {
-      text: '转化对比',
+      text: `各区域${type}转化率`,
+      top: 18,
       textStyle: {
         fontSize: 14,
         color: titleColor,
-        fontWeight: 400,
+        fontWeight: 500,
       },
     },
     tooltip: {
@@ -22,96 +195,85 @@ export function cbarOption(barData) {
       axisPointer: {
         type: 'shadow',
       },
+      formatter(item) {
+        const obj = item[0] || {}
+        return `${obj.name}: ${obj.value}%`
+      },
     },
     grid: {
-      top: 96,
+      top: 72,
       bottom: 64,
-      left: 32,
-      // right: 0,
+      left: 128,
+      right: 72,
     },
-    legend: {
-      top: 32,
-      data: type,
+    xAxis: {
+      type: 'value',
+      show: false,
     },
-    xAxis: [
-      {
-        type: 'category',
-        // min: 0,
-        // max: 100,
-        // type: 'value',
-        data: y,
+    yAxis: {
+      type: 'category',
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      nameTextStyle: {
+        fontSize: 14,
         color: fontColor,
-        axisTick: {
-          show: false,
+      },
+      axisLabel: {
+        textStyle: {
+          fontSize: 14,
           color: fontColor,
-        },
-        nameTextStyle: {
-          fontSize: 12,
-          color: fontColor,
-        },
-        axisLabel: {
-          textStyle: {
-            fontSize: 12,
-            color: fontColor,
-          },
-        },
-        axisLine: {
-          lineStyle: {
-            color: '#ccc',
-          },
+          left: 256,
         },
       },
-    ],
-    dataZoom: [
+      data: y,
+    },
+    series: [
       {
-        show: true,
-        realtime: true,
-        start: 0,
-        end: 50,
-      },
-      {
-        type: 'inside',
-        realtime: true,
-        start: 0,
-        end: 50,
-      },
-    ],
-    yAxis: [
-      {
-        name: '转化率',
-        type: 'value',
-        min: 0,
-        max: 100,
-        // data: y,
-        nameTextStyle: {
-          fontSize: 12,
-          color: fontColor,
+        type: 'bar',
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(22,50,78,0.05)',
+          borderRadius: 12,
         },
-        axisLabel: {
-          textStyle: {
-            fontSize: 12,
-            color: fontColor,
+        labelLayout(params) {
+          return {
+            // x: 48,
+            x: '97%',
+            y: params.rect.y + params.rect.height / 2,
+            verticalAlign: 'middle',
+            align: 'right',
+          }
+        },
+        barWidth: 16,
+        itemStyle: {
+          barBorderRadius: 12,
+          color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+            offset: 0,
+            color: '#86D4FF',
+          }, {
+            offset: 1,
+            color: '#2592FF',
+          }]),
+        },
+        label: {
+          show: true,
+          position: 'right',
+          // position: 'inside',
+          formatter(d) {
+            const ins = `${d.value}%`
+            return ins
           },
-          // rotate: 40,
         },
-        axisLine: {
-          lineStyle: {
-            color: '#ccc',
-          },
-        },
-      },
+        name: type,
+        data: data.map(sitem => {
+          return sitem[type]
+        }),
+      }, 
     ],
-    series: type.length ? (type.map((item, index) => ({
-      name: item,
-      data: data.map(sitem => {
-        return sitem[item]
-      }),
-      barWidth: '30%',
-      type: 'bar',
-      stack: 'total',
-      // yAxisIndex: 1,
-      // color: color[index],
-    }))) : [],
   }
 }
 
@@ -120,26 +282,24 @@ export function lineOption(lineData) {
   const {data = [], type = []} = lineData
   const xData = []
   // eslint-disable-next-line no-restricted-syntax
-  for (const item in data) {
-    xData.push({name: item, value: data[item]})
+  // for (const item in data) {
+  //   xData.unshift({name: item, value: data[item]})
+  // }
+  const keys = Object.keys(data).length ? Object.keys(data).sort() : []
+  for (let i = 0; i < keys.length; i++) {
+    xData.push({name: keys[i], value: data[keys[i]]})
   }
+  
   return {
-    title: {
-      // text: area === 'china' ? '转化趋势' : '供需情况',
-      text: '转化趋势',
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
     grid: {
-      top: 96,
-      bottom: 64,
+      top: 40,
+      bottom: 24,
+      right: 16,
+      left: 48,
     },
     legend: {
-      top: 32,
-      // data: area === 'china' ? ['来访', '成交'] : ['高层', '别墅'],
+      top: 0,
+      right: 8,
       data: type,
     },
     tooltip: {
@@ -148,20 +308,20 @@ export function lineOption(lineData) {
         type: 'shadow',
       },
     },
-    dataZoom: [
-      {
-        show: true,
-        realtime: true,
-        start: 0,
-        end: 50,
-      },
-      {
-        type: 'inside',
-        realtime: true,
-        start: 0,
-        end: 50,
-      },
-    ],
+    // dataZoom: [
+    //   {
+    //     show: true,
+    //     realtime: true,
+    //     start: 0,
+    //     end: 50,
+    //   },
+    //   {
+    //     type: 'inside',
+    //     realtime: true,
+    //     start: 0,
+    //     end: 50,
+    //   },
+    // ],
     xAxis: {
       type: 'category',
       data: xData.map(item => item.name),
@@ -170,17 +330,18 @@ export function lineOption(lineData) {
         color: fontColor,
       },
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
       },
       axisLine: {
         lineStyle: {
+          type: 'dashed',
           color: '#ccc',
         },
       },
@@ -189,17 +350,24 @@ export function lineOption(lineData) {
       {
         type: 'value',
         nameTextStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
         axisLabel: {
           textStyle: {
-            fontSize: 12,
+            fontSize: 14,
             color: fontColor,
           },
         },
         axisLine: {
           lineStyle: {
+            color: '#fff',
+          },
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
             color: '#ccc',
           },
         },
@@ -230,15 +398,6 @@ export function lineOption(lineData) {
 export function mapOption(mapType, data) {
   const counts = data.map(item => item.count)
   return {
-    title: {
-      text: '客户分布',
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-      x: 'left',
-    },
     tooltip: {
       trigger: 'item',
       formatter(item) {
@@ -247,46 +406,93 @@ export function mapOption(mapType, data) {
       },
     },
     dataRange: {
+      itemWidth: 8,
+      itemHeight: 72,
       min: 0,
       max: counts.length ? Math.max(...counts) : 0,
       show: true,
       x: 'left',
       y: 'bottom',
-    // text: ['高', '低'], // 文本，默认为数值文本
-    // calculable: false,
+      width: 12,
+      inRange: {
+        // color: ['rgba(105, 137, 255, 0.1)', 'rgba(105, 137, 255, 1)'], // 渐变颜色
+        color: ['rgba(187, 202, 255, 1)', 'rgba(105, 137, 255, 1)'], // 渐变颜色
+      },
+      text: ['高', '低'], // 文本，默认为数值文本
+      calculable: false,
     },
-    geo: {
-      map: mapType,
-      zoom: 1.2,
-      regions: [
-        {
-          name: '南海诸岛',
-          itemStyle: {
-            // 隐藏地图
-            normal: {
-              opacity: 0, // 为 0 时不绘制该图形
-            },
-          },
-          label: {
-            show: false, // 隐藏文字
-          },
-        },
-      ],
-    },
+    // geo: {
+    //   map: mapType,
+    //   zoom: 1.2,
+    //   regions: [
+    //     {
+    //       name: '南海诸岛',
+    //       itemStyle: {
+    //         // 隐藏地图
+    //         normal: {
+    //           opacity: 0, // 为 0 时不绘制该图形
+    //         },
+    //       },
+    //       label: {
+    //         show: false, // 隐藏文字
+    //       },
+    //     },
+    //   ],
+    // },
+    // emphasis: {
+    //   itemStyle: {
+    //     areaColor: '#A88EFF',
+    //     color: '#fff',
+    //   },
+    //   label: {
+    //     color: '#fff',
+    //   },
+    // },
     series: [
       {
         // name: '客户人数',
         type: 'map',
+        label: {
+          show: false, // 显示省份标签
+        },
+        itemStyle: {
+          borderColor: '#ccccf6',
+          areaColor: 'rgba(105, 137, 255, 0.1)', // 这里是重点
+        },
+        emphasis: { // 对应的鼠标悬浮效果
+          show: true,
+          itemStyle: {
+            areaColor: '#A88EFF',
+            borderColor: '#ccccf6',
+            borderWidth: 2,
+          },
+          label: {
+            show: true, // 显示省份标签
+            textStyle: {
+              color: '#fff',
+            }, // 省份标签字体颜色
+          },
+        },
+        select: {
+          show: true,
+          itemStyle: {
+            areaColor: '#A88EFF',
+            borderColor: '#ccccf6',
+            borderWidth: 2,
+          },
+          label: {
+            show: true, // 显示省份标签
+            textStyle: {
+              color: '#fff',
+            }, // 省份标签字体颜色
+          },
+        },
         mapType,
         geoIndex: 0,
-        top: 128,
-        left: 56,
+        top: mapType === 'china' ? 120 : 48,
+        left: mapType === 'china' ? '30%' : '25%',
         roam: false,
-        zoom: 1.2,
-        itemStyle: {
-          normal: {label: {show: false}},
-          emphasis: {label: {show: true}},
-        },
+        zoom: mapType === 'china' ? 1.6 : 1.2,
         data: data.map(item => ({name: item.name, value: item.count})),
       },
     ],
@@ -296,14 +502,33 @@ export function mapOption(mapType, data) {
 // 客户分布
 export function dbarOption(data) {
   return {
+    title: {
+      text: '客户分布排名',
+      top: 16,
+      textStyle: {
+        fontSize: 14,
+        color: titleColor,
+        fontWeight: 500,
+      },
+    },
     tooltip: {
       trigger: 'axis',
+      formatter(item) {
+        if (!item[0]) {
+          return '-'
+        }
+        const ins = `${item[0].name}<br /> 客户人数：${item[0].value || '-'}`
+        return ins
+      },
       axisPointer: {
         type: 'shadow',
       },
     },
     grid: {
-      left: 96,
+      left: 128,
+      bottom: 12,
+      top: 48,
+      right: 60,
     },
     xAxis: {
       type: 'value',
@@ -318,12 +543,12 @@ export function dbarOption(data) {
         show: false,
       },
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
           left: 256,
         },
@@ -333,8 +558,30 @@ export function dbarOption(data) {
     series: [
       {
         type: 'bar',
-        barWidth: 24,
-        color: color[1],
+        barWidth: 6,
+        itemStyle: {
+          barBorderRadius: 12,
+          color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+            offset: 0,
+            color: '#CABAFF',
+          }, {
+            offset: 1,
+            color: '#7F59FB',
+          }]),
+        },
+        showBackground: true,
+        backgroundStyle: {
+          color: 'rgba(22,50,78,0.05)',
+          borderRadius: 12,
+        },
+        labelLayout(params) {
+          return {
+            x: '96%',
+            y: params.rect.y + params.rect.height / 2,
+            verticalAlign: 'middle',
+            align: 'right',
+          }
+        },
         label: {
           show: true,
           position: 'right',
@@ -349,133 +596,31 @@ export function dbarOption(data) {
 // 渠道分布
 export function sunOption(data) {
   return {
-    color,
+
     tooltip: {
       trigger: 'item',
       formatter: '{b} : {c}',
     },
+    
     series: {
       type: 'sunburst',
-      color,
-      data,
+      data: data.map((item, index) => {
+        item.itemStyle = {
+          normal: {
+            color: colors[index % colors.length],
+          },
+        }
+        return item
+      }),
       sort: null,
       center: ['50%', '50%'],
-      radius: ['0%', '100%'],
+      radius: ['0%', '80%'],
       label: {
         // rotate: 'radial',
-        minAngle: 30,
+        color: '#fff',
+        fontSize: 12,
+        // minAngle: 30,
       },
     },
   }
-}
-
-// 客户转化率
-export function funnelOption(funnelData) {
-  const {data = [], type = []} = funnelData
-  if (!data.length) {
-    return {
-      title: [{
-        text: '客户转化率',
-        top: 12,
-        left: 16,
-        textStyle: {
-          fontSize: 14,
-          color: titleColor,
-          fontWeight: 400,
-        }},
-      {text: '暂无数据',
-        top: '50%',
-        left: '30%',
-        textStyle: {
-          fontSize: 32,
-          color: titleColor,
-          fontWeight: 400,
-        }},
-      ],
-    } 
-  }
-  return ({
-    title: {
-      text: '客户转化率',
-      top: 12,
-      left: 16,
-      textStyle: {
-        fontSize: 14,
-        color: titleColor,
-        fontWeight: 400,
-      },
-    },
-    color,
-    legend: {
-      top: 42,
-      left: 'center',
-      data: type,
-    },
-    series: [{
-      top: 84,
-      type: 'funnel',
-      sort: 'none',
-      height: '250',
-      gap: 0,
-      minSize: 150,
-      // left: '5%',
-      left: 'center',
-      width: '60%',
-      label: {
-        show: true,
-        position: 'inside',
-        fontSize: '14',
-        formatter(d) {
-          const ins = `${d.name}{aa|}\n${d.value}`
-          return ins
-        },
-        rich: {
-          aa: {
-            padding: [8, 0, 6, 0],
-          },
-        },
-      },
-      data: data.map(item => ({name: item.name, value: item.count})),
-    }, 
-    // {
-    //   top: 96,
-    //   type: 'funnel',
-    //   // sort: (a, b) => data.map(item => item.count)[b],
-    //   sort: 'descending',
-    //   height: '300',
-    //   gap: -1,
-    //   minSize: 150,
-    //   left: '5%',
-    //   width: '60%',
-    //   z: 2,
-    //   label: {
-    //     normal: {
-    //       color: '#333',
-    //       position: 'right',
-    //       // formatter(d) {
-    //       //   const ins = `{bb|${d.data.goal}}\n{aa|${d.name}}`
-    //       //   return ins
-    //       // },
-    //       // rich: {
-    //       //   aa: {
-    //       //     align: 'center',
-    //       //     color: fontColor,
-    //       //     fontSize: '12',
-    //       //     lineHeight: '30',
-    //       //   },
-    //       //   bb: {
-    //       //     align: 'center',
-    //       //     color: titleColor,
-    //       //     fontSize: '22',
-    //       //   },
-    //       // },
-    //     },
-    //   },
-    //   labelLine: {
-    //     show: false,
-    //   },
-    //   data: data.map(item => ({name: item.name, value: item.count})),
-    // },
-    ],
-  })
 }

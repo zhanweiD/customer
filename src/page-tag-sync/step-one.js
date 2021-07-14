@@ -9,6 +9,7 @@ import '@ant-design/compatible/assets/index.css'
 import {Input, Select, Button, Switch} from 'antd'
 import {ModalStotageDetail} from '../component'
 import {debounce, getNamePattern, getEnNamePattern} from '../common/util'
+import dropdown from '../icon/dropdown.svg'
 
 const FormItem = Form.Item
 const Option = {Select}
@@ -166,7 +167,7 @@ export default class StepOne extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入计划名称" />
+              <Input autoComplete="off" placeholder="请输入计划名称" />
             )}
           </FormItem>
           
@@ -181,6 +182,7 @@ export default class StepOne extends Component {
                 style={{width: '100%'}} 
                 onSelect={v => this.selectObj(v)}
                 optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
               >
                 {
                   objList.map(item => (

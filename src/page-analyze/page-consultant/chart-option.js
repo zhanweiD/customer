@@ -2,8 +2,39 @@
 // eslint-disable-next-line max-len
 // const color = ['#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac', '#0090ff', '#06d3c4', '#ffbc32', '#2ccc44', '#ff3976', '#6173d6', '#914ce5', '#42b1cc', '#ff55ac']
 const color = ['#1cd389', '#668eff', '#ff6e73', '#8683e6', '#06d3c4', '#42b1cc']
-const fontColor = 'rgba(0,0,0,0.65)'
-const titleColor = 'rgba(0,0,0,0.85)'
+const fontColor = 'rgba(22,50,78,0.85)'
+const titleColor = 'rgba(22,50,78,1)'
+const colors = [new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#BFEEA9',
+}, {
+  offset: 1,
+  color: '#61BA46',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#86D4FF',
+}, {
+  offset: 1,
+  color: '#2592FF',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#8D9FFF',
+}, {
+  offset: 1,
+  color: '#355FF9',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#AE95FF',
+}, {
+  offset: 1,
+  color: '#6C41FA',
+}]), new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
+  offset: 0,
+  color: '#FFA1BC ',
+}, {
+  offset: 1,
+  color: '#FD5071',
+}])]
 
 export function barOption(columnChart) {
   return ({
@@ -37,12 +68,12 @@ export function barOption(columnChart) {
         color: fontColor,
       },
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
         interval: 1,
@@ -58,12 +89,12 @@ export function barOption(columnChart) {
       type: 'value',
       name: 'AB率/%',
       nameTextStyle: {
-        fontSize: 12,
+        fontSize: 14,
         color: fontColor,
       },
       axisLabel: {
         textStyle: {
-          fontSize: 12,
+          fontSize: 14,
           color: fontColor,
         },
       },
@@ -92,7 +123,7 @@ export function barOption(columnChart) {
         return {
           value: item,
           itemStyle: {
-            color: color[index % color.length],
+            color: colors[index % color.length],
           },
         }
       }),
@@ -118,7 +149,7 @@ export function radarOption(radarChart) {
       top: 24,
       right: 24,
       orient: 'vertical',
-      textStyle: {color: fontColor, fontSize: 12}, 
+      textStyle: {color: fontColor, fontSize: 14}, 
       data: radarChart.data && radarChart.data.map(item => item.name),
       icon: 'roundRect',
     },
@@ -128,7 +159,7 @@ export function radarOption(radarChart) {
       name: {
         textStyle: {
           color: fontColor,
-          fontSize: 12,
+          fontSize: 14,
         },
       },
       indicator: radarChart.indicator && radarChart.indicator.map(item => {
@@ -166,7 +197,7 @@ export function radarOption(radarChart) {
       type: 'radar',
       data: radarChart.data && radarChart.data.map((item, index) => {
         item.areaStyle = {
-          color: color[index],
+          color: colors[index],
         }
         return item
       }),

@@ -11,6 +11,7 @@ import {
 import {
   tagStatusBadgeMap,
 } from '../util'
+import dropdown from '../../../../icon/dropdown.svg'
 
 import ModalTagMove from './modal-tag-move'
 import ModalUpdateBiz from './modal-update-biz'
@@ -22,6 +23,7 @@ import store from './store'
 import treeStore from './store-tree'
 
 const {Option} = Select
+const {Search} = Input
 
 @observer
 class TagList extends Component {
@@ -336,7 +338,6 @@ class TagList extends Component {
     <Menu style={{textAlign: 'center'}}>
       <Menu.Item disabled={!keys.length}>
         <a
-          className="fs12"
           disabled={!keys.length}
           onClick={() => {
             store.updateBizVisible = true
@@ -350,7 +351,6 @@ class TagList extends Component {
           authCode="tag-manage:release-tag"
         >
           <a 
-            className="fs12" 
             disabled={!keys.length} 
             onClick={() => store.updateTagStatus({
               status: 1,
@@ -365,7 +365,7 @@ class TagList extends Component {
         <Authority
           authCode="tag-manage:add-tag"
         >
-          <a className="fs12" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
+          <a disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
         </Authority>
       </Menu.Item>
     </Menu>
@@ -410,7 +410,7 @@ class TagList extends Component {
               authCode="tag-manage:release-tag"
             >
               <Button 
-                className="fs12 mr8" 
+                className="fs14 mr8" 
                 disabled={!publishRowKeys.length} 
                 onClick={() => store.batchPublish(treeStore.getList)}
               >
@@ -420,7 +420,7 @@ class TagList extends Component {
             <Authority
               authCode="tag-manage:add-tag"
             >
-              <Button className="fs12 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
+              <Button className="fs14 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
             </Authority>
             {/* <Popconfirm
               placement="topRight"
@@ -443,7 +443,7 @@ class TagList extends Component {
               disabled={!publishRowKeys.length}
               onConfirm={() => this.remove(store.publishRowKeys)}
             >
-              <Button size="small" className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
+              <Button className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
             </Popconfirm> */}
             <Dropdown overlay={() => this.menu(publishRowKeys)} placement="bottomCenter">
               <Button>更多操作</Button>
@@ -451,21 +451,22 @@ class TagList extends Component {
           </div>
           <div>
             <Select 
-              style={{width: 128, marginRight: '8px'}} 
+              style={{width: 128}} 
               placeholder="请选择标签状态"
               defaultValue=""
+              suffixIcon={<img src={dropdown} alt="dropdown" />}
               onChange={v => {
                 treeStore.status = v
                 treeStore.getList({currentPage: 1, objId, cateId: treeStore.currentSelectKeys, keyword: treeStore.keyword, status: treeStore.status})
               }}
             >
-              <Option style={{fontSize: '12px'}} value="">全部</Option>
-              <Option style={{fontSize: '12px'}} value={0}>待配置</Option>
-              <Option style={{fontSize: '12px'}} value={1}>待发布</Option>
-              <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
+              <Option value="">全部</Option>
+              <Option value={0}>待配置</Option>
+              <Option value={1}>待发布</Option>
+              <Option value={2}>已发布</Option>
             </Select>
-            <Input 
-              style={{width: 128, marginRight: '24px'}} 
+            <Search 
+              style={{width: 180, marginLeft: '8px'}} 
               placeholder="请输入标签名称" 
               onChange={v => {
                 treeStore.keyword = v.target.value
@@ -482,10 +483,12 @@ class TagList extends Component {
 
     return (
       <Provider bigStore={store}>
-        <div className="h-100">
+        <div className="h-100 custom-border pt16">
           <div className="d-flex h-100 tag-model">
             <TagCateTree bigStore={store} store={treeStore} />
-            <ListContent {...listConfig} />
+            <div className="FB1" style={{overflowY: 'auto'}}>
+              <ListContent {...listConfig} />
+            </div>
           </div>
           <TagDetailModal store={store} />
           <ModalTagMove store={store} treeStore={treeStore} />

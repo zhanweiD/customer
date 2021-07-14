@@ -42,6 +42,7 @@ module.exports = {
       // },
       {
         context: ['/hub_user_api', '/hub_api', '/marketing_api'],
+        // target: 'http://cust.estate.dtwave-inc.com',
         target: 'http://192.168.90.135:8173',
         changeOrigin: true,
       },
@@ -113,7 +114,12 @@ module.exports = {
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          'stylus-loader',
+          {
+            loader: 'stylus-loader',
+            options: {
+              import: [path.join(__dirname, 'src/common/theme.styl')],
+            },
+          },
         ],
         include: [path.resolve(__dirname, 'src')],
         exclude: /node_modules/,

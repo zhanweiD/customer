@@ -37,7 +37,7 @@ export default class ObjectModel extends Component {
     }
 
     return (
-      <ConfigProvider componentSize="small">
+      <ConfigProvider>
         <Provider store={store}>
           <div className="page-object-modal oa">
             <div className="content-header">标签管理</div>

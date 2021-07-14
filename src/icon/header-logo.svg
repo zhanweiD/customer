@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="22px" viewBox="0 0 28 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63 (92445) - https://sketch.com -->
+    <title>编组14</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="36.7599287%" y1="8.70218741%" x2="79.3206124%" y2="84.4772078%" id="linearGradient-1">
+            <stop stop-color="#FFE800" offset="0%"></stop>
+            <stop stop-color="#FF924A" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="88.72%" x2="22.546696%" y2="50%" id="linearGradient-2">
+            <stop stop-color="#4835F9" offset="0%"></stop>
+            <stop stop-color="#5973FF" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="10-|-创建计划策略配置可修改状态1" transform="translate(-73.000000, -14.000000)">
+            <g id="产品顶部导航" transform="translate(50.000000, 0.000000)">
+                <g id="编组7">
+                    <g id="编组13" transform="translate(23.000000, 12.000000)">
+                        <g id="6框架-/-1顶部导航-/-亮色-/-Logo">
+                            <g id="Logo">
+                                <g id="编组14" transform="translate(0.875070, 2.000000)">
+                                    <circle id="椭圆形" fill="url(#linearGradient-1)" cx="19.1249298" cy="13" r="8"></circle>
+                                    <polygon id="路径4" fill="url(#linearGradient-2)" points="0 22 12.5968452 0 25 22"></polygon>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

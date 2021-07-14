@@ -149,7 +149,7 @@ export default class Tree extends Component {
       rightClickMenuAble: true,
     }
     return (
-      <ConfigProvider size="small">
+      <ConfigProvider>
         {/* <div style={{width: '140px', margin: '16px 0px 12px 16px', backgroundColor: '#fff'}}> 
           <Button style={{margin: '16px 16px 0px', width: '108px'}} type="primary" onClick={this.addTree}>
             新建

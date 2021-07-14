@@ -49,7 +49,7 @@ export default class DrawerAddSync extends Component {
         {...drawerConfig}
       >
         <div className="add-sync">
-          <Steps size="small" current={currentStep} className="add-sync-step">
+          <Steps current={currentStep} className="add-sync-step">
             <Step title="基础信息" />
             <Step title="配置同步标签" />
             <Step title="预览保存" />

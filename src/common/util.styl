@@ -85,6 +85,8 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
     margin-bottom u($n)
   .ml{$n}
     margin-left u($n)
+.mt-8
+  margin-top -8px
 
 .c85
   color rgba(22,50,78,0.85)
@@ -92,8 +94,10 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   color rgba(22,50,78,0.65)
 .c45
   color rgba(22,50,78,0.45)
+.c25
+  color rgba(22,50,78,0.25)
 .ac
-  color #2466ff
+  color #3F5FF4
 .w100
   width 100%
 .w60
@@ -163,7 +167,9 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   justify-content space-around
 .d-flex
   display flex
-  
+.d-ilbl
+  display inline-block
+  vertical-align top
 .omit
   overflow hidden
   text-overflow ellipsis
@@ -210,7 +216,7 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   border 0
   background transparent
   outline none
-  font-size 12px
+  font-size 14px
   display inline-block
 
 .button-style-hover
@@ -219,7 +225,7 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   border 0
   background transparent
   outline none
-  font-size 12px
+  font-size 14px
   display inline-block
   transition all .5s
 
@@ -239,37 +245,96 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   border 1px solid #E6EDF8
   border-radius 2px
   background #ffffff
+.period-content
+  border: 1px solid #e6ebf3
+  border-top none
+.period-header
+  color: #16324E
+  font-weight: 500
+  line-height: 48px
+  padding-left: 16px
+  height: 48px
+  background: #F6F9FB
+  border: 1px solid #E6EBF3
+  // border-radius: 4px
+
+.content-header-fixed
+  // margin 4px 4px 0px
+  line-height 56px
+  font-size 18px
+  font-weight bold
+  padding-left 16px
+  background #ffffff
+  // border-bottom 1px solid #E6EDF8
+  background-color rgb(246, 250, 255)
+  position fixed
+  z-index 10
+  width 100%
+.header-scroll
+  // border-bottom 1px solid #D4DCE9
+  border-bottom 1px solid rgba(223,237,244,0.5)
+  // box-shadow: 0px 0px 4px 0px rgba(223,237,244,0.5);
 
 /* header */
 .content-header
   // margin 4px 4px 0px
-  line-height 56px
-  font-size 16px
-  padding-left 16px
-  background #ffffff
-  color rgba(0,0,0, .85)
-  border-bottom 1px solid #E6EDF8
-  position fixed
-  z-index 10
-  width 100%
+  // line-height 56px
+  // font-size 16px
+  // padding-left 16px
+  // background #ffffff
+  // // border-bottom 1px solid #E6EDF8
+  // background-color rgb(246, 250, 255)
+  // position fixed
+  // z-index 10
+  // width 100%
+
+  height 32px
+  line-height 32px
+  font-size 18px
+  color #16324E
+  font-weight 500
+  margin 16px 0 0 16px
+
 .oa
   overflow auto
+  position relative
+  width 100%
+  height 100%
+  background-color $main-background-color
+
+.ant-table-custom-wrapper
+  position absolute
+  width 100%
+  padding-left inherit
+  padding-right inherit
+  left 0
+  right 0
 
 /* 普通页面 start */
 .header-page
-  min-height calc(100vh - 136px)
+  // min-height calc(100vh - 136px)
+  overflow auto
   margin 16px
-  background #ffffff
-  border 1px solid #E6EDF8
-  border-radius 2px
-  margin-top 72px
-  
+  background #fff
+  border 1px solid #E6EBF3
+  border-radius 4px
+  box-shadow 2px 0px 4px 2px rgba(223,237,244,0.5)
+  // margin-top 72px
+
+.custom-border
+  background #fff
+  border 1px solid #E6EBF3
+  border-radius 4px
+  box-shadow 2px 0px 4px 2px rgba(223,237,244,0.5)
+.chart-border
+  box-shadow 2px 0px 4px 2px rgba(223,237,244,0.5)
+  background #fff
 /* 普通列表页面 end */
 .bgf
   background #ffffff
 
 .a-href-color
-  color #0078ff
+  color $main-color-end
 
 .comp-tab
   background #ffffff
@@ -288,7 +353,7 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   margin 0 8px
 
 .disabled
-  color: rgba(0, 0, 0, 0.25)
+  color: rgba(22, 50, 78, 0.25)
   cursor: not-allowed
 
 // .ant-table-placeholder
@@ -310,7 +375,8 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   display flex
   align-items center
   padding-left 8px
-  background-color #f0f2f4
+  background-color #f6f9fb
+  border-radius 4px 4px 0 0
 
 // .ant-modal-body
 //   padding 24px!important
@@ -322,16 +388,11 @@ for $n in -4 -2 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 48 72
   src: url("https://cdn.dtwave.com/platform/font/font_zck90zmlh7hf47vi.eot?#iefix") format("embedded-opentype"), url("https://cdn.dtwave.com/platform/font/font_zck90zmlh7hf47vi.woff") format("woff"), url("https://cdn.dtwave.com/platform/font/font_zck90zmlh7hf47vi.ttf") format("truetype"), url("https://cdn.dtwave.com/platform/font/font_zck90zmlh7hf47vi.svg#iconfont") format("svg")
 }
 
-a
-  color #2466ff
-  &:hover
-    color #2466ff
-
 // 修改按钮文字大小
 .dt-ant-12 
   .ant-modal-footer 
     .ant-btn
-      font-size 12px  
+      font-size 14px  
 .h-100 
   height 100%
 .legend-name-icon
@@ -346,3 +407,24 @@ a
   width 100%
 .c-primary
   color #3F5FF4
+
+.dt-inner-text
+  color $main-text-color
+
+.dt-tree-node-detail
+  height 24px !important
+  padding-top 4px !important
+  font-size 14px !important
+  color $main-text-color !important
+
+.dt-tree .dt-li-tree
+  line-height 24px !important
+
+.require-word:before
+  display inline-block
+  margin-right 4px
+  color #ff8c7d
+  font-size 14px
+  line-height 1
+  content '*'
+

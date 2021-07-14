@@ -248,7 +248,7 @@ export default class TagDetailModal extends Component {
           <div
             style={{
               width: '64px',
-              fontSize: '12px',
+              fontSize: '14px',
               color: 'rgba(0,0,0,0.45)',
             }}
           >

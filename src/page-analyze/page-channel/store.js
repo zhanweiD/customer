@@ -14,6 +14,7 @@ const pastDate = '2021-01-01'
 class Store extends ListContentStore(io.getList) {
   @observable tableLoading = false 
   @observable loading = true 
+  @observable isScroll = false 
   @observable treeDate = [] // 全部渠道
   @observable reqData = { // 时间筛选
     reportTimeStart: pastDate,

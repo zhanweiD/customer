@@ -5,6 +5,7 @@ import {useObserver} from 'mobx-react-lite'
 import _ from 'lodash'
 import {codeInProduct} from '@util'
 import MyForm from './scene-form'
+import dropdown from '../../icon/dropdown.svg'
 
 const {Search} = Input
 
@@ -30,9 +31,6 @@ export default inject('store')(({store}) => {
     }, {
       title: '所属业务域',
       dataIndex: 'p_bizName', // 要自己查找处理
-    }, {
-      title: '场景描述',
-      dataIndex: 'descr',
     }, {
       title: '操作',
       render: (text, record) => {
@@ -99,7 +97,7 @@ export default inject('store')(({store}) => {
   }, [])
 
   return useObserver(() => (
-    <div className="tab-box">
+    <div className="tab-box custom-border pt16">
       <div className="FBH FBJB mb8">
         <div className="FBH">
           {
@@ -135,6 +133,8 @@ export default inject('store')(({store}) => {
             options={store.domainFormatOption} 
             placeholder="请选择" 
             onChange={e => cascaderChange(e)}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
           />
           {/* <Search placeholder="请输入场景名称" className="ml8" /> */}
         </div>

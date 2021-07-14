@@ -66,12 +66,12 @@ class UserManage extends Component {
         <Authority
           authCode="system:user-manage:authorization-func"
         >
-          <a href onClick={() => this.openModal(record)} className="mr16">功能授权</a>
+          <a href onClick={() => this.openModal(record)}>功能授权</a>
         </Authority>
         <Authority
           authCode="system:user-manage:authorization-data"
         >
-          <a href onClick={() => this.openDrawer(record)}>数据授权</a>
+          <a href className="ml16" onClick={() => this.openDrawer(record)}>数据授权</a>
         </Authority>
       </div>
     ),
@@ -170,13 +170,12 @@ class UserManage extends Component {
             <Authority
               authCode="system:user-manage:authorization-func"
             >
-              <Button type="primary" disabled={!publishRowKeys.length} className="mr8" onClick={() => this.openModal()}>批量功能授权</Button>
+              <Button type="primary" disabled={!publishRowKeys.length} onClick={() => this.openModal()}>批量功能授权</Button>
             </Authority>
           </div>
           <div>
             <Input 
-              size="small"
-              style={{width: 160, marginRight: '24px'}} 
+              style={{width: 160, marginLeft: '8px'}} 
               placeholder="请输入用户名称" 
               onChange={this.searchUser}
               // onChange={v => store.getList(v.target.value)}
@@ -206,11 +205,13 @@ class UserManage extends Component {
     }
 
     return (
-      <div className="system-user oa">
+      <div className="system-user oa FBV">
         <div className="content-header">用户管理</div> 
-        <div className="d-flex user-manage">
+        <div className="d-flex user-manage FB1">
           <Tree store={store} />
-          <ListContent {...listConfig} />
+          <div className="custom-border FB1 manage-right">
+            <ListContent {...listConfig} />
+          </div>
         </div>
         <Modal {...modalConfig}>
           <ModalForm {...formConfig} />

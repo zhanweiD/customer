@@ -16,6 +16,8 @@ import './main.styl'
 
 const {RangePicker} = DatePicker
 
+const {Search} = Input
+
 // import {errorTip} from '../../common/util'
 
 @observer
@@ -59,11 +61,10 @@ class SystemLog extends Component {
       searchParams: {},
       scroll: {x: 960},
       buttons: [
-        <div className="dfjf mr24">
-          <Input 
+        <div className="dfjf">
+          <Search 
             placeholder="请输入用户名或者账号"
-            style={{width: 180, marginRight: '8px'}}
-            suffix={<SearchOutlined />}
+            style={{width: 220, marginRight: '8px'}}
             allowClear
             onChange={e => {
               store.reqData = {
@@ -75,7 +76,6 @@ class SystemLog extends Component {
             }}
           />
           <RangePicker
-            size="small"
             onChange={value => {
               store.reqData = {
                 ...store.reqData,
@@ -84,14 +84,15 @@ class SystemLog extends Component {
               }
               store.getList({...store.reqData, startTime: store.reqData.startTime, endTime: store.reqData.endTime})
             }}
+            getPopupContainer={triggerNode => triggerNode.parentElement}
           />
         </div>,
       ],
     }
     return (
-      <div className="system-log oa" style={{minHeight: 'calc(100vh - 198px)'}}>
-        <div className="content-header">系统日志</div> 
-        <div className="user-manage mt72">
+      <div className="system-log oa FBV">
+        <div className="content-header">审计日志</div> 
+        <div className="user-manage custom-border m16 pt16 FB1">
           <ListContent {...listConfig} />
         </div>
       </div>

@@ -306,7 +306,7 @@ class TagList extends Component {
           authCode="tag-manage:release-tag"
         >
           <a 
-            className="fs12" 
+            className="fs14" 
             disabled={!keys.length} 
             onClick={() => store.updateTagStatus({
               status: 1,
@@ -321,7 +321,7 @@ class TagList extends Component {
         <Authority
           authCode="tag-manage:add-tag"
         >
-          <a className="fs12" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
+          <a className="fs14" disabled={!keys.length} onClick={() => this.remove(store.publishRowKeys)}>批量删除</a>
         </Authority>
       </Menu.Item>
     </Menu>
@@ -366,7 +366,7 @@ class TagList extends Component {
               authCode="tag-manage:release-tag"
             >
               <Button 
-                className="fs12 mr8" 
+                className="fs14 mr8" 
                 disabled={!publishRowKeys.length} 
                 onClick={() => store.batchPublish(treeStore.getList)}
               >
@@ -376,7 +376,7 @@ class TagList extends Component {
             <Authority
               authCode="tag-manage:add-tag"
             >
-              <Button className="fs12 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
+              <Button className="fs14 mr8" disabled={!publishRowKeys.length} onClick={() => store.openModal()}>批量移动</Button>
             </Authority>
             {/* <Popconfirm
               placement="topRight"
@@ -399,7 +399,7 @@ class TagList extends Component {
               disabled={!publishRowKeys.length}
               onConfirm={() => this.remove(store.publishRowKeys)}
             >
-              <Button size="small" className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
+              <Button className="mr8" disabled={!publishRowKeys.length}>批量删除</Button>
             </Popconfirm> */}
             <Dropdown overlay={() => this.menu(publishRowKeys)} placement="bottomCenter">
               <Button>更多操作</Button>
@@ -415,10 +415,10 @@ class TagList extends Component {
                 treeStore.getList({currentPage: 1})
               }}
             >
-              <Option style={{fontSize: '12px'}} value="">全部</Option>
-              <Option style={{fontSize: '12px'}} value={0}>待配置</Option>
-              <Option style={{fontSize: '12px'}} value={1}>待发布</Option>
-              <Option style={{fontSize: '12px'}} value={2}>已发布</Option>
+              <Option value="">全部</Option>
+              <Option value={0}>待配置</Option>
+              <Option value={1}>待发布</Option>
+              <Option value={2}>已发布</Option>
             </Select>
             <Input 
               style={{width: 128, marginRight: '24px'}} 

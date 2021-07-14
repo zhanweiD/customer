@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="96px" height="96px" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>位图</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="26.4114234%" y1="8.6802109%" x2="77.3710216%" y2="94.1966412%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.1" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="3.50435719%" x2="50%" y2="99.6422026%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.3848066" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="模版页面" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="标签集市" transform="translate(-852.000000, -168.000000)">
+            <g id="编组-5备份-2" transform="translate(63.000000, 152.000000)">
+                <g id="编组-4备份" transform="translate(459.000000, 0.000000)">
+                    <g id="位图" transform="translate(330.000000, 16.000000)">
+                        <circle id="蒙版" fill="url(#linearGradient-1)" opacity="0.12" cx="48" cy="48" r="48"></circle>
+                        <g id="编组" transform="translate(27.000000, 30.000000)" fill="url(#linearGradient-2)" fill-rule="nonzero">
+                            <path d="M7.17921613,10.4321237 L36.4837649,10.4321237 L36.4837649,7.79949419 C36.4837649,6.32139776 35.3145245,5.12029118 33.8780991,5.12029122 L18.2514576,5.12029122 L18.2514576,2.69356572 C18.2514576,1.21546929 17.0871196,0.0143627076 15.648243,0.0143627076 L2.6223649,0.0143627076 C1.18593954,0.0143627076 0.0191502767,1.21546929 0.0191502767,2.69356572 L0.0191502767,34.1037278 L4.57355027,13.1113267 C4.57355027,11.630779 5.74279073,10.4321237 7.17921613,10.4321237 Z M37.133343,34.1037278 C37.133343,35.5867268 35.9665537,36.7829309 34.5301283,36.7829309 L1.97278689,36.7829309 L6.53208932,15.1213418 C6.53208932,13.6407941 7.69397606,12.4421387 9.13040146,12.4421387 L39.091882,12.4421387 C40.5283074,12.4421387 41.6926454,13.6432453 41.6926454,15.1213418 L37.1382454,34.1037278 L37.133343,34.1037278 Z" id="形状"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

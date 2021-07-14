@@ -5,6 +5,7 @@ import {Form} from '@ant-design/compatible'
 import '@ant-design/compatible/assets/index.css'
 import {Button, Drawer, Input, Select} from 'antd'
 import {getNamePattern, getEnNamePattern, nameTypeMap} from '../../common/util'
+import dropdown from '../../icon/dropdown.svg'
 
 const FormItem = Form.Item
 const Option = {Select}
@@ -150,7 +151,7 @@ class ModalObject extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入对象名称" />
+              <Input autoComplete="off" placeholder="请输入对象名称" />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="对象标识">
@@ -164,7 +165,7 @@ class ModalObject extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入对象标识" />
+              <Input autoComplete="off" placeholder="请输入对象标识" />
             )}
           </FormItem>
           
@@ -192,7 +193,7 @@ class ModalObject extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入标签名称" />
+              <Input autoComplete="off" placeholder="请输入标签名称" />
             )}
           </FormItem>
 
@@ -207,7 +208,7 @@ class ModalObject extends Component {
                 }],
               validateFirst: true,
             })(
-              <Input size="small" autoComplete="off" placeholder="请输入标签标识" />
+              <Input autoComplete="off" placeholder="请输入标签标识" />
             )}
           </FormItem>
 
@@ -216,10 +217,15 @@ class ModalObject extends Component {
               initialValue: data.tagValueType || 4,
               rules: [{required: true, message: '请选择数据类型'}],
             })(
-              <Select size="small" placeholder="请选择数据类型" showSearch optionFilterProp="children">
+              <Select 
+                placeholder="请选择数据类型" 
+                showSearch 
+                optionFilterProp="children"
+                suffixIcon={<img src={dropdown} alt="dropdown" />}
+              >
                 {
                   window.njkData.dict.dataType.map(item => (
-                    <Option style={{fontSize: '12px'}} key={item.key} value={item.key}>{item.value}</Option>
+                    <Option key={item.key} value={item.key}>{item.value}</Option>
                   ))
                 }
               </Select>

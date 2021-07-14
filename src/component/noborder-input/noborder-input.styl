@@ -4,7 +4,7 @@
   position:relative
 
   input
-    font-size:12px
+    font-size:14px
     //padding:10px 10px 10px 5px
     //padding: 6px 0 8px 5px
     display:block
@@ -18,11 +18,13 @@
   // 处理firfox下required导致的红色边框
   input:required
     box-shadow: none
+  input::placeholder
+    color $disable-text-color
 
 
   label
     color:#999
-    font-size:12px
+    font-size:14px
     font-weight:normal
     position:absolute
     pointer-events:none

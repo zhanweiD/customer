@@ -8,8 +8,10 @@ import {action, toJS} from 'mobx'
 import NoBorderInput from '../component/noborder-input-svg'
 import ErrorField from '../component/error-field'
 import Button from '../component/button'
-import banner from './icon/banner.gif'
-import bgImage from './icon/bg.svg'
+import banner from './icon/banner.png'
+// import banner from './icon/banner.gif'
+import bgImage from './icon/bg.png'
+// import bgImage from './icon/bg.svg'
 import user from './icon/user.svg'
 import lock from './icon/lock.svg'
 import './icon'
@@ -70,12 +72,11 @@ export default class Login extends Component {
         <div className="inner-area FB1 FBH FBAC FBJC">
           <div className="content FBH">
             <div className="main-pic FB1 animated fadeIn">
-              <div className="title-container FBV FBJ FBAC">
-                {/* <div className="dt-title">彰泰</div> */}
+              {/* <div className="title-container FBV FBJ FBAC">
                 <div className="dt-title">慧营客</div>
                 <div className="dt-subtitle">客户洞察</div>
-              </div>
-              <img src={banner} alt="" />
+              </div> */}
+              <img width={640} height={620} src={banner} alt="" />
             </div>
             <div className="operation FBV FBJC">
               <div className="component-new-operation">
@@ -83,15 +84,16 @@ export default class Login extends Component {
                   <div className="tab active">
                     {/* <div className="caret-blue" />
                     <div className="caret-white" /> */}
-                    登录
+                    用户登录
                   </div>
                 </div>
 
                 <form className="form">
                   <ErrorField className="error-msg" message={store.errorMsg} />
                   <div className="formItem">
+                    <div className="c45 mb16">账号</div>
                     <NoBorderInput
-                      label={this.getPlaceholder(user, '账号')}
+                      label={this.getPlaceholder(user, '请输入账号')}
                       type="text"
                       onChange={e => this.handleUserNameChange(e)}
                       onFocus={() => this.handleFocus('verifyUserNameMsg')}
@@ -99,8 +101,9 @@ export default class Login extends Component {
                     <ErrorField message={store.verifyUserNameMsg} />
                   </div>
                   <div className="formItem">
+                    <div className="c45 mb16">密码</div>
                     <NoBorderInput
-                      label={this.getPlaceholder(lock, '密码')}
+                      label={this.getPlaceholder(lock, '请输入密码')}
                       type="password"
                       autoComplete="current-password"
                       onChange={e => this.handlePasswordChange(e)}

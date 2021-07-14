@@ -62,9 +62,9 @@ export default class ChartPie extends Component {
         value: funnelChart[i].count,
         goal: funnelChart[i].goal,
         name: `年度目标达成：${funnelChart[i].rate}`,
-        itemStyle: {
-          opacity: 0,
-        },
+        // itemStyle: {
+        //   opacity: 0,
+        // },
       }
       data1.push(obj1)
       data2.push(obj2)
@@ -76,8 +76,18 @@ export default class ChartPie extends Component {
   render() {
     return (
       <div className="chartPie-ad">
-        <div ref="chartsPie" style={{height: '480px', width: '45%', display: 'inline-block'}} />
-        <div ref="chartsFunnel" style={{height: '480px', width: '55%', display: 'inline-block'}} />
+        <div className="chart-border db50 mr16">
+          <div className="period-header">客户状态分布</div>
+          <div className="period-content">
+            <div ref="chartsPie" style={{height: '480px', width: '100%'}} />
+          </div>
+        </div>
+        <div className="chart-border db50">
+          <div className="period-header">成交转化情况</div>
+          <div className="period-content">
+            <div ref="chartsFunnel" style={{height: '480px', width: '100%'}} />
+          </div>
+        </div>
       </div> 
     )
   }
