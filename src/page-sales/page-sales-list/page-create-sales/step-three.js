@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-useless-escape */
 import {useState, useEffect, Fragment} from 'react'
 import {Form, Button, Input, Select, Cascader, message} from 'antd'
 import _ from 'lodash'
@@ -221,26 +223,9 @@ export default ({
   const saveData = () => {
     if (isSms) {
       // 短信模块
-      /*
-        {
-          "signName": "选择的签名名称",
-          "templateCode": "选择的短信模板code",
-          "templateJson":"模版json",
-          // 模板参数配置
-          "templateParams": [{
-              "key":"1", // 模板json中 动态参数key
-              "type":"USER_TAG", // 类型，预留字段可不传
-              "defaultValue": "" // 默认值， 可不填
-          },{
-              "key":"2", // 模板json中 动态参数key
-              "type":"USER_TAG", // 类型，预留字段可不传
-              "defaultValue": "默认值" // 默认值， 可不填
-          }]
-        }
-      */
       smsForm.validateFields().then(value => {
         const {signName, templateCode} = value
-        const alldefaultValues = _.flatten(_.values(smsDefaultValues))
+        const alldefaultValues = _.compact(_.flatten(_.values(smsDefaultValues)))
 
         // 模板字符串
         const templateJson = []
@@ -248,26 +233,22 @@ export default ({
 
         smsTplKeyList.forEach(item => {
           let itemValue = value[item]
+          itemValue = itemValue.replace(/&nbsp;/g, '')
+          // 新的替换，
+          // 例子：${888888!你好}，${标签id!默认值}
+          alldefaultValues.forEach(item => {
+            const targetTag = _.find(tagList, e => e.objNameTagName === item.name)
+            const targetTagId = targetTag.objIdTagId
+            console.log(itemValue)
 
-          itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
-
-          tagList.forEach(e => {
-            if (itemValue.indexOf(e.objNameTagName) > -1) {
-              itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
-
-              // TODO: 最好找到id
-              const targetDefaultItem = _.find(alldefaultValues, j => j.name === e.objNameTagName)
-
-              templateParams.push({
-                key: e.objIdTagId,
-                type: 'USER_TAG',
-                defaultValue: targetDefaultItem && targetDefaultItem.value,
-              })
+            const regExp = new RegExp('<span[^>]+id=\"' + item.id + '\">([^>]+)<\/span>')
+            if (item.value) {
+              itemValue = itemValue.replace(regExp, '${' + targetTagId + '!' + item.value + '}')
+            } else {
+              itemValue = itemValue.replace(regExp, '${' + targetTagId + '}')
             }
           })
 
-          // eslint-disable-next-line no-useless-escape
-          // content = content.replace(`\$\{${item}\}`, itemValue)
           templateJson.push({
             name: item,
             value: itemValue,
@@ -279,7 +260,6 @@ export default ({
           signName,
           templateCode,
           templateJson: JSON.stringify(templateJson),
-          templateParams,
         }
 
         const myFormValues = myForm.getFieldsValue()
@@ -556,8 +536,6 @@ export default ({
 
       // 需要知道 accountId
       setAccountId(channel.accountId)
-      // const {sendOutContent: {channel: editChannel}} = strategyDetail
-      // setAccountId(editChannel.accountId)
 
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
@@ -566,29 +544,29 @@ export default ({
       parseTemplateJson.forEach((item, index) => {
         const {value} = item
 
-        if (value.indexOf('${')) {
-          // 说明有属性
-          // TODO: 如何快速提取 ${}
-          const valueSplit = value.split('${')
-          let id = 0
-          valueSplit.forEach(e => {
-            if (e.indexOf('}') > -1) {
-              const target = e.split('}')[0]
-              const targetName = _.find(tagList, j => j.objIdTagId === target).objNameTagName
-              const targetValue = templateParams.shift().defaultValue
-              if (defaultValues[index] && defaultValues[index].length) {
-                defaultValues[index].push({
-                  name: targetName,
-                  value: targetValue,
-                })
-              } else {
-                defaultValues[index] = []
-                defaultValues[index].push({
-                  name: targetName,
-                  value: targetValue,
-                  id: ++id,
-                })
-              }
+        if (value.indexOf('${') > -1) {
+          // ${属性id!默认值}
+          const valueMatch = value.match(/\${[^}]+}/g) || []
+          let id = 0          
+          valueMatch.forEach((e, k) => {
+            const v = e.replace('\${', '').replace('}', '')
+            const vSplit = v.split('!')
+            const targetName = _.find(tagList, j => j.objIdTagId === vSplit[0]).objNameTagName
+            
+            if (!defaultValues[index]) defaultValues[index] = []
+            if (vSplit.length > 1) {
+              // 有默认值
+              defaultValues[index].push({
+                name: targetName,
+                value: vSplit[1],
+                id: String(++id),
+              })
+            } else {
+              defaultValues[index].push({
+                name: targetName,
+                value: undefined,
+                id: String(++id),
+              })
             }
           })
         } else {
@@ -601,6 +579,8 @@ export default ({
       const templateObj = {}
       parseTemplateJson.forEach(e => {
         let valueTemp = e.value
+
+        valueTemp = valueTemp.replace(/![^}]+}/g, '}')
         tagList.forEach(item => {
           if (valueTemp.indexOf(item.objIdTagId) > -1) {
             valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
