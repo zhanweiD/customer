@@ -9,8 +9,9 @@ import TagMarketDetail from './page-tag-market-detail'
 export default () => {
   return (
     <Switch>
-      <Route exact path="/tag-market/manage" component={TagMarket} />
-      <Route exact path="/tag-market/manage/:id" component={TagMarketDetail} />
+      {/* <Route exact path="/tag-market/manage" component={TagMarket} /> */}
+      <Route exact path="/tag-market/manage" component={TagMarketDetail} />
+      {/* <Route exact path="/tag-market/manage/:id" component={TagMarketDetail} /> */}
     </Switch>
   )
 }

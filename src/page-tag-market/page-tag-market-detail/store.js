@@ -1,6 +1,7 @@
 import {
   observable, action, runInAction, 
 } from 'mobx'
+import _ from 'lodash'
 import {successTip, errorTip, userLog} from '../../common/util'
 import io from './io'
 
@@ -29,8 +30,11 @@ class Store {
       runInAction(() => {
         this.objTreeData = res
         if (!res.length) return
-        this.selectedKey = this.selectedKey || res[0].id
-        this.objId = this.selectedKey || res[0].id
+        const target = _.find(res, e => e.name === '客户对象')
+        this.selectedKey = target.id
+        this.objId = target.id
+        // this.selectedKey = this.selectedKey || res[0].id
+        // this.objId = this.selectedKey || res[0].id
         this.getObjDetail()
         if (cb) cb()
       })
@@ -153,10 +157,10 @@ class Store {
    * @param {any} objId id
    * @returns {any} void
    */
-  @action async getObjDetailNew(objId) {
+  @action async getObjDetailNew() {
     try {
       const res = await io.getObjDetail({
-        objId,
+        objId: this.objId,
       })
 
       this.objDetailNew = res

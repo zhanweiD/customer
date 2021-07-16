@@ -14,14 +14,11 @@ import store from './store'
 @observer
 class TagMarketDetail extends Component {
   constructor(props) {
-    super(props)
-    console.log(props)
- 
-    const {match: {params: {id}}} = props
- 
-    store.selectedKey = +id
-    store.getObjDetailNew(id)
-    store.getTreeData()
+    super(props) 
+    
+    store.getTreeData(() => {
+      store.getObjDetailNew()
+    })
   }
    // @action changeTab = code => {
    //   store.typeCode = code

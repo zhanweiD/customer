@@ -257,12 +257,12 @@ const Sales = () => {
       key: 'endTime',
       width: 200,
     },
-    {
-      title: '修改时间',
-      dataIndex: 'mtime',
-      key: 'mtime',
-      width: 200,
-    },
+    // {
+    //   title: '修改时间',
+    //   dataIndex: 'mtime',
+    //   key: 'mtime',
+    //   width: 200,
+    // },
     {
       title: '操作',
       key: 'action',
