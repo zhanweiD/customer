@@ -104,6 +104,7 @@ export default class GroupList extends Component {
       key: 'action',
       title: '操作',
       width: 180,
+      fixed: 'right',
       dataIndex: 'action',
       render: (text, record) => (
         <div className="FBH FBAC">

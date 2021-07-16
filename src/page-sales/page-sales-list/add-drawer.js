@@ -3,6 +3,7 @@ import {
   Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip, Cascader, Spin,
 } from 'antd'
 import {errorTip, debounce} from '@util'
+import _ from 'lodash'
 import io from './io'
 import dropdown from '../../icon/dropdown.svg'
 
@@ -26,10 +27,10 @@ const listToTree = data => {
 
 const layout = {
   labelCol: {
-    span: 4,
+    span: 5,
   },
   wrapperCol: {
-    span: 20,
+    span: 19,
   },
 }
 
@@ -44,6 +45,7 @@ export default ({
   const [groupList, setGroupList] = useState([])
   const [eventList, setEventList] = useState([])
   const [eventOriginList, setOriginEventList] = useState([])
+  const [groupCount, setGroupCount] = useState(0)
   
   const [addForm] = Form.useForm()
   const {
@@ -156,6 +158,8 @@ export default ({
       delete value.timeGap
       delete value.timeUnit
       delete value.event
+
+      value.planGroupId = 1 // 默认分组的数据，前端页面隐藏了
       // 编辑新增
       if (planInfo.id) {
         value.id = planInfo.id
@@ -173,18 +177,31 @@ export default ({
     return time && time < moment().startOf('day')
   }
 
+  const groupChange = e => {
+    const target = _.find(groupList, item => item.id === e)
+
+    setGroupCount(target.lastCount)
+  }
+
   useEffect(() => {
     getTargetChannelList()
     getGroupList()
   }, [])
 
   useEffect(() => {
+    setGroupCount(0)
     addForm.resetFields()
+
+    if (clientGroupId) {
+      const target = _.find(groupList, item => item.id === clientGroupId)
+
+      setGroupCount(target.lastCount)
+    }
   }, [planInfo])
 
   return (
     <Drawer
-      title={id ? '编辑计划' : '新建计划'}
+      title={id ? '编辑计划' : '创建计划'}
       width={525}
       className="add-form"
       visible={showModal}
@@ -230,7 +247,7 @@ export default ({
             >
               <Input placeholder="请输入计划名称" />
             </Item>
-            <Item
+            {/* <Item
               label="计划分组"
               name="planGroupId"
               initialValue={1}
@@ -243,9 +260,17 @@ export default ({
               >
                 <Option value={1}>默认分组</Option>
               </Select>
+            </Item> */}
+            <Item
+              label="计划时间"
+              name="startEndDate"
+              rules={[{required: true, message: '请选择日期'}]}
+              initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
+            >
+              <RangePicker disabledDate={disabledDate} format={dateFormat} />
             </Item>
             <Item
-              label="受众用户"
+              label="目标客群"
               name="clientGroupId"
               initialValue={clientGroupId}
               rules={[{required: true, message: '请选择人群'}]}
@@ -254,27 +279,28 @@ export default ({
                 // labelInValue
                 placeholder="请选择人群"
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
+                onChange={groupChange}
               >
                 {
                   groupList.map(item => <Option value={item.id}>{item.name}</Option>)
                 }
               </Select>
             </Item>
-            <Item
-              label="有效时间"
-              name="startEndDate"
-              rules={[{required: true, message: '请选择日期'}]}
-              initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
-            >
-              <RangePicker disabledDate={disabledDate} format={dateFormat} />
-            </Item>
-            <Item
+            <div className="FBH FBJB mb12">
+              <div />
+              <div>
+                <span className="mr8">当前预估可触达客户数</span>
+                <span className="fs16 mr8" style={{color: '#3F5FF4'}}>{groupCount}</span>
+                位
+              </div>
+            </div>
+            {/* <Item
               label="描述"
               name="descr"
               initialValue={descr}
             >
               <TextArea placeholder="请输入描述" autoSize={{minRows: 3, maxRows: 5}} />
-            </Item>
+            </Item> */}
           </Panel>
         </Collapse>
         
