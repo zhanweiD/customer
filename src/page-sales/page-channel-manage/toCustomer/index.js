@@ -1,7 +1,6 @@
-import {Button} from 'antd'
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 
-export default props => {
+export default () => {
   useEffect(() => {
     const params = window.location.hash.split('?')[1].split('&')
     if (!params) return

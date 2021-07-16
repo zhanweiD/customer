@@ -1,5 +1,4 @@
-import {Button} from 'antd'
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import {errorTip} from '../../../common/util'
 import io from '../io'
 

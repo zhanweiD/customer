@@ -84,7 +84,7 @@ class ModalObject extends Component {
         }
         // 编辑 
         if (!isAdd) {
-          const params = {id: objDetail.id, ...param}
+          const params = {objId: objDetail.id, ...param}
           store.editNode(params, () => {
             t.handleCancel()
             // 编辑节点为当前选中节点
