@@ -45,17 +45,21 @@ class EditNode extends Component {
     const html = this.ref.current.innerHTML
     if (onChange && html !== this.lastHtml) {
       if (this.lastHtml && this.lastHtml.length - html.length > 100) {
-        // 说明删除了 span 节点
-        let tempLast = this.lastHtml
-        const tempHtml = html
-        tempLast = tempLast.replace(tempHtml, '') // 删除的内容
+        const lastKeys = this.lastHtml.match(/id="[^"]+"/g) || [] // 原有的 id
+        const nowKeys = html.match(/id="[^"]+"/g) || [] // 现在的 id
 
-        const templateIds = tempLast.match(/id="[^"]+"/g)
+        const deletedKeys = [] // 被删除的
+        
+        lastKeys.forEach(item => {
+          if (nowKeys.indexOf(item) === -1) {
+            deletedKeys.push(item)
+          }
+        })
+
         // eslint-disable-next-line no-useless-escape
-        const templateKey = _.map(templateIds, j => j.replace('id=\"', '').replace('\"', ''))
-
+        const deletedKeyIds = _.map(deletedKeys, j => j.replace('id=\"', '').replace('\"', ''))
         // 对应删除默认值
-        onUpdateAttrList(templateKey)
+        onUpdateAttrList(deletedKeyIds)
       }
 
       onChange(html)

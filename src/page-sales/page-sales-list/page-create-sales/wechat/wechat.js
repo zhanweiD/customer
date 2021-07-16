@@ -106,7 +106,7 @@ class SomeCompoent extends Component {
 
     if (type === 'sms') {
       this.attrList.forEach(item => {
-        if (item.id === +this.clickedId) {
+        if (+item.id === +this.clickedId) {
           item.name = targetText
         }
       })
@@ -184,11 +184,29 @@ class SomeCompoent extends Component {
     onChange(this.html)
 
     if (type === 'sms') {
-      this.attrList.push({
-        name: tagList[0].objNameTagName,
-        value: null,
-        id: this.id,
+      // id 的排序
+      const idMatch = this.html.match(/id="[^"]+"/g) 
+      // eslint-disable-next-line no-useless-escape
+      const sortIds = _.map(idMatch, e => e.split('\"')[1])
+      
+      const newAttrList = []
+      const attrIds = _.map(this.attrList, 'id') // 现在数组中的 id
+
+      sortIds.forEach(item => {
+        if (attrIds.indexOf(String(item)) > -1) {
+          const target = this.attrList[attrIds.indexOf(String(item))]
+          newAttrList.push(target)
+        } else {
+          // 新增的
+          newAttrList.push({
+            name: tagList[0].objNameTagName,
+            value: null,
+            id: String(item),
+          })
+        }
       })
+
+      this.attrList = newAttrList
     }
   }
 

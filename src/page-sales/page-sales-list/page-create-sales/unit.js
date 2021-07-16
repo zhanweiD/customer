@@ -450,6 +450,9 @@ export const setSmsTpl = ({
       dataIndex: 'name',
       title: '模版名称', // hover 展示详情？
     }, {
+      dataIndex: 'code',
+      title: 'code',
+    }, {
       dataIndex: 'content',
       title: '模版',
       render: (text, record) => {
