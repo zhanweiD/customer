@@ -654,11 +654,13 @@ export default ({
 
   useEffect(() => {
     if (accountCode && actionId) {
-      if (actionId === 2101 && accountId) {
-        // 发送短信
-        getAllSign(accountId)
-        getAllTpl(accountId)
-        setIsSms(true)
+      if (actionId === 2101) {
+        if (accountId) {
+          // 发送短信
+          getAllSign(accountId)
+          getAllTpl(accountId)
+          setIsSms(true)
+        }
       } else if (actionId === 2002) {
         // 微信群发消息
         getThumbMediaList()
