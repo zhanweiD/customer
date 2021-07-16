@@ -11,6 +11,7 @@ export default props => {
 
     localStorage.setItem('hostUrl', url)
     localStorage.setItem('userAccount', params.userAccount)
+    localStorage.setItem('authType', params.authType)
     try {
       const res = await io.authoriza({
         authType: params.authType, 
