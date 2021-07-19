@@ -39,7 +39,6 @@ export default ({
   tagList,
   addStrategy, // 添加策略
   editStrategy,
-
   setThreeFormData, // 表单数据
   oneFormData,
   twoFormData,
@@ -173,7 +172,7 @@ export default ({
   // 选择模版
   const templateChange = e => {
     // 目标模板数据
-    const target = _.find(templateList, item => item.template_id === e)
+    const target = _.find(templateList, item => item.templateId === e)
     const req = /{(\w+).DATA}/g
     const matchData = target.content.match(req)
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
@@ -347,13 +346,11 @@ export default ({
           sendOutContent: {
             ...value,
             ...matchAction(value.actionId),
-            // channel: matchChannel(value.channelCode),
             channel: {
               channelCode: value.channelCode[0],
               accountCode: value.channelCode[1],
             },
             actionParams: JSON.stringify(setActionParams()),
-            // templateJson: JSON.stringify(templateJson),
           },
         }
       
@@ -393,10 +390,10 @@ export default ({
   }
 
   // TODO:
-  const getTemplate = async () => {
+  const getTemplate = async code => {
     try {
       const res = await io.getTemplate({
-        accountCode,
+        accountCode: code || accountCode,
       })
       if (res && res.templateList) {
         setTemplateList(res.templateList)
@@ -459,6 +456,7 @@ export default ({
 
   useEffect(() => {
     if (!strategyDetail.id) return 
+
     const {sendOutContent} = strategyDetail
     const {
       isDelay, timeGap, timeUnit, channel, actionParams,
@@ -471,8 +469,7 @@ export default ({
     }
     // 模版消息处理
     if (sendOutContent.actionId === 2001) {
-      // getTemplate()
-      // if (!templateList.length || !tagList.length) return
+      getTemplate(channel.accountCode)
       const templateData = JSON.parse(actionParams).templateJson
       const {templateId} = JSON.parse(actionParams)
       // 有模板数据
@@ -497,7 +494,7 @@ export default ({
         }
         templateObj[e.name] = valueTemp
       })
-      const target = _.find(templateList, item => item.template_id === templateId)
+      const target = _.find(templateList, item => item.templateId === templateId)
   
       if (target && target.content) {
         setPreviewData(target.content)
@@ -642,7 +639,7 @@ export default ({
       } else if (actionId === 2002) {
         // 微信群发消息
         getThumbMediaList()
-      } else {
+      } else if (actionId === 2001) {
         // 微信模版消息
         getTemplate()
         setVis(true)
@@ -708,6 +705,8 @@ export default ({
               thumbMediaList,
               showDrawer: () => setDrawerVisible(true),
               selectMedia,
+              setPreviewData,
+              strategyDetail,
             })
           }
         </Form>

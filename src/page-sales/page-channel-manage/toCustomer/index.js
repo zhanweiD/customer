@@ -4,8 +4,8 @@ export default () => {
   useEffect(() => {
     const params = window.location.hash.split('?')[1].split('&')
     if (!params) return
-    const authCode = params[0].split('=')[1]
-    const expiresIn = params[1].split('=')[1]
+    const authCode = params[0].split('=')[1] || ''
+    const expiresIn = params[1].split('=')[1] || ''
     const req = new XMLHttpRequest()
     req.open('get', `http://zdhyx.dc.dtwave.com/wechat/authorized?auth_code=${authCode}&expires_in=${expiresIn}&userAccount=${localStorage.getItem('userAccount')}`, true)
     req.setRequestHeader('Content-Type', 'application/json')

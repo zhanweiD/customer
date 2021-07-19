@@ -193,7 +193,7 @@ export default ({list}) => {
     let action = {}
     if (actionId === 2001) {
       const {templateId} = actionParamsObj
-      template = templateList.filter(item => templateId === item.template_id)[0] || {}
+      template = templateList.filter(item => templateId === item.templateId)[0] || {}
       action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
     }
     if (actionId === 2002) {
