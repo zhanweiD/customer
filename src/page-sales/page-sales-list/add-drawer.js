@@ -18,11 +18,11 @@ const listToTree = data => {
   const newData = _.cloneDeep(data)
 
   newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
+    const children = newData.filter(sitem => sitem.parentCode === item.code)
     if (children.length && !item.children) item.children = children
   })
 
-  return newData.filter(item => item.parentId === -1)
+  return newData.filter(item => item.parentCode === '-1')
 }
 
 const layout = {
@@ -58,7 +58,7 @@ export default ({
     firstTargetContent = {},
   } = planInfo
   const {event} = firstTargetContent
-  const defaultEvent = event ? [event.channelId, event.accountId, event.eventId] : undefined
+  const defaultEvent = event ? [event.channelCode, event.accountCode, event.eventCode] : undefined
   // 获取人群
   const getGroupList = async () => {
     try {
@@ -78,6 +78,7 @@ export default ({
       errorTip(error.message)
     }
   }
+
   // 计划名称查重
   const checkPlanName = async (name, callback) => {
     try {
@@ -102,18 +103,19 @@ export default ({
     console.log(v)
   }
   const setEvent = data => {
-    const channel = eventOriginList.filter(item => item.id === data[0])[0] || {}
-    const account = eventOriginList.filter(item => item.id === data[1])[0] || {}
-    const eventItem = eventOriginList.filter(item => item.id === data[2])[0] || {}
-    return {
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
-      eventId: eventItem.id,
-      eventCode: eventItem.code,
-      eventName: eventItem.name,
-    }
+    // const channel = eventOriginList.filter(item => item.code === data[0])[0] || {}
+    // const account = eventOriginList.filter(item => item.code === data[1])[0] || {}
+    const eventItem = eventOriginList.filter(item => item.code === data[2])[0] || {}
+    // return {
+    //   // channelId: channel.id,
+    //   channelCode: channel.code,
+    //   // accountId: account.id,
+    //   accountCode: account.code,
+    //   // eventId: eventItem.id,
+    //   eventCode: eventItem.code,
+    //   eventName: eventItem.name,
+    // }
+    return eventItem.name
   }
   const checkNumber = (rule, value, callback) => {
     if (!value) {
@@ -153,12 +155,17 @@ export default ({
       value.firstTargetContents = {
         timeGap: value.timeGap,
         timeUnit: value.timeUnit,
-        event: setEvent(value.event),
+        event: {
+          channelCode: value.event[0],
+          accountCode: value.event[1],
+          eventCode: value.event[2],
+          eventName: setEvent(value.event),
+        },
       }
       delete value.timeGap
       delete value.timeUnit
       delete value.event
-
+      delete value.validationTime
       value.planGroupId = 1 // 默认分组的数据，前端页面隐藏了
       // 编辑新增
       if (planInfo.id) {
@@ -312,8 +319,8 @@ export default ({
             <div className="fs14 mb16">首要目标</div>
             <Item
               label="完成时间"
-              name="validation-time"
-              initialValue="validation-time"
+              name="validationTime"
+              initialValue="validationTime"
               rules={[{required: true, message: '请输入时间'}]}
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
@@ -358,7 +365,7 @@ export default ({
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
                 fieldNames={{
                   label: 'name',
-                  value: 'id',
+                  value: 'code',
                   children: 'children',
                 }}
                 onChange={changeEvent}

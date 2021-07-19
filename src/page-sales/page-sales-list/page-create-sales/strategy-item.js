@@ -17,19 +17,17 @@ export default ({
   matchTime,
   comparisionList = [],
   originEventList = [],
-  allChannelActions = [],
 }) => {
   const [wechartActions, setWechartActions] = useState([])
   const [smsActions, setSmsActions] = useState([])
-  const [smsTplList, setSmsTplList] = useState([])
   // 营销动作列表
-  const getChannelActions = async channelId => {
+  const getChannelActions = async channelCode => {
     try {
-      const res = await io.getChannelActions({channelId})
-      if (channelId === 1) {
+      const res = await io.getChannelActions({channelCode})
+      if (channelCode === 'WECHAT_OFFICIAL_ACCOUNTS') {
         setWechartActions(res)
       }
-      if (channelId === 2) {
+      if (channelCode === 'ALIYUN_SMS') {
         setSmsActions(res)
       }
     } catch (error) {
@@ -38,14 +36,15 @@ export default ({
   }
   
   useEffect(() => {
-    getChannelActions(1)
-    getChannelActions(2)
+    getChannelActions('WECHAT_OFFICIAL_ACCOUNTS')
+    getChannelActions('ALIYUN_SMS')
   }, [])
+
   // 返回事件详情
   const setEventDom = event => {
-    const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
-    const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
-    const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
+    const channel = conditionList.filter(item => item.code === event.channelCode)[0] || {}
+    const account = conditionList.filter(item => item.code === event.accountCode)[0] || {}
+    const even = conditionList.filter(item => item.code === event.eventCode)[0] || {}
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
 
@@ -69,7 +68,6 @@ export default ({
     }
     if (frequency !== '0') {
       time = CycleSelect.cronSrialize(cron)
-      console.log(time)
     } else {
       time = {time: cron}
     }
@@ -86,9 +84,9 @@ export default ({
 
   // 返回动作详情
   const setActionUserDom = user => {
-    const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
-    const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
-    const even = originEventList.filter(item => item.id === user.eventId)[0] || {}
+    const channel = originEventList.filter(item => item.code === user.channelCode)[0] || {}
+    const account = originEventList.filter(item => item.code === user.accountCode)[0] || {}
+    const even = originEventList.filter(item => item.code === user.eventCode)[0] || {}
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
 
@@ -100,7 +98,7 @@ export default ({
     let action = {}
     if (actionId === 2001) {
       const {templateId} = actionParamsObj
-      template = templateList.filter(item => templateId === item.template_id)[0] || {}
+      template = templateList.filter(item => templateId === item.templateId)[0] || {}
       action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
     }
     if (actionId === 2002) {
@@ -113,8 +111,8 @@ export default ({
       template = templateCode
     }
 
-    const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
-    const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
+    const obj = strChannelList.filter(item => channel.channelCode === item.code)[0] || {}
+    const account = strChannelList.filter(item => channel.accountCode === item.code)[0] || {}
     return `${obj.name}-${account.name} ${action.actionName}(${template.title || template})`
   }
 

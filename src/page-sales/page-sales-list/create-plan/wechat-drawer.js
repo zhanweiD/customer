@@ -237,7 +237,7 @@ export default ({
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
+        accountCode: 'wxe2b3f176ba1a4f33',
       })
 
       if (res && res.template_list) {

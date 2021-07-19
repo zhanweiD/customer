@@ -69,16 +69,6 @@ const SalesDetail = ({visible, setVisible, store}) => {
       // 获取过程配置的数据
       const analysisValues = _.values(rest)
 
-      /*
-        {
-          "eventId": 1,
-          "eventCode": "MSG_TEXT",
-          "channelId": 1,
-          "channelCode": "wxe2b3f176ba1a4f33",
-          "accountId": 8207207676424,
-          "accountCode": "wxe2b3f176ba1a4f33"
-        }
-      */
       const resultValues = []
 
       dragItems.forEach(item => {

@@ -1,5 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-useless-escape */
 import {useState, useEffect, Fragment} from 'react'
 import {Form, Button, Input, Select, Cascader, message} from 'antd'
 import _ from 'lodash'
@@ -34,7 +32,6 @@ const layout = {
 export default ({
   strategyDetail = {}, // 用于编辑回显
   treeStrChannelList, // 触达渠道列表
-  strChannelList, // 触达渠道
   planInfo, // 计划信息
   current, 
   prevStep,
@@ -46,8 +43,6 @@ export default ({
   setThreeFormData, // 表单数据
   oneFormData,
   twoFormData,
-  threeFormData,
-  setResetThreeForm, // 为了step-two能重置step-three
   strName, // 策略名称
 }) => {
   const [templateList, setTemplateList] = useState([])
@@ -62,7 +57,6 @@ export default ({
   const [vis, setVis] = useState(false) // 手机预览
   const [actionId, setActionId] = useState(null) // 用于判断动作类型
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
-  const [accountId, setAccountId] = useState(null) // 使用 accountId
   const [myForm] = Form.useForm()
 
   const [smsForm] = Form.useForm()
@@ -77,9 +71,9 @@ export default ({
   const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
 
   // 营销动作列表
-  const getChannelActions = async channelId => {
+  const getChannelActions = async channelCode => {
     try {
-      const res = await io.getChannelActions({channelId})
+      const res = await io.getChannelActions({channelCode})
       // strategyConditionType
       let newData = []
       if (twoFormData.strategyConditionType) {
@@ -201,21 +195,8 @@ export default ({
     setVis(true)
   }
 
-  // 返回渠道信息（code id）
-  const matchChannel = ids => {
-    const channel = strChannelList.filter(item => item.id === ids[0])[0] || {}
-    const account = strChannelList.filter(item => item.id === ids[1])[0] || {}
-    return {
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
-    }
-  }
-
   const matchAction = id => {
     const actionObj = channelActionList.filter(item => item.actionId === id)[0] || {}
-    console.log(actionObj)
     return actionObj
   }
 
@@ -239,13 +220,12 @@ export default ({
           alldefaultValues.forEach(item => {
             const targetTag = _.find(tagList, e => e.objNameTagName === item.name)
             const targetTagId = targetTag.objIdTagId
-            console.log(itemValue)
 
-            const regExp = new RegExp('<span[^>]+id=\"' + item.id + '\">([^>]+)<\/span>')
+            const regExp = new RegExp(`<span[^>]+id=\"${item.id}\">([^>]+)<\/span>`)
             if (item.value) {
-              itemValue = itemValue.replace(regExp, '${' + targetTagId + '!' + item.value + '}')
+              itemValue = itemValue.replace(regExp, `\${${targetTagId}!${item.value}}`)
             } else {
-              itemValue = itemValue.replace(regExp, '${' + targetTagId + '}')
+              itemValue = itemValue.replace(regExp, `\${${targetTagId}}`)
             }
           })
 
@@ -273,14 +253,14 @@ export default ({
           sendOutContent: {
             ...myFormValues,
             ...matchAction(myFormValues.actionId),
-            channel: matchChannel(myFormValues.channelCode),
+            // channel: matchChannel(myFormValues.channelCode),
+            channel: {
+              channelCode: myFormValues.channelCode[0],
+              accountCode: myFormValues.channelCode[1],
+            },
             actionParams: JSON.stringify(actionParams),
           },
         }
-
-        console.log('~~~最终参数~~~')
-        console.log(params)
-        console.log('~~~最终参数~~~')
 
         // 删除编辑前部分无用属性
         if (params.strategyConditionType) {
@@ -367,7 +347,11 @@ export default ({
           sendOutContent: {
             ...value,
             ...matchAction(value.actionId),
-            channel: matchChannel(value.channelCode),
+            // channel: matchChannel(value.channelCode),
+            channel: {
+              channelCode: value.channelCode[0],
+              accountCode: value.channelCode[1],
+            },
             actionParams: JSON.stringify(setActionParams()),
             // templateJson: JSON.stringify(templateJson),
           },
@@ -412,49 +396,48 @@ export default ({
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: accountCode,
+        accountCode,
       })
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
       }
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
   // 短信签名列表
-  const getAllSign = async (id, cb = () => {}) => {
+  const getAllSign = async (code, cb = () => {}) => {
     try {
       const res = await io.getAllSign({
-        accountId: id || accountId,
+        accountCode: code || accountCode,
       })
 
       setSmsSignList(res)
       cb()
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
   // 短信模版列表
-  const getAllTpl = async (id, cb = () => {}) => {
+  const getAllTpl = async (code, cb = () => {}) => {
     try {
       const res = await io.getAllTpl({
-        accountId: id || accountId,
+        accountCode: code || accountCode,
       })
 
       setSmsTplList(res)
       cb()
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
   // 触达通道
-  const changeCode = (v, item) => {
+  const changeCode = v => {
     getChannelActions(v[0])
-    setAccountCode(item[1].code)
-    setAccountId(item[1].id)
+    setAccountCode(v[1])
     setActionId(undefined)
     myForm.setFieldsValue({actionId: undefined})
     setIsSms(false)
@@ -480,7 +463,7 @@ export default ({
     const {
       isDelay, timeGap, timeUnit, channel, actionParams,
     } = sendOutContent
-    const channelCode = [channel.channelId, channel.accountId]
+    const channelCode = [channel.channelCode, channel.accountCode]
 
     // 群发消息处理
     if (sendOutContent.actionId === 2002) {
@@ -533,9 +516,6 @@ export default ({
       const parseActionParams = JSON.parse(actionParams)
       const {signName, templateCode, templateJson, templateParams} = parseActionParams
       const parseTemplateJson = JSON.parse(templateJson)
-
-      // 需要知道 accountId
-      setAccountId(channel.accountId)
 
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
@@ -600,10 +580,8 @@ export default ({
       })
 
       // 把签名和模版的数据准备好
-      getAllSign(channel.accountId)
-      getAllTpl(channel.accountId)
-      // getAllSign(editChannel.accountId)
-      // getAllTpl(editChannel.accountId)
+      getAllSign(channel.accountCode)
+      getAllTpl(channel.accountCode)
 
       setSmsTplId(templateCode)
 
@@ -648,17 +626,17 @@ export default ({
       const {channel = {}} = sendOutContent
       setActionId(sendOutContent.actionId)
       setAccountCode(channel.accountCode)
-      getChannelActions(channel.channelId)
+      getChannelActions(channel.channelCode)
     }
   }, [strategyDetail])
 
   useEffect(() => {
     if (accountCode && actionId) {
       if (actionId === 2101) {
-        if (accountId) {
+        if (accountCode) {
           // 发送短信
-          getAllSign(accountId)
-          getAllTpl(accountId)
+          getAllSign(accountCode)
+          getAllTpl(accountCode)
           setIsSms(true)
         }
       } else if (actionId === 2002) {
@@ -672,10 +650,6 @@ export default ({
       }
     }
   }, [accountCode, actionId])
-
-  // useEffect(() => {
-  //   setResetThreeForm(myForm)
-  // }, [])
 
   return (
     <Fragment>
@@ -704,7 +678,7 @@ export default ({
               suffixIcon={<img src={dropdown} alt="dropdown" />}
               fieldNames={{
                 label: 'name',
-                value: 'id',
+                value: 'code',
                 children: 'children',
               }}
             />
@@ -737,7 +711,6 @@ export default ({
             })
           }
         </Form>
-        {/* {console.log(isSms)} */}
         {
           <div
             style={{
@@ -753,7 +726,7 @@ export default ({
                   smsSignList,
                   smsTplId,
                   smsTplList,
-                  accountId,
+                  accountCode,
                   getAllSign,
                   getAllTpl,
                   tagList,

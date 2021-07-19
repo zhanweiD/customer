@@ -44,11 +44,11 @@ export const listToTree = data => {
   const newData = _.cloneDeep(data)
 
   newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
+    const children = newData.filter(sitem => sitem.parentCode === item.code)
     if (children.length && !item.children) item.children = children
   })
 
-  return newData.filter(item => item.parentId === -1)
+  return newData.filter(item => item.parentCode === '-1')
 }
 
 export const matchTime = v => {
@@ -82,7 +82,7 @@ export const setTemplate = ({
               <div className="select-content">
                 <div className="FBH content-item">
                   <div>
-                    {mediaData.thumb_url ? <img className="mr16" height={88} src={mediaData.thumb_url} alt="" /> : ''}
+                    {mediaData.thumbUrl ? <img className="mr16" height={88} src={mediaData.thumbUrl} alt="" /> : ''}
                   </div>
                   <div>
                     <div className="item-title">{mediaData.title}</div>
@@ -132,7 +132,7 @@ export const setTemplate = ({
             suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
             {
-              templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
+              templateList.map(item => <Option value={item.templateId}>{item.title}</Option>)
             }
           </Select>
         </Item>

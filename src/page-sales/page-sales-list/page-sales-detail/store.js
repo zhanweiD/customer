@@ -194,14 +194,23 @@ export default class Store {
 
         const datas = []
         dataCopy.forEach(item => {
-          const targetChannel = _.find(this.eventList, e => e.code === item.channelCode && e.id === item.channelId)
-          const targetAccount = _.find(this.eventList, e => e.code === item.accountCode && e.id === item.accountId)
-          const targetEvent = _.find(this.eventList, e => e.code === item.eventCode && item.eventId)
+          const targetChannel = _.find(this.eventList, e => e.code === item.channelCode)
+          const targetAccount = _.find(this.eventList, e => e.code === item.accountCode)
+          const targetEvent = _.find(this.eventList, e => e.code === item.eventCode)
 
           if (targetChannel && targetAccount && targetEvent) {
             datas.push(`${targetChannel.name}-${targetAccount.name}-${targetEvent.name}`)
           }
         })
+        // dataCopy.forEach(item => {
+        //   const targetChannel = _.find(this.eventList, e => e.code === item.channelCode && e.id === item.channelId)
+        //   const targetAccount = _.find(this.eventList, e => e.code === item.accountCode && e.id === item.accountId)
+        //   const targetEvent = _.find(this.eventList, e => e.code === item.eventCode && item.eventId)
+
+        //   if (targetChannel && targetAccount && targetEvent) {
+        //     datas.push(`${targetChannel.name}-${targetAccount.name}-${targetEvent.name}`)
+        //   }
+        // })
 
         this.initAnalisysValue = datas
       }
@@ -257,9 +266,9 @@ export default class Store {
       }
 
       if (res && res.length && res.length > 0) {
-        const channelName = _.find(res, e => e.id === channelId).name
-        const accountName = _.find(res, e => e.id === accountId).name
-        const eventName = _.find(res, e => e.id === eventId).name
+        const channelName = _.find(res, e => e.code === channelCode).name
+        const accountName = _.find(res, e => e.code === accountCode).name
+        const eventName = _.find(res, e => e.code === eventCode).name
 
         this.planTarget = `${timeGap}${timeMap[timeUnit]}内完成 ${channelName}-${accountName}-${eventName}`
         this.analysisEnd = `${channelName}-${accountName}-${eventName}`

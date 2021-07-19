@@ -249,13 +249,15 @@ const Sales = () => {
       title: '开始时间',
       dataIndex: 'startTime',
       key: 'startTime',
-      width: 200,
+      width: 100,
+      render: v => v.split(' ')[0],
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       key: 'endTime',
-      width: 200,
+      width: 100,
+      render: v => v.split(' ')[0],
     },
     // {
     //   title: '修改时间',

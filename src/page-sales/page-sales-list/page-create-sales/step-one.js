@@ -1,10 +1,10 @@
 import {useEffect, useState, Fragment} from 'react'
-import {Form, Select, Button, Input, Radio, Collapse, Cascader, Popconfirm} from 'antd'
+import {Form, Select, Button, Radio, Collapse, Cascader, Popconfirm} from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
 import Attr from '../icon/wechat-attr.svg'
 import RuleItem from './ruleItem'
-import io from './io'
 import dropdown from '../../../icon/dropdown.svg'
+import {listToTree} from './unit'
 
 const {Item, List} = Form
 const {Option} = Select 
@@ -18,26 +18,12 @@ const layout = {
   },
 }
 
-const listToTree = data => {
-  const newData = _.cloneDeep(data)
-
-  newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
-    if (children.length && !item.children) item.children = children
-  })
-
-  return newData.filter(item => item.parentId === -1)
-}
-
 const CreateSales = ({
   nextStep, 
   current, 
   objTagList, 
-  oneFormData, 
   setOneFormData, 
-  setStrategyDetail, 
   strategyDetail,
-  filterChannelList,
   originEventList,
 }) => {
   const [oneForm] = Form.useForm()
@@ -47,26 +33,15 @@ const CreateSales = ({
   const [selectKey, setSelectKey] = useState([]) // 已选事件id
   const [channelList, setChannelList] = useState([]) // 带disable的事件
 
-  // 返回事件全部信息（code, id）
-  const matchEnent = data => {
-    const channel = originEventList.filter(item => item.id === data[0])[0] || {}
-    const account = originEventList.filter(item => item.id === data[1])[0] || {}
-    const event = originEventList.filter(item => item.id === data[2])[0] || {}
-    return {
-      eventId: event.id,
-      eventCode: event.code,
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
-    }
-  }
-
   // 保存表单值
   const complete = () => {
     oneForm.validateFields().then(value => {
       if (value.clientGroupFilterType) {
-        const events = value.clientGroupFilterContent.map(item => matchEnent(item.event))
+        const events = value.clientGroupFilterContent.map(item => ({
+          channelCode: item.event[0],
+          accountCode: item.event[1],
+          eventCode: item.event[2],
+        }))
         value.clientGroupUserActionFilterContent = {events, logic: userLogic}
       } else if (value.clientGroupFilterContent[0]) {
         const param = value.clientGroupFilterContent.map(item => {
@@ -75,7 +50,6 @@ const CreateSales = ({
         })
         value.clientGroupTagFilterContent = JSON.stringify({logic: userLogic, express: param || []})
       }
-
       setOneFormData(value)
       nextStep()
     })
@@ -104,7 +78,7 @@ const CreateSales = ({
   // 为已选择事件添加disabled
   useEffect(() => {
     const data = originEventList.map(item => {
-      if (selectKey.find(jtem => jtem === item.id)) {
+      if (selectKey.find(jtem => jtem === item.code)) {
         item.disabled = true
       } else {
         item.disabled = false
@@ -118,7 +92,7 @@ const CreateSales = ({
     if (!strategyDetail.id) return
     if (strategyDetail.clientGroupFilterType) {
       const {clientGroupUserActionFilterContent, clientGroupFilterType} = strategyDetail
-      const list = clientGroupUserActionFilterContent.events.map(item => ({event: [item.channelId, item.accountId, item.eventId]}))
+      const list = clientGroupUserActionFilterContent.events.map(item => ({event: [item.channelCode, item.accountCode, item.eventCode]}))
       setClientGroup(list)
       setUserLogic(clientGroupUserActionFilterContent.logic)
       setRadioType(clientGroupFilterType)
@@ -159,7 +133,11 @@ const CreateSales = ({
               initialValue={radioType}
               style={{marginBottom: 12}}
             >
-              <Radio.Group name="radiogroup" onChange={v => setRadioType(v.target.value)}>
+              <Radio.Group 
+                name="radiogroup" 
+                onChange={v => setRadioType(v.target.value)}
+                disabled={strategyDetail.id}
+              >
                 <Radio value={0}>按用户标签筛选</Radio>
                 <Radio value={1}>按用户行为筛选</Radio>
               </Radio.Group>
@@ -211,11 +189,11 @@ const CreateSales = ({
                                   suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
-                                    value: 'id',
+                                    value: 'code',
                                     children: 'children',
                                   }}
                                   style={{
-                                    width: '200px',
+                                    width: '360px',
                                   }}
                                   onChange={checkSelectEvent}
                                 />

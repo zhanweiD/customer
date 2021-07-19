@@ -25,6 +25,7 @@ export default ({
   smsTplList,
   smsTplId,
   accountId,
+  accountCode,
   getAllSign,
   getAllTpl,
   tagList,
@@ -126,7 +127,7 @@ export default ({
       const targetTpl = _.find(smsTplList, e => e.id === formValues.templateCode)
 
       sendSMSIO({
-        accountId,
+        accountCode,
         phoneNumbers: +value.phoneNumbers,
         signName: formValues.signName,
         templateCode: formValues.templateCode,
@@ -298,7 +299,7 @@ export default ({
         {
           setSmsSign({
             smsSignList,
-            accountId,
+            accountCode,
             getAllSign,
           })
         }
@@ -314,7 +315,7 @@ export default ({
         {
           setSmsTpl({
             smsTplList,
-            accountId,
+            accountCode,
             getAllTpl,
           })
         }
