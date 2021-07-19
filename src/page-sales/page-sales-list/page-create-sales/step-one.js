@@ -135,8 +135,11 @@ const CreateSales = ({
             >
               <Radio.Group 
                 name="radiogroup" 
-                onChange={v => setRadioType(v.target.value)}
-                disabled={strategyDetail.id}
+                onChange={v => {
+                  setRadioType(v.target.value)
+                  oneForm.setFieldsValue({clientGroupFilterContent: []})
+                }}
+                // disabled={strategyDetail.id}
               >
                 <Radio value={0}>按用户标签筛选</Radio>
                 <Radio value={1}>按用户行为筛选</Radio>
