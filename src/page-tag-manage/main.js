@@ -9,8 +9,9 @@ import TagManage from './page-tag-object'
 export default () => {
   return (
     <Switch>
-      <Route exact path="/tag-manage/uphold" component={TagManage} />
-      <Route exact path="/tag-manage/uphold/:id" component={TagManageDetail} />
+      {/* <Route exact path="/tag-manage/uphold" component={TagManage} /> */}
+      <Route exact path="/tag-manage/uphold" component={TagManageDetail} />
+      {/* <Route exact path="/tag-manage/uphold/:id" component={TagManageDetail} /> */}
     </Switch>
   )
 }
