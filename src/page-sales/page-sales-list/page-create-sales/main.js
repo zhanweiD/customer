@@ -106,6 +106,7 @@ const CreateSales = props => {
       console.log(error.message)
     }
   }
+  
   // 配置详情
   const getStrategyDetail = async id => {
     setStrategyDetail({})

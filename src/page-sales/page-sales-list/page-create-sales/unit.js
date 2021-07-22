@@ -1,8 +1,20 @@
 import {useState} from 'react'
 import {
-  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag, Popconfirm, message,
+  Form, 
+  DatePicker, 
+  TimePicker, 
+  Input, 
+  Select, 
+  Button, 
+  Table, 
+  Tag, 
+  Popconfirm, 
+  message,
+  Upload,
 } from 'antd'
+import {LoadingOutlined, PlusOutlined} from '@ant-design/icons'
 
+import {marketingApi} from '../../../common/util'
 import io from './io'
 import Wechat from './wechat/wechat'
 import dropdown from '../../../icon/dropdown.svg'
@@ -61,6 +73,18 @@ export const matchTime = v => {
   return '天'
 }
 
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+  if (!isJpgOrPng) {
+    message.error('仅支持JPG/PNG格式图片!')
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    message.error('图片大小不能超过2MB!')
+  }
+  return isJpgOrPng && isLt2M
+}
+
 // step-three 设置模版
 export const setTemplate = ({
   templateChange,
@@ -70,6 +94,10 @@ export const setTemplate = ({
   actionId,
   showDrawer,
   selectMedia,
+  uploadLoading,
+  imageUrl,
+  uploadChange,
+  imageUid,
 }) => {
   // 发送图文消息
   if (actionId === 2002) {
@@ -118,6 +146,7 @@ export const setTemplate = ({
       </div>
     )
   }
+  // 发送模版消息
   if (actionId === 2001) {
     return (
       <div>
@@ -154,6 +183,64 @@ export const setTemplate = ({
             </Item>
           ))
         }
+      </div>
+    )
+  }
+  // 发送弹窗消息
+  if (actionId === 2201) {
+    const uploadButton = (
+      <div>
+        {uploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+        <div style={{marginTop: 8}}>Upload</div>
+      </div>
+    )
+    return (
+      <div>
+        <Item
+          label="弹窗触达页"
+          name="dialogPage"
+          rules={[{required: true, message: '弹窗触达页不能为空'}]}
+          initialValue="home"
+        >
+          <Select 
+            placeholder="请选择弹窗触达页"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            <Option value="home">首页</Option>
+          </Select>
+        </Item>
+        <Item
+          label="弹窗图片"
+          name="resourceId"
+          extra="图片在个体画像中显示，支持Jpg/Png格式，大小不超过2MB"
+          // rules={[{required: true, message: '弹窗触达页不能为空'}]}
+          initialValue={imageUid}
+        >
+          <Upload
+            name="image"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            beforeUpload={beforeUpload}
+            action={`${marketingApi}/resource/uploadImage`}
+            onChange={uploadChange}
+          >
+            {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}} /> : uploadButton}
+          </Upload>
+        </Item>
+        <Item
+          label="弹窗跳转"
+          name="redirectUrl"
+          rules={[{required: true, message: '弹窗跳转不能为空'}]}
+          initialValue="https://www.dtwave.com"
+        >
+          <Select 
+            placeholder="请选择弹窗跳转地址"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            <Option value="https://www.dtwave.com">数澜科技</Option>
+          </Select>
+        </Item>
       </div>
     )
   }

@@ -68,6 +68,21 @@ export default ({
 
   const [previewData, setPreviewData] = useState('')
   const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
+  const [uploadLoading, setUploadLoading] = useState(false) // 图片上传状态
+  const [imageUrl, setImageUrl] = useState('') // 图片地址
+  const [imageUid, setImageUid] = useState('') // 图片id
+
+  // 微信小程序图片
+  const getImageUrl = async resourceId => {
+    try {
+      const res = await io.getImageUrl({
+        resourceId,
+      })
+      setImageUrl(res)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   // 营销动作列表
   const getChannelActions = async channelCode => {
@@ -192,6 +207,92 @@ export default ({
     setTemplateKeyList(matchKeys)
     setPreviewData(target.content)
     setVis(true)
+  }
+
+  // TODO:
+  const getTemplate = async code => {
+    try {
+      const res = await io.getTemplate({
+        accountCode: code || accountCode,
+      })
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 短信签名列表
+  const getAllSign = async (code, cb = () => {}) => {
+    try {
+      const res = await io.getAllSign({
+        accountCode: code || accountCode,
+      })
+
+      setSmsSignList(res)
+      cb()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 短信模版列表
+  const getAllTpl = async (code, cb = () => {}) => {
+    try {
+      const res = await io.getAllTpl({
+        accountCode: code || accountCode,
+      })
+
+      setSmsTplList(res)
+      cb()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 触达通道
+  const changeCode = v => {
+    getChannelActions(v[0])
+    setAccountCode(v[1])
+    setActionId(undefined)
+    myForm.setFieldsValue({actionId: undefined})
+    setIsSms(false)
+    setVis(false)
+  }
+
+  // 改变动作
+  const changeAction = v => {
+    setActionId(v)
+  }
+
+  // 关于属性的默认值
+  const onDefaultValChange = (val, index) => {
+    setSmsDefaultValues({
+      ...smsDefaultValues,
+      [index]: val,
+    })
+  }
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+  }
+
+  const uploadChange = info => {
+    const {status, response} = info.file
+
+    if (status === 'uploading') {
+      setUploadLoading(true)
+    }
+    if (status === 'done') {
+      getBase64(info.file.originFileObj, url => {
+        setUploadLoading(false)
+        setImageUrl(url)
+        setImageUid(response.content)
+      })
+    }
   }
 
   const matchAction = id => {
@@ -334,6 +435,13 @@ export default ({
               templateId: value.templateId,
             } 
           }
+          if (value.actionId === 2201) {
+            return {
+              dialogPage: value.dialogPage,
+              resourceId: imageUid,
+              redirectUrl: value.redirectUrl,
+            }
+          }
         }
 
         const params = {
@@ -389,71 +497,6 @@ export default ({
     }
   }
 
-  // TODO:
-  const getTemplate = async code => {
-    try {
-      const res = await io.getTemplate({
-        accountCode: code || accountCode,
-      })
-      if (res && res.templateList) {
-        setTemplateList(res.templateList)
-      }
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
-  // 短信签名列表
-  const getAllSign = async (code, cb = () => {}) => {
-    try {
-      const res = await io.getAllSign({
-        accountCode: code || accountCode,
-      })
-
-      setSmsSignList(res)
-      cb()
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
-  // 短信模版列表
-  const getAllTpl = async (code, cb = () => {}) => {
-    try {
-      const res = await io.getAllTpl({
-        accountCode: code || accountCode,
-      })
-
-      setSmsTplList(res)
-      cb()
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
-  // 触达通道
-  const changeCode = v => {
-    getChannelActions(v[0])
-    setAccountCode(v[1])
-    setActionId(undefined)
-    myForm.setFieldsValue({actionId: undefined})
-    setIsSms(false)
-    setVis(false)
-  }
-
-  // 改变动作
-  const changeAction = v => {
-    setActionId(v)
-  }
-
-  // 关于属性的默认值
-  const onDefaultValChange = (val, index) => {
-    setSmsDefaultValues({
-      ...smsDefaultValues,
-      [index]: val,
-    })
-  }
-
   useEffect(() => {
     if (!strategyDetail.id) return 
 
@@ -463,6 +506,11 @@ export default ({
     } = sendOutContent
     const channelCode = [channel.channelCode, channel.accountCode]
 
+    if (sendOutContent.actionId === 2201) {
+      const {dialogPage, resourceId, redirectUrl} = JSON.parse(actionParams)
+      getImageUrl(resourceId)
+      setImageUid(resourceId)
+    }
     // 群发消息处理
     if (sendOutContent.actionId === 2002) {
       setSelectMedia(JSON.parse(actionParams))
@@ -612,6 +660,8 @@ export default ({
       setTouchWay(0)
       setPreviewData('')
       setSelectMedia({})
+      setImageUrl('')
+      setImageUid('')
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
@@ -644,6 +694,8 @@ export default ({
         getTemplate()
         setVis(true)
         setIsSms(false)
+      } else if (actionId === 2201) {
+        // getImageUrl()
       }
     }
   }, [accountCode, actionId])
@@ -707,6 +759,9 @@ export default ({
               selectMedia,
               setPreviewData,
               strategyDetail,
+              uploadLoading,
+              uploadChange,
+              imageUrl,
             })
           }
         </Form>
@@ -736,6 +791,7 @@ export default ({
                   setVis,
                   setPreviewData,
                   smsForm,
+                  imageUid,
                 })
               }
             </Form>

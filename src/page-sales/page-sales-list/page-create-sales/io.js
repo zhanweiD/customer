@@ -35,6 +35,8 @@ const api = {
   addTpl: get(`${marketingApi}/aliyunsms/add_template`), // 添加短信模版
   deleteTpl: get(`${marketingApi}/aliyunsms/delete_template`), // 删除模版
   sendSms: post(`${marketingApi}/aliyunsms/send`), // 发送短信
+
+  getImageUrl: get(`${marketingApi}/resource/getImage`), // 获取图片
 } 
 
 ioContext.create('createSales', api) 

@@ -20,6 +20,7 @@ export default ({
 }) => {
   const [wechartActions, setWechartActions] = useState([])
   const [smsActions, setSmsActions] = useState([])
+  const [weAppletActions, setWeAppletActions] = useState([])
   // 营销动作列表
   const getChannelActions = async channelCode => {
     try {
@@ -30,6 +31,9 @@ export default ({
       if (channelCode === 'ALIYUN_SMS') {
         setSmsActions(res)
       }
+      if (channelCode === 'WECHAT_APPLET') {
+        setWeAppletActions(res)
+      }
     } catch (error) {
       errorTip(error.message)
     }
@@ -38,6 +42,7 @@ export default ({
   useEffect(() => {
     getChannelActions('WECHAT_OFFICIAL_ACCOUNTS')
     getChannelActions('ALIYUN_SMS')
+    getChannelActions('WECHAT_APPLET')
   }, [])
 
   // 返回事件详情
@@ -109,6 +114,12 @@ export default ({
       const {templateCode} = actionParamsObj
       action = smsActions.filter(item => actionId === item.actionId)[0] || {}
       template = templateCode
+    }
+
+    if (actionId === 2201) {
+      // const {templateCode} = actionParamsObj
+      action = weAppletActions.filter(item => actionId === item.actionId)[0] || {}
+      template = '图片弹窗'
     }
 
     const obj = strChannelList.filter(item => channel.channelCode === item.code)[0] || {}
