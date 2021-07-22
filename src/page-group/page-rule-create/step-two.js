@@ -36,7 +36,6 @@ export default class StepTwo extends Component {
 
   @action next = () => {
     this.nameRef.current.validateFields().then(value => {
-      console.log(value)
       this.store.oneForm = value
       this.formRef.current
         .validateFields()
@@ -172,7 +171,16 @@ export default class StepTwo extends Component {
 
   render() {
     const {
-      current, configTagList, drawerConfigTagList, relList, posList, objId, detail, isCopy, groupId,
+      current, 
+      configTagList, 
+      drawerConfigTagList, 
+      relList, 
+      posList, 
+      objId, 
+      detail, 
+      isCopy, 
+      groupId,
+      submitLoading,
     } = this.store
     return (
       // <div className="step-two" style={{display: current === 1 ? 'block' : 'none'}}>
@@ -193,7 +201,7 @@ export default class StepTwo extends Component {
             }, {
               validator: this.checkName,
             }]}
-            // initialValue={isCopy ? undefined : detail.name}
+            initialValue={isCopy ? undefined : detail.name}
           >
             <Input disabled={!objId || (groupId && !isCopy)} placeholder="请输入名称" />
           </Form.Item>
@@ -222,18 +230,20 @@ export default class StepTwo extends Component {
         />
         <div className="steps-action">
           {/* <Button style={{marginRight: 16}} onClick={this.pre}>取消</Button> */}
+          <Button style={{marginRight: 16}} onClick={this.openAysDrawer}>数据分析</Button>
+
           <Button 
             style={{marginRight: 16}}
             onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`}
           >
             返回
           </Button>
-          <Button style={{marginRight: 16}} onClick={this.openAysDrawer}>数据分析</Button>
           <Button
             type="primary"
             onClick={this.next}
+            loading={submitLoading}
           >
-            创建客群
+            确定
           </Button>
         </div>
         <DrawerAnalysis />

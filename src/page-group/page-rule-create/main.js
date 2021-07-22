@@ -3,7 +3,7 @@ import {observer, Provider} from 'mobx-react'
 import {action, toJS} from 'mobx'
 import {Steps, message, Modal} from 'antd'
 
-import {authView} from '../../component'
+import {authView, Loading} from '../../component'
 import store from './store'
 import StepOne from './step-one'
 import StepTwo from './step-two'
@@ -24,10 +24,10 @@ class RuleCreate extends Component {
     store.groupId = +params.groupId
     store.isCopy = +params.isCopy
 
-    if (params.isCopy) {
+    if (store.isCopy) {
       return headerTitle = '复制客群'
     }
-    if (params.groupId) {
+    if (store.groupId) {
       headerTitle = '编辑客群'
     } else {
       headerTitle = '新建客群'
@@ -35,13 +35,13 @@ class RuleCreate extends Component {
   }
 
   componentWillMount() {
-    store.getEntityList(() => {
-      store.getConfigTagList()
-      store.getRelList()
-    })
-    
     if (store.groupId) {
       store.getDetail(store.groupId)
+    } else {
+      store.getEntityList(() => {
+        store.getConfigTagList()
+        store.getRelList()
+      })
     }
   }
 
@@ -88,6 +88,7 @@ class RuleCreate extends Component {
       groupId,
       isCopy,
       saveInfo,
+      editLoading,
     } = store
     return (
       <Provider store={store}>
@@ -103,7 +104,10 @@ class RuleCreate extends Component {
               prev={this.prev}
               save={this.save}
             /> */}
-            <StepTwo save={this.save} />
+            {
+              editLoading ? <div><Loading /></div> : <StepTwo save={this.save} />
+            }
+            {/* <StepTwo save={this.save} /> */}
             {/* {
               store.current === 1 ? <StepTwo save={this.save} /> : null
             }

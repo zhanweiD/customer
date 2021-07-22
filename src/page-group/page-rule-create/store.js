@@ -87,7 +87,7 @@ class Store {
         // cb(res)
         this.saveInfo = res
         this.current += 1
-        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)
@@ -124,8 +124,6 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
-    } finally {
-      this.editLoading = false
     }
   }
 
@@ -151,10 +149,10 @@ class Store {
       runInAction(() => {
         if (this.isCopy) userLog('客群管理/复制客群')
         else userLog('客群管理/编辑客群')
-        // cb(res)
+        // cb(res)/group/manage/${record.id}/${record.objId}
         this.saveInfo = res
         this.current += 1
-        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)
@@ -209,6 +207,8 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.editLoading = false
     }
   }
 
