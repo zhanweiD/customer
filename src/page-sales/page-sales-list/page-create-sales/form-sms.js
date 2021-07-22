@@ -50,7 +50,6 @@ export default ({
   const [templateParam, setTemplateParam] = useState({})
   const [btnLoading, setBtnLoading] = useState(false)
   const [showTestSMS, setShowTestSMS] = useState(false)
-
   const showSign = () => {
     setIsSign(true)
     setDrawerTitle('短信签名')

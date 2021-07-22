@@ -35,7 +35,10 @@ class RuleCreate extends Component {
   }
 
   componentWillMount() {
-    store.getEntityList()
+    store.getEntityList(() => {
+      store.getConfigTagList()
+      store.getRelList()
+    })
     
     if (store.groupId) {
       store.getDetail(store.groupId)
@@ -91,17 +94,17 @@ class RuleCreate extends Component {
         <div className="oa FBV">
           <div className="content-header">{headerTitle}</div>
           <div className="rule-create custom-border FB1 m16">
-            <Steps current={current} style={{width: '80%', margin: '0 auto'}}>
+            {/* <Steps current={current} style={{width: '80%', margin: '0 auto'}}>
               <Step title="信息配置" />
               <Step title="圈选规则" />
               <Step title="完成" />
-            </Steps>
-            <StepOne
+            </Steps> */}
+            {/* <StepOne
               prev={this.prev}
               save={this.save}
-            />
-          
-            {
+            /> */}
+            <StepTwo save={this.save} />
+            {/* {
               store.current === 1 ? <StepTwo save={this.save} /> : null
             }
          
@@ -115,7 +118,7 @@ class RuleCreate extends Component {
                   saveInfo={saveInfo}
                 />
               ) : null
-            }
+            } */}
          
           </div>
         </div>

@@ -332,7 +332,7 @@ export const setSMS = ({
 
 export const setSmsSign = ({
   smsSignList,
-  accountId,
+  accountCode,
   getAllSign,
 }) => {
   const [tblLoading, setTblLoading] = useState(false)
@@ -371,7 +371,7 @@ export const setSmsSign = ({
     setTblLoading(true)
     try {
       const res = await io.addSign({
-        accountId,
+        accountCode,
         signName,
       })
 
@@ -440,7 +440,7 @@ export const setSmsSign = ({
 
 export const setSmsTpl = ({
   smsTplList,
-  accountId,
+  accountCode,
   getAllTpl,
 }) => {
   const [tblLoading, setTblLoading] = useState(false)
@@ -498,7 +498,7 @@ export const setSmsTpl = ({
     setTblLoading(true)
     try {
       const res = await io.addTpl({
-        accountId,
+        accountCode,
         templateCode,
       })
 

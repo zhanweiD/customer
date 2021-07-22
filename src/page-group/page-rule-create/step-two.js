@@ -1,11 +1,18 @@
 import React, {Component} from 'react'
 import {action, toJS, observable} from 'mobx'
 import {inject, observer} from 'mobx-react'
-import {Button, message} from 'antd'
+import {Button, message, Form, Input} from 'antd'
 import {RuleContent} from '../component'
 import SetRule from './drawer-analysis'
 import {formatData, getRenderData} from '../component/util'
+import {debounce} from '../../common/util'
 import DrawerAnalysis from './drawer'
+
+const formItemLayout = {
+  labelCol: {span: 2},
+  wrapperCol: {span: 8},
+  colon: false,
+}
 
 @inject('store')
 @observer
@@ -14,6 +21,7 @@ export default class StepTwo extends Component {
     super(props)
     this.store = props.store
     this.formRef = React.createRef()
+    this.nameRef = React.createRef()
     this.ruleContentRef = React.createRef()
 
     this.wherePosMap = toJS(props.store.wherePosMap) || {}
@@ -27,24 +35,30 @@ export default class StepTwo extends Component {
   }
 
   @action next = () => {
-    this.formRef.current
-      .validateFields()
-      .then(values => {
-        if (JSON.stringify(values) !== '{}') {
-          this.store.logicExper = formatData(values, this.ruleContentRef, this.whereMap)
-          this.store.posList = getRenderData(values, this.ruleContentRef, this.wherePosMap, this.whereMap)
+    this.nameRef.current.validateFields().then(value => {
+      console.log(value)
+      this.store.oneForm = value
+      this.formRef.current
+        .validateFields()
+        .then(values => {
+          if (JSON.stringify(values) !== '{}') {
+            this.store.logicExper = formatData(values, this.ruleContentRef, this.whereMap)
+            this.store.posList = getRenderData(values, this.ruleContentRef, this.wherePosMap, this.whereMap)
 
-          this.store.whereMap = this.whereMap
-          this.store.wherePosMap = this.wherePosMap
-          // this.store.getOutputTags()
-          this.props.save()
-        } else {
-          message.error('请添加规则配置')
-        }
-      })
-      .catch(info => {
-        console.log('Validate Failed:', info)
-      })
+            this.store.whereMap = this.whereMap
+            this.store.wherePosMap = this.wherePosMap
+            // this.store.getOutputTags()
+            this.props.save()
+          } else {
+            message.error('请添加规则配置')
+          }
+        })
+        .catch(info => {
+          console.log('Validate Failed:', info)
+        })
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   @action openDrawer = (flag, relId) => {
@@ -140,10 +154,50 @@ export default class StepTwo extends Component {
       })
   }
 
+  @action checkName = (rule, value, callback) => {
+    if (!value) return callback('')
+    const {objId, isCopy, detail} = this.store
+    const params = {
+      name: value,
+      objId,
+    }
+
+    if (detail.id) {
+      params.id = isCopy ? null : detail.id
+    }
+    
+    // 防抖
+    debounce(() => this.store.checkName(params, callback), 500)
+  }
+
   render() {
-    const {current, configTagList, drawerConfigTagList, relList, posList, objId} = this.store
+    const {
+      current, configTagList, drawerConfigTagList, relList, posList, objId, detail, isCopy, groupId,
+    } = this.store
     return (
-      <div className="step-two" style={{display: current === 1 ? 'block' : 'none'}}>
+      // <div className="step-two" style={{display: current === 1 ? 'block' : 'none'}}>
+      <div className="step-two">
+        <Form
+          name="three"
+          // onFinish={onFinish}
+          // form={form}
+          ref={this.nameRef}
+          {...formItemLayout}
+        >
+          <Form.Item
+            label="客群名称"
+            name="name"
+            rules={[{
+              required: true,
+              message: '请输入名称',
+            }, {
+              validator: this.checkName,
+            }]}
+            // initialValue={isCopy ? undefined : detail.name}
+          >
+            <Input disabled={!objId || (groupId && !isCopy)} placeholder="请输入名称" />
+          </Form.Item>
+        </Form>
         {/* 圈选规则box */}
         <RuleContent 
           formRef={this.formRef} 
@@ -167,13 +221,19 @@ export default class StepTwo extends Component {
           posList={this.wherePosMap[this.drawerFlag]}
         />
         <div className="steps-action">
-          <Button style={{marginRight: 16}} onClick={this.pre}>上一步</Button>
+          {/* <Button style={{marginRight: 16}} onClick={this.pre}>取消</Button> */}
+          <Button 
+            style={{marginRight: 16}}
+            onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage`}
+          >
+            返回
+          </Button>
           <Button style={{marginRight: 16}} onClick={this.openAysDrawer}>数据分析</Button>
           <Button
             type="primary"
             onClick={this.next}
           >
-            下一步
+            创建客群
           </Button>
         </div>
         <DrawerAnalysis />

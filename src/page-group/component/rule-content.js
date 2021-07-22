@@ -163,6 +163,7 @@ export default class RuleContent extends Component {
         {
           page === 'detail' ? null : (
             <div className="mb24">
+              <span className="mr8 ml28 c85">客群圈选</span>
               <Button type="primary" icon={<PlusOutlined />} onClick={this.addGroup} disabled={renderData.length === 10}>添加</Button>
               <Button className="ml8 mr8" onClick={this.reset}>重置条件</Button>
               {/* <a target="_blank" rel="noopener noreferrer" href={`${window.__keeper.pathHrefPrefix}/group/explain`}><QuestionCircleOutlined /></a>  */}
