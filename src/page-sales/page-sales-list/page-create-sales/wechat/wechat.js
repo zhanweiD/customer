@@ -262,10 +262,10 @@ class SomeCompoent extends Component {
                 <img src={Attr} alt="属性" />
                 <span className="ml4 fs14">插入属性</span>
               </div>
-              <div className="hand" onClick={() => this.addUrl('link')}>
+              {/* <div className="hand" onClick={() => this.addUrl('link')}>
                 <img src={Link} alt="链接" />
                 <span className="ml4 fs14">插入链接</span>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="p8">
