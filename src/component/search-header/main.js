@@ -56,11 +56,11 @@ export default class SearchContent extends Component {
      control,
      ...rest
    }) => {
-     const {form} = this.props
+     const {form, colSpan = 8} = this.props
      const {getFieldDecorator} = form
  
      return (
-       <Col span={8}>
+       <Col span={colSpan}>
          <FormItem {...formItemLayout} key={key} label={label}>
            {getFieldDecorator(key, {
              initialValue, 
@@ -102,7 +102,7 @@ export default class SearchContent extends Component {
    }
  
    render() {
-     const {params: searchParams} = this.props
+     const {params: searchParams, colSpan = 8} = this.props
  
      if (!searchParams || !searchParams.length) {
        // 如果没有，则返回内容
@@ -113,7 +113,7 @@ export default class SearchContent extends Component {
        <Form className="dt-form-column comp-list-search" onSubmit={this.handleSubmit} colon={false}>
          <Row>
            {searchParams.map(item => this.getWarperComponent(item))}
-           <Col span={24 - (searchParams.length % 3) * 8} className="far mb16" style={{marginTop: -8}}>
+           <Col span={24 - (searchParams.length % 3) * colSpan} className="far mb16 mt4">
              <Button htmlType="submit" type="primary">查询</Button>
              <Button
                className="ml8"

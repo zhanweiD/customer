@@ -15,11 +15,12 @@ export default inject('store')(
     }, [])
 
     return useObserver(() => (
-      <div className="p16 custom-border" style={{minHeight: 'calc(100vh - 204px)'}}>
+      <div className="p16 pt8 custom-border" style={{minHeight: 'calc(100vh - 204px)'}}>
         <Search 
           onReset={() => console.log('重置')}
-          onSearch={store.getUnitList}
+          onSearch={store.getDetail}
           params={search(store.outputTags)}
+          // colSpan={16}
         />
         <Authority
           authCode="group-manage:export-group"

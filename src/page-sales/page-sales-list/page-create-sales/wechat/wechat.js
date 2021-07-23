@@ -210,6 +210,22 @@ class SomeCompoent extends Component {
     }
   }
 
+  addUrl(addType) {
+    const {onChange, value} = this.props
+    if (this.html.split('/').length > 5) {
+      message.warning('最多插入5个属性！')
+      return 
+    }
+    if (value && !this.html) {
+      // 有内容但是想直接插入属性，直接添加在后面
+      this.html = value + this.generateSpan(addType)
+    } else {
+      this.html = this.mySlice(this.html, this.generateSpan(addType), this.cursorPos)
+    }
+
+    onChange(this.html)
+  }
+
   inputChange(e, index) {
     const {onDefaultValChange} = this.props
     this.attrList[index].value = e.target.value
@@ -222,7 +238,6 @@ class SomeCompoent extends Component {
 
     return (
       <Fragment>
-      
         <div className="wechat-node" id={id}>
           <div 
             style={{
@@ -236,10 +251,6 @@ class SomeCompoent extends Component {
               <div
                 className="ml8 mr8 hand"
                 onClick={() => {
-                // if (this.id > 104) {
-                //   message.warning('最多插入5个属性！')
-                //   return
-                // }
                   if (tagList && tagList.length && tagList.length > 0) {
                     this.add(tagList[0].objNameTagName)
                   } else {
@@ -251,10 +262,10 @@ class SomeCompoent extends Component {
                 <img src={Attr} alt="属性" />
                 <span className="ml4 fs14">插入属性</span>
               </div>
-              {/* <div className="hand" onClick={() => this.add('link')}>
-              <img src={Link} alt="链接" />
-              <span className="ml4 fs14">插入链接</span>
-            </div> */}
+              <div className="hand" onClick={() => this.addUrl('link')}>
+                <img src={Link} alt="链接" />
+                <span className="ml4 fs14">插入链接</span>
+              </div>
             </div>
           </div>
           <div className="p8">

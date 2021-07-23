@@ -2,7 +2,8 @@ const searchParams = tagList => {
   return [
     {
       label: '输出标签',
-      key: 'outputTag',
+      key: 'outputTags',
+      width: 720,
       control: {
         mode: 'multiple',
 

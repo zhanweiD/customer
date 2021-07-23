@@ -3,6 +3,8 @@ import {get, post, baseApi, groupApi, groupConfigApi} from '../../common/util'
 
 const api = {
   getGroupDetail: post(`${groupApi}/base`), // 客群基本信息
+  getDetail: post(`${groupApi}/get_group_edit`), // 编辑客群详情信息
+  editGroup: post(`${groupApi}/edit_group`), // 编辑客群
   getTopList: post(`${baseApi}/groupAnalysis/topListOfTag`), // 客群标签 top 榜单
   getDistributionByTag: post(`${baseApi}/groupAnalysis/distributionByTag`, {overrideSelfConcurrent: true}), // 客群下标签值分布
   getTagTree: post(`${baseApi}/tag/tag_tree`), // 获取标签树

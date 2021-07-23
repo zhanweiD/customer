@@ -400,9 +400,41 @@ export default class Store {
   @observable totalCount = 0
   @observable clientTableLoading = false
 
+  // 编辑客群详情信息
+  @action.bound async getDetail(outputTags) {
+    this.clientTableLoading = true
+    try {
+      const res = await io.getDetail({
+        id: this.id, 
+      })
+
+      runInAction(() => {
+        this.editGroup(res, outputTags)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 编辑客群
+  @action.bound async editGroup(params, outputTags) {
+    try {
+      const res = await io.editGroup({
+        ...params,
+        type: 2,
+        ...outputTags,
+      })
+
+      runInAction(() => {
+        this.getUnitList()
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
   // ---------------------- 客户列表 ------------------
   @action.bound async getUnitList() {
-    this.clientTableLoading = true
     try {
       const res = await io.getUnitList({
         id: this.id,

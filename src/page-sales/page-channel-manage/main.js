@@ -107,6 +107,9 @@ const ChannelManage = () => {
       case '微信公众号':
         type = '公众号类型'
         break
+      case '微信小程序':
+        type = '微信小程序'
+        break
       default:
         type = '短信'
         break
