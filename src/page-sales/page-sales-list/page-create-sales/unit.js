@@ -74,13 +74,14 @@ export const matchTime = v => {
 }
 
 function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+  console.log(file.type)
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
   if (!isJpgOrPng) {
-    message.error('仅支持JPG/PNG格式图片!')
+    message.error('仅支持JPG/PNG/GIF格式图片!')
   }
-  const isLt2M = file.size / 1024 / 1024 < 2
+  const isLt2M = file.size / 1024 / 1024 < 10
   if (!isLt2M) {
-    message.error('图片大小不能超过2MB!')
+    message.error('图片大小不能超10MB!')
   }
   return isJpgOrPng && isLt2M
 }
