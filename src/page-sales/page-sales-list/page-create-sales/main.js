@@ -26,7 +26,7 @@ const tagMap = {
 
 const CreateSales = props => {
   const [strategyList, setStrategyList] = useState([{}]) // 策略列表
-  const [current, setCurrent] = useState(2)
+  const [current, setCurrent] = useState(0)
   const [planId, setPlanId] = useState(null) // 计划id
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
   const [selectItemId, setSelectItemId] = useState(null) // 选中策略id

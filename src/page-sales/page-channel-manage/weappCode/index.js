@@ -16,7 +16,7 @@ export default props => {
         authType: params.authType, 
       })
       if (res) {
-        window.location.href = `${res}http%3A%2F%2Fzdhyx_dc.dtwave.com%2Fcustomer%2Findex.html%23%2FtoCustomer`
+        window.location.href = `${res}http%3A%2F%2Fzdhyx.dtwave.com%2Fcustomer%2Findex.html%23%2FtoCustomer`
       }
     } catch (error) {
       errorTip(error.message)
