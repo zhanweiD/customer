@@ -103,18 +103,7 @@ export default ({
     console.log(v)
   }
   const setEvent = data => {
-    // const channel = eventOriginList.filter(item => item.code === data[0])[0] || {}
-    // const account = eventOriginList.filter(item => item.code === data[1])[0] || {}
     const eventItem = eventOriginList.filter(item => item.code === data[2])[0] || {}
-    // return {
-    //   // channelId: channel.id,
-    //   channelCode: channel.code,
-    //   // accountId: account.id,
-    //   accountCode: account.code,
-    //   // eventId: eventItem.id,
-    //   eventCode: eventItem.code,
-    //   eventName: eventItem.name,
-    // }
     return eventItem.name
   }
   const checkNumber = (rule, value, callback) => {

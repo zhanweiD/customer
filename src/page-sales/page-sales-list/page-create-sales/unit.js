@@ -233,13 +233,13 @@ export const setTemplate = ({
           label="弹窗跳转"
           name="redirectUrl"
           rules={[{required: true, message: '弹窗跳转不能为空'}]}
-          initialValue="https://www.dtwave.com"
+          initialValue="../detail/detail"
         >
           <Select 
             placeholder="请选择弹窗跳转地址"
             suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
-            <Option value="https://www.dtwave.com">数澜科技</Option>
+            <Option value="../detail/detail">活动详情</Option>
           </Select>
         </Item>
       </div>
