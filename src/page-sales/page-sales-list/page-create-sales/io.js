@@ -18,6 +18,7 @@ const api = {
   getChannelActions: post(`${marketingApi}/planStrategy/getChannelActions`), // 营销动作列表
 
   detailPlan: post(`${marketingApi}/planInfo/details`), // 计划详情
+  startPlan: post(`${marketingApi}/planInfo/start`), // 启动计划
   getGroupList: post(`${marketingApi}/planInfo/clientGroupList`), // 人群列表
   getPromptTag: post(`${groupApi}/obj_target_tag/values`), // 获取提示值
   getFilterChannelList: post(`${marketingApi}/planStrategy/getFilterChannelList`), // 行为筛选事件

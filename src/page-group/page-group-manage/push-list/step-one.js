@@ -52,7 +52,7 @@ export default class StepOne extends Component {
   }
 
   render() {
-    const {detail, sourceList, groupList, tableList, current, formLoading} = this.store
+    const {detail, sourceList, groupList, tableList, current, formLoading, groupId} = this.store
     const formItemLayout = {
       labelCol: {span: 8},
       wrapperCol: {span: 9},
@@ -72,7 +72,7 @@ export default class StepOne extends Component {
                 label="客群"
                 name="groupId"
                 rules={[{required: true, message: '请选择客群'}]}
-                initialValue={toJS(detail.groupId)}
+                initialValue={toJS(detail.groupId || groupId)}
               >
                 <Select
                   suffixIcon={<img src={dropdown} alt="dropdown" />}

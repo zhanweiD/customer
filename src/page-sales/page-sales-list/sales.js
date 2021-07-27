@@ -8,7 +8,7 @@ import searchParams from './search'
 import AddDrawer from './add-drawer'
 import io from './io'
 
-const Sales = () => {
+const Sales = props => {
   const [listDate, setListDate] = useState([]) // 表格数据
   const [userList, setUserList] = useState([]) // 用户列表
   const [planInfo, setPlanInfo] = useState({}) // 计划详情
@@ -60,6 +60,7 @@ const Sales = () => {
   } 
   // 删除计划
   const delPlan = async id => {
+    setTableLoading(true)
     try {
       await io.delPlan({
         id,
@@ -70,18 +71,7 @@ const Sales = () => {
       errorTip(error.message)
     }
   }
-  // 复制计划
-  const copyPlan = async id => {
-    try {
-      await io.copyPlan({
-        id,
-      })
-      getList({currentPage: 1})
-      successTip('复制成功')
-    } catch (error) {
-      errorTip(error.message)
-    }
-  }
+  
   // 创建计划
   const addPlan = async params => {
     setAddLoading(true)
@@ -131,6 +121,7 @@ const Sales = () => {
   }
   // 启动计划
   const startPlan = async id => {
+    setTableLoading(true)
     try {
       await io.startPlan({
         id,
@@ -143,6 +134,7 @@ const Sales = () => {
   }
   // 暂停计划
   const stopPlan = async id => {
+    setTableLoading(true)
     try {
       await io.stopPlan({
         id,
@@ -221,17 +213,16 @@ const Sales = () => {
             color = 'blue'
             break
         }
-        if (record.remark && text === 2) {
-          const remarkData = []
-          record.remark.split('\n').forEach((v, i) => {
-            remarkData.push(v)
-            remarkData.push(<br key={i} />)
-          })
-
+        if (record.targetStatisticsStatus === 0 && text === 2) {
+          // const remarkData = []
+          // record.remark.split('\n').forEach((v, i) => {
+          //   remarkData.push(v)
+          //   remarkData.push(<br key={i} />)
+          // })
           return (
             <div className="FBH">
               <Badge status="red" text={status} />
-              <Tooltip title={remarkData}>
+              <Tooltip title={record.remark}>
                 <QuestionCircleFilled style={{color: 'red', marginLeft: 4, marginTop: 4, fontSize: 14}} />
               </Tooltip>
             </div>
@@ -301,6 +292,11 @@ const Sales = () => {
   ]
 
   useEffect(() => {
+    const {params} = props.match
+    if (params.id) {
+      setPlanInfo({clientGroupId: +params.id})
+      setModal(true)
+    }
     getUserList()
   }, [])
   useEffect(() => {
@@ -360,3 +356,4 @@ const Sales = () => {
   )
 }
 export default authView(Sales)
+// export default Sales

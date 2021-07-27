@@ -265,6 +265,22 @@ const CreateSales = props => {
     setStrategyDetail(v)
   }
 
+  // 启动计划
+  const startPlan = async () => {
+    setListLoading(true)
+    try {
+      await io.startPlan({
+        id: planId,
+      })
+      successTip('启动成功')
+      window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`
+    } catch (error) {
+      errorTip(error.message)
+    } finally {
+      setListLoading(false)
+    }
+  }
+
   const nextStep = () => {
     setCurrent(current + 1)
   }
@@ -351,9 +367,14 @@ const CreateSales = props => {
   return (
     <div className="create-sales FBV">
       <div className="m16">
-        <div className="pb8 FBH FBAC">
-          <span className="fs18 mr8">{planInfo.planName}</span>
-          <span>{tagMap[planInfo.planStatus]}</span>
+        <div className="pb8 FBH FBJB">
+          <div>
+            <span className="fs18 mr8">{planInfo.planName}</span>
+            <span>{tagMap[planInfo.planStatus]}</span>
+          </div>
+          <div>
+            <Button type="primary" onClick={startPlan}>启动计划</Button>
+          </div>
         </div>
         <div className="FBH">
           {

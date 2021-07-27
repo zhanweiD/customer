@@ -188,12 +188,12 @@ export default ({
     setGroupCount(0)
     addForm.resetFields()
 
-    if (clientGroupId) {
+    if (clientGroupId && groupList.length) {
       const target = _.find(groupList, item => item.id === clientGroupId)
 
       setGroupCount(target.lastCount)
     }
-  }, [planInfo])
+  }, [planInfo, groupList])
 
   return (
     <Drawer

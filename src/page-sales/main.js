@@ -23,7 +23,7 @@ export default () => {
       {/* 素材管理 */}
       <Route exact path={`${prePath}/material-manage`} component={materialManage} />
       {/* 营销计划列表 */}
-      <Route exact path={`${prePath}/list`} component={SalesList} />
+      <Route exact path={`${prePath}/list/:id?`} component={SalesList} />
       {/* 营销计划详情 */}
       <Route exact path={`${prePath}/list/detail/:id`} component={SalesDetail} />
       {/* 营销计划创建/编辑 */}

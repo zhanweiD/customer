@@ -11,7 +11,7 @@ export default () => {
   return (
     <Switch>
       {/* 客群管理 */}
-      <Route exact path={`${prePath}/manage`} component={GroupManage} />
+      <Route exact path={`${prePath}/manage/:id?`} component={GroupManage} />
       {/* 客群创建/编辑/复制 */}
       <Route exact path={`${prePath}/manage/create/:groupId?/:isCopy?`} component={RuleCreate} />
       {/* 客群详情 */}
