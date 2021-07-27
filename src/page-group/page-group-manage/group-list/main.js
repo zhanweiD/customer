@@ -109,7 +109,7 @@ export default class GroupList extends Component {
       render: (text, record) => (
         <div className="FBH FBAC">
           <Authority
-            authCode="/group/manage/create/:groupId?/:isCopy?"
+            authCode="/group/manage/create/group/:groupId?/:isCopy?"
           >
             <a className="mr16" disabled={record.status === 2} href onClick={() => this.goGroupEdit(record, 0)}>编辑</a>
             <a className="mr16" href disabled={record.status === 2} onClick={() => this.goGroupEdit(record, 1)}>复制</a>
@@ -128,7 +128,7 @@ export default class GroupList extends Component {
   ]
 
   @action openModal = () => {
-    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/group`
     store.isAdd = true
     // store.visible = true
   }
@@ -150,7 +150,7 @@ export default class GroupList extends Component {
     store.isAdd = false
     const {id} = record
 
-    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/${id}/${isCopy}`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/create/group/${id}/${isCopy}`
   }
 
   // 列表请求前搜索参数处理
@@ -183,12 +183,12 @@ export default class GroupList extends Component {
       scroll: {x: 960},
       buttons: [
         <Authority
-          authCode="/group/manage/create/:groupId?/:isCopy?"
+          authCode="/group/manage/create/group/:groupId?/:isCopy?"
         >
           <Button className="mr8" type="primary" onClick={() => this.openModal()}>新建客群</Button>
         </Authority>,
         <Authority
-          authCode="/group/manage/create/:groupId?/:isCopy?"
+          authCode="/group/manage/create/group/:groupId?/:isCopy?"
         >
           <Popconfirm
             placement="topRight"

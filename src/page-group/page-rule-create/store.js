@@ -53,7 +53,8 @@ class Store {
     try {
       const res = await io.getEntityList({
       })
-      this.objId = res.filter(item => item.name === '客户对象')[0].objId
+      // this.objId = res.filter(item => item.name === '客户对象')[0].objId
+      this.objId = res[0].objId
       // runInAction(() => {
       //   this.entityList = changeToOptions(toJS(res || []))('name', 'objId')
       // })

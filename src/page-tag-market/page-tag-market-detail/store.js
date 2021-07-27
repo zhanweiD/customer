@@ -30,7 +30,7 @@ class Store {
       runInAction(() => {
         this.objTreeData = res
         if (!res.length) return
-        const target = _.find(res, e => e.name === '客户对象')
+        const target = res[0] || {}
         this.selectedKey = target.id
         this.objId = target.id
         // this.selectedKey = this.selectedKey || res[0].id

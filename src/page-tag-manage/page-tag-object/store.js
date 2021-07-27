@@ -24,7 +24,7 @@ class Store {
       runInAction(() => {
         this.objList = res || []
         if (res.length) {
-          const target = _.find(res, e => e.name === '客户对象')
+          const target = res[0] || {}
           if (cb) cb()
           window.location.href = `${window.__keeper.pathHrefPrefix}/tag-manage/uphold/${target.id}`
         }
