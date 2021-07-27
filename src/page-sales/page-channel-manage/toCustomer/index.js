@@ -7,7 +7,7 @@ export default () => {
     const authCode = params[0].split('=')[1] || ''
     const expiresIn = params[1].split('=')[1] || ''
     const req = new XMLHttpRequest()
-    req.open('get', `http://zdhyx.dtwave.com/wechat/authorized?auth_code=${authCode}&expires_in=${expiresIn}&userAccount=${localStorage.getItem('userAccount')}`, true)
+    req.open('get', `https://zdhyx.dtwave.com/wechat/authorized?auth_code=${authCode}&expires_in=${expiresIn}&userAccount=${localStorage.getItem('userAccount')}`, true)
     req.setRequestHeader('Content-Type', 'application/json')
     req.onload = () => {
       window.location.href = localStorage.getItem('hostUrl')
