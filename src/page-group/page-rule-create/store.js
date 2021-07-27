@@ -87,7 +87,7 @@ class Store {
         // cb(res)
         this.saveInfo = res
         this.current += 1
-        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/${res.id}/${this.objId}`
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/detail/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)
@@ -152,7 +152,7 @@ class Store {
         // cb(res)/group/manage/${record.id}/${record.objId}
         this.saveInfo = res
         this.current += 1
-        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/${res.id}/${this.objId}`
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/detail/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)

@@ -46,7 +46,7 @@ class RuleDetail extends Component {
 
   @action goBack = () => {
     // 返回规则详情
-    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/${store.groupId}/${store.objId}`
+    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/detail/${store.groupId}/${store.objId}`
   }
 
   @action openDrawer = (flag, relId) => {

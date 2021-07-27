@@ -15,7 +15,7 @@ export default () => {
       {/* 客群创建/编辑/复制 */}
       <Route exact path={`${prePath}/manage/create/:groupId?/:isCopy?`} component={RuleCreate} />
       {/* 客群详情 */}
-      <Route exact path={`${prePath}/manage/:id/:objId`} component={GroupDetail} /> 
+      <Route exact path={`${prePath}/manage/detail/:id/:objId`} component={GroupDetail} /> 
       {/* 查看规则详情 */}
       {/* <Route exact path={`${prePath}/manage/rule/:groupId/:objId`} component={RuleDetail} />  */}
       {/* 个体列表 */}
