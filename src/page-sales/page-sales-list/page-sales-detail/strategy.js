@@ -93,8 +93,8 @@ export default ({list}) => {
         accountCode: 'wxe2b3f176ba1a4f33',
       })
   
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
       }
     } catch (error) {
       console.log(error)
@@ -225,6 +225,7 @@ export default ({list}) => {
 
   // 设置策略dom
   const setLeftItem = () => {
+    console.log(conditionList, strChannelList, tagList, templateList)
     if (!conditionList.length || !strChannelList.length || !tagList.length || !templateList.length) return ''
     const itemList = strategyList.map((item, i) => {
       const {
