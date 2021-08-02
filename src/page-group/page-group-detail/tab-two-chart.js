@@ -43,9 +43,12 @@ export default class ChartPie extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // console.log(toJS(this.props.data))
     if (prevProps.data !== this.props.data) {
       this.data = this.props.data
       this.myChartPie.clear()
+      this.title = this.props.title
+      this.dataList = this.props.data
       this.drawSaveTrend(this.props.data, this.props.title)
     }
   }
