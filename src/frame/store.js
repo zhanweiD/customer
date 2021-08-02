@@ -26,7 +26,7 @@ class Store {
     }
   }
 
-  @action async getUserInfo() {
+  @action.bound async getUserInfo() {
     try {
       const res = await io.getUserInfo()
       runInAction(() => {

@@ -27,7 +27,7 @@ export default class ConfigField extends Component {
     const {objId, editSelectedItem} = props.dataSheetStore
     store.objId = objId
     store.tableName = editSelectedItem.dataTableName
-    store.storageId = window.defaultParams.hiveStorageId
+    store.storageId = window.defaultParams.gpStorageId
   }
 
   componentWillUnmount() {

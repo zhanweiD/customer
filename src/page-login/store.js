@@ -93,7 +93,7 @@ class Store {
       window.location.reload() // 强制刷新页面
     } else {
       window.location.href = `${window.__keeper.pathHrefPrefix}/home/overview`
-      // window.location.reload() // 强制刷新页面
+      window.location.reload() // 强制刷新页面
     }
     // window.location.reload()
   }

@@ -118,7 +118,7 @@ export default class DataSheet extends Component {
   @action removeList(data) {
     const t = this
     const params = {
-      storageId: window.defaultParams.hiveStorageId,
+      storageId: window.defaultParams.gpStorageId,
       tableName: data.dataTableName,
     }
     store.removeList(params, () => {

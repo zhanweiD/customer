@@ -134,8 +134,6 @@ export default class Frame extends Component {
   }
 
   render() {
-    if (!localStorage.getItem('token')) return null
-    
     const {children} = this.props
     const {
       collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
@@ -251,13 +249,13 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   codeInProduct('/tag-sync/manage') && (
                     <Menu.Item key="/tag-sync/manage" icon={<FileSyncOutlined />}>
                       标签同步
                     </Menu.Item>
                   )
-                }
+                } */}
                 {
                   codeInProduct('/group/manage/:id?') && (
                     <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
