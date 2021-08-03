@@ -39,7 +39,7 @@ const TransformationTrend = ({
       })
       setLineData(res)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.message)
     } finally {
       setLoading(false)
     }
