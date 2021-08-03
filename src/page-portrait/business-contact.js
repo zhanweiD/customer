@@ -24,10 +24,10 @@ export default class BusinessContact extends Component {
   // 选择日期
   @action changePicker = v => {
     if (v) {
-      this.store.businessParams.starmTime = v[0].format('YYYY-MM-DD')
+      this.store.businessParams.startTime = v[0].format('YYYY-MM-DD')
       this.store.businessParams.endTime = v[1].format('YYYY-MM-DD')
     } else {
-      this.store.businessParams.starmTime = null
+      this.store.businessParams.startTime = null
       this.store.businessParams.endTime = null
     }
     
@@ -77,8 +77,8 @@ export default class BusinessContact extends Component {
             placeholder="触点类型"
             suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
-            <Option value={0}>线上触点</Option>
-            <Option value={1}>线下触点</Option>
+            <Option value={1}>线上触点</Option>
+            <Option value={0}>线下触点</Option>
           </Select>
         </div>
         <div className="d-flex mb16">

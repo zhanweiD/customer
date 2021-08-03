@@ -111,7 +111,7 @@ export default class StepTwo extends React.Component {
         title: '操作',
         key: 'operation',
         // dataIndex: 'isUsed',
-        width: 100,
+        width: 120,
         render: (v, record, index) => (
           <span>
             <a href onClick={() => this.removeItem(index, record)}>移除</a>

@@ -57,15 +57,6 @@ export function pieOption(data, total) {
           color: titleColor,
           fontWeight: 400,
         },
-      }, {
-        text: '暂无数据',
-        top: '50%',
-        left: '50%',
-        textStyle: {
-          fontSize: 32,
-          color: titleColor,
-          fontWeight: 400,
-        },
       }],
     } 
   }
@@ -160,6 +151,20 @@ export function pieOption(data, total) {
 }
 
 export function barOption(data) {
+  if (!data.length) {
+    return {
+      title: [{
+        text: '触点类型分布',
+        top: 0,
+        left: 0,
+        textStyle: {
+          fontSize: 14,
+          color: titleColor,
+          fontWeight: 400,
+        },
+      }],
+    } 
+  }
   return ({
     title: {
       text: '触点类型分布',
