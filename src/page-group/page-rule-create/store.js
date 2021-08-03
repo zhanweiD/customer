@@ -49,14 +49,16 @@ class Store {
   @observable detailLoading = false
 
   // 获取实体列表
-  @action async getEntityList() {
+  @action async getEntityList(cb) {
     try {
       const res = await io.getEntityList({
       })
-
-      runInAction(() => {
-        this.entityList = changeToOptions(toJS(res || []))('name', 'objId')
-      })
+      // this.objId = res.filter(item => item.name === '客户对象')[0].objId
+      this.objId = res[0].objId
+      // runInAction(() => {
+      //   this.entityList = changeToOptions(toJS(res || []))('name', 'objId')
+      // })
+      if (cb) cb()
     } catch (e) {
       errorTip(e.message)
     }
@@ -76,6 +78,7 @@ class Store {
         mode: 1,
         type: +this.type,
         logicExper: JSON.stringify(logicExper),
+        objId: this.objId,
         ...toJS(this.oneForm),
         // ...params,
       })
@@ -85,6 +88,7 @@ class Store {
         // cb(res)
         this.saveInfo = res
         this.current += 1
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/detail/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)
@@ -121,8 +125,6 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
-    } finally {
-      this.editLoading = false
     }
   }
 
@@ -139,6 +141,7 @@ class Store {
         id: +this.groupId,
         mode: 1,
         type: +this.type,
+        objId: this.objId,
         logicExper: JSON.stringify(logicExper),
         ...toJS(this.oneForm),
         // ...params,
@@ -147,9 +150,10 @@ class Store {
       runInAction(() => {
         if (this.isCopy) userLog('客群管理/复制客群')
         else userLog('客群管理/编辑客群')
-        // cb(res)
+        // cb(res)/group/manage/${record.id}/${record.objId}
         this.saveInfo = res
         this.current += 1
+        window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/detail/${res.id}/${this.objId}`
       })
     } catch (e) {
       errorTip(e.message)
@@ -204,6 +208,8 @@ class Store {
       })
     } catch (e) {
       errorTip(e.message)
+    } finally {
+      this.editLoading = false
     }
   }
 

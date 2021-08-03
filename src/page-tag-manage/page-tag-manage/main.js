@@ -15,11 +15,9 @@ import store from './store'
 class TagManage extends Component {
   constructor(props) {
     super(props)
- 
-    const {match: {params: {id}}} = props
- 
-    store.selectedKey = +id
-    store.getObjDetailNew(id)
+    // const {match: {params: {id}}} = props
+    // store.selectedKey = +id
+    // store.getObjDetailNew(id)
     store.getTreeData()
   }
    // @action changeTab = code => {

@@ -85,7 +85,11 @@ const ChannelManage = () => {
     setNowRecord({})
     if (name === '微信公众号') {
       const host = window.location.href.split('/')
-      window.open(`http://zdhyx.dc.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}`)
+      window.open(`https://zdhyx.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}/${1}`)
+    }
+    if (name === '微信小程序') {
+      const host = window.location.href.split('/')
+      window.open(`https://zdhyx.dtwave.com/customer/index.html#/weappCode/${localStorage.getItem('userAccount')}/${host[2]}/${2}`)
     }
     if (name === '阿里云短信') {
       setDrawer(true)
@@ -102,6 +106,9 @@ const ChannelManage = () => {
     switch (name) {
       case '微信公众号':
         type = '公众号类型'
+        break
+      case '微信小程序':
+        type = '微信小程序'
         break
       default:
         type = '短信'

@@ -1,8 +1,20 @@
 import {useState} from 'react'
 import {
-  Form, DatePicker, TimePicker, Input, Select, Button, Table, Tag, Popconfirm, message,
+  Form, 
+  DatePicker, 
+  TimePicker, 
+  Input, 
+  Select, 
+  Button, 
+  Table, 
+  Tag, 
+  Popconfirm, 
+  message,
+  Upload,
 } from 'antd'
+import {LoadingOutlined, PlusOutlined} from '@ant-design/icons'
 
+import {marketingApi} from '../../../common/util'
 import io from './io'
 import Wechat from './wechat/wechat'
 import dropdown from '../../../icon/dropdown.svg'
@@ -44,11 +56,11 @@ export const listToTree = data => {
   const newData = _.cloneDeep(data)
 
   newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
+    const children = newData.filter(sitem => sitem.parentCode === item.code)
     if (children.length && !item.children) item.children = children
   })
 
-  return newData.filter(item => item.parentId === -1)
+  return newData.filter(item => item.parentCode === '-1')
 }
 
 export const matchTime = v => {
@@ -61,6 +73,19 @@ export const matchTime = v => {
   return '天'
 }
 
+function beforeUpload(file) {
+  console.log(file.type)
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif'
+  if (!isJpgOrPng) {
+    message.error('仅支持JPG/PNG/GIF格式图片!')
+  }
+  const isLt2M = file.size / 1024 / 1024 < 10
+  if (!isLt2M) {
+    message.error('图片大小不能超10MB!')
+  }
+  return isJpgOrPng && isLt2M
+}
+
 // step-three 设置模版
 export const setTemplate = ({
   templateChange,
@@ -70,6 +95,10 @@ export const setTemplate = ({
   actionId,
   showDrawer,
   selectMedia,
+  uploadLoading,
+  imageUrl,
+  uploadChange,
+  imageUid,
 }) => {
   // 发送图文消息
   if (actionId === 2002) {
@@ -82,7 +111,7 @@ export const setTemplate = ({
               <div className="select-content">
                 <div className="FBH content-item">
                   <div>
-                    {mediaData.thumb_url ? <img className="mr16" height={88} src={mediaData.thumb_url} alt="" /> : ''}
+                    {mediaData.thumbUrl ? <img className="mr16" height={88} src={mediaData.thumbUrl} alt="" /> : ''}
                   </div>
                   <div>
                     <div className="item-title">{mediaData.title}</div>
@@ -118,6 +147,7 @@ export const setTemplate = ({
       </div>
     )
   }
+  // 发送模版消息
   if (actionId === 2001) {
     return (
       <div>
@@ -132,7 +162,7 @@ export const setTemplate = ({
             suffixIcon={<img src={dropdown} alt="dropdown" />}
           >
             {
-              templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
+              templateList.map(item => <Option value={item.templateId}>{item.title}</Option>)
             }
           </Select>
         </Item>
@@ -154,6 +184,64 @@ export const setTemplate = ({
             </Item>
           ))
         }
+      </div>
+    )
+  }
+  // 发送弹窗消息
+  if (actionId === 2201) {
+    const uploadButton = (
+      <div>
+        {uploadLoading ? <LoadingOutlined /> : <PlusOutlined />}
+        <div style={{marginTop: 8}}>Upload</div>
+      </div>
+    )
+    return (
+      <div>
+        <Item
+          label="弹窗触达页"
+          name="dialogPage"
+          rules={[{required: true, message: '弹窗触达页不能为空'}]}
+          initialValue="home"
+        >
+          <Select 
+            placeholder="请选择弹窗触达页"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            <Option value="home">首页</Option>
+          </Select>
+        </Item>
+        <Item
+          label="弹窗图片"
+          name="resourceId"
+          extra="图片在个体画像中显示，支持Jpg/Png格式，大小不超过2MB"
+          // rules={[{required: true, message: '弹窗触达页不能为空'}]}
+          initialValue={imageUid}
+        >
+          <Upload
+            name="image"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            beforeUpload={beforeUpload}
+            action={`${marketingApi}/resource/uploadImage`}
+            onChange={uploadChange}
+          >
+            {imageUrl ? <img src={imageUrl} alt="avatar" style={{width: '100%'}} /> : uploadButton}
+          </Upload>
+        </Item>
+        <Item
+          label="弹窗跳转"
+          name="redirectUrl"
+          rules={[{required: true, message: '弹窗跳转不能为空'}]}
+          initialValue="../detail/detail"
+        >
+          <Select 
+            placeholder="请选择弹窗跳转地址"
+            suffixIcon={<img src={dropdown} alt="dropdown" />}
+          >
+            <Option value="../detail/detail">活动详情</Option>
+          </Select>
+        </Item>
       </div>
     )
   }
@@ -332,7 +420,7 @@ export const setSMS = ({
 
 export const setSmsSign = ({
   smsSignList,
-  accountId,
+  accountCode,
   getAllSign,
 }) => {
   const [tblLoading, setTblLoading] = useState(false)
@@ -371,7 +459,7 @@ export const setSmsSign = ({
     setTblLoading(true)
     try {
       const res = await io.addSign({
-        accountId,
+        accountCode,
         signName,
       })
 
@@ -440,7 +528,7 @@ export const setSmsSign = ({
 
 export const setSmsTpl = ({
   smsTplList,
-  accountId,
+  accountCode,
   getAllTpl,
 }) => {
   const [tblLoading, setTblLoading] = useState(false)
@@ -449,6 +537,9 @@ export const setSmsTpl = ({
     {
       dataIndex: 'name',
       title: '模版名称', // hover 展示详情？
+    }, {
+      dataIndex: 'code',
+      title: 'code',
     }, {
       dataIndex: 'content',
       title: '模版',
@@ -495,7 +586,7 @@ export const setSmsTpl = ({
     setTblLoading(true)
     try {
       const res = await io.addTpl({
-        accountId,
+        accountCode,
         templateCode,
       })
 

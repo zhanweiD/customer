@@ -183,7 +183,7 @@ class Store extends ListContentStore(io.getList) {
 
     const filedObjReqList = selectFields.map(d => ({
       // dataDbName: dataDbInfo.storageName,
-      dataStorageId: window.defaultParams.hiveStorageId,
+      dataStorageId: window.defaultParams.gpStorageId,
       // dataDbType: dataDbInfo.storageType,
       dataTableName: this.tableName,
       dataFieldName: d.field,

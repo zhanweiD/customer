@@ -106,7 +106,7 @@ class SomeCompoent extends Component {
 
     if (type === 'sms') {
       this.attrList.forEach(item => {
-        if (item.id === +this.clickedId) {
+        if (+item.id === +this.clickedId) {
           item.name = targetText
         }
       })
@@ -184,12 +184,46 @@ class SomeCompoent extends Component {
     onChange(this.html)
 
     if (type === 'sms') {
-      this.attrList.push({
-        name: tagList[0].objNameTagName,
-        value: null,
-        id: this.id,
+      // id 的排序
+      const idMatch = this.html.match(/id="[^"]+"/g) 
+      // eslint-disable-next-line no-useless-escape
+      const sortIds = _.map(idMatch, e => e.split('\"')[1])
+      
+      const newAttrList = []
+      const attrIds = _.map(this.attrList, 'id') // 现在数组中的 id
+
+      sortIds.forEach(item => {
+        if (attrIds.indexOf(String(item)) > -1) {
+          const target = this.attrList[attrIds.indexOf(String(item))]
+          newAttrList.push(target)
+        } else {
+          // 新增的
+          newAttrList.push({
+            name: tagList[0].objNameTagName,
+            value: null,
+            id: String(item),
+          })
+        }
       })
+
+      this.attrList = newAttrList
     }
+  }
+
+  addUrl(addType) {
+    const {onChange, value} = this.props
+    if (this.html.split('/').length > 5) {
+      message.warning('最多插入5个属性！')
+      return 
+    }
+    if (value && !this.html) {
+      // 有内容但是想直接插入属性，直接添加在后面
+      this.html = value + this.generateSpan(addType)
+    } else {
+      this.html = this.mySlice(this.html, this.generateSpan(addType), this.cursorPos)
+    }
+
+    onChange(this.html)
   }
 
   inputChange(e, index) {
@@ -204,7 +238,6 @@ class SomeCompoent extends Component {
 
     return (
       <Fragment>
-      
         <div className="wechat-node" id={id}>
           <div 
             style={{
@@ -218,10 +251,6 @@ class SomeCompoent extends Component {
               <div
                 className="ml8 mr8 hand"
                 onClick={() => {
-                // if (this.id > 104) {
-                //   message.warning('最多插入5个属性！')
-                //   return
-                // }
                   if (tagList && tagList.length && tagList.length > 0) {
                     this.add(tagList[0].objNameTagName)
                   } else {
@@ -233,10 +262,10 @@ class SomeCompoent extends Component {
                 <img src={Attr} alt="属性" />
                 <span className="ml4 fs14">插入属性</span>
               </div>
-              {/* <div className="hand" onClick={() => this.add('link')}>
-              <img src={Link} alt="链接" />
-              <span className="ml4 fs14">插入链接</span>
-            </div> */}
+              {/* <div className="hand" onClick={() => this.addUrl('link')}>
+                <img src={Link} alt="链接" />
+                <span className="ml4 fs14">插入链接</span>
+              </div> */}
             </div>
           </div>
           <div className="p8">

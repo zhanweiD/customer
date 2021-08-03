@@ -19,7 +19,6 @@ import Sync from './page-tag-sync'
 import Overview from './page-overview'
 import TagMarket from './page-tag-market'
 import TagManage from './page-tag-manage'
-// import Sales from './page-sales1/page-sales-list'
 import WeappCode from './page-sales/page-channel-manage/weappCode'
 import ToCustomer from './page-sales/page-channel-manage/toCustomer'
 import Sales from './page-sales'
@@ -36,8 +35,13 @@ function Entry() {
       <Switch>
         {/* 登录 */}
         <Route path="/login" component={Login} />
+        {/* 上传标签 */}
         <Route path="/upload-tag" component={UploadTag} />
-        <Route path="/weappCode/:userAccount/:host?" component={WeappCode} />
+
+        {/* 公网使用 */}
+        {/* 授权跳转 */}
+        <Route path="/weappCode/:userAccount/:host/:authType" component={WeappCode} />
+        {/* 授权成功返回慧营客跳转 */}
         <Route path="/toCustomer/:authCode?/:expiresIn?" component={ToCustomer} />
 
         <Frame>
@@ -48,7 +52,7 @@ function Entry() {
           {/* 标签维护 */}
           <Route path="/tag-manage" component={TagManage} />
           {/* 标签同步 */}
-          <Route path="/tag-sync/manage" component={Sync} />
+          {/* <Route path="/tag-sync/manage" component={Sync} /> */}
           {/* 客群管理 */}
           <Route path="/group" component={Group} />
           {/* 客户画像 */}
@@ -58,12 +62,7 @@ function Entry() {
           {/* 系统管理 */}
           <Route path="/system" component={System} />
           {/* 自动化营销 */}
-          {/* <Route path="/sales/list" component={Sales} /> */}
           <Route path="/sales" component={Sales} />
-          {/* 事件管理 */}
-          {/* <Route path="/event-manage" component={EventManage} /> */}
-          {/* 渠道管理 */}
-          {/* <Route path="/channel-manage" component={ChannelManage} /> */}
         </Frame>
 
       </Switch>

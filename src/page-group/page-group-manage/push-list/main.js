@@ -15,6 +15,13 @@ import './main.styl'
 
 @observer
 export default class PushList extends Component {
+  constructor(props) {
+    super(props)
+    if (props.groupId) {
+      store.groupId = +props.groupId
+      store.drawerVisible = true
+    }
+  }
   componentDidMount() {
     store.getGroupList()
     store.getStorages()

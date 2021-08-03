@@ -19,7 +19,8 @@ class Store {
   @observable releaseLoading = false
 
   @observable isSpinning = true
-  
+
+  // 获取对象
   @action.bound async getTreeData(cb) {
     this.loading = true
     try {
@@ -29,9 +30,13 @@ class Store {
       runInAction(() => {
         this.objTreeData = res
         if (!res.length) return
-        this.selectedKey = this.selectedKey || res[0].id
-        this.objId = this.selectedKey || res[0].id
+        const target = res[0] || {}
+        this.selectedKey = target.id
+        this.objId = target.id
+        // this.selectedKey = this.selectedKey || res[0].id
+        // this.objId = this.selectedKey || res[0].id
         this.getObjDetail()
+        this.getObjDetailNew(this.objId)
         if (cb) cb()
       })
     } catch (e) {

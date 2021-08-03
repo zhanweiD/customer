@@ -39,7 +39,6 @@ const CreateSales = props => {
   const [treeStrChannelList, setTreeStrChannelList] = useState([]) // 触达渠道列表
   const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
   const [channelActions, setChannelActions] = useState([]) // 营销动作列表
-  const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
   const [templateList, setTemplateList] = useState([]) // 内容模版列表
   const [checkNameTip, setCheckNameTip] = useState('') // 名称重复提示
   const [strName, setStrName] = useState('') // 名称
@@ -88,7 +87,6 @@ const CreateSales = props => {
   const getChannelActions = async channelId => {
     try {
       const res = await io.getChannelActions({channelId})
-      setAllChannelActions([...allChannelActions, ...res])
       setChannelActions(res)
     } catch (error) {
       errorTip(error.message)
@@ -98,16 +96,17 @@ const CreateSales = props => {
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
+        accountCode: 'wxe2b3f176ba1a4f33',
       })
 
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
       }
     } catch (error) {
       console.log(error.message)
     }
   }
+  
   // 配置详情
   const getStrategyDetail = async id => {
     setStrategyDetail({})
@@ -143,10 +142,7 @@ const CreateSales = props => {
       } else {
         getStrategyDetail(selectItemId)
       }
-      // res.forEach(item => {
-      //   const {channel} = item.sendOutContent
-      //   getChannelActions(channel.channelId)
-      // })
+      
       setTimeout(() => {
         setListLoading(false)
       }, 200)
@@ -269,6 +265,22 @@ const CreateSales = props => {
     setStrategyDetail(v)
   }
 
+  // 启动计划
+  const startPlan = async () => {
+    setListLoading(true)
+    try {
+      await io.startPlan({
+        id: planId,
+      })
+      successTip('启动成功')
+      window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list`
+    } catch (error) {
+      errorTip(error.message)
+    } finally {
+      setListLoading(false)
+    }
+  }
+
   const nextStep = () => {
     setCurrent(current + 1)
   }
@@ -321,10 +333,7 @@ const CreateSales = props => {
     const {firstTargetContent = {}, clientGroupId, startTime, endTime, front} = planInfo
     const {timeGap, timeUnit, event = {}} = firstTargetContent
     const names = JSON.parse(front)
-    // const setEvent = v => {
-    //   const obj = targetChannelList.filter(item => item.id === v.eventId)[0] || {}
-    //   return obj.name
-    // }
+   
     const list = [
       {
         title: '分组',
@@ -335,7 +344,6 @@ const CreateSales = props => {
       {
         title: '用户',
         value: `${names.clientGroupName}`,
-        // value: groupList.filter(item => item.id === clientGroupId)[0].name,
         icon: <img style={{marginBottom: 1}} src={group} alt="用户" />,
       },
       {
@@ -346,7 +354,6 @@ const CreateSales = props => {
       {
         title: '主要目标',
         value: `${timeGap} ${matchTime(timeUnit)} 完成 ${event.eventName || ''}`,
-        // value: `${timeGap} ${matchTime(timeUnit)} 完成 ${setEvent(event)}`,
         icon: <img style={{marginBottom: 1}} src={clinch} alt="主要目标" />,
       },
     ]
@@ -360,9 +367,14 @@ const CreateSales = props => {
   return (
     <div className="create-sales FBV">
       <div className="m16">
-        <div className="pb8 FBH FBAC">
-          <span className="fs18 mr8">{planInfo.planName}</span>
-          <span>{tagMap[planInfo.planStatus]}</span>
+        <div className="pb8 FBH FBJB">
+          <div>
+            <span className="fs18 mr8">{planInfo.planName}</span>
+            <span>{tagMap[planInfo.planStatus]}</span>
+          </div>
+          <div>
+            <Button type="primary" onClick={startPlan}>启动计划</Button>
+          </div>
         </div>
         <div className="FBH">
           {
@@ -390,7 +402,6 @@ const CreateSales = props => {
             matchTime={matchTime}
             comparisionList={comparisionList}
             originEventList={originEventList}
-            allChannelActions={allChannelActions}
           />
           <Button 
             type="dashed" 

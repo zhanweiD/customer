@@ -55,7 +55,7 @@ const StepThree = ({
         {/* /group/manage/${record.id}/${record.objId} */}
         <Button
           type="primary"
-          onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/${saveInfo.id}/${objId}`}
+          onClick={() => window.location.href = `${window.__keeper.pathHrefPrefix || '/'}/group/manage/detail/${saveInfo.id}/${objId}`}
         >
           客群分析
         </Button>

@@ -10,7 +10,7 @@ export default () => {
   return (
     <Switch>
       {/* 营销计划列表 */}
-      <Route exact path={`${prePath}`} component={Sales} />
+      <Route exact path={`${prePath}/:id?`} component={Sales} />
       {/* 营销计划详情 */}
       <Route exact path={`${prePath}/detail/:id`} component={SalesDetail} />
       {/* 营销计划创建/编辑 */}

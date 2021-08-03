@@ -134,8 +134,6 @@ export default class Frame extends Component {
   }
 
   render() {
-    if (!localStorage.getItem('token')) return null
-    
     const {children} = this.props
     const {
       collapsed, pathName, visible, confirmLoading, userInfo, getPerLoading, menuName,
@@ -187,7 +185,7 @@ export default class Frame extends Component {
     const showAnalyze = codeInProduct('/analyze/clinch') || codeInProduct('/analyze/supply-demand') || codeInProduct('/analyze/purchase') || codeInProduct('/analyze/channel') || codeInProduct('/analyze/satisfaction')
     // eslint-disable-next-line max-len
     const showSystem = codeInProduct('/system/user-manage') || codeInProduct('/system/role-manage') || codeInProduct('/system/portrait') || codeInProduct('/system/business') || codeInProduct('/system/system-log')
-    const showSales = codeInProduct('/sales/list') || codeInProduct('/sales/channel-manage') || codeInProduct('/sales/event-manage')
+    const showSales = codeInProduct('/sales/list/:id?') || codeInProduct('/sales/channel-manage') || codeInProduct('/sales/event-manage')
     
     let myProps = {}
     if (this.collapsed) {
@@ -251,15 +249,15 @@ export default class Frame extends Component {
                     </Menu.Item>
                   )
                 }
-                {
+                {/* {
                   codeInProduct('/tag-sync/manage') && (
                     <Menu.Item key="/tag-sync/manage" icon={<FileSyncOutlined />}>
                       标签同步
                     </Menu.Item>
                   )
-                }
+                } */}
                 {
-                  codeInProduct('/group/manage') && (
+                  codeInProduct('/group/manage/:id?') && (
                     <Menu.Item key="/group/manage" icon={<TeamOutlined />}>
                       客群管理
                     </Menu.Item>
@@ -308,7 +306,7 @@ export default class Frame extends Component {
                   showSales && (
                     <SubMenu key="/sales" icon={<DeploymentUnitOutlined />} title="自动化营销">
                       {
-                        codeInProduct('/sales/list') && (
+                        codeInProduct('/sales/list/:id?') && (
                           <Menu.Item key="/sales/list">营销计划</Menu.Item>
                         )
                       }

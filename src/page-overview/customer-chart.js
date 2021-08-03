@@ -43,7 +43,7 @@ const CustomerChart = ({
       })
       setBarData(res)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.message)
     } finally {
       setLoading(false)
     }

@@ -72,7 +72,7 @@ const DistributionChart = ({
 
       setBarData(newValues)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.message)
     } finally {
       setLoading(false)
     }

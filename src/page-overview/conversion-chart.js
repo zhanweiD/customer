@@ -40,7 +40,7 @@ const ConversionChart = ({
       })
       setBarData(res)
     } catch (err) {
-      errorTip(err)
+      errorTip(err.message)
     } finally {
       setLoading(false)
     }

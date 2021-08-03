@@ -26,7 +26,6 @@ export default ({list}) => {
   const [strategyList, setStrategyList] = useState([]) // 策略列表
   const [conditionList, setConditionList] = useState([]) // 触发条件事件
   const [strChannelList, setStrChannelList] = useState([]) // 未打平触达渠道列表
-  const [allChannelActions, setAllChannelActions] = useState([]) // 所有策略营销动作列表
   const [templateList, setTemplateList] = useState([]) // 内容模版列表
   const [tagList, setTagList] = useState([]) // 标签列表
   const [originEventList, setOriginEventList] = useState([]) // 行为筛选事件打平
@@ -91,11 +90,11 @@ export default ({list}) => {
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
+        accountCode: 'wxe2b3f176ba1a4f33',
       })
   
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
       }
     } catch (error) {
       console.log(error)
@@ -103,15 +102,19 @@ export default ({list}) => {
   }
   const [wechartActions, setWechartActions] = useState([])
   const [smsActions, setSmsActions] = useState([])
+  const [weAppletActions, setWeAppletActions] = useState([])
   // 营销动作列表
-  const getChannelActions = async channelId => {
+  const getChannelActions = async channelCode => {
     try {
-      const res = await io.getChannelActions({channelId})
-      if (channelId === 1) {
+      const res = await io.getChannelActions({channelCode})
+      if (channelCode === 'WECHAT_OFFICIAL_ACCOUNTS') {
         setWechartActions(res)
       }
-      if (channelId === 2) {
+      if (channelCode === 'ALIYUN_SMS') {
         setSmsActions(res)
+      }
+      if (channelCode === 'WECHAT_APPLET') {
+        setWeAppletActions(res)
       }
     } catch (error) {
       errorTip(error.message)
@@ -125,8 +128,9 @@ export default ({list}) => {
     setStrategyList(list)
     getGroupList()
     getFilterChannelList()
-    getChannelActions(1)
-    getChannelActions(2)
+    getChannelActions('WECHAT_OFFICIAL_ACCOUNTS')
+    getChannelActions('ALIYUN_SMS')
+    getChannelActions('WECHAT_APPLET')
   }, [list])
   useEffect(() => {
     const obj = groupList.filter(item => item.id === groupId)
@@ -142,9 +146,9 @@ export default ({list}) => {
   }, [])
 
   const setEventDom = event => {
-    const channel = conditionList.filter(item => item.id === event.channelId)[0] || {}
-    const account = conditionList.filter(item => item.id === event.accountId)[0] || {}
-    const even = conditionList.filter(item => item.id === event.eventId)[0] || {}
+    const channel = conditionList.filter(item => item.code === event.channelCode)[0] || {}
+    const account = conditionList.filter(item => item.code === event.accountCode)[0] || {}
+    const even = conditionList.filter(item => item.code === event.eventCode)[0] || {}
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${even.name || '事件不可用'}`
   }
   const setCornDom = (cron, frequency) => {
@@ -181,20 +185,12 @@ export default ({list}) => {
   }
 
   const setActionUserDom = user => {
-    const channel = originEventList.filter(item => item.id === user.channelId)[0] || {}
-    const account = originEventList.filter(item => item.id === user.accountId)[0] || {}
-    const event = originEventList.filter(item => item.id === user.eventId)[0] || {}
+    const channel = originEventList.filter(item => item.code === user.channelCode)[0] || {}
+    const account = originEventList.filter(item => item.code === user.accountCode)[0] || {}
+    const event = originEventList.filter(item => item.code === user.eventCode)[0] || {}
     return `${channel.name || '渠道不可用'}-${account.name || '账号不可用'}-${event.name || '事件不可用'}`
   }
 
-  // const setChannelDom = sendOutContent => {
-  //   const {channel, actionId, templateId} = sendOutContent
-  //   const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
-  //   const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
-  //   const action = allChannelActions.filter(item => actionId === item.actionId)[0] || {}
-  //   const template = templateList.filter(item => templateId === item.template_id)[0] || {}
-  //   return `${obj.name}-${account.name} ${action.actionName}(${template.title})`
-  // }
   const setChannelDom = sendOutContent => {
     const {channel, actionId, actionParams} = sendOutContent
     const actionParamsObj = JSON.parse(actionParams)
@@ -202,7 +198,7 @@ export default ({list}) => {
     let action = {}
     if (actionId === 2001) {
       const {templateId} = actionParamsObj
-      template = templateList.filter(item => templateId === item.template_id)[0] || {}
+      template = templateList.filter(item => templateId === item.templateId)[0] || {}
       action = wechartActions.filter(item => actionId === item.actionId)[0] || {}
     }
     if (actionId === 2002) {
@@ -215,14 +211,21 @@ export default ({list}) => {
       template = templateCode
     }
 
-    const obj = strChannelList.filter(item => channel.channelId === item.id)[0] || {}
-    const account = strChannelList.filter(item => channel.accountId === item.id)[0] || {}
+    if (actionId === 2201) {
+      // const {templateCode} = actionParamsObj
+      action = weAppletActions.filter(item => actionId === item.actionId)[0] || {}
+      template = '图片弹窗'
+    }
+
+    const obj = strChannelList.filter(item => channel.channelCode === item.code)[0] || {}
+    const account = strChannelList.filter(item => channel.accountCode === item.code)[0] || {}
     return `${obj.name}-${account.name} ${action.actionName}(${template.title || template})`
   }
 
 
   // 设置策略dom
   const setLeftItem = () => {
+    console.log(conditionList, strChannelList, tagList, templateList)
     if (!conditionList.length || !strChannelList.length || !tagList.length || !templateList.length) return ''
     const itemList = strategyList.map((item, i) => {
       const {

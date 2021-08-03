@@ -1,5 +1,5 @@
 /* eslint-disable no-inner-declarations */
-import {observable, action, toJS} from 'mobx'
+import {observable, action, toJS, runInAction} from 'mobx'
 import _ from 'lodash'
 import {errorTip, changeToOptions, userLog, listToTree} from '../../common/util'
 import io from './io'
@@ -35,6 +35,7 @@ export default class Store {
 
   // 显著特征 排名
   @observable topList = []
+  @observable outputTags = [] // 输出标签
 
   // 显著特征 loading
   @observable tableLoading = false
@@ -48,21 +49,6 @@ export default class Store {
 
   // -----------------Tab 2 特征分布-------
   @observable usableTag = [] // 可用的标签集合
-
-  // 显著特征 - 特征分布 option 数据
-  // const option = {
-  //   xAxis: {
-  //     type: 'category',
-  //     data: ['未知'],
-  //   },
-  //   yAxis: {
-  //     type: 'value',
-  //   },
-  //   series: [{
-  //     data: [5978],
-  //     type: 'bar',
-  //   }],
-  // }
 
   @observable option = {
     tooltip: {
@@ -121,14 +107,6 @@ export default class Store {
 
       const all = texts.join(` <span class="logic-word">${logicMap[logic]}</span> `)
 
-      // let totalText = ''
-
-      // if (twoText) {
-      //   totalText = `${oneText} ${logicMap[logic]} ${twoText}`
-      // } else {
-      //   totalText = oneText
-      // }
-
       this.ruleText = this.ruleText.concat(all)
     }
   }
@@ -167,6 +145,21 @@ export default class Store {
     return []
   }
 
+  // 获取输出标签
+  @action async getOutputTags() {
+    try {
+      const res = await io.getOutputTags({
+        objId: this.objId, // 实体ID
+      })
+
+      runInAction(() => {
+        this.outputTags = changeToOptions(res)('tagName', 'tagId')
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
   /**
    * 描述 获取客群详情
    * @date 2021-04-09
@@ -185,6 +178,7 @@ export default class Store {
       this.geneRuleText(logicFormat)
 
       this.groupDetail = {...res, logicExper: this.ruleText}
+      this.getOutputTags()
     } catch (e) {
       errorTip(e.message)
     } finally {
@@ -406,9 +400,41 @@ export default class Store {
   @observable totalCount = 0
   @observable clientTableLoading = false
 
-  // ---------------------- 客户列表 ------------------
-  @action async getUnitList() {
+  // 编辑客群详情信息
+  @action.bound async getDetail(outputTags) {
     this.clientTableLoading = true
+    try {
+      const res = await io.getDetail({
+        id: this.id, 
+      })
+
+      runInAction(() => {
+        this.editGroup(res, outputTags)
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // 编辑客群
+  @action.bound async editGroup(params, outputTags) {
+    try {
+      const res = await io.editGroup({
+        ...params,
+        type: 2,
+        ...outputTags,
+      })
+
+      runInAction(() => {
+        this.getUnitList()
+      })
+    } catch (e) {
+      errorTip(e.message)
+    }
+  }
+
+  // ---------------------- 客户列表 ------------------
+  @action.bound async getUnitList() {
     try {
       const res = await io.getUnitList({
         id: this.id,

@@ -3,6 +3,7 @@ import {
   Drawer, Form, Button, DatePicker, Input, Select, Collapse, Tooltip, Cascader, Spin,
 } from 'antd'
 import {errorTip, debounce} from '@util'
+import _ from 'lodash'
 import io from './io'
 import dropdown from '../../icon/dropdown.svg'
 
@@ -17,19 +18,19 @@ const listToTree = data => {
   const newData = _.cloneDeep(data)
 
   newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
+    const children = newData.filter(sitem => sitem.parentCode === item.code)
     if (children.length && !item.children) item.children = children
   })
 
-  return newData.filter(item => item.parentId === -1)
+  return newData.filter(item => item.parentCode === '-1')
 }
 
 const layout = {
   labelCol: {
-    span: 4,
+    span: 5,
   },
   wrapperCol: {
-    span: 20,
+    span: 19,
   },
 }
 
@@ -44,6 +45,7 @@ export default ({
   const [groupList, setGroupList] = useState([])
   const [eventList, setEventList] = useState([])
   const [eventOriginList, setOriginEventList] = useState([])
+  const [groupCount, setGroupCount] = useState(0)
   
   const [addForm] = Form.useForm()
   const {
@@ -56,7 +58,7 @@ export default ({
     firstTargetContent = {},
   } = planInfo
   const {event} = firstTargetContent
-  const defaultEvent = event ? [event.channelId, event.accountId, event.eventId] : undefined
+  const defaultEvent = event ? [event.channelCode, event.accountCode, event.eventCode] : undefined
   // 获取人群
   const getGroupList = async () => {
     try {
@@ -76,6 +78,7 @@ export default ({
       errorTip(error.message)
     }
   }
+
   // 计划名称查重
   const checkPlanName = async (name, callback) => {
     try {
@@ -100,18 +103,8 @@ export default ({
     console.log(v)
   }
   const setEvent = data => {
-    const channel = eventOriginList.filter(item => item.id === data[0])[0] || {}
-    const account = eventOriginList.filter(item => item.id === data[1])[0] || {}
-    const eventItem = eventOriginList.filter(item => item.id === data[2])[0] || {}
-    return {
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
-      eventId: eventItem.id,
-      eventCode: eventItem.code,
-      eventName: eventItem.name,
-    }
+    const eventItem = eventOriginList.filter(item => item.code === data[2])[0] || {}
+    return eventItem.name
   }
   const checkNumber = (rule, value, callback) => {
     if (!value) {
@@ -151,11 +144,18 @@ export default ({
       value.firstTargetContents = {
         timeGap: value.timeGap,
         timeUnit: value.timeUnit,
-        event: setEvent(value.event),
+        event: {
+          channelCode: value.event[0],
+          accountCode: value.event[1],
+          eventCode: value.event[2],
+          eventName: setEvent(value.event),
+        },
       }
       delete value.timeGap
       delete value.timeUnit
       delete value.event
+      delete value.validationTime
+      value.planGroupId = 1 // 默认分组的数据，前端页面隐藏了
       // 编辑新增
       if (planInfo.id) {
         value.id = planInfo.id
@@ -173,18 +173,31 @@ export default ({
     return time && time < moment().startOf('day')
   }
 
+  const groupChange = e => {
+    const target = _.find(groupList, item => item.id === e)
+
+    setGroupCount(target.lastCount)
+  }
+
   useEffect(() => {
     getTargetChannelList()
     getGroupList()
   }, [])
 
   useEffect(() => {
+    setGroupCount(0)
     addForm.resetFields()
-  }, [planInfo])
+
+    if (clientGroupId && groupList.length) {
+      const target = _.find(groupList, item => item.id === clientGroupId)
+
+      setGroupCount(target.lastCount)
+    }
+  }, [planInfo, groupList])
 
   return (
     <Drawer
-      title={id ? '编辑计划' : '新建计划'}
+      title={id ? '编辑计划' : '创建计划'}
       width={525}
       className="add-form"
       visible={showModal}
@@ -230,7 +243,7 @@ export default ({
             >
               <Input placeholder="请输入计划名称" />
             </Item>
-            <Item
+            {/* <Item
               label="计划分组"
               name="planGroupId"
               initialValue={1}
@@ -243,9 +256,17 @@ export default ({
               >
                 <Option value={1}>默认分组</Option>
               </Select>
+            </Item> */}
+            <Item
+              label="计划时间"
+              name="startEndDate"
+              rules={[{required: true, message: '请选择日期'}]}
+              initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
+            >
+              <RangePicker disabledDate={disabledDate} format={dateFormat} />
             </Item>
             <Item
-              label="受众用户"
+              label="目标客群"
               name="clientGroupId"
               initialValue={clientGroupId}
               rules={[{required: true, message: '请选择人群'}]}
@@ -254,27 +275,28 @@ export default ({
                 // labelInValue
                 placeholder="请选择人群"
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
+                onChange={groupChange}
               >
                 {
                   groupList.map(item => <Option value={item.id}>{item.name}</Option>)
                 }
               </Select>
             </Item>
-            <Item
-              label="有效时间"
-              name="startEndDate"
-              rules={[{required: true, message: '请选择日期'}]}
-              initialValue={startTime ? [moment(startTime, dateFormat), moment(endTime, dateFormat)] : undefined}
-            >
-              <RangePicker disabledDate={disabledDate} format={dateFormat} />
-            </Item>
-            <Item
+            <div className="FBH FBJB mb12">
+              <div />
+              <div>
+                <span className="mr8">当前预估可触达客户数</span>
+                <span className="fs16 mr8" style={{color: '#3F5FF4'}}>{groupCount}</span>
+                位
+              </div>
+            </div>
+            {/* <Item
               label="描述"
               name="descr"
               initialValue={descr}
             >
               <TextArea placeholder="请输入描述" autoSize={{minRows: 3, maxRows: 5}} />
-            </Item>
+            </Item> */}
           </Panel>
         </Collapse>
         
@@ -286,8 +308,8 @@ export default ({
             <div className="fs14 mb16">首要目标</div>
             <Item
               label="完成时间"
-              name="validation-time"
-              initialValue="validation-time"
+              name="validationTime"
+              initialValue="validationTime"
               rules={[{required: true, message: '请输入时间'}]}
               extra="用户进入流程后，在该时间内完成一次转化事件，则认为完成目标"
             >
@@ -332,7 +354,7 @@ export default ({
                 suffixIcon={<img src={dropdown} alt="dropdown" />}
                 fieldNames={{
                   label: 'name',
-                  value: 'id',
+                  value: 'code',
                   children: 'children',
                 }}
                 onChange={changeEvent}

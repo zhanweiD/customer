@@ -63,16 +63,16 @@ export default ({
       <Spin spinning={mesLoading}>
         {
           thumbMediaList.map(item => {
-            const {content, media_id, update_time} = item
-            const {news_item = []} = content
-            const data = news_item[0] || {}
+            const {content, mediaId, updateTime} = item
+            const {newsItem = []} = content
+            const data = newsItem[0] || {}
             return (
               <div className="item-wrap">
-                <Radio.Group onChange={v => setMedia({media_id, mediaData: data, update_time})} value={media.media_id}>
-                  <Radio value={media_id}>
+                <Radio.Group onChange={v => setMedia({mediaId, mediaData: data, updateTime})} value={media.mediaId}>
+                  <Radio value={mediaId}>
                     <div className="FBH content-item">
                       <div>
-                        {data.thumb_url ? <img className="mr12" height={88} width={156} src={data.thumb_url} alt="" /> : null}
+                        {data.thumbUrl ? <img className="mr12" height={88} width={156} src={data.thumbUrl} alt="" /> : null}
                       </div>
                       <div style={{width: 300}}>
                         <div className="item-title">{data.title}</div>
@@ -82,10 +82,10 @@ export default ({
                   </Radio>
                 </Radio.Group>
                 <div className="FBH FBJB item-preview mb12">
-                  <div className="c65">{`消息编辑时间: ${moment(+update_time * 1000).format('YYYY-MM-DD HH:mm:ss')}`}</div>
+                  <div className="c65">{`消息编辑时间: ${moment(+updateTime * 1000).format('YYYY-MM-DD HH:mm:ss')}`}</div>
                   <a onClick={() => {
                     setModalVisible(true)
-                    setPreviewId(media_id)
+                    setPreviewId(mediaId)
                   }}
                   >
                     预览

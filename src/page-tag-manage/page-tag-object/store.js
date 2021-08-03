@@ -23,8 +23,11 @@ class Store {
       })
       runInAction(() => {
         this.objList = res || []
-        if (!res.length) return
-        if (cb) cb()
+        if (res.length) {
+          const target = res[0] || {}
+          if (cb) cb()
+          window.location.href = `${window.__keeper.pathHrefPrefix}/tag-manage/uphold/${target.id}`
+        }
       })
     } catch (e) {
       errorTip(e.message)

@@ -32,7 +32,6 @@ const layout = {
 export default ({
   strategyDetail = {}, // 用于编辑回显
   treeStrChannelList, // 触达渠道列表
-  strChannelList, // 触达渠道
   planInfo, // 计划信息
   current, 
   prevStep,
@@ -40,12 +39,9 @@ export default ({
   tagList,
   addStrategy, // 添加策略
   editStrategy,
-
   setThreeFormData, // 表单数据
   oneFormData,
   twoFormData,
-  threeFormData,
-  setResetThreeForm, // 为了step-two能重置step-three
   strName, // 策略名称
 }) => {
   const [templateList, setTemplateList] = useState([])
@@ -60,7 +56,6 @@ export default ({
   const [vis, setVis] = useState(false) // 手机预览
   const [actionId, setActionId] = useState(null) // 用于判断动作类型
   const [accountCode, setAccountCode] = useState(null) // 用于获取模版信息
-  const [accountId, setAccountId] = useState(null) // 使用 accountId
   const [myForm] = Form.useForm()
 
   const [smsForm] = Form.useForm()
@@ -73,11 +68,26 @@ export default ({
 
   const [previewData, setPreviewData] = useState('')
   const [selectMedia, setSelectMedia] = useState({}) // 选择群发消息
+  const [uploadLoading, setUploadLoading] = useState(false) // 图片上传状态
+  const [imageUrl, setImageUrl] = useState('') // 图片地址
+  const [imageUid, setImageUid] = useState('') // 图片id
+
+  // 微信小程序图片
+  const getImageUrl = async resourceId => {
+    try {
+      const res = await io.getImageUrl({
+        resourceId,
+      })
+      setImageUrl(res)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   // 营销动作列表
-  const getChannelActions = async channelId => {
+  const getChannelActions = async channelCode => {
     try {
-      const res = await io.getChannelActions({channelId})
+      const res = await io.getChannelActions({channelCode})
       // strategyConditionType
       let newData = []
       if (twoFormData.strategyConditionType) {
@@ -177,7 +187,7 @@ export default ({
   // 选择模版
   const templateChange = e => {
     // 目标模板数据
-    const target = _.find(templateList, item => item.template_id === e)
+    const target = _.find(templateList, item => item.templateId === e)
     const req = /{(\w+).DATA}/g
     const matchData = target.content.match(req)
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
@@ -199,21 +209,94 @@ export default ({
     setVis(true)
   }
 
-  // 返回渠道信息（code id）
-  const matchChannel = ids => {
-    const channel = strChannelList.filter(item => item.id === ids[0])[0] || {}
-    const account = strChannelList.filter(item => item.id === ids[1])[0] || {}
-    return {
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
+  // TODO:
+  const getTemplate = async code => {
+    try {
+      const res = await io.getTemplate({
+        accountCode: code || accountCode,
+      })
+      if (res && res.templateList) {
+        setTemplateList(res.templateList)
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 短信签名列表
+  const getAllSign = async (code, cb = () => {}) => {
+    try {
+      const res = await io.getAllSign({
+        accountCode: code || accountCode,
+      })
+
+      setSmsSignList(res)
+      cb()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 短信模版列表
+  const getAllTpl = async (code, cb = () => {}) => {
+    try {
+      const res = await io.getAllTpl({
+        accountCode: code || accountCode,
+      })
+
+      setSmsTplList(res)
+      cb()
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // 触达通道
+  const changeCode = v => {
+    getChannelActions(v[0])
+    setAccountCode(v[1])
+    setActionId(undefined)
+    myForm.setFieldsValue({actionId: undefined})
+    setIsSms(false)
+    setVis(false)
+  }
+
+  // 改变动作
+  const changeAction = v => {
+    setActionId(v)
+  }
+
+  // 关于属性的默认值
+  const onDefaultValChange = (val, index) => {
+    setSmsDefaultValues({
+      ...smsDefaultValues,
+      [index]: val,
+    })
+  }
+
+  const getBase64 = (img, callback) => {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+  }
+
+  const uploadChange = info => {
+    const {status, response} = info.file
+
+    if (status === 'uploading') {
+      setUploadLoading(true)
+    }
+    if (status === 'done') {
+      getBase64(info.file.originFileObj, url => {
+        setUploadLoading(false)
+        setImageUrl(url)
+        setImageUid(response.content)
+      })
     }
   }
 
   const matchAction = id => {
     const actionObj = channelActionList.filter(item => item.actionId === id)[0] || {}
-    console.log(actionObj)
     return actionObj
   }
 
@@ -221,26 +304,9 @@ export default ({
   const saveData = () => {
     if (isSms) {
       // 短信模块
-      /*
-        {
-          "signName": "选择的签名名称",
-          "templateCode": "选择的短信模板code",
-          "templateJson":"模版json",
-          // 模板参数配置
-          "templateParams": [{
-              "key":"1", // 模板json中 动态参数key
-              "type":"USER_TAG", // 类型，预留字段可不传
-              "defaultValue": "" // 默认值， 可不填
-          },{
-              "key":"2", // 模板json中 动态参数key
-              "type":"USER_TAG", // 类型，预留字段可不传
-              "defaultValue": "默认值" // 默认值， 可不填
-          }]
-        }
-      */
       smsForm.validateFields().then(value => {
         const {signName, templateCode} = value
-        const alldefaultValues = _.flatten(_.values(smsDefaultValues))
+        const alldefaultValues = _.compact(_.flatten(_.values(smsDefaultValues)))
 
         // 模板字符串
         const templateJson = []
@@ -248,26 +314,21 @@ export default ({
 
         smsTplKeyList.forEach(item => {
           let itemValue = value[item]
+          itemValue = itemValue.replace(/&nbsp;/g, '')
+          // 新的替换，
+          // 例子：${888888!你好}，${标签id!默认值}
+          alldefaultValues.forEach(item => {
+            const targetTag = _.find(tagList, e => e.objNameTagName === item.name)
+            const targetTagId = targetTag.objIdTagId
 
-          itemValue = itemValue.replace(/<span[^>]+">/g, '${').replace(/<\/span>/g, '}').replace(/&nbsp;/g, '')
-
-          tagList.forEach(e => {
-            if (itemValue.indexOf(e.objNameTagName) > -1) {
-              itemValue = itemValue.replace(new RegExp(e.objNameTagName, 'g'), e.objIdTagId)
-
-              // TODO: 最好找到id
-              const targetDefaultItem = _.find(alldefaultValues, j => j.name === e.objNameTagName)
-
-              templateParams.push({
-                key: e.objIdTagId,
-                type: 'USER_TAG',
-                defaultValue: targetDefaultItem && targetDefaultItem.value,
-              })
+            const regExp = new RegExp(`<span[^>]+id=\"${item.id}\">([^>]+)<\/span>`)
+            if (item.value) {
+              itemValue = itemValue.replace(regExp, `\${${targetTagId}!${item.value}}`)
+            } else {
+              itemValue = itemValue.replace(regExp, `\${${targetTagId}}`)
             }
           })
 
-          // eslint-disable-next-line no-useless-escape
-          // content = content.replace(`\$\{${item}\}`, itemValue)
           templateJson.push({
             name: item,
             value: itemValue,
@@ -279,7 +340,6 @@ export default ({
           signName,
           templateCode,
           templateJson: JSON.stringify(templateJson),
-          templateParams,
         }
 
         const myFormValues = myForm.getFieldsValue()
@@ -293,14 +353,14 @@ export default ({
           sendOutContent: {
             ...myFormValues,
             ...matchAction(myFormValues.actionId),
-            channel: matchChannel(myFormValues.channelCode),
+            // channel: matchChannel(myFormValues.channelCode),
+            channel: {
+              channelCode: myFormValues.channelCode[0],
+              accountCode: myFormValues.channelCode[1],
+            },
             actionParams: JSON.stringify(actionParams),
           },
         }
-
-        console.log('~~~最终参数~~~')
-        console.log(params)
-        console.log('~~~最终参数~~~')
 
         // 删除编辑前部分无用属性
         if (params.strategyConditionType) {
@@ -375,6 +435,13 @@ export default ({
               templateId: value.templateId,
             } 
           }
+          if (value.actionId === 2201) {
+            return {
+              dialogPage: value.dialogPage,
+              resourceId: imageUid,
+              redirectUrl: value.redirectUrl,
+            }
+          }
         }
 
         const params = {
@@ -387,9 +454,11 @@ export default ({
           sendOutContent: {
             ...value,
             ...matchAction(value.actionId),
-            channel: matchChannel(value.channelCode),
+            channel: {
+              channelCode: value.channelCode[0],
+              accountCode: value.channelCode[1],
+            },
             actionParams: JSON.stringify(setActionParams()),
-            // templateJson: JSON.stringify(templateJson),
           },
         }
       
@@ -428,88 +497,27 @@ export default ({
     }
   }
 
-  // TODO:
-  const getTemplate = async () => {
-    try {
-      const res = await io.getTemplate({
-        accountId: accountCode,
-      })
-      if (res && res.template_list) {
-        setTemplateList(res.template_list)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // 短信签名列表
-  const getAllSign = async (id, cb = () => {}) => {
-    try {
-      const res = await io.getAllSign({
-        accountId: id || accountId,
-      })
-
-      setSmsSignList(res)
-      cb()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // 短信模版列表
-  const getAllTpl = async (id, cb = () => {}) => {
-    try {
-      const res = await io.getAllTpl({
-        accountId: id || accountId,
-      })
-
-      setSmsTplList(res)
-      cb()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // 触达通道
-  const changeCode = (v, item) => {
-    getChannelActions(v[0])
-    setAccountCode(item[1].code)
-    setAccountId(item[1].id)
-    setActionId(undefined)
-    myForm.setFieldsValue({actionId: undefined})
-    setIsSms(false)
-    setVis(false)
-  }
-
-  // 改变动作
-  const changeAction = v => {
-    setActionId(v)
-  }
-
-  // 关于属性的默认值
-  const onDefaultValChange = (val, index) => {
-    setSmsDefaultValues({
-      ...smsDefaultValues,
-      [index]: val,
-    })
-  }
-
   useEffect(() => {
     if (!strategyDetail.id) return 
+
     const {sendOutContent} = strategyDetail
     const {
       isDelay, timeGap, timeUnit, channel, actionParams,
     } = sendOutContent
-    const channelCode = [channel.channelId, channel.accountId]
+    const channelCode = [channel.channelCode, channel.accountCode]
 
+    if (sendOutContent.actionId === 2201) {
+      const {dialogPage, resourceId, redirectUrl} = JSON.parse(actionParams)
+      getImageUrl(resourceId)
+      setImageUid(resourceId)
+    }
     // 群发消息处理
     if (sendOutContent.actionId === 2002) {
       setSelectMedia(JSON.parse(actionParams))
     }
     // 模版消息处理
     if (sendOutContent.actionId === 2001) {
-      // getTemplate()
-      // if (!templateList.length || !tagList.length) return
+      getTemplate(channel.accountCode)
       const templateData = JSON.parse(actionParams).templateJson
       const {templateId} = JSON.parse(actionParams)
       // 有模板数据
@@ -534,7 +542,7 @@ export default ({
         }
         templateObj[e.name] = valueTemp
       })
-      const target = _.find(templateList, item => item.template_id === templateId)
+      const target = _.find(templateList, item => item.templateId === templateId)
   
       if (target && target.content) {
         setPreviewData(target.content)
@@ -554,11 +562,6 @@ export default ({
       const {signName, templateCode, templateJson, templateParams} = parseActionParams
       const parseTemplateJson = JSON.parse(templateJson)
 
-      // 需要知道 accountId
-      setAccountId(channel.accountId)
-      // const {sendOutContent: {channel: editChannel}} = strategyDetail
-      // setAccountId(editChannel.accountId)
-
       // 关键字列表
       setSmsTplKeyList(_.map(parseTemplateJson, 'name'))
 
@@ -566,29 +569,29 @@ export default ({
       parseTemplateJson.forEach((item, index) => {
         const {value} = item
 
-        if (value.indexOf('${')) {
-          // 说明有属性
-          // TODO: 如何快速提取 ${}
-          const valueSplit = value.split('${')
-          let id = 0
-          valueSplit.forEach(e => {
-            if (e.indexOf('}') > -1) {
-              const target = e.split('}')[0]
-              const targetName = _.find(tagList, j => j.objIdTagId === target).objNameTagName
-              const targetValue = templateParams.shift().defaultValue
-              if (defaultValues[index] && defaultValues[index].length) {
-                defaultValues[index].push({
-                  name: targetName,
-                  value: targetValue,
-                })
-              } else {
-                defaultValues[index] = []
-                defaultValues[index].push({
-                  name: targetName,
-                  value: targetValue,
-                  id: ++id,
-                })
-              }
+        if (value.indexOf('${') > -1) {
+          // ${属性id!默认值}
+          const valueMatch = value.match(/\${[^}]+}/g) || []
+          let id = 0          
+          valueMatch.forEach((e, k) => {
+            const v = e.replace('\${', '').replace('}', '')
+            const vSplit = v.split('!')
+            const targetName = _.find(tagList, j => j.objIdTagId === vSplit[0]).objNameTagName
+            
+            if (!defaultValues[index]) defaultValues[index] = []
+            if (vSplit.length > 1) {
+              // 有默认值
+              defaultValues[index].push({
+                name: targetName,
+                value: vSplit[1],
+                id: String(++id),
+              })
+            } else {
+              defaultValues[index].push({
+                name: targetName,
+                value: undefined,
+                id: String(++id),
+              })
             }
           })
         } else {
@@ -601,6 +604,8 @@ export default ({
       const templateObj = {}
       parseTemplateJson.forEach(e => {
         let valueTemp = e.value
+
+        valueTemp = valueTemp.replace(/![^}]+}/g, '}')
         tagList.forEach(item => {
           if (valueTemp.indexOf(item.objIdTagId) > -1) {
             valueTemp = valueTemp.replace(new RegExp(item.objIdTagId, 'g'), item.objNameTagName)
@@ -620,10 +625,8 @@ export default ({
       })
 
       // 把签名和模版的数据准备好
-      getAllSign(channel.accountId)
-      getAllTpl(channel.accountId)
-      // getAllSign(editChannel.accountId)
-      // getAllTpl(editChannel.accountId)
+      getAllSign(channel.accountCode)
+      getAllTpl(channel.accountCode)
 
       setSmsTplId(templateCode)
 
@@ -657,6 +660,8 @@ export default ({
       setTouchWay(0)
       setPreviewData('')
       setSelectMedia({})
+      setImageUrl('')
+      setImageUid('')
       setVis(false)
       myForm.resetFields()
       myForm.setFieldsValue({isDelay: 0})
@@ -668,32 +673,32 @@ export default ({
       const {channel = {}} = sendOutContent
       setActionId(sendOutContent.actionId)
       setAccountCode(channel.accountCode)
-      getChannelActions(channel.channelId)
+      getChannelActions(channel.channelCode)
     }
   }, [strategyDetail])
 
   useEffect(() => {
     if (accountCode && actionId) {
-      if (actionId === 2101 && accountId) {
-        // 发送短信
-        getAllSign(accountId)
-        getAllTpl(accountId)
-        setIsSms(true)
+      if (actionId === 2101) {
+        if (accountCode) {
+          // 发送短信
+          getAllSign(accountCode)
+          getAllTpl(accountCode)
+          setIsSms(true)
+        }
       } else if (actionId === 2002) {
         // 微信群发消息
         getThumbMediaList()
-      } else {
+      } else if (actionId === 2001) {
         // 微信模版消息
         getTemplate()
         setVis(true)
         setIsSms(false)
+      } else if (actionId === 2201) {
+        // getImageUrl()
       }
     }
   }, [accountCode, actionId])
-
-  // useEffect(() => {
-  //   setResetThreeForm(myForm)
-  // }, [])
 
   return (
     <Fragment>
@@ -722,7 +727,7 @@ export default ({
               suffixIcon={<img src={dropdown} alt="dropdown" />}
               fieldNames={{
                 label: 'name',
-                value: 'id',
+                value: 'code',
                 children: 'children',
               }}
             />
@@ -752,10 +757,14 @@ export default ({
               thumbMediaList,
               showDrawer: () => setDrawerVisible(true),
               selectMedia,
+              setPreviewData,
+              strategyDetail,
+              uploadLoading,
+              uploadChange,
+              imageUrl,
             })
           }
         </Form>
-        {/* {console.log(isSms)} */}
         {
           <div
             style={{
@@ -771,7 +780,7 @@ export default ({
                   smsSignList,
                   smsTplId,
                   smsTplList,
-                  accountId,
+                  accountCode,
                   getAllSign,
                   getAllTpl,
                   tagList,
@@ -782,6 +791,7 @@ export default ({
                   setVis,
                   setPreviewData,
                   smsForm,
+                  imageUid,
                 })
               }
             </Form>

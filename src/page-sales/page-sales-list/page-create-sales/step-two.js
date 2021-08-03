@@ -4,7 +4,7 @@ import {
 } from 'antd'
 import {MinusCircleOutlined} from '@ant-design/icons'
 import {CycleSelect} from '@dtwave/uikit'
-import {setTimeDom} from './unit'
+import {setTimeDom, listToTree} from './unit'
 import Attr from '../icon/wechat-attr.svg'
 import dropdown from '../../../icon/dropdown.svg'
 
@@ -15,17 +15,6 @@ const {RangePicker} = DatePicker
 const dateFormat = 'YYYY-MM-DD'
 const dateTimeFormat = 'YYYY-MM-DD'
 const timeFormat = 'HH:mm:ss'
-
-const listToTree = data => {
-  const newData = _.cloneDeep(data)
-
-  newData.forEach(item => {
-    const children = newData.filter(sitem => sitem.parentId === item.id)
-    if (children.length && !item.children) item.children = children
-  })
-
-  return newData.filter(item => item.parentId === -1)
-}
 
 const layout = {
   labelCol: {
@@ -49,13 +38,9 @@ export default ({
   nextStep,
   prevStep,
   planInfo,
-  twoFormData = {}, 
   setTwoFormData,
-  setStrategyDetail, 
   strategyDetail,
-  treeConditionList,
   conditionList,
-  resetThreeForm,
 }) => {
   const [stepForm] = Form.useForm()
   const [planType, setPlanType] = useState(1) // 计划类型 0定时1事件
@@ -96,22 +81,6 @@ export default ({
     }
   }
 
-  // 匹配事件返回全量信息（code + id）
-  const matchEnent = data => {
-    const channel = conditionList.filter(item => item.id === data[0])[0] || {}
-    const account = conditionList.filter(item => item.id === data[1])[0] || {}
-    const event = conditionList.filter(item => item.id === data[2])[0] || {}
-    return {
-      eventId: event.id,
-      eventCode: event.code,
-      eventName: event.name,
-      channelId: channel.id,
-      channelCode: channel.code,
-      accountId: account.id,
-      accountCode: account.code,
-    }
-  }
-
   // 保存表单数据
   const onFinish = () => {
     stepForm.validateFields().then(value => {
@@ -126,13 +95,22 @@ export default ({
       // 事件触发
       if (value.strategyConditionType) {
         const {doneEvents, notDoneEvents} = value
+
         const strategyEventConditionContent = {
           doneLogic,
           notDoneLogic,
           timeGap: value.timeGap,
           timeUnit: value.timeUnit,
-          doneEvents: doneEvents.map(item => matchEnent(item)),
-          notDoneEvents: notDoneEvents.map(item => matchEnent(item)),
+          doneEvents: doneEvents.map(item => ({
+            channelCode: item[0],
+            accountCode: item[1],
+            eventCode: item[2],
+          })),
+          notDoneEvents: notDoneEvents.map(item => ({
+            channelCode: item[0],
+            accountCode: item[1],
+            eventCode: item[2],
+          })),
           startTime: value.startTime,
           endTime: value.endTime,
         }
@@ -178,7 +156,6 @@ export default ({
           strategyFixConditionContent,
         }
       }
-
       setTwoFormData(params)
       nextStep()
     }).catch(err => console.log(err))
@@ -231,7 +208,7 @@ export default ({
   }
 
   // 已选未完成事件disabled
-  const checkDoneSelectEvent = () => {
+  const checkDoneSelectEvent = v => {
     const data = []
     stepForm.validateFields(['doneEvents']).then(value => {
       value.doneEvents.forEach(item => {
@@ -248,7 +225,7 @@ export default ({
   // 为已选择完成事件添加disabled
   useEffect(() => {
     const data = conditionList.map(item => {
-      if (doneSelectKey.find(jtem => jtem === item.id)) {
+      if (doneSelectKey.find(jtem => jtem === item.code)) {
         item.disabled = true
       } else {
         item.disabled = false
@@ -261,7 +238,7 @@ export default ({
   // 为已选择未完成事件添加disabled
   useEffect(() => {
     const data = conditionList.map(item => {
-      if (selectKey.find(jtem => jtem === item.id)) {
+      if (selectKey.find(jtem => jtem === item.code)) {
         item.disabled = true
       } else {
         item.disabled = false
@@ -290,8 +267,8 @@ export default ({
     if (strategyDetail.strategyConditionType) {
       const {strategyEventConditionContent, strategyConditionType} = strategyDetail
       const {doneEvents, notDoneEvents = []} = strategyEventConditionContent
-      const done = doneEvents.map(item => [item.channelId, item.accountId, item.eventId])
-      const notDone = notDoneEvents.map(item => [item.channelId, item.accountId, item.eventId])
+      const done = doneEvents.map(item => [item.channelCode, item.accountCode, item.eventCode])
+      const notDone = notDoneEvents.map(item => [item.channelCode, item.accountCode, item.eventCode])
       setStrategyEventCondition(strategyEventConditionContent)
       setDoneEventList(done)
       setNotDoneEventList(notDone)
@@ -329,7 +306,6 @@ export default ({
       >
         <Form 
           {...layout}
-          // className="run-form"
           name="stepForm"
           form={stepForm}
         >
@@ -386,16 +362,12 @@ export default ({
                               <Item
                                 {...field}
                                 {...layout1}
-                                // name={[field.name, 'id']}
-                                // fieldKey={[field.fieldKey, 'id']}
                                 style={{marginBottom: index === fields.length - 1 ? '0px' : '24px'}}
                                 className="position-icon"
-                                // label={`事件${index + 1}`}
                                 rules={[{required: true, message: '请选择事件'}]}
                               >
                                 <Cascader
                                   placeholder="请选择事件"
-                                  // options={treeConditionList}
                                   options={doneConditionList}
                                   expandTrigger="hover"
                                   style={{width: 360}}
@@ -403,7 +375,7 @@ export default ({
                                   suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
-                                    value: 'id',
+                                    value: 'code',
                                     children: 'children',
                                   }}
                                 />
@@ -421,7 +393,9 @@ export default ({
                           ))}
                           <div
                             className="add-event-btn fs14 hand"
-                            onClick={add}
+                            onClick={() => {
+                              add() // add简写会报错有坑
+                            }}
                           >
                             <img style={{marginBottom: 1}} src={Attr} alt="属性" />
                             <span className="ml4">添加事件</span>
@@ -509,7 +483,7 @@ export default ({
                                   suffixIcon={<img src={dropdown} alt="dropdown" />}
                                   fieldNames={{
                                     label: 'name',
-                                    value: 'id',
+                                    value: 'code',
                                     children: 'children',
                                   }}
                                 />
@@ -591,7 +565,6 @@ export default ({
               <Item 
                 label="起止日期" 
                 name="startEndDate"
-                // style={{marginTop: 24}}
                 rules={[{required: true, message: '请选择日期'}]}
                 initialValue={
                   strategyEventCondition.startTime ? (

@@ -37,7 +37,7 @@ const layout2 = {
 const templateListMock = [
   [
     {
-      template_id: 'qdJWd_NP89dVXoZm16OnMbVpmHAKeEYJhiuXQI-u9wM',
+      templateId: 'qdJWd_NP89dVXoZm16OnMbVpmHAKeEYJhiuXQI-u9wM',
       title: '异地登录提醒',
       primary_industry: 'IT科技',
       deputy_industry: 'IT软件与服务',
@@ -45,7 +45,7 @@ const templateListMock = [
       example: '你好，samueldeng\n\n你的企业邮帐号samueldeng@gzmailteam.com于今天11:22在北京登录。地址信息有误差，如有疑问请在电脑登录并查看自助查询。',
     },
     {
-      template_id: '5ZQaDUG6m_nzKlgrAJznbawATtN1XqHzJ6Bbrn_FDaI',
+      templateId: '5ZQaDUG6m_nzKlgrAJznbawATtN1XqHzJ6Bbrn_FDaI',
       title: '服务器恢复通知',
       primary_industry: 'IT科技',
       deputy_industry: 'IT软件与服务',
@@ -92,7 +92,7 @@ export default ({
 
   const templateChange = e => {
     // 目标模板数据
-    const target = _.find(templateList, item => item.template_id === e)
+    const target = _.find(templateList, item => item.templateId === e)
     const req = /{(\w+).DATA}/g
     const matchData = target.content.match(req)
     const matchKeys = _.map(matchData, item => item.replace('{', '').replace('.DATA}', ''))
@@ -237,7 +237,7 @@ export default ({
   const getTemplate = async () => {
     try {
       const res = await io.getTemplate({
-        accountId: 'wxe2b3f176ba1a4f33',
+        accountCode: 'wxe2b3f176ba1a4f33',
       })
 
       if (res && res.template_list) {
@@ -319,7 +319,7 @@ export default ({
       }
 
       if (weSFormData.action && weSFormData.action.templateId) {
-        const target = _.find(templateList, item => item.template_id === weSFormData.action.templateId)
+        const target = _.find(templateList, item => item.templateId === weSFormData.action.templateId)
 
         if (target && target.content) {
           setPreviewData(target.content)
@@ -382,7 +382,7 @@ export default ({
             >
               <Select onChange={templateChange} placeholder="请选择模版">
                 {
-                  templateList.map(item => <Option value={item.template_id}>{item.title}</Option>)
+                  templateList.map(item => <Option value={item.templateId}>{item.title}</Option>)
                 }
               </Select>
             </Item>

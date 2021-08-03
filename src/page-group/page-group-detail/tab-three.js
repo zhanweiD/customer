@@ -5,16 +5,23 @@ import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 
 import {downloadResult, userLog} from '../../common/util'
-import {Authority} from '../../component'
+import {Authority, Search} from '../../component'
+import search from './search'
 
 export default inject('store')(
   ({store}) => {
     useEffect(() => {
-      store.getUnitList()
+      // store.getUnitList()
     }, [])
 
     return useObserver(() => (
-      <div className="p16 custom-border" style={{minHeight: 'calc(100vh - 204px)'}}>
+      <div className="p16 pt8 custom-border" style={{minHeight: 'calc(100vh - 204px)'}}>
+        <Search 
+          onReset={() => console.log('重置')}
+          onSearch={store.getDetail}
+          params={search(store.outputTags)}
+          // colSpan={16}
+        />
         <Authority
           authCode="group-manage:export-group"
         >
@@ -28,6 +35,7 @@ export default inject('store')(
             导出个体列表
           </Button>
         </Authority>
+        
         <Table
           loading={store.clientTableLoading}
           columns={toJS(store.titleList)}

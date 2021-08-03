@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react'
 import {Button, Divider, Spin} from 'antd'
-import {EditOutlined, CopyOutlined, ReloadOutlined} from '@ant-design/icons'
 import {inject} from 'mobx-react'
 import {useObserver} from 'mobx-react-lite'
 import {moneyNumFormat} from '@util'
@@ -13,6 +12,13 @@ export default inject('store')(({store, id}) => {
     }
 
     return `${(num).toFixed(2)}%`
+  }
+
+  const toSales = () => {
+    window.location.href = `${window.__keeper.pathHrefPrefix}/sales/list/${id}`
+  }
+  const toPushGroup = () => {
+    window.location.href = `${window.__keeper.pathHrefPrefix}/group/manage/${id}`
   }
 
   useEffect(() => {
@@ -76,6 +82,10 @@ export default inject('store')(({store, id}) => {
                 {genRate(store.groupDetail.coveringRate)}
               </div>
             </div>
+          </div>
+          <div>
+            <Button type="primary" className="mr8" onClick={toSales}>创建计划</Button>
+            <Button onClick={toPushGroup}>推送客群</Button>
           </div>
         </div>
       </div>
