@@ -43,9 +43,10 @@ export default class ChartPie extends Component {
       }
     }
     window.addEventListener('resize', resize)
-
-    if (pieData.length) this.myChartPie.setOption(pieOption(pieData, total))
-    if (barData.length) this.myChartBar.setOption(barOption(barData))
+    this.myChartPie.clear()
+    this.myChartBar.clear()
+    this.myChartPie.setOption(pieOption(pieData, total))
+    this.myChartBar.setOption(barOption(barData))
   }
 
   render() {
@@ -69,11 +70,22 @@ export default class ChartPie extends Component {
               }
             </div>
           </div>
+          {
+            pieData.length ? null : (
+              <NoData style={{marginTop: '-46%'}} text="暂无数据" />
+            )
+          }
+          
           <div className="mt16 type-distribution p16">
             <div 
               ref="chartBar" 
               style={{height: '180px', width: '100%'}} 
             />
+            {
+              barData.length ? null : (
+                <NoData style={{marginTop: '-20%'}} text="暂无数据" />
+              )
+            }
           </div>
         </Spin>
       </div> 

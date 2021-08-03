@@ -61,7 +61,7 @@ export default class User extends Component {
     const {basicLoading, attention, defaultInfo, unitKeys} = this.store
     return (
       <div className="basis-info-content ml16 mr16">
-        <Spin spinning={basicLoading}>
+        <Spin spinning={basicLoading} style={{marginTop: '100%'}}>
           <div>
             {/* <div className="herder">客户档案</div> */}
             <div className="fs14 c85 pb8">
